@@ -1,6 +1,6 @@
 // components/Button.jsx
 import React from "react";
-import COLORS from "./Color";
+import COLORS from "./Colors";
 
 const Button = ({ text, color = "primary", size = "md", onClick, ...props }) => {
   const sizeClasses = {
