@@ -25,7 +25,7 @@ export default function LandingPage() {
                     </div>
                     <div className="nav-links">
                         <Button text={language === "he" ? "אודות" : "About"} onClick={() => window.location.href = "#about"} />
-                        <Button text={language === "he" ? "הירשם עכשיו" : "Sign Up"} onClick={() => window.location.href = "#signup"} />
+                        <Button text={language === "he" ? "הירשם" : "Sign Up"} onClick={() => router.push("/register")} />
                         <Button text={language === "he" ? "התחברות" : "Login"} onClick={() => window.location.href = "#login"} />
                         <Button text={language === "he" ? "🇮🇱 עברית" : "English"} onClick={toggleLanguage} />
                         <Button text="HomePageReserve" onClick={() => router.push("/HomePageReserve")} />
@@ -65,11 +65,6 @@ export default function LandingPage() {
                     </p>
                 </section>
 
-                <section id="signup" className="signup">
-                    <h2>{language === "he" ? "הצטרף אלינו" : "Join Us"}</h2>
-                    <p>{language === "he" ? "התחבר עכשיו כדי לקבל גישה לשירותים מותאמים אישית." : "Sign in now to access personalized services."}</p>
-                    <Button text={language === "he" ? "הירשם עכשיו" : "Sign Up"} onClick={() => window.location.href = "#signup"} />
-                </section>
             </main>
 
             <footer className="footer">
