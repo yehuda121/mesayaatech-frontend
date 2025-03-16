@@ -10,7 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 
-src/utils/firebase.js
+src/app/utils/firebase.js
 
 # testing
 /coverage
