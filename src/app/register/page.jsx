@@ -62,8 +62,7 @@ export default function RegisterPage() {
               <span className="tooltip-text">{getTooltip(type)}</span>
               <Button
                 text={
-                  language === "he"
-                    ? type === "reserve"
+                  language === "he" ? type === "reserve"
                       ? "מילואימניק"
                       : type === "mentor"
                       ? "מנטור"
@@ -74,7 +73,8 @@ export default function RegisterPage() {
                     ? "Mentor"
                     : "Ambassador"
                 }
-                onClick={() => router.push(/register/${type})}
+                onClick={() => router.push(`/register/${type}`)}
+                // onClick={() => router.push('/register/${type}')}
               />
             </div>
           ))}
