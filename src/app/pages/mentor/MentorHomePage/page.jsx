@@ -1,8 +1,7 @@
 // "use client";
 // import React, { useState } from "react";
 // import { useRouter } from "next/navigation";
-// import { isEnglish } from "../../language";
-// ``
+// import { isEnglish } from "../../../language";
 
 // export default function MentorDashboard() {
 //   const router = useRouter();
@@ -16,8 +15,8 @@
 //   };
 
 //   const navItems = [
-//     { label: language === "he" ? "ראשי" : "Dashboard", path: "/HomePageMentor" },
-//     { label: language === "he" ? "רשימת המלווים שלי" : "My Reservists", path: "/mentor/my-reservists" },
+//     { label: language === "he" ? "ראשי" : "Dashboard", path: "/pages/mentor/MentorHomePage" },
+//     { label: language === "he" ? "רשימת המלווים שלי" : "My Reservists", path: "/pages/mentor/mentees"},
 //     { label: language === "he" ? "פניות חדשות לליווי" : "New Requests", path: "/mentor/requests" },
 //     { label: language === "he" ? "משרות רלוונטיות" : "Job Matches", path: "/mentor/job-matches" },
 //     { label: language === "he" ? "פרסום משרה" : "Post Job", path: "/mentor/post-job" },
@@ -42,7 +41,6 @@
 //           </button>
 //         </div>
 
-//         {/* ניווט */}
 //         <nav className="space-y-4">
 //           {navItems.map(({ label, path }) => (
 //             <button
@@ -56,7 +54,7 @@
 //         </nav>
 //       </aside>
 
-//       {/* תוכן ראשי */}
+    
 //       <main className="flex-1 bg-gray-100 p-10 text-right">
 //         <h1 className="text-3xl font-bold text-blue-800 mb-6">
 //           {language === "he" ? "לוח הבקרה של המנטור" : "Mentor Dashboard"}
@@ -67,12 +65,11 @@
 //             : "Manage all your mentoring tasks in one place."}
 //         </p>
 
-//         {/* כרטיסים מרכזיים */}
 //         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 //           <DashboardCard
 //             title={language === "he" ? "רשימת המלווים שלי" : "My Reservists"}
 //             description={language === "he" ? "צפה במלווים שאתה מלווה" : "View reservists you're mentoring"}
-//             onClick={() => router.push("/mentor/my-reservists")}
+//             onClick={() => router.push("/pages/mentor/mentees")}
 //           />
 //           <DashboardCard
 //             title={language === "he" ? "פניות חדשות לליווי" : "New Requests"}
@@ -104,7 +101,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getLanguage, toggleLanguage } from "../../language";
+import { getLanguage, toggleLanguage } from "../../../language";
 
 export default function MentorDashboard() {
   const router = useRouter();
@@ -120,8 +117,8 @@ export default function MentorDashboard() {
   }, []);
 
   const navItems = [
-    { label: language === "he" ? "ראשי" : "Dashboard", path: "/HomePageMentor" },
-    { label: language === "he" ? "רשימת המלווים שלי" : "My Reservists", path: "/mentor/my-reservists" },
+    { label: language === "he" ? "ראשי" : "Dashboard", path: "/pages/mentor/MentorHomePage" },
+    { label: language === "he" ? "רשימת המלווים שלי" : "My Reservists", path: "/pages/mentor/mentees" },
     { label: language === "he" ? "פניות חדשות לליווי" : "New Requests", path: "/mentor/requests" },
     { label: language === "he" ? "משרות רלוונטיות" : "Job Matches", path: "/mentor/job-matches" },
     { label: language === "he" ? "פרסום משרה" : "Post Job", path: "/mentor/post-job" },
@@ -171,11 +168,12 @@ export default function MentorDashboard() {
             : "Manage all your mentoring tasks in one place."}
         </p>
 
+        {/* כרטיסים */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <DashboardCard
             title={language === "he" ? "רשימת המלווים שלי" : "My Reservists"}
             description={language === "he" ? "צפה במלווים שאתה מלווה" : "View reservists you're mentoring"}
-            onClick={() => router.push("/mentor/my-reservists")}
+            onClick={() => router.push("/pages/mentor/mentees")}
           />
           <DashboardCard
             title={language === "he" ? "פניות חדשות לליווי" : "New Requests"}
