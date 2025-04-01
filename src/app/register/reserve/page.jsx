@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { db } from '../../../utils/firebase';
-import { collection, doc, setDoc } from 'firebase/firestore';
+// import { db } from '../../../utils/firebase';
+// import { collection, doc, setDoc } from 'firebase/firestore';
 import Button from '../../../components/Button';
 
 export default function MilouimnikRegisterForm() {
