@@ -3,18 +3,29 @@ import { useState } from "react";
 import { useRouter } from "next/navigation"; 
 import "./LandingPage.css";
 import Button from "../components/Button";
-import { isEnglish } from "./language";
-
+import { getLanguagePreference, setLanguagePreference } from './language';
+import { useEffect } from "react";
 
 export default function LandingPage() {
-    const [language, setLanguage] = useState(isEnglish ? "en" : "he");
+    const [language, setLanguage] = useState('he');
     const router = useRouter();
 
+    useEffect(() => {
+        setLanguage(getLanguagePreference());
+    }, []);
+
     const toggleLanguage = () => {
-        setLanguage(prevLang => (prevLang === "he" ? "en" : "he"));
-        document.documentElement.lang = language === "he" ? "en" : "he";
-        document.body.setAttribute("dir", language === "he" ? "ltr" : "rtl");
+    setLanguage(prev => {
+        const nextLang = prev === "he" ? "en" : "he";
+        setLanguagePreference(nextLang);
+        if (typeof document !== 'undefined') {
+        document.documentElement.lang = nextLang;
+        document.body.setAttribute("dir", nextLang === "he" ? "rtl" : "ltr");
+        }
+        return nextLang;
+    });
     };
+
 
     return (
         <div>

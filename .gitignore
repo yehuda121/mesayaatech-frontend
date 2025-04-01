@@ -11,6 +11,9 @@
 !.yarn/versions
 
 src/app/utils/firebase.js
+src/app/utils/aws-config.js
+src/app/utils/amplify-config.js
+.env.local
 
 # testing
 /coverage
