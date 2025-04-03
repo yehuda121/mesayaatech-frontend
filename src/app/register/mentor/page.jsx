@@ -1,206 +1,147 @@
-// "use client";
-// import React, { useState } from "react";
-// import { useRouter } from "next/navigation";
-// import { isEnglish } from "../../language";
-// ``
+'use client';
+import { useState } from 'react';
+import Button from '../../../components/Button';
 
-// export default function MentorDashboard() {
-//   const router = useRouter();
-//   const [language, setLanguage] = useState(isEnglish ? "en" : "he");
+export default function mentorRegisterForm() {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    idNumber: '',
+    email: '',
+    phone: '',
+    profession: '',
+    location: '',
+    specialties: [],
+    experience: '',
+    pastMentoring: '',
+    availability: '',
+    linkedin: '',
+    notes: '',
+    userType: 'mentor'
+  });
 
-//   const toggleLanguage = () => {
-//     const newLang = language === "he" ? "en" : "he";
-//     setLanguage(newLang);
-//     document.documentElement.lang = newLang;
-//     document.body.setAttribute("dir", newLang === "he" ? "rtl" : "ltr");
-//   };
+  const [success, setSuccess] = useState('');
 
-//   const navItems = [
-//     { label: language === "he" ? "ראשי" : "Dashboard", path: "/HomePageMentor" },
-//     { label: language === "he" ? "רשימת המלווים שלי" : "My Reservists", path: "/mentor/my-reservists" },
-//     { label: language === "he" ? "פניות חדשות לליווי" : "New Requests", path: "/mentor/requests" },
-//     { label: language === "he" ? "משרות רלוונטיות" : "Job Matches", path: "/mentor/job-matches" },
-//     { label: language === "he" ? "פרסום משרה" : "Post Job", path: "/mentor/post-job" },
-//     { label: language === "he" ? "פידבקים שהתקבלו" : "Feedback", path: "/mentor/feedback" },
-//     { label: language === "he" ? "סטטיסטיקות" : "Statistics", path: "/mentor/stats" },
-//     { label: language === "he" ? "הפרופיל שלי" : "My Profile", path: "/mentor/profile" },
-//   ];
-
-//   return (
-//     <div className="flex min-h-screen">
-//       {/* Sidebar */}
-//       <aside className="w-64 bg-blue-900 text-white p-6 space-y-6">
-//         <h2 className="text-2xl font-bold mb-6 border-b pb-2">מסייעטק</h2>
-
-//         {/* כפתור שפה */}
-//         <div className="text-sm mb-4 text-right">
-//           <button
-//             onClick={toggleLanguage}
-//             className="bg-white text-blue-900 px-3 py-1 rounded hover:bg-blue-100 transition"
-//           >
-//             {language === "he" ? "English" : "עברית 🇮🇱"}
-//           </button>
-//         </div>
-
-//         {/* ניווט */}
-//         <nav className="space-y-4">
-//           {navItems.map(({ label, path }) => (
-//             <button
-//               key={path}
-//               className="block text-right w-full text-white hover:bg-blue-700 px-4 py-2 rounded transition"
-//               onClick={() => router.push(path)}
-//             >
-//               {label}
-//             </button>
-//           ))}
-//         </nav>
-//       </aside>
-
-//       {/* תוכן ראשי */}
-//       <main className="flex-1 bg-gray-100 p-10 text-right">
-//         <h1 className="text-3xl font-bold text-blue-800 mb-6">
-//           {language === "he" ? "לוח הבקרה של המנטור" : "Mentor Dashboard"}
-//         </h1>
-//         <p className="text-gray-700 mb-8">
-//           {language === "he"
-//             ? "כאן תוכל לנהל את כל הפעולות שלך כמנטור."
-//             : "Manage all your mentoring tasks in one place."}
-//         </p>
-
-//         {/* כרטיסים מרכזיים */}
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//           <DashboardCard
-//             title={language === "he" ? "רשימת המלווים שלי" : "My Reservists"}
-//             description={language === "he" ? "צפה במלווים שאתה מלווה" : "View reservists you're mentoring"}
-//             onClick={() => router.push("/mentor/my-reservists")}
-//           />
-//           <DashboardCard
-//             title={language === "he" ? "פניות חדשות לליווי" : "New Requests"}
-//             description={language === "he" ? "בדוק בקשות ליווי" : "Check new mentoring requests"}
-//             onClick={() => router.push("/mentor/requests")}
-//           />
-//           <DashboardCard
-//             title={language === "he" ? "פרסום משרה חדשה" : "Post New Job"}
-//             description={language === "he" ? "הוסף משרה למערכת" : "Post a job opportunity"}
-//             onClick={() => router.push("/mentor/post-job")}
-//           />
-//         </div>
-//       </main>
-//     </div>
-//   );
-// }
-
-// function DashboardCard({ title, description, onClick }) {
-//   return (
-//     <div
-//       className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-xl transition duration-200"
-//       onClick={onClick}
-//     >
-//       <h3 className="text-xl font-semibold text-blue-700 mb-2">{title}</h3>
-//       <p className="text-gray-600">{description}</p>
-//     </div>
-//   );
-// }
-"use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { getLanguage, toggleLanguage } from "../../language";
-
-export default function MentorDashboard() {
-  const router = useRouter();
-  const [language, setLanguage] = useState(getLanguage());
-
-  const handleToggleLanguage = () => {
-    const newLang = toggleLanguage();
-    setLanguage(newLang);
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setFormData((prev) => ({
+        ...prev,
+        specialties: checked
+          ? [...prev.specialties, value]
+          : prev.specialties.filter((s) => s !== value),
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-  useEffect(() => {
-    setLanguage(getLanguage());
-  }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const navItems = [
-    { label: language === "he" ? "ראשי" : "Dashboard", path: "/HomePageMentor" },
-    { label: language === "he" ? "רשימת המלווים שלי" : "My Reservists", path: "/mentor/my-reservists" },
-    { label: language === "he" ? "פניות חדשות לליווי" : "New Requests", path: "/mentor/requests" },
-    { label: language === "he" ? "משרות רלוונטיות" : "Job Matches", path: "/mentor/job-matches" },
-    { label: language === "he" ? "פרסום משרה" : "Post Job", path: "/mentor/post-job" },
-    { label: language === "he" ? "פידבקים שהתקבלו" : "Feedback", path: "/mentor/feedback" },
-    { label: language === "he" ? "סטטיסטיקות" : "Statistics", path: "/mentor/stats" },
-    { label: language === "he" ? "הפרופיל שלי" : "My Profile", path: "/mentor/profile" },
-  ];
+    try {
+      const res = await fetch('http://localhost:5000/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setSuccess('הרישום נשלח בהצלחה!');
+        setFormData({
+          fullName: '',
+          idNumber: '',
+          email: '',
+          phone: '',
+          profession: '',
+          location: '',
+          specialties: [],
+          experience: '',
+          pastMentoring: '',
+          availability: '',
+          linkedin: '',
+          notes: '',
+        });
+      } else {
+        throw new Error('שליחה נכשלה');
+      }
+    } catch (err) {
+      console.error('שגיאה:', err);
+      setSuccess('אירעה שגיאה בשליחה');
+    }
+  };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-blue-900 text-white p-6 space-y-6">
-        <h2 className="text-2xl font-bold mb-6 border-b pb-2">מסייעטק</h2>
+    <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-lg space-y-6">
+      <h1 className="text-3xl font-bold text-center">הרשמה למנטור</h1>
 
-        {/* כפתור שפה */}
-        <div className="text-sm mb-4 text-right">
-          <button
-            onClick={handleToggleLanguage}
-            className="bg-white text-blue-900 px-3 py-1 rounded hover:bg-blue-100 transition"
-          >
-            {language === "he" ? "English" : "עברית 🇮🇱"}
-          </button>
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <label>שם מלא*:
+          <input name="fullName" required value={formData.fullName} onChange={handleChange} className="border p-2 w-full rounded" />
+        </label>
 
-        {/* ניווט */}
-        <nav className="space-y-4">
-          {navItems.map(({ label, path }) => (
-            <button
-              key={path}
-              className="block text-right w-full text-white hover:bg-blue-700 px-4 py-2 rounded transition"
-              onClick={() => router.push(path)}
-            >
-              {label}
-            </button>
+        <label>תעודת זהות*:
+          <input name="idNumber" required value={formData.idNumber} onChange={handleChange} className="border p-2 w-full rounded" />
+        </label>
+
+        <label>אימייל*:
+          <input name="email" type="email" required value={formData.email} onChange={handleChange} className="border p-2 w-full rounded" />
+        </label>
+
+        <label>מספר טלפון*:
+          <input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="border p-2 w-full rounded" />
+        </label>
+
+        <label>תחום עיסוק עיקרי*:
+          <input name="profession" required value={formData.profession} onChange={handleChange} className="border p-2 w-full rounded" />
+        </label>
+
+        <label>מיקום גאוגרפי*:
+          <input name="location" required value={formData.location} onChange={handleChange} className="border p-2 w-full rounded" />
+        </label>
+
+        <fieldset>
+          <legend className="font-semibold">תחומי מומחיות (אפשר לבחור כמה):</legend>
+          {['חיפוש עבודה', 'כתיבת קורות חיים', 'הכנה לראיונות', 'בניית מסלול קריירה', 'שיפור מיומנויות רכות', 'אחר'].map((field) => (
+            <label key={field} className="block">
+              <input
+                type="checkbox"
+                name="specialties"
+                value={field}
+                checked={formData.specialties.includes(field)}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              {field}
+            </label>
           ))}
-        </nav>
-      </aside>
+        </fieldset>
 
-      {/* תוכן ראשי */}
-      <main className="flex-1 bg-gray-100 p-10 text-right">
-        <h1 className="text-3xl font-bold text-blue-800 mb-6">
-          {language === "he" ? "לוח הבקרה של המנטור" : "Mentor Dashboard"}
-        </h1>
-        <p className="text-gray-700 mb-8">
-          {language === "he"
-            ? "כאן תוכל לנהל את כל הפעולות שלך כמנטור."
-            : "Manage all your mentoring tasks in one place."}
-        </p>
+        <label>רקע מקצועי (ציין ניסיון רלוונטי)*:
+          <textarea name="experience" required value={formData.experience} onChange={handleChange} className="border p-2 w-full rounded h-24" />
+        </label>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <DashboardCard
-            title={language === "he" ? "רשימת המלווים שלי" : "My Reservists"}
-            description={language === "he" ? "צפה במלווים שאתה מלווה" : "View reservists you're mentoring"}
-            onClick={() => router.push("/mentor/my-reservists")}
-          />
-          <DashboardCard
-            title={language === "he" ? "פניות חדשות לליווי" : "New Requests"}
-            description={language === "he" ? "בדוק בקשות ליווי" : "Check new mentoring requests"}
-            onClick={() => router.push("/mentor/requests")}
-          />
-          <DashboardCard
-            title={language === "he" ? "פרסום משרה חדשה" : "Post New Job"}
-            description={language === "he" ? "הוסף משרה למערכת" : "Post a job opportunity"}
-            onClick={() => router.push("/mentor/post-job")}
-          />
-        </div>
-      </main>
-    </div>
-  );
-}
+        <label>ניסיון קודם בהדרכה/מנטורינג:
+          <textarea name="pastMentoring" value={formData.pastMentoring} onChange={handleChange} className="border p-2 w-full rounded h-24" />
+        </label>
 
-function DashboardCard({ title, description, onClick }) {
-  return (
-    <div
-      className="bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-xl transition duration-200"
-      onClick={onClick}
-    >
-      <h3 className="text-xl font-semibold text-blue-700 mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+        <label>זמינות (שעות/ימים מועדפים):
+          <input name="availability" value={formData.availability} onChange={handleChange} className="border p-2 w-full rounded" />
+        </label>
+
+        <label>לינקדאין (לא חובה):
+          <input name="linkedin" value={formData.linkedin} onChange={handleChange} className="border p-2 w-full rounded" />
+        </label>
+
+        <label>הערות נוספות:
+          <textarea name="notes" value={formData.notes} onChange={handleChange} className="border p-2 w-full rounded h-24" />
+        </label>
+
+        <Button text="שלח בקשה" type="submit" />
+      </form>
+
+      {success && <p className="text-green-600 text-center font-bold">{success}</p>}
     </div>
   );
 }

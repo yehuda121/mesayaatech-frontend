@@ -43,7 +43,7 @@ export default function RegisterPage() {
 
       <div className="space-y-4 text-center">
         <p className="text-xl">
-          {language === "he" ? "יש לך חשבון קיים?" : "Already have an account?"}
+          {language === "he" ? "?יש לך כבר חשבון" : "Already have an account?"}
         </p>
         <Button
           text={language === "he" ? "התחברות" : "Login"}
@@ -53,7 +53,7 @@ export default function RegisterPage() {
 
       <div className="space-y-4 text-center">
         <p className="text-xl">
-          {language === "he" ? "אין לך חשבון? הירשם לפי התפקיד שלך:" : "Don't have an account? Register as:"}
+          {language === "he" ? "אין לך חשבון? הירשם עכשיו בתור" : "Don't have an account? Register as"}
         </p>
 
         <div className="space-y-4">
@@ -62,19 +62,13 @@ export default function RegisterPage() {
               <span className="tooltip-text">{getTooltip(type)}</span>
               <Button
                 text={
-                  language === "he" ? type === "reserve"
-                      ? "מילואימניק"
-                      : type === "mentor"
-                      ? "מנטור"
-                      : "שגריר"
-                    : type === "reserve"
-                    ? "Reservist"
-                    : type === "mentor"
-                    ? "Mentor"
-                    : "Ambassador"
+                  language === "he" ? 
+                  type === "reserve" ? "מילואימניק": 
+                  type === "mentor" ? "מנטור" : "שגריר"
+                    : type === "reserve" ? "Reservist" : 
+                    type === "mentor" ? "Mentor" : "Ambassador"
                 }
                 onClick={() => router.push(`/register/${type}`)}
-                // onClick={() => router.push('/register/${type}')}
               />
             </div>
           ))}

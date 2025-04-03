@@ -14,6 +14,7 @@ export default function reseveRegisterForm() {
     experience: '',
     linkedin: '',
     notes: '',
+    userType: 'reservist'
   });
 
   const [success, setSuccess] = useState('');
