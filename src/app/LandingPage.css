@@ -1,190 +1,86 @@
-/* General Reset
-body, h1, h2, h3, p, a, button {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    line-height: 1.6;
-    color: #333;
-    background-color: #f4f4f9;
-}
-
-.header {
-    background-color: #002855;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-}
-
-.logo-image {
-    width: 100px;
-    height: auto;
-}
-
-.nav-links {
-    display: flex;
-    gap: 10px;
-}
-
-.Button {
-    background-color: #00509e;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background 0.3s ease;
-}
-
-.Button:hover {
-    background-color: #003f7d;
-}
-
-.hero {
-    background-color: #002855;
-    color: #fff;
-    padding: 60px 20px;
-    text-align: center;
-}
-
-.hero h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    font-size: 1.2em;
-    margin-bottom: 20px;
-}
-
-.about {
-    padding: 40px 20px;
-    text-align: center;
-}
-
-.about h2 {
-    font-size: 2em;
-    color: #002855;
-    margin-bottom: 20px;
-}
-
-.about p {
-    font-size: 1.2em;
-    color: #333;
-}
-
-.signup {
-    padding: 40px 20px;
-    text-align: center;
-    background-color: #f4f4f9;
-}
-
-.signup h2 {
-    font-size: 2em;
-    color: #002855;
-    margin-bottom: 20px;
-}
-
-.signup p {
-    font-size: 1.2em;
-    margin-bottom: 20px;
-}
-
-.footer {
-    background-color: #002855;
-    color: #fff;
-    text-align: center;
-    padding: 10px 20px;
-}
-
-.tooltip-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .tooltip-wrapper .tooltip-text {
-    visibility: hidden;
-    background-color: #002855;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 6px 12px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%; 
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    white-space: nowrap;
-    font-size: 0.85rem;
-  }
-  
-  .tooltip-wrapper:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
-  }
-   */
-
 /* General Reset */
 body, h1, h2, h3, p, a, button {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
-}
-
-html, body {
+  }
+  
+  html, body {
     direction: ltr;
     line-height: 1.6;
     color: #333;
     background-color: #f4f4f9;
     text-align: right;
-}
-
-/* Class for English text if needed */
-.text-ltr {
+  }
+  
+  .text-ltr {
     direction: ltr;
     text-align: left;
-}
-
-/* Header */
-.header {
+  }
+  
+  /* Header */
+  .header {
     background-color: #002855;
     color: #fff;
     padding: 20px 0;
     text-align: center;
-}
-
-.navbar {
+  }
+  
+  .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
-}
-
-.logo-image {
+    position: relative;
+  }
+  
+  .logo-image {
     width: 100px;
     height: auto;
-}
-
-.nav-links {
+  }
+  
+  /* כפתור המבורגר */
+  .menu-icon {
+    font-size: 30px;
+    cursor: pointer;
+    user-select: none;
+    z-index: 2100;
+  }
+  
+  /* תפריט נפתח */
+  .dropdown-menu {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 10px;
     display: flex;
+    flex-direction: column;
     gap: 10px;
-}
-
-.Button {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .dropdown-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  
+  .dropdown-menu.closed {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+  }
+  
+  /* כפתורים */
+  .Button {
     background-color: #00509e;
     color: #fff;
     padding: 10px 20px;
@@ -193,79 +89,80 @@ html, body {
     cursor: pointer;
     font-size: 1em;
     transition: background 0.3s ease;
-}
-
-.Button:hover {
+  }
+  
+  .Button:hover {
     background-color: #003f7d;
-}
-
-/* Hero Section */
-.hero {
+  }
+  
+  /* Hero Section */
+  .hero {
     background-color: #002855;
     color: #fff;
     padding: 60px 20px;
     text-align: center;
-}
-
-.hero h1 {
+  }
+  
+  .hero h1 {
     font-size: 2.5em;
     margin-bottom: 20px;
-}
-
-.hero p {
+  }
+  
+  .hero p {
     font-size: 1.2em;
     margin-bottom: 20px;
-}
-
-/* About Section */
-.about {
+  }
+  
+  /* About Section */
+  .about {
     padding: 40px 20px;
     text-align: center;
-}
-
-.about h2 {
+  }
+  
+  .about h2 {
     font-size: 2em;
     color: #002855;
     margin-bottom: 20px;
-}
-
-.about p {
+  }
+  
+  .about p {
     font-size: 1.2em;
     color: #333;
-}
-
-/* Signup Section */
-.signup {
+  }
+  
+  /* Signup Section */
+  .signup {
     padding: 40px 20px;
     text-align: center;
     background-color: #f4f4f9;
-}
-
-.signup h2 {
+  }
+  
+  .signup h2 {
     font-size: 2em;
     color: #002855;
     margin-bottom: 20px;
-}
-
-.signup p {
+  }
+  
+  .signup p {
     font-size: 1.2em;
     margin-bottom: 20px;
-}
-
-/* Footer */
-.footer {
+  }
+  
+  /* Footer */
+  .footer {
     background-color: #002855;
     color: #fff;
     text-align: center;
     padding: 10px 20px;
-}
-
-.tooltip-wrapper {
+  }
+  
+  /* Tooltip */
+  .tooltip-wrapper {
     position: relative;
     display: inline-block;
-}
-
-.tooltip-wrapper .tooltip-text {
+  }
+  
+  .tooltip-wrapper .tooltip-text {
     visibility: hidden;
     background-color: #002855;
     color: #fff;
@@ -281,9 +178,51 @@ html, body {
     transition: opacity 0.3s;
     white-space: nowrap;
     font-size: 0.85rem;
-}
-
-.tooltip-wrapper:hover .tooltip-text {
+  }
+  
+  .tooltip-wrapper:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
-}
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: -260px;
+    width: 250px;
+    height: 100%;
+    background-color: #002855;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: right 0.3s ease-in-out;
+    z-index: 2000;
+  }
+  
+  .sidebar.open {
+    right: 0;
+  }
+  /* כפתור איקס בתוך הסיידבר */
+.close-icon {
+    font-size: 26px;
+    align-self: flex-end;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+  
+  /* אין קשר למובייל – תפריט קבוע בכל גודל */
+  @media (min-width: 768px) {
+    .menu-icon {
+      display: block;
+    }
+  
+    .sidebar {
+      display: flex;
+    }
+  }

@@ -4,6 +4,8 @@ import Button from '../../../components/Button';
 
 export default function ambassadorRegisterForm() {
   const [formData, setFormData] = useState({
+    userType: 'ambassador',
+    status: 'pending',
     fullName: '',
     idNumber: '',
     email: '',
@@ -15,7 +17,6 @@ export default function ambassadorRegisterForm() {
     jobFields: [],
     linkedin: '',
     notes: '',
-    userType: 'ambassador'
   });
 
   const [success, setSuccess] = useState('');

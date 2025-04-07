@@ -4,6 +4,8 @@ import Button from '../../../components/Button';
 
 export default function mentorRegisterForm() {
   const [formData, setFormData] = useState({
+    userType: 'mentor',
+    status: 'pending',
     fullName: '',
     idNumber: '',
     email: '',
@@ -16,7 +18,6 @@ export default function mentorRegisterForm() {
     availability: '',
     linkedin: '',
     notes: '',
-    userType: 'mentor'
   });
 
   const [success, setSuccess] = useState('');

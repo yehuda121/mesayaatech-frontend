@@ -4,6 +4,8 @@ import Button from '../../../components/Button';
 
 export default function reseveRegisterForm() {
   const [formData, setFormData] = useState({
+    userType: 'reservist',
+    status: 'pending',
     fullName: '',
     idNumber: '',
     email: '',
@@ -14,7 +16,6 @@ export default function reseveRegisterForm() {
     experience: '',
     linkedin: '',
     notes: '',
-    userType: 'reservist'
   });
 
   const [success, setSuccess] = useState('');
