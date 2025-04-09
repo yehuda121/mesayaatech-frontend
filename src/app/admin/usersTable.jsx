@@ -27,7 +27,6 @@ export default function AdminTable({ users, onStatusChange }) {
       setSelectedForm({ error: 'שגיאה בחיבור לשרת' });
     }
   };
-  
 
   return (
     <div>
@@ -38,7 +37,7 @@ export default function AdminTable({ users, onStatusChange }) {
             <th className="p-2">תעודת זהות</th>
             <th className="p-2">סוג משתמש</th>
             <th className="p-2">סטטוס</th>
-            <th className="p-2">פעולות</th>
+            <th className="p-2">אשר/דחה</th>
           </tr>
         </thead>
         <tbody>

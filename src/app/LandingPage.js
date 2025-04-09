@@ -106,7 +106,6 @@ export default function LandingPage() {
     };
   }, []);
 
-
   const handleToggleLanguage = () => {
     const newLang = toggleLanguage();
     setLanguage(newLang);
@@ -134,16 +133,13 @@ export default function LandingPage() {
 
           <div className={`sidebar ${menuOpen ? 'open' : ''}`} ref={menuRef}>
             <div className="close-icon" onClick={toggleMenu}>✖</div>
-            <Button text={language === "he" ? "אודות" : "About"} onClick={() => { setMenuOpen(false); window.location.href = "#about"; }} />
-            <Button text={language === "he" ? "הירשם" : "Sign Up"} onClick={() => { setMenuOpen(false); router.push("/register"); }} />
-            <Button text={language === "he" ? "התחברות" : "Login"} onClick={() => { setMenuOpen(false); window.location.href = "#login"; }} />
-            <Button text={language === "he" ? "🇮🇱 עברית" : "English"} onClick={() => { setMenuOpen(false); handleToggleLanguage(); }} />
+            <Button text={language === "he" ?  "English" : "🇮🇱 עברית"} onClick={() => { setMenuOpen(false); handleToggleLanguage(); }} />
+            <Button text={language === "he" ? "הרשמה" : "Sign Up"} onClick={() => { setMenuOpen(false); router.push("/register"); }} />
+            <Button text={language === "he" ? "התחברות עם חשבון קיים" : "Login"} onClick={() => { setMenuOpen(false); window.location.href = "#login"; }} />
             <Button text="כניסה לדף הבית של מנטור (זמני)" onClick={() => { setMenuOpen(false); router.push("/pages/mentor/MentorHomePage"); }} />
             <Button text="HomePageReserve" onClick={() => { setMenuOpen(false); router.push("/pages/reserve/ReserveHomePage"); }} />
-            <Button text={language === "he" ? "נהל" : "admin"} onClick={() => { setMenuOpen(false); router.push("/admin"); }} />
+            <Button text={language === "he" ? "מנהל" : "admin"} onClick={() => { setMenuOpen(false); router.push("/admin"); }} />
           </div>
-
-
         </nav>
 
         <div className="hero">
@@ -152,7 +148,14 @@ export default function LandingPage() {
           <Button text={language === "he" ? "התחל עכשיו" : "Get Started"} onClick={() => window.location.href = "#signup"} />
         </div>
       </header>
-
+      <section className="aboutSection" id="aboutSection">
+        <h2>{language === "he" ? "אודות הפרויקט" : "About the Project"}</h2>
+        <p>
+          {language === "he"
+            ? "מסייעטק היא פלטפורמה דיגיטלית ייחודית שנועדה לסייע למשרתי מילואים להשתלב בצורה יעילה בשוק העבודה. באמצעות התאמה חכמה למנטורים מקצועיים, ניהול תהליך ליווי אישי, והצגת משרות ייעודיות, הפלטפורמה נותנת מענה מדויק לצרכים הייחודיים של משרתי המילואים בישראל."
+            : "Mesayaatech is a unique digital platform designed to help Israeli reservists integrate effectively into the workforce. Through smart matching with professional mentors, personalized mentoring management, and a dedicated job board, the platform addresses the specific needs of reservists in Israel."}
+        </p>
+      </section>
     </div>
   );
 }

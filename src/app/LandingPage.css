@@ -187,11 +187,12 @@ body, h1, h2, h3, p, a, button {
 
   .sidebar {
     position: fixed;
+    margin-top: 20px;
     top: 0;
     right: -260px;
     width: 250px;
     height: 100%;
-    background-color: #002855;
+    background-color: #00499c;
     box-shadow: -2px 0 5px rgba(0,0,0,0.2);
     padding: 20px;
     display: flex;
@@ -215,8 +216,27 @@ body, h1, h2, h3, p, a, button {
   .nav-links {
     display: none;
   }
+  .aboutSection {
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #f0f4ff, #ffffff);
+    text-align: center;
+    direction: rtl;
+  }
   
-  /* אין קשר למובייל – תפריט קבוע בכל גודל */
+  .aboutSection h2 {
+    font-size: 2.5rem;
+    color: #1a237e;
+    margin-bottom: 1rem;
+  }
+  
+  .aboutSection p {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #333333;
+  }
+  
   @media (min-width: 768px) {
     .menu-icon {
       display: block;
