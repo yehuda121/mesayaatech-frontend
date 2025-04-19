@@ -38,7 +38,7 @@ export default function reseveRegisterForm() {
     e.preventDefault();
   
     try {
-      const res = await fetch('http://localhost:5000/api/upload', {
+      const res = await fetch('http://localhost:5000/api/upload-registration-form', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

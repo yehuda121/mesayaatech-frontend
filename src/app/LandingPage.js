@@ -139,6 +139,7 @@ export default function LandingPage() {
             <Button text="כניסה לדף הבית של מנטור (זמני)" onClick={() => { setMenuOpen(false); router.push("/pages/mentor/MentorHomePage"); }} />
             <Button text="HomePageReserve" onClick={() => { setMenuOpen(false); router.push("/pages/reserve/ReserveHomePage"); }} />
             <Button text={language === "he" ? "מנהל" : "admin"} onClick={() => { setMenuOpen(false); router.push("/admin"); }} />
+            <Button text={language === "he" ? "אירועים" : "events"} onClick={() => { setMenuOpen(false); router.push("/events"); }} />
           </div>
         </nav>
 
