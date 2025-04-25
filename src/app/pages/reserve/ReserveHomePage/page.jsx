@@ -1,67 +1,93 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getLanguage, toggleLanguage } from "@/app/language";
+import "../../mentor/MentorHomePage/mentor.css";
 
-export default function HomePage() {
+export default function ReserveDashboard() {
+  const router = useRouter();
+  const [language, setLanguage] = useState(getLanguage());
+
+  const handleToggleLanguage = () => {
+    const newLang = toggleLanguage();
+    setLanguage(newLang);
+  };
+
+  useEffect(() => {
+    setLanguage(getLanguage());
+  }, []);
+
+  const navItems = [
+    { label: language === "he" ? "ראשי" : "Dashboard", path: "/pages/reserve/ReserveHomePage" },
+    { label: language === "he" ? "משרות" : "Jobs", path: "/pages/jobs"},
+    { label: language === "he" ? "הפרופיל שלי" : "My Profile", path: "/reserve/profile" },
+  ];
+
   return (
-    <div className="bg-gray-100 text-gray-900">
-      {/* ניווט עליון */}
-      <nav className="bg-white shadow-lg p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-blue-600">מסייעטק</h1>
-        <div className="space-x-4">
-          <a href="#about" className="text-gray-700 hover:text-blue-500">אודות</a>
-          <a href="#mentors" className="text-gray-700 hover:text-blue-500">מצא מנטור</a>
-          <a href="#jobs" className="text-gray-700 hover:text-blue-500">משרות</a>
-          <a href="#signup" className="bg-blue-500 text-white px-4 py-2 rounded-lg">הירשם</a>
+    <div className="dashboard-container">
+      <aside className="dashboard-sidebar">
+        <h2 className="dashboard-title">מסייעטק</h2>
+        <div className="language-toggle">
+          <button onClick={handleToggleLanguage}>
+            {language === "he" ? "English" : "עברית 🇮🇱"}
+          </button>
         </div>
-      </nav>
+        <nav className="dashboard-nav">
+          {navItems.map(({ label, path }) => (
+            <button key={path} onClick={() => router.push(path)}>
+              {label}
+            </button>
+          ))}
+        </nav>
+      </aside>
 
-      {/* באנר ראשי */}
-      <header className="text-center py-20 bg-blue-500 text-white">
-        <h2 className="text-4xl font-bold">מחברים בין מילואימניקים למנטורים בדרך להצלחה!</h2>
-        <p className="mt-4 text-lg">מצא מנטור, קבל הכנה לראיונות וגלה משרות פתוחות</p>
-        <div className="mt-6">
-          <button className="bg-white text-blue-500 px-6 py-3 rounded-lg shadow-lg mr-4">מצא מנטור</button>
-          <button className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">גלה משרות</button>
+      <main className="dashboard-main">
+        <h1>{language === "he" ? "שלום, מאי 👋" : "Hello, May 👋"}</h1>
+        <p>
+          {language === "he"
+            ? "כאן תמצאי את כל מה שאת צריכה כדי להתקדם בקריירה."
+            : "Everything you need to boost your career."}
+        </p>
+
+        <div className="dashboard-grid">
+          <DashboardCard
+            title={language === "he" ? "הפרופיל שלי" : "My Profile"}
+            description={language === "he" ? "נהל את הפרטים האישיים שלך" : "Manage your personal info"}
+            onClick={() => router.push("/reserve/profile")}
+          />
+          <DashboardCard
+            title={language === "he" ? "משרות" : "Jobs"}
+            description={language === "he" ? "מצא משרות מותאמות" : "Find tailored jobs"}
+            onClick={() => router.push("/pages/jobs")
+            }
+          />
+          <DashboardCard
+            title={language === "he" ? "הכנה לראיונות" : "Interview Prep"}
+            description={language === "he" ? "תרגול וקבלת פידבק לשאלות ראיונות עבודה" : "Practice and get feedback on job interview questions"}
+            onClick={() => router.push("/reserve/interview-prep")}
+          />
+
+          <DashboardCard
+            title={language === "he" ? "פגישות קרובות" : "Upcoming Meetings"}
+            description={language === "he" ? "צפי בפגישות הקרובות עם מנטורים" : "See your upcoming meetings"}
+            onClick={() => router.push("/reserve/meetings")}
+          />
+          <DashboardCard
+            title={language === "he" ? "פידבקים מהמנטור" : "Mentor Feedback"}
+            description={language === "he" ? "ראה מה המנטורים חושבים עליך" : "See what mentors say about you"}
+            onClick={() => router.push("/reserve/feedback")}
+          />
         </div>
-      </header>
+      </main>
+    </div>
+  );
+}
 
-      {/* יתרונות הפלטפורמה */}
-      <section id="about" className="py-16 text-center">
-        <h3 className="text-3xl font-bold">למה מסייעטק?</h3>
-        <div className="flex justify-center mt-6 space-x-8">
-          <div className="w-1/4 p-4 bg-white shadow-lg rounded-lg">
-            <h4 className="font-bold text-xl">🎯 התאמה חכמה</h4>
-            <p>מצא מנטור רלוונטי לפי תחום ומיקום</p>
-          </div>
-          <div className="w-1/4 p-4 bg-white shadow-lg rounded-lg">
-            <h4 className="font-bold text-xl">📝 הכנה לראיונות</h4>
-            <p>קבל פידבק AI לשיפור הראיונות</p>
-          </div>
-          <div className="w-1/4 p-4 bg-white shadow-lg rounded-lg">
-            <h4 className="font-bold text-xl">💼 משרות בלעדיות</h4>
-            <p>עיין בהזדמנויות עבודה שמציעים שגרירים</p>
-          </div>
-        </div>
-      </section>
-
-      {/* עדויות משתמשים */}
-      <section id="testimonials" className="py-16 bg-gray-200 text-center">
-        <h3 className="text-3xl font-bold">מה אומרים עלינו?</h3>
-        <div className="mt-6 space-y-4">
-          <p className="italic">"המערכת עזרה לי למצוא עבודה בתוך חודשיים!" – יואב ר.</p>
-          <p className="italic">"המנטור שלי היה מדהים, הכין אותי לכל שלב בראיונות." – דניאל ש.</p>
-        </div>
-      </section>
-
-      {/* קריאה לפעולה */}
-      <section id="signup" className="py-16 text-center bg-blue-500 text-white">
-        <h3 className="text-3xl font-bold">מוכן לעשות את הצעד הבא בקריירה שלך?</h3>
-        <button className="bg-white text-blue-500 px-6 py-3 rounded-lg mt-6">הירשם עכשיו – זה בחינם!</button>
-      </section>
-
-      {/* תחתית האתר */}
-      <footer className="bg-gray-800 text-white py-4 text-center">
-        <p>© 2025 מסייעטק - כל הזכויות שמורות</p>
-      </footer>
+function DashboardCard({ title, description, onClick }) {
+  return (
+    <div className="dashboard-card" onClick={onClick}>
+      <h3>{title}</h3>
+      <p>{description}</p>
     </div>
   );
 }
