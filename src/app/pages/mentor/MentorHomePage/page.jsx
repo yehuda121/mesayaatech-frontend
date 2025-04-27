@@ -23,7 +23,7 @@ export default function MentorDashboard() {
     { label: language === "he" ? "רשימת המלווים שלי" : "My Reservists", path: "/mentor/my-reservists" },
     { label: language === "he" ? "פניות חדשות לליווי" : "New Requests", path: "/mentor/requests" },
     { label: language === "he" ? "משרות רלוונטיות" : "Job Matches", path: "/mentor/job-matches" },
-    { label: language === "he" ? "פרסום משרה" : "Post Job", path: "/mentor/post-job" },
+    { label: language === "he" ? "פרסום משרה" : "Post Job", path: "/pages/jobs/newJob" },
     { label: language === "he" ? "פידבקים שהתקבלו" : "Feedback", path: "/mentor/feedback" },
     { label: language === "he" ? "סטטיסטיקות" : "Statistics", path: "/mentor/stats" },
     { label: language === "he" ? "הפרופיל שלי" : "My Profile", path: "/mentor/profile" },
@@ -69,7 +69,7 @@ export default function MentorDashboard() {
           <DashboardCard
             title={language === "he" ? "פרסום משרה חדשה" : "Post New Job"}
             description={language === "he" ? "הוסף משרה למערכת" : "Post a job opportunity"}
-            onClick={() => router.push("/mentor/post-job")}
+            onClick={() => router.push("/pages/jobs/newJob")}
           />
         </div>
       </main>

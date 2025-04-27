@@ -4,7 +4,6 @@ import { getLanguage, toggleLanguage } from "@/app/language";
 import { useRouter } from "next/navigation";
 import "../mentor/MentorHomePage/mentor.css";
 
-
 export default function JobsPage() {
   const [language, setLanguage] = useState(getLanguage());
   const [userType, setUserType] = useState(null); // reservist / mentor / ambassador
@@ -24,19 +23,26 @@ export default function JobsPage() {
     setLanguage(newLang);
   };
 
-  // Only mentors and ambassadors can post jobs
-  const canPostJob = userType === "mentor" || userType === "ambassador";
+  const canPostJob = userType === "mentor" || userType === "ambassador" || userType === "admin";
 
   const handleNavigateHome = () => {
+    if (!userType) {
+      console.log("User type not loaded yet");
+      return;
+    }
+
     switch (userType) {
       case "mentor":
-        router.push("/mentor/MentorHomePage");
+        router.push("/pages/mentor/MentorHomePage");
         break;
       case "reservist":
-        router.push("/reserve/ReserveHomePage");
+        router.push("/pages/reserve/ReserveHomePage");
         break;
       case "ambassador":
-        router.push("/ambassador/AmbassadorHomePage"); //create this page
+        router.push("/pages/ambassador/AmbassadorHomePage");
+        break;
+      case "admin":
+        router.push("/admin"); 
         break;
       default:
         router.push("/");
@@ -55,7 +61,7 @@ export default function JobsPage() {
           </button>
         </div>
         <nav className="dashboard-nav">
-          <button onClick={handleNavigateHome}>
+          <button onClick={handleNavigateHome} disabled={!userType}>
             {language === "he" ? "ראשי" : "Home"}
           </button>
         </nav>
@@ -74,7 +80,7 @@ export default function JobsPage() {
         {canPostJob && (
           <div className="mb-6 text-right">
             <button
-              onClick={() => router.push("/jobs/new")}
+              onClick={() => router.push("/pages/jobs/newJob")}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
             >
               {language === "he" ? "הוסף משרה" : "Post a Job"}

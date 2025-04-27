@@ -159,11 +159,13 @@ import UsersTable from "./components/usersTable";
 import CreateEvent from './components/CreateEvent';
 import EventUpdateDelete from './components/EventUpdateDelete';
 import "./admin.css";
+import { useRouter } from "next/navigation"; 
 
 export default function AdminPage() {
   const [users, setUsers] = useState([]);
   const [view, setView] = useState('');
   const [openSection, setOpenSection] = useState('');
+  const router = useRouter();
 
   const toggleSection = (section) => {
     setOpenSection(prev => prev === section ? '' : section);
@@ -294,6 +296,11 @@ export default function AdminPage() {
               <button className="sub-button" onClick={() => setView('update-event')}>עדכון / מחיקת אירוע</button>
             </div>
           )}
+           {/* לחצן משרות */}
+           <button onClick={() => router.push("/pages/jobs")}>
+            📄 משרות
+          </button>
+          
         </div>
       </aside>
 
