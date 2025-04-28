@@ -6,24 +6,37 @@ import "../mentor/MentorHomePage/mentor.css";
 
 export default function JobsPage() {
   const [language, setLanguage] = useState(getLanguage());
-  const [userType, setUserType] = useState(null); // reservist / mentor / ambassador
+  const [userType, setUserType] = useState(null); // reservist / mentor / ambassador / admin
+  const [jobs, setJobs] = useState([]);  // כל המשרות
+  const [filteredJobs, setFilteredJobs] = useState([]); // משרות אחרי סינון
+  const [filters, setFilters] = useState({ location: "", company: "" });
+
   const router = useRouter();
 
-  // Load language and user type from localStorage on mount
   useEffect(() => {
     setLanguage(getLanguage());
     const storedUserType = localStorage.getItem("userType");
     if (storedUserType) {
       setUserType(storedUserType);
     }
+    fetchJobs();
   }, []);
+
+  const fetchJobs = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/import-jobs");
+      const data = await res.json();
+      setJobs(data);
+      setFilteredJobs(data);
+    } catch (error) {
+      console.error("Failed to fetch jobs:", error);
+    }
+  };
 
   const handleToggleLanguage = () => {
     const newLang = toggleLanguage();
     setLanguage(newLang);
   };
-
-  const canPostJob = userType === "mentor" || userType === "ambassador" || userType === "admin";
 
   const handleNavigateHome = () => {
     if (!userType) {
@@ -42,12 +55,27 @@ export default function JobsPage() {
         router.push("/pages/ambassador/AmbassadorHomePage");
         break;
       case "admin":
-        router.push("/admin"); 
+        router.push("/admin");
         break;
       default:
         router.push("/");
         break;
     }
+  };
+
+  const canPostJob = userType === "mentor" || userType === "ambassador" || userType === "admin";
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+
+    // עדכון התצוגה בזמן אמת
+    const newFiltered = jobs.filter((job) => {
+      const locationMatch = !value || job.location?.includes(filters.location);
+      const companyMatch = !filters.company || job.company?.includes(filters.company);
+      return locationMatch && companyMatch;
+    });
+    setFilteredJobs(newFiltered);
   };
 
   return (
@@ -70,13 +98,7 @@ export default function JobsPage() {
       {/* Main content */}
       <main className="dashboard-main">
         <h1>{language === "he" ? "משרות פנויות" : "Available Jobs"}</h1>
-        <p>
-          {language === "he"
-            ? "מצא משרה מתאימה או הוסף אחת חדשה אם באפשרותך."
-            : "Find a suitable job or post a new one if you can."}
-        </p>
 
-        {/* Show "Add Job" button for mentors and ambassadors */}
         {canPostJob && (
           <div className="mb-6 text-right">
             <button
@@ -88,11 +110,49 @@ export default function JobsPage() {
           </div>
         )}
 
+        {/* סינון */}
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div>
+            <label className="font-semibold">
+              {language === "he" ? "מיקום" : "Location"}:
+            </label>
+            <input
+              type="text"
+              name="location"
+              value={filters.location}
+              onChange={handleFilterChange}
+              className="border p-2 rounded w-full"
+            />
+          </div>
+
+          <div>
+            <label className="font-semibold">
+              {language === "he" ? "חברה" : "Company"}:
+            </label>
+            <input
+              type="text"
+              name="company"
+              value={filters.company}
+              onChange={handleFilterChange}
+              className="border p-2 rounded w-full"
+            />
+          </div>
+        </div>
+
+        {/* הצגת משרות */}
         <div className="dashboard-grid">
-          {/* TODO: Load and map job listings from backend (S3 or DB) */}
-          <p className="text-gray-600">
-            {language === "he" ? "אין עדיין משרות להצגה." : "No jobs to display yet."}
-          </p>
+          {filteredJobs.length > 0 ? (
+            filteredJobs.map((job, idx) => (
+              <div key={idx} className="dashboard-card">
+                <h3 className="text-xl font-semibold text-blue-700 mb-2">{job.title}</h3>
+                <p className="text-gray-700">{language === "he" ? "חברה" : "Company"}: {job.company}</p>
+                <p className="text-gray-700">{language === "he" ? "מיקום" : "Location"}: {job.location}</p>
+                <p className="text-gray-600 mt-2">{job.description}</p>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-600">{language === "he" ? "אין משרות להצגה." : "No jobs to display."}</p>
+          )}
         </div>
       </main>
     </div>

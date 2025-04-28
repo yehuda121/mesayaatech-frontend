@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getLanguage, toggleLanguage } from "@/app/language";
 import "../../mentor/MentorHomePage/mentor.css";
+
 export default function AddJobPage() {
   const router = useRouter();
   const [language, setLanguage] = useState(getLanguage());
@@ -14,6 +15,10 @@ export default function AddJobPage() {
     description: "",
   });
 
+  useEffect(() => {
+    setLanguage(getLanguage());
+  }, []);
+
   const handleToggleLanguage = () => {
     const newLang = toggleLanguage();
     setLanguage(newLang);
@@ -24,16 +29,35 @@ export default function AddJobPage() {
     setJobData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("📝 New job submitted:", jobData);
-    // save in s3 in futere
-    router.push("/pages/jobs");
-  };
+    console.log("📝 Submitting job:", jobData);
 
-  useEffect(() => {
-    setLanguage(getLanguage());
-  }, []);
+    try {
+      const response = await fetch("http://localhost:5000/api/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...jobData,
+          createdAt: new Date().toISOString(), // מוסיף תאריך יצירה
+        }),
+      });
+
+      if (response.ok) {
+        console.log("✅ Job uploaded successfully");
+        router.push("/pages/jobs");
+      } else {
+        const error = await response.json();
+        console.error("❌ Failed to upload job:", error.message);
+        alert("אירעה שגיאה בהעלאת משרה.");
+      }
+    } catch (err) {
+      console.error("❌ Error submitting job:", err);
+      alert("אירעה שגיאה בהעלאת משרה.");
+    }
+  };
 
   return (
     <div className="dashboard-container">
