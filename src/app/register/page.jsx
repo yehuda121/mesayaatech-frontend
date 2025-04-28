@@ -1,5 +1,6 @@
-"use client";
-import { useEffect, useState } from "react";
+'use client';
+
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import "../LandingPage.css";
 import Button from "../../components/Button";
@@ -7,12 +8,28 @@ import { getLanguage, toggleLanguage } from "../language";
 
 export default function RegisterPage() {
   const [language, setLanguage] = useState(getLanguage());
+  const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleToggleLanguage = () => {
     const newLang = toggleLanguage();
     setLanguage(newLang);
   };
+
+  const toggleMenu = () => setMenuOpen(!menuOpen);
 
   useEffect(() => {
     setLanguage(getLanguage());
@@ -36,51 +53,85 @@ export default function RegisterPage() {
   const getTooltip = (type) => tooltips[type][language];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 space-y-8">
-      <h1 className="text-4xl font-bold">
-        {language === "he" ? "ברוך הבא למסייעטק" : "Welcome to Mesayaatech"}
-      </h1>
+    <div>
+      <header className="header">
+        <nav className="navbar">
+          <div className="logo">
+            <img src="/logo.png" alt="Logo" className="logo-image" />
+          </div>
 
-      <div className="space-y-4 text-center">
-        <p className="text-xl">
-          {language === "he" ? "?יש לך כבר חשבון" : "Already have an account?"}
-        </p>
-        <Button
-          text={language === "he" ? "התחברות" : "Login"}
-          onClick={() => router.push("/login")}
-        />
-      </div>
+          <div className="menu-icons">
+            {!menuOpen && (
+              <div className="menu-icon" onClick={toggleMenu}>
+                ☰
+              </div>
+            )}
+            {menuOpen && (
+              <div className="close-icon" onClick={toggleMenu}>
+                ✖
+              </div>
+            )}
+          </div>
 
-      <div className="space-y-4 text-center">
-        <p className="text-xl">
-          {language === "he" ? "אין לך חשבון? הירשם עכשיו בתור" : "Don't have an account? Register as"}
-        </p>
+          <div className={`sidebar ${menuOpen ? 'open' : 'closed'}`} ref={menuRef}>
+            <Button text={language === "he" ? "English" : "🇮🇱 עברית"} onClick={() => { setMenuOpen(false); handleToggleLanguage(); }} />
+            <div className="divider"></div>
+            <Button text={language === "he" ? "דף הבית" : "Home"} onClick={() => { setMenuOpen(false); router.push("/"); }} />
+            <Button text={language === "he" ? "התחברות" : "Login"} onClick={() => { setMenuOpen(false); router.push("/login"); }} />
+            <div>{language === "he" ? "או הירשם עכשיו" : "Register now"}</div>
+            <Button text={language === "he" ? "מילואימניק" : "reserve"} onClick={() => { setMenuOpen(false); router.push("/register/reserve"); }} />
+            <Button text={language === "he" ? "מנטור" : "mentor"} onClick={() => { setMenuOpen(false); router.push("/register/mentor"); }} />
+            <Button text={language === "he" ? "שגריר" : "Ambassador"} onClick={() => { setMenuOpen(false); router.push("/register/ambassador"); }} />
+          </div>
+        </nav>
 
-        <div className="space-y-4">
-          {["reserve", "mentor", "ambassador"].map((type) => (
-            <div className="tooltip-wrapper" key={type}>
-              <span className="tooltip-text">{getTooltip(type)}</span>
-              <Button
-                text={
-                  language === "he" ? 
-                  type === "reserve" ? "מילואימניק": 
-                  type === "mentor" ? "מנטור" : "שגריר"
-                    : type === "reserve" ? "Reservist" : 
-                    type === "mentor" ? "Mentor" : "Ambassador"
-                }
-                onClick={() => router.push(`/register/${type}`)}
-              />
-            </div>
-          ))}
+        <div className="hero">
+          <h1>{language === "he" ? "ברוך הבא למסייעטק" : "Welcome to Mesayaatech"}</h1>
+          <p>{language === "he" ? "הירשם והצטרף לקהילה" : "Register and join the community"}</p>
         </div>
-      </div>
+      </header>
 
-      <div className="absolute top-4 right-4">
-        <Button
-          text={language === "he" ? "English" : "עברית 🇮🇱"}
-          onClick={handleToggleLanguage}
-        />
-      </div>
+      <section className="aboutSection" id="registerForm">
+        <div className="flex flex-col items-center justify-center p-8 space-y-8">
+          {/* <h2 className="text-3xl font-bold">
+            {language === "he" ? "התחבר או הירשם" : "Login or Register"}
+          </h2>
+
+          <div className="space-y-4 text-center">
+            <p className="text-xl">
+              {language === "he" ? "?יש לך כבר חשבון" : "Already have an account?"}
+            </p>
+            <Button
+              text={language === "he" ? "התחברות" : "Login"}
+              onClick={() => router.push("/login")}
+            />
+          </div> */}
+
+          <div className="space-y-4 text-center">
+            <p className="text-xl">
+              {language === "he" ? "הירשם עכשיו בתור" : "Register as"}
+            </p>
+
+            <div className="space-y-4">
+              {["reserve", "mentor", "ambassador"].map((type) => (
+                <div className="tooltip-wrapper" key={type}>
+                  <span className="tooltip-text">{getTooltip(type)}</span>
+                  <Button
+                    text={
+                      language === "he"
+                        ? type === "reserve" ? "מילואימניק" :
+                          type === "mentor" ? "מנטור" : "שגריר"
+                        : type === "reserve" ? "Reservist" :
+                          type === "mentor" ? "Mentor" : "Ambassador"
+                    }
+                    onClick={() => router.push(`/register/${type}`)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

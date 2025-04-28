@@ -60,10 +60,11 @@ export default function LandingPage() {
 
           <div className={`sidebar ${menuOpen ? 'open' : 'closed'}`} ref={menuRef}>
             <Button text={language === "he" ? "English" : "🇮🇱 עברית"} onClick={() => { setMenuOpen(false); handleToggleLanguage(); }} />
+            <div className="divider"></div> {/* קו הפרדה קטן */}
             <Button text={language === "he" ? "הרשמה" : "Sign Up"} onClick={() => { setMenuOpen(false); router.push("/register"); }} />
             <Button text={language === "he" ? "התחברות עם חשבון קיים" : "Login"} onClick={() => { setMenuOpen(false); window.location.href = "#login"; }} />
-            <Button text="כניסה לדף הבית של מנטור (זמני)" onClick={() => { setMenuOpen(false); router.push("/pages/mentor/MentorHomePage"); }} />
-            <Button text="HomePageReserve" onClick={() => { setMenuOpen(false); router.push("/pages/reserve/ReserveHomePage"); }} />
+            <Button text={language === "he" ? "דף בית מנטור" : "Mentor homePage"} onClick={() => { setMenuOpen(false); router.push("/pages/mentor/MentorHomePage"); }} />
+            <Button text={language === "he" ? "דף בית מילואימניק" : "Reserve homePage"} onClick={() => { setMenuOpen(false); router.push("/pages/reserve/ReserveHomePage"); }} />
             <Button text={language === "he" ? "מנהל" : "admin"} onClick={() => { setMenuOpen(false); router.push("/admin"); }} />
             <Button text={language === "he" ? "אירועים" : "events"} onClick={() => { setMenuOpen(false); router.push("/events"); }} />
           </div>

@@ -86,7 +86,7 @@ html, body {
   gap: 15px;
   transition: transform 0.3s ease-in-out;
   z-index: 2000;
-  transform: translateX(0); /* תמיד פתוח במסך גדול */
+  transform: translateX(0);
 }
 
 /* Hero Section */
@@ -184,4 +184,7 @@ html, body {
   .sidebar.open {
     transform: translateX(0);
   }
+}
+.divider {
+  height: 30px; /* רווח אנכי */
 }
