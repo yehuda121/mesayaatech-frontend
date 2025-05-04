@@ -218,7 +218,7 @@
   right: 0;
   width: 16rem;
   height: 100%;
-  background-color: #1e3a8a;
+  background-color:  #00499c;
   color: white;
   padding: 1.5rem;
   display: flex;
@@ -229,19 +229,6 @@
   transition: transform 0.3s ease-in-out;
   transform: translateX(0);
 }
-/* .admin-sidebar {
-  position: fixed;
-  top: 60px;
-  right: 0;
-  width: 250px;
-  height: 100%;
-  background-color: #1e3a8a;
-  transform: translateX(100%);
-  transition: transform 0.3s ease-in-out;
-  z-index: 1000;
-} */
-
-
 
 .admin-sidebar.open {
   transform: translateX(0);
@@ -254,7 +241,9 @@
 }
 
 .admin-sidebar button {
-  background: transparent;
+  /* background: transparent; */
+  background-color: transparent;
+  /* margin-top: 10%; */
   color: white;
   padding: 0.5rem 1rem;
   text-align: right;
@@ -263,6 +252,7 @@
   font-size: 0.875rem;
   display: block;
   width: 100%;
+  direction: rtl;
 }
 
 .admin-sidebar button:hover {
@@ -270,7 +260,7 @@
 }
 
 .admin-sidebar button.sub-button {
-  margin-right: 20px;
+  margin-left: -40px;
 }
 
 .admin-sidebar button.sub-sub-button {

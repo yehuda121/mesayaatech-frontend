@@ -1,8 +1,14 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getLanguage, toggleLanguage } from '../../language';
+import { useRouter } from 'next/navigation';
 import Button from '../../../components/Button';
 
 export default function ambassadorRegisterForm() {
+  const router = useRouter();
+  const [language, setLanguage] = useState(getLanguage());
+  const [success, setSuccess] = useState('');
+
   const [formData, setFormData] = useState({
     userType: 'ambassador',
     status: 'pending',
@@ -19,7 +25,40 @@ export default function ambassadorRegisterForm() {
     notes: '',
   });
 
-  const [success, setSuccess] = useState('');
+  useEffect(() => {
+    const handleLanguageChange = () => setLanguage(getLanguage());
+    window.addEventListener('languageChanged', handleLanguageChange);
+    return () => window.removeEventListener('languageChanged', handleLanguageChange);
+  }, []);
+
+  const t = {
+    title: { he: "הרשמה לשגריר", en: "Ambassador Registration" },
+    fullName: { he: "שם מלא", en: "Full Name" },
+    idNumber: { he: "תעודת זהות", en: "ID Number" },
+    email: { he: "אימייל", en: "Email" },
+    phone: { he: "מספר טלפון", en: "Phone" },
+    currentCompany: { he: "חברה נוכחית בה אתה עובד", en: "Current Company" },
+    position: { he: "תפקיד נוכחי", en: "Current Position" },
+    location: { he: "מיקום גאוגרפי", en: "Location" },
+    canShareJobs: { he: "האם תוכל לשתף משרות מהארגון שלך?", en: "Can you share jobs from your organization?" },
+    jobFieldsTitle: { he: "באילו תחומים יש לך גישה למשרות?", en: "Which fields do you have access to jobs in?" },
+    linkedin: { he: "לינקדאין (לא חובה)", en: "LinkedIn (optional)" },
+    notes: { he: "הערות נוספות", en: "Additional Notes" },
+    submit: { he: "שלח בקשה", en: "Submit" },
+    success: { he: "הרישום נשלח בהצלחה!", en: "Registration submitted successfully!" },
+    error: { he: "אירעה שגיאה בשליחה", en: "An error occurred during submission" },
+    login: { he: "יש לי חשבון קיים", en: "I already have an account" },
+    switchLang: { he: "English", en: "עברית" }
+  };
+
+  const translatedJobFields = {
+    "הייטק": { he: " הייטק", en: "Hi-Tech" },
+    "פיננסים": { he: " פיננסים ", en: "Finance" },
+    "לוגיסטיקה": { he: " לוגיסטיקה", en: "Logistics" },
+    "שיווק": { he: " שיווק", en: "Marketing" },
+    "חינוך": { he: " חינוך", en: "Education" },
+    "אחר": { he: " אחר", en: "Other" }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -38,18 +77,26 @@ export default function ambassadorRegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const required = ['fullName', 'idNumber', 'email', 'phone', 'location', 'canShareJobs'];
+    for (let key of required) {
+      if (!formData[key]) {
+        setSuccess(language === 'he' ? `נא למלא את השדה: ${t[key].he}` : `Please fill out: ${t[key].en}`);
+        return;
+      }
+    }
+
     try {
       const res = await fetch('http://localhost:5000/api/upload-registration-form', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       if (res.ok) {
-        setSuccess('הרישום נשלח בהצלחה!');
+        setSuccess(t.success[language]);
         setFormData({
+          userType: 'ambassador',
+          status: 'pending',
           fullName: '',
           idNumber: '',
           email: '',
@@ -63,85 +110,101 @@ export default function ambassadorRegisterForm() {
           notes: '',
         });
       } else {
-        throw new Error('שליחה נכשלה');
+        throw new Error();
       }
-    } catch (err) {
-      console.error('שגיאה:', err);
-      setSuccess('אירעה שגיאה בשליחה');
+    } catch {
+      setSuccess(t.error[language]);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-lg space-y-6">
-      <h1 className="text-3xl font-bold text-center">הרשמה לשגריר</h1>
+    <div dir={language === 'he' ? 'rtl' : 'ltr'}>
+      <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-lg space-y-6">
+        <div dir="ltr" className="flex justify-end gap-4 items-center w-full">
+          <button
+            onClick={() => router.push('/login')}
+            className="text-blue-700 font-medium hover:underline"
+          >
+            {t.login[language]}
+          </button>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <label>שם מלא*:
-          <input name="fullName" required value={formData.fullName} onChange={handleChange} className="border p-2 w-full rounded" />
-        </label>
+          <button onClick={() => setLanguage(toggleLanguage())}
+            className="text-sm underline hover:text-blue-600"
+          >
+            {t.switchLang[language]}
+          </button>
+        </div>
 
-        <label>תעודת זהות*:
-          <input name="idNumber" required value={formData.idNumber} onChange={handleChange} className="border p-2 w-full rounded" />
-        </label>
+        <h1 className="text-3xl font-bold text-center">{t.title[language]}</h1>
 
-        <label>אימייל*:
-          <input name="email" type="email" required value={formData.email} onChange={handleChange} className="border p-2 w-full rounded" />
-        </label>
+        <form onSubmit={handleSubmit} className={`space-y-4 ${language === 'he' ? 'text-right' : 'text-left'}`}>
+        <label>{t.fullName[language]}*:
+            <input name="fullName" required value={formData.fullName} onChange={handleChange} className="border p-2 w-full rounded" />
+          </label>
 
-        <label>מספר טלפון*:
-          <input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="border p-2 w-full rounded" />
-        </label>
+          <label>{t.idNumber[language]}*:
+            <input name="idNumber" required value={formData.idNumber} onChange={handleChange} className="border p-2 w-full rounded" />
+          </label>
 
-        <label>חברה נוכחית בה אתה עובד:
-          <input name="currentCompany" value={formData.currentCompany} onChange={handleChange} className="border p-2 w-full rounded" />
-        </label>
+          <label>{t.email[language]}*:
+            <input name="email" type="email" required value={formData.email} onChange={handleChange} className="border p-2 w-full rounded" />
+          </label>
 
-        <label>תפקיד נוכחי:
-          <input name="position" value={formData.position} onChange={handleChange} className="border p-2 w-full rounded" />
-        </label>
+          <label>{t.phone[language]}*:
+            <input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="border p-2 w-full rounded" />
+          </label>
 
-        <label>מיקום גאוגרפי*:
-          <input name="location" required value={formData.location} onChange={handleChange} className="border p-2 w-full rounded" />
-        </label>
+          <label>{t.currentCompany[language]}:
+            <input name="currentCompany" value={formData.currentCompany} onChange={handleChange} className="border p-2 w-full rounded" />
+          </label>
 
-        <label>האם תוכל לשתף משרות מהארגון שלך?*:
-          <select name="canShareJobs" required value={formData.canShareJobs} onChange={handleChange} className="border p-2 w-full rounded">
-            <option value="">בחר</option>
-            <option value="כן">כן</option>
-            <option value="אולי">אולי</option>
-            <option value="לא">לא</option>
-          </select>
-        </label>
+          <label>{t.position[language]}:
+            <input name="position" value={formData.position} onChange={handleChange} className="border p-2 w-full rounded" />
+          </label>
 
-        <fieldset>
-          <legend className="font-semibold">באילו תחומים יש לך גישה למשרות?</legend>
-          {['הייטק', 'פיננסים', 'לוגיסטיקה', 'שיווק', 'חינוך', 'אחר'].map((field) => (
-            <label key={field} className="block">
-              <input
-                type="checkbox"
-                name="jobFields"
-                value={field}
-                checked={formData.jobFields.includes(field)}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              {field}
-            </label>
-          ))}
-        </fieldset>
+          <label>{t.location[language]}*:
+            <input name="location" required value={formData.location} onChange={handleChange} className="border p-2 w-full rounded" />
+          </label>
 
-        <label>לינקדאין (לא חובה):
-          <input name="linkedin" value={formData.linkedin} onChange={handleChange} className="border p-2 w-full rounded" />
-        </label>
+          <label>{t.canShareJobs[language]}*:
+            <select name="canShareJobs" required value={formData.canShareJobs} onChange={handleChange} className="border p-2 w-full rounded">
+              <option value="">{language === 'he' ? 'בחר' : 'Select'}</option>
+              <option value="כן">{language === 'he' ? 'כן' : 'Yes'}</option>
+              <option value="אולי">{language === 'he' ? 'אולי' : 'Maybe'}</option>
+              <option value="לא">{language === 'he' ? 'לא' : 'No'}</option>
+            </select>
+          </label>
 
-        <label>הערות נוספות:
-          <textarea name="notes" value={formData.notes} onChange={handleChange} className="border p-2 w-full rounded h-24" />
-        </label>
+          <fieldset>
+            <legend className="font-semibold">{t.jobFieldsTitle[language]}</legend>
+            {Object.keys(translatedJobFields).map((field) => (
+              <label key={field} className="block">
+                <input
+                  type="checkbox"
+                  name="jobFields"
+                  value={field}
+                  checked={formData.jobFields.includes(field)}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                {translatedJobFields[field][language]}
+              </label>
+            ))}
+          </fieldset>
 
-        <Button text="שלח בקשה" type="submit" />
-      </form>
+          <label>{t.linkedin[language]}:
+            <input name="linkedin" value={formData.linkedin} onChange={handleChange} className="border p-2 w-full rounded" />
+          </label>
 
-      {success && <p className="text-green-600 text-center font-bold">{success}</p>}
+          <label>{t.notes[language]}:
+            <textarea name="notes" value={formData.notes} onChange={handleChange} className="border p-2 w-full rounded h-24" />
+          </label>
+
+          <Button text={t.submit[language]} type="submit" />
+        </form>
+
+        {success && <p className="text-green-600 text-center font-bold">{success}</p>}
+      </div>
     </div>
   );
 }

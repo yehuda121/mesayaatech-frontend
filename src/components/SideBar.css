@@ -43,7 +43,7 @@ body, h1, h2, h3, p, a, button {
     height: auto;
   }
   
-  /* אייקונים (☰ ✖) */
+  /* icons (☰ ✖) */
   .menu-icons {
     display: none;
   }
@@ -96,17 +96,6 @@ body, h1, h2, h3, p, a, button {
     opacity: 1;
   }
 
-  
-
-
-
-
-
-
-
-  /* ... הקוד הקיים שלך נשמר בדיוק כפי שהוא ... */
-
-/* סיידבר – ברירת מחדל: פתוח */
 .sidebar {
     position: fixed;
     top: 0;
