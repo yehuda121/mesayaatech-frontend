@@ -1,12 +1,23 @@
-.admin-container {
+/* .admin-container {
   display: flex;
-  flex-direction: row;
   direction: rtl;
   min-height: 100vh;
 }
-  
+.admin-header {
+  background-color: #002855;
+  height: 70px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  position: fixed;
+}
+
 .admin-sidebar {
+  position: fixed;
   width: 16rem;
+  height: 100%;
   background-color: #1e3a8a;
   color: white;
   padding: 1.5rem;
@@ -14,8 +25,9 @@
   flex-direction: column;
   gap: 1rem;
   text-align: right;
+  overflow-y: auto;
 }
-  
+
 .admin-sidebar h2 {
   font-size: 1.25rem;
   font-weight: bold;
@@ -38,7 +50,6 @@
   background-color: #1d4ed8;
 }
 
-/* כפתורי תתי קטגוריות */
 .admin-sidebar button.sub-button {
   margin-right: 20px;
 }
@@ -47,7 +58,6 @@
   margin-right: 40px;
 }
 
-/* התאמה להצגה ברוחב מלא */
 .admin-main {
   flex-grow: 1;
   background-color: #f3f4f6;
@@ -114,4 +124,251 @@
 
 .admin-buttons .deny:hover {
   background-color: #dc2626;
+}
+.hea  
+
+
+
+.logo-image {
+  width: 50px;
+  height: auto;
+}
+.admin-menu-icon {
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  display: none;
+  margin-right: auto;
+  margin-left: 50%;
+  direction: rtl
+}
+
+@media (max-width: 768px) {
+  .admin-menu-icon {
+    display: block;
+  }
+
+
+
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .admin-container {
+    flex-direction: column;
+    padding-top: 60px;
+  }
+
+  .admin-main {
+    padding: 1rem;
+  }
+} */
+.admin-container {
+  display: flex;
+  direction: rtl;
+  min-height: 100vh;
+}
+
+.admin-header {
+  background-color: #002855;
+  height: 70px;
+  width: 100%;
+  position: fixed;
+  /* top: 0; */
+  /* left: 0; */
+  /* box-sizing: border-box; */
+  /* z-index: 1000; */
+}
+
+.admin-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  height: 100%;
+  width: 100%;
+}
+/* .admin-navbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  
+} */
+.logo-image {
+  width: 60px;
+  height: auto;
+}
+
+.menu-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.admin-menu-icon {
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  display: none;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  position: fixed;
+  top: 0px;
+  right: 0;
+  width: 16rem;
+  height: 100%;
+  background-color: #1e3a8a;
+  color: white;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: right;
+  overflow-y: auto;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(0);
+}
+/* .admin-sidebar {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #1e3a8a;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+} */
+
+
+
+.admin-sidebar.open {
+  transform: translateX(0);
+}
+
+.admin-sidebar h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.admin-sidebar button {
+  background: transparent;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-align: right;
+  border-radius: 0.375rem;
+  transition: background-color 0.3s;
+  font-size: 0.875rem;
+  display: block;
+  width: 100%;
+}
+
+.admin-sidebar button:hover {
+  background-color: #1d4ed8;
+}
+
+.admin-sidebar button.sub-button {
+  margin-right: 20px;
+}
+
+.admin-sidebar button.sub-sub-button {
+  margin-right: 40px;
+}
+
+/* Main content */
+.admin-main {
+  flex-grow: 1;
+  background-color: #f3f4f6;
+  padding: 2.5rem;
+  text-align: right;
+  margin-top: 70px;
+  margin-right: 16rem;
+}
+
+.admin-main h1 {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: #1e3a8a;
+  margin-bottom: 1.5rem;
+}
+
+.admin-main table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.admin-main th,
+.admin-main td {
+  padding: 0.75rem 1rem;
+  text-align: right;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-main th {
+  background-color: #e0e7ff;
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+.admin-main tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Buttons inside table */
+.admin-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.admin-buttons button {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  color: white;
+  font-size: 0.875rem;
+  transition: background-color 0.3s;
+}
+
+.admin-buttons .approve {
+  background-color: #10b981;
+}
+
+.admin-buttons .approve:hover {
+  background-color: #059669;
+}
+
+.admin-buttons .deny {
+  background-color: #ef4444;
+}
+
+.admin-buttons .deny:hover {
+  background-color: #dc2626;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-menu-icon {
+    display: block;
+  }
+
+  .admin-sidebar {
+    top: 70px;
+    width: 250px;
+    height: calc(100% - 70px);
+    transform: translateX(100%);
+    z-index: 1001;
+  }
+
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .admin-main {
+    margin-right: 0;
+    padding: 1rem;
+  }
 }
