@@ -209,12 +209,6 @@ export default function AdminPage() {
       path: "#update-event",
       onClick: () => setView('update-event')
     },
-    {
-      labelHe: language === 'he' ? "English" : "עברית",
-      labelEn: language === 'he' ? "English" : "עברית",
-      path: "#language",
-      onClick: () => setLanguage(toggleLanguage())
-    }
   ];
 
   return (

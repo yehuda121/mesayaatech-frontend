@@ -10,7 +10,6 @@ export default function UsersTable() {
 
   useEffect(() => {
     fetchUsers();
-
     const handleLangChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLangChange);
     return () => window.removeEventListener('languageChanged', handleLangChange);
@@ -20,7 +19,6 @@ export default function UsersTable() {
     try {
       const res = await fetch(`http://localhost:5000/api/imports-user-registration-form`);
       const data = await res.json();
-      // console.log('data:', data); 
       setUsers(data);
     } catch (err) {
       console.error('שגיאה בשליפת משתמשים:', err);
@@ -39,24 +37,9 @@ export default function UsersTable() {
           status,
         }),
       });
-      fetchUsers(); // טען מחדש
+      fetchUsers();
     } catch (err) {
       console.error('שגיאה בעדכון סטטוס:', err);
-    }
-  };
-
-  const fetchForm = async (user) => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/user-form?userType=${user.userType}&idNumber=${user.idNumber}`);
-      if (!res.ok) {
-        setSelectedForm({ error: language === 'he' ? 'הטופס לא נמצא' : 'Form not found' });
-        return;
-      }
-      const data = await res.json();
-      setSelectedForm(data);
-    } catch (err) {
-      console.error('שגיאה בשליפת טופס:', err);
-      setSelectedForm({ error: language === 'he' ? 'שגיאה בשליפת טופס' : 'Error fetching form' });
     }
   };
 
@@ -75,11 +58,16 @@ export default function UsersTable() {
     }
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.phone?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = users.filter((user) => {
+    const text = searchTerm.toLowerCase();
+  
+    return (
+      user.fullName?.toLowerCase().includes(text) ||
+      user.email?.toLowerCase().includes(text) ||
+      user.phone?.toLowerCase().includes(text)
+    );
+  });
+  
 
   return (
     <div dir="rtl">
@@ -105,7 +93,7 @@ export default function UsersTable() {
         </thead>
         <tbody>
           {filteredUsers.map((user) => (
-            <tr key={`${user.userType}-${user.idNumber}`} className="border-t cursor-pointer" onClick={() => fetchForm(user)}>
+            <tr key={`${user.userType}-${user.idNumber}`} className="border-t cursor-pointer" onClick={() => setSelectedForm(user)}>
               <td className="p-2">{user.fullName}</td>
               <td className="p-2">{user.idNumber}</td>
               <td className="p-2">{user.userType}</td>
@@ -134,13 +122,13 @@ export default function UsersTable() {
       {selectedForm && (
         <div className="mt-6 p-4 bg-white border rounded">
           <h3 className="text-lg font-bold mb-2">{t.formTitle[language]}</h3>
-          {selectedForm.error ? (
-            <p className="text-red-600">{selectedForm.error}</p>
-          ) : (
-            <pre className="text-sm overflow-auto whitespace-pre-wrap bg-gray-100 p-4 rounded">
-              {JSON.stringify(selectedForm, null, 2)}
-            </pre>
-          )}
+          <pre className="text-sm overflow-auto whitespace-pre-wrap bg-gray-100 p-4 rounded">
+            {Object.entries(selectedForm).map(([key, value]) => (
+              <div key={key}>
+                <strong>{key}:</strong> {Array.isArray(value) ? value.join(', ') : String(value)}
+              </div>
+            ))}
+          </pre>
         </div>
       )}
     </div>
