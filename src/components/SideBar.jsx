@@ -61,13 +61,17 @@ export default function SideBar({ navItems }) {
             }}
           />
           <div className="divider"></div>
-          {navItems.map(({ labelHe, labelEn, path }) => (
+          {navItems.map(({ labelHe, labelEn, path, onClick }) => (
             <Button
-              key={path}
+              key={labelEn}
               text={language === "he" ? labelHe : labelEn}
               onClick={() => {
                 setMenuOpen(false);
-                router.push(path);
+                if (typeof onClick === 'function') {
+                  onClick(); // קריאה לפעולה פנימית
+                } else if (typeof path === 'string') {
+                  router.push(path); // התנהגות רגילה
+                }
               }}
             />
           ))}
