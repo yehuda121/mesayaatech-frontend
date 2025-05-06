@@ -110,7 +110,11 @@ export default function reseveRegisterForm() {
           notes: '',
         });
       } else {
-        throw new Error();
+        // throw new Error();
+        const errorText = await res.text();
+        console.error('שגיאה מהשרת:', errorText);
+        setSuccess(`${t.error[language]}: ${errorText}`);
+        return;
       }
     } catch {
       setSuccess(t.error[language]);
