@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { getLanguage } from '../../language';
+import EditUsersForms from './EditUsersForms';
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
@@ -64,6 +65,32 @@ export default function UsersTable() {
     }
   };
 
+  const handleDeleteUser = async (user) => {
+    try {
+      const res = await fetch('http://localhost:5000/api/delete-user-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userType: user.userType,
+          idNumber: user.idNumber,
+        }),
+      });
+  
+      if (!res.ok) {
+        console.error('שגיאה במחיקת משתמש:', await res.text());
+        return;
+      }
+  
+      setUsers(prev => prev.filter(u =>
+        !(u.idNumber === user.idNumber && u.userType === user.userType)
+      ));
+      setSelectedForm(null);
+    } catch (err) {
+      console.error('שגיאה במחיקת משתמש:', err);
+    }
+  };
+  
+
   const t = {
     name: { he: "שם", en: "Name" },
     id: { he: "תעודת זהות", en: "ID" },
@@ -113,6 +140,32 @@ export default function UsersTable() {
     return matchText && matchType && matchStatus;
   });
 
+  const handleSaveUser = async (updatedUser) => {
+    try {
+      const res = await fetch('http://localhost:5000/api/update-user-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedUser),
+      });
+  
+      if (!res.ok) {
+        console.error('שגיאה בעדכון משתמש:', await res.text());
+        return;
+      }
+  
+      setUsers(prev =>
+        prev.map(u =>
+          u.idNumber === updatedUser.idNumber && u.userType === updatedUser.userType
+            ? updatedUser
+            : u
+        )
+      );
+      setSelectedForm(null);
+    } catch (err) {
+      console.error('שגיאה בעדכון משתמש:', err);
+    }
+  };
+  
   return (
     <div dir="rtl" className="space-y-4">
       {/* סינון */}
@@ -200,18 +253,14 @@ export default function UsersTable() {
           ))}
         </tbody>
       </table>
-
+      
       {selectedForm && (
-        <div className="mt-6 p-4 bg-white border rounded">
-          <h3 className="text-lg font-bold mb-2">{t.formTitle[language]}</h3>
-          <pre className="text-sm overflow-auto whitespace-pre-wrap bg-gray-100 p-4 rounded">
-            {Object.entries(selectedForm).map(([key, value]) => (
-              <div key={key}>
-                <strong>{key}:</strong> {Array.isArray(value) ? value.join(', ') : String(value)}
-              </div>
-            ))}
-          </pre>
-        </div>
+        <EditUsersForms
+          user={selectedForm}
+          onClose={() => setSelectedForm(null)}
+          onSave={handleSaveUser}
+          onDelete={handleDeleteUser}
+        />
       )}
     </div>
   );

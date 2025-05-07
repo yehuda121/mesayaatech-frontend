@@ -336,7 +336,7 @@ export default function EventUpdateDelete() {
           ))}
           <div className="flex gap-2">
             <Button text={t.save[language]} onClick={handleUpdate} />
-            <Button text={t.cancel[language]} color="gray" onClick={() => setEditingEvent(null)} />
+            <Button text={t.cancel[language]}  onClick={() => setEditingEvent(null)} />
           </div>
         </div>
       )}
