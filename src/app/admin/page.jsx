@@ -171,18 +171,85 @@
 //   );
   
 // }
+
+
+
+
+
+
+
+
+
+
+
+// 'use client';
+// import { useEffect, useState } from 'react';
+// import { getLanguage, toggleLanguage } from '../language';
+// import SideBar from '../../components/SideBar';
+// import UsersTable from './components/usersTable';
+// import EventUploadForm from './components/CreateEvent';
+// import EventUpdateDelete from './components/EventUpdateDelete';
+// import './admin.css';
+
+// export default function AdminPage() {
+//   const [language, setLanguage] = useState(getLanguage());
+//   const [view, setView] = useState('');
+
+//   useEffect(() => {
+//     const handleLangChange = () => setLanguage(getLanguage());
+//     window.addEventListener('languageChanged', handleLangChange);
+//     return () => window.removeEventListener('languageChanged', handleLangChange);
+//   }, []);
+
+//   const navItems = [
+//     {
+//       labelHe: "צפיה במשתמשים",
+//       labelEn: "users",
+//       path: UsersTable,
+//       onClick: () => setView('users')
+//     },
+//     {
+//       labelHe: "יצירת אירוע חדש",
+//       labelEn: "Create Event",
+//       path: "#create-event",
+//       onClick: () => setView('create-event')
+//     },
+//     {
+//       labelHe: "צפיה באירועים קיימים",
+//       labelEn: "View Events",
+//       path: "#update-event",
+//       onClick: () => setView('update-event')
+//     },
+//   ];
+
+//   return (
+//     <div>
+//       <SideBar navItems={navItems} />
+//       <div className="admin-container">
+//         <main className="admin-main">
+//           {view === 'create-event' && <EventUploadForm />}
+//           {view === 'update-event' && <EventUpdateDelete />}
+//           {view === 'users' && <UsersTable />}
+//         </main>
+//       </div>
+//     </div>
+//   );
+// }
 'use client';
 import { useEffect, useState } from 'react';
 import { getLanguage, toggleLanguage } from '../language';
 import SideBar from '../../components/SideBar';
 import UsersTable from './components/usersTable';
-import EventUploadForm from './components/CreateEvent';
-import EventUpdateDelete from './components/EventUpdateDelete';
+import CreateEvent from './components/CreateEvent';
+import ViewEvents from './components/ViewEvents';
+import EditEvents from './components/EditEvents';
 import './admin.css';
 
 export default function AdminPage() {
   const [language, setLanguage] = useState(getLanguage());
   const [view, setView] = useState('');
+  const [eventToEdit, setEventToEdit] = useState(null);
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
@@ -206,8 +273,8 @@ export default function AdminPage() {
     {
       labelHe: "צפיה באירועים קיימים",
       labelEn: "View Events",
-      path: "#update-event",
-      onClick: () => setView('update-event')
+      path: "#view-events",
+      onClick: () => setView('view-events')
     },
   ];
 
@@ -216,11 +283,32 @@ export default function AdminPage() {
       <SideBar navItems={navItems} />
       <div className="admin-container">
         <main className="admin-main">
-          {view === 'create-event' && <EventUploadForm />}
-          {view === 'update-event' && <EventUpdateDelete />}
+          {view === 'create-event' && <CreateEvent />}
+          {view === 'view-events' && (
+            <ViewEvents
+              events={events}
+              setEvents={setEvents}
+              onEdit={(ev) => setEventToEdit(ev)}
+            />
+          )}
           {view === 'users' && <UsersTable />}
         </main>
       </div>
+
+      {eventToEdit && (
+        <EditEvents
+          event={eventToEdit}
+          onClose={() => setEventToEdit(null)}
+          onSave={(updatedEvent) => {
+            setEventToEdit(null);
+            setEvents(prev =>
+              prev.map(ev =>
+                ev.eventId === updatedEvent.eventId ? updatedEvent : ev
+              )
+            );
+          }}
+        />
+      )}
     </div>
   );
 }
