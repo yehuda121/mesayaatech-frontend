@@ -193,7 +193,7 @@ export default function AdminPage() {
   const navItems = [
     {
       labelHe: "צפיה במשתמשים",
-      labelEn: "#users",
+      labelEn: "users",
       path: UsersTable,
       onClick: () => setView('users')
     },
