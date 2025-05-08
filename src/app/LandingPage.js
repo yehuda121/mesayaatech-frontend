@@ -23,7 +23,7 @@ export default function LandingPage() {
 
   const navItems = [
     { labelHe: "הרשמה", labelEn: "Sign Up", path: "/register" },
-    { labelHe: "התחברות", labelEn: "Login", path: "#login" },
+    { labelHe: "התחברות", labelEn: "Login", path: "/login" },
     { labelHe: "דף בית מנטור", labelEn: "Mentor homePage", path: "/pages/mentor/MentorHomePage" },
     { labelHe: "דף בית מילואימניק", labelEn: "Reserve homePage", path: "/pages/reserve/ReserveHomePage" },
     { labelHe: "מנהל", labelEn: "Admin", path: "/admin" },

@@ -37,6 +37,29 @@ export default function UsersTable() {
 
   const handleStatusChange = async (user, status) => {
     try {
+      // If approving the user, first try to create the user in Cognito
+      if (status === 'approved') {
+        const createRes = await fetch('http://localhost:5000/api/approve-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: user.email,
+            name: user.fullName,
+            role: user.userType,
+            idNumber: user.idNumber
+          }),
+        });
+  
+        // If Cognito creation failed then show error and stop
+        if (!createRes.ok) {
+          const errorText = await createRes.text();
+          console.error('Error creating Cognito user:', errorText);
+          alert('Failed to send email – please verify the email address is valid');
+          return;
+        }
+      }
+  
+      // Update status in DynamoDB
       const res = await fetch('http://localhost:5000/api/update-user-status/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,12 +70,13 @@ export default function UsersTable() {
           status,
         }),
       });
-
+  
       if (!res.ok) {
-        console.error('שגיאה בעדכון סטטוס:', await res.text());
+        console.error('Error updating status in DynamoDB:', await res.text());
         return;
       }
-
+  
+      // Update React state
       setUsers(prev =>
         prev.map(u =>
           u.idNumber === user.idNumber && u.userType === user.userType
@@ -61,9 +85,10 @@ export default function UsersTable() {
         )
       );
     } catch (err) {
-      console.error('שגיאה בעדכון סטטוס:', err);
+      console.error('General error during status change:', err);
+      alert('A general error occurred. Check the console for details.');
     }
-  };
+  };  
 
   const handleDeleteUser = async (user) => {
     try {
