@@ -232,8 +232,9 @@ export default function UsersTable() {
           <tr className="bg-gray-100">
             <th className="p-2">{t.name[language]}</th>
             <th className="p-2">{t.id[language]}</th>
-            <th className="p-2">{t.type[language]}</th>
             <th className="p-2">{t.status[language]}</th>
+            <th className="p-2">{t.type[language]}</th>
+           
             <th className="p-2">{t.actions[language]}</th>
           </tr>
         </thead>

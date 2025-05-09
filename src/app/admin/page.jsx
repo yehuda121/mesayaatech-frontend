@@ -177,64 +177,6 @@
 
 
 
-
-
-
-
-
-// 'use client';
-// import { useEffect, useState } from 'react';
-// import { getLanguage, toggleLanguage } from '../language';
-// import SideBar from '../../components/SideBar';
-// import UsersTable from './components/usersTable';
-// import EventUploadForm from './components/CreateEvent';
-// import EventUpdateDelete from './components/EventUpdateDelete';
-// import './admin.css';
-
-// export default function AdminPage() {
-//   const [language, setLanguage] = useState(getLanguage());
-//   const [view, setView] = useState('');
-
-//   useEffect(() => {
-//     const handleLangChange = () => setLanguage(getLanguage());
-//     window.addEventListener('languageChanged', handleLangChange);
-//     return () => window.removeEventListener('languageChanged', handleLangChange);
-//   }, []);
-
-//   const navItems = [
-//     {
-//       labelHe: "צפיה במשתמשים",
-//       labelEn: "users",
-//       path: UsersTable,
-//       onClick: () => setView('users')
-//     },
-//     {
-//       labelHe: "יצירת אירוע חדש",
-//       labelEn: "Create Event",
-//       path: "#create-event",
-//       onClick: () => setView('create-event')
-//     },
-//     {
-//       labelHe: "צפיה באירועים קיימים",
-//       labelEn: "View Events",
-//       path: "#update-event",
-//       onClick: () => setView('update-event')
-//     },
-//   ];
-
-//   return (
-//     <div>
-//       <SideBar navItems={navItems} />
-//       <div className="admin-container">
-//         <main className="admin-main">
-//           {view === 'create-event' && <EventUploadForm />}
-//           {view === 'update-event' && <EventUpdateDelete />}
-//           {view === 'users' && <UsersTable />}
-//         </main>
-//       </div>
-//     </div>
-//   );
-// }
 'use client';
 import { useEffect, useState } from 'react';
 import { getLanguage, toggleLanguage } from '../language';

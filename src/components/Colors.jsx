@@ -1,6 +1,6 @@
 // components/Color.jsx
 const COLORS = {
-    primary: "#007bff",
+    primary: "#002855",
     secondary: "#6c757d",
     success: "#28a745",
     danger: "#dc3545",

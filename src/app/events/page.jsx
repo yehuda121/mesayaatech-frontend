@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import Button from '@/components/Button';
 import { getLanguage } from '@/app/language';
 
-export default function Events() {
+export default function Events({ idNumber, fullName, email }) {
   const [language, setLanguage] = useState(getLanguage());
   const [filter, setFilter] = useState({ title: '', date: '' });
   const [events, setEvents] = useState([]);
+  const [joinedEvents, setJoinedEvents] = useState({});
 
   useEffect(() => {
     fetchEvents();
@@ -28,13 +29,41 @@ export default function Events() {
     }
   };
 
+  const handleJoin = async (eventId) => {
+    if (!idNumber || !fullName || !email) {
+      alert(language === 'he' ? 'פרטי משתמש חסרים' : 'Missing user details');
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:5000/api/join-to-event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ eventId, idNumber: idNumber, fullName, email }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setJoinedEvents((prev) => ({ ...prev, [eventId]: true }));
+        alert(language === 'he' ? 'נרשמת לאירוע בהצלחה' : 'Successfully joined event');
+      } else {
+        alert(data.error || (language === 'he' ? 'שגיאה בהרשמה' : 'Join failed'));
+      }
+    } catch (err) {
+      console.error('Join error:', err);
+      alert(language === 'he' ? 'שגיאה בשרת' : 'Server error');
+    }
+  };
+
   const t = {
     title: { he: 'כותרת', en: 'Title' },
     date: { he: 'תאריך', en: 'Date' },
     time: { he: 'שעה', en: 'Time' },
     location: { he: 'מיקום', en: 'Location' },
+    join: { he: 'מגיע', en: 'Join' },
+    joined: { he: 'כבר נרשמת', en: 'Already Joined' },
     filterTitle: { he: 'סנן לפי כותרת', en: 'Filter by title' },
-    filterDate: { he: 'סנן לפי תאריך', en: 'Filter by date' }
+    filterDate: { he: 'סנן לפי תאריך', en: 'Filter by date' },
   };
 
   const filteredEvents = events.filter((e) =>
@@ -74,6 +103,17 @@ export default function Events() {
               <div className="text-lg font-bold truncate">{event.title}</div>
               <div>{event.date} {event.time}</div>
               <div className="truncate">{event.location}</div>
+              <div className="mt-2">
+                {joinedEvents[event.eventId] ? (
+                  <span className="text-green-600 font-semibold">{t.joined[language]}</span>
+                ) : (
+                  <Button
+                    text={t.join[language]}
+                    size="sm"
+                    onClick={() => handleJoin(event.eventId)}
+                  />
+                )}
+              </div>
             </div>
           ))}
         </div>

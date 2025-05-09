@@ -22,6 +22,7 @@ export default function EditEvents({ event, onClose, onSave }) {
     time: { he: 'שעה', en: 'Time' },
     location: { he: 'מיקום', en: 'Location' },
     notes: { he: 'הערות', en: 'Notes' },
+    participants: { he: 'משתתפים באירוע', en: 'Participants' },
     save: { he: 'שמור שינויים', en: 'Save Changes' },
     cancel: { he: 'ביטול', en: 'Cancel' },
   };
@@ -123,6 +124,20 @@ export default function EditEvents({ event, onClose, onSave }) {
             />
           </label>
         </form>
+
+        {/* ✅ תצוגת רשימת משתתפים */}
+        {Array.isArray(formData.participants) && formData.participants.length > 0 && (
+          <div className="mt-6 border-t pt-4">
+            <h3 className="font-semibold mb-2">{t.participants[language]}</h3>
+            <ul className="list-disc ml-6 space-y-1 text-sm">
+              {formData.participants.map((p, index) => (
+                <li key={index}>
+                  {p.fullName} - {p.email} - {p.idNumber}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="flex justify-end gap-3 mt-6">
           <Button text={t.cancel[language]} onClick={onClose} />

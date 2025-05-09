@@ -11,24 +11,22 @@ export default function CreateEventForm() {
     date: '',
     time: '',
     location: '',
-    notes: ''
+    notes: '',
+    participants: []
   });
   const [success, setSuccess] = useState('');
 
-  // Update language dynamically on event
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLangChange);
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Submit event to server
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess('');
@@ -44,7 +42,15 @@ export default function CreateEventForm() {
 
       if (res.ok) {
         setSuccess(t.success[language]);
-        setFormData({ title: '', description: '', date: '', time: '', location: '', notes: '' });
+        setFormData({
+          title: '',
+          description: '',
+          date: '',
+          time: '',
+          location: '',
+          notes: '',
+          participants: [] 
+        });
       } else {
         setSuccess(resData.error || t.error[language]);
       }
@@ -54,7 +60,6 @@ export default function CreateEventForm() {
     }
   };
 
-  // Text translations
   const t = {
     createTitle: { he: 'יצירת אירוע חדש', en: 'Create New Event' },
     title: { he: 'כותרת (לא חובה)', en: 'Title (optional)' },
