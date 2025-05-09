@@ -58,7 +58,7 @@ export default function LoginPage() {
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
         <h1 className="text-2xl font-bold mb-6 text-center">התחברות</h1>
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4" autoComplete="on">
           <input
             type="email"
             value={email}
@@ -66,6 +66,7 @@ export default function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             required
             className="w-full p-2 border rounded"
+            autoComplete="email"
           />
           <input
             type="password"
@@ -74,6 +75,7 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
             className="w-full p-2 border rounded"
+            autoComplete="current-password"
           />
           <button
             type="submit"
