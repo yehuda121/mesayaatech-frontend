@@ -21,7 +21,7 @@ export default function MentorDashboard() {
   }, []);
 
   const navItems = [
-    { labelHe: "ראשי", labelEn: "Dashboard", path: "/mentor" },
+    { labelHe: "ראשי", labelEn: "Dashboard", path: "/mentor/MentorHomePage" },
     { labelHe: "רשימת המלווים שלי", labelEn: "My Reservists", path: "/mentor/my-reservists" },
     { labelHe: "פניות חדשות לליווי", labelEn: "New Requests", path: "/mentor/requests" },
     { labelHe: "משרות רלוונטיות", labelEn: "Job Matches", path: "/mentor/job-matches" },

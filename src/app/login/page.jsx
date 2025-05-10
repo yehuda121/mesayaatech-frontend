@@ -36,10 +36,12 @@ export default function LoginPage() {
         const role = decoded['custom:role'];
 
         // Save token for use in app
+        localStorage.setItem('userId', decoded.sub);
+        localStorage.setItem('userType', role);
         localStorage.setItem('idToken', data.idToken);
 
         // Navigate based on role
-        if (role === 'mentor') router.push('/mentor/home');
+        if (role === 'mentor') router.push('/pages/mentor/MentorHomePage');
         else if (role === 'reservist') router.push('/reservist/home');
         else if (role === 'ambassador') router.push('/ambassador/home');
         else router.push('/');

@@ -35,7 +35,7 @@ export default function NewPasswordPage() {
       if (res.ok) {
         setMessage('Password changed successfully');
         localStorage.setItem('idToken', data.tokens.IdToken);
-        router.push('/'); // Redirect to homepage
+        router.push('/login');
       } else {
         setMessage(data.message || 'Failed to update password');
       }

@@ -7,6 +7,8 @@ import "../../mentor/MentorHomePage/mentor.css";
 export default function AddJobPage() {
   const router = useRouter();
   const [language, setLanguage] = useState(getLanguage());
+  const [userId, setUserId] = useState(null);
+  const [userType, setUserType] = useState(null);
 
   const [jobData, setJobData] = useState({
     title: "",
@@ -15,8 +17,12 @@ export default function AddJobPage() {
     description: "",
   });
 
+  const [file, setFile] = useState(null); // optional attachment
+
   useEffect(() => {
     setLanguage(getLanguage());
+    setUserId(localStorage.getItem("userId"));
+    setUserType(localStorage.getItem("userType"));
   }, []);
 
   const handleToggleLanguage = () => {
@@ -29,9 +35,24 @@ export default function AddJobPage() {
     setJobData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0] || null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("📝 Submitting job:", jobData);
+
+    if (!userId || !userType) {
+      alert(language === "he" ? "משתמש לא מזוהה" : "User not recognized");
+      return;
+    }
+
+    const jobPayload = {
+      ...jobData,
+      publisherId: userId,
+      publisherType: userType,
+      attachmentUrl: "", // We’ll handle real file upload later
+    };
 
     try {
       const response = await fetch("http://localhost:5000/api/jobs", {
@@ -39,23 +60,19 @@ export default function AddJobPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...jobData,
-          createdAt: new Date().toISOString(), // מוסיף תאריך יצירה
-        }),
+        body: JSON.stringify(jobPayload),
       });
 
       if (response.ok) {
-        console.log("✅ Job uploaded successfully");
         router.push("/pages/jobs");
       } else {
         const error = await response.json();
-        console.error("❌ Failed to upload job:", error.message);
-        alert("אירעה שגיאה בהעלאת משרה.");
+        console.error("Upload error:", error.message);
+        alert(language === "he" ? "אירעה שגיאה בהעלאת משרה." : "Failed to post job.");
       }
     } catch (err) {
-      console.error("❌ Error submitting job:", err);
-      alert("אירעה שגיאה בהעלאת משרה.");
+      console.error("Submit error:", err);
+      alert(language === "he" ? "שגיאה בשרת." : "Server error.");
     }
   };
 
@@ -128,6 +145,13 @@ export default function AddJobPage() {
               className="w-full p-2 border rounded h-32"
               required
             />
+          </div>
+
+          <div>
+            <label className="block font-semibold text-blue-700 mb-2">
+              {language === "he" ? "העלה קובץ (PDF / תמונה) [לא חובה]" : "Upload file (PDF / image) [optional]"}:
+            </label>
+            <input type="file" onChange={handleFileChange} />
           </div>
 
           <button
