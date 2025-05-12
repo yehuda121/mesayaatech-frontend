@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { getLanguage } from '../../language';
+import { t } from '@/app/utils/loadTranslations';
 import Button from '../../../components/Button';
 
 export default function CreateEventForm() {
@@ -41,7 +42,7 @@ export default function CreateEventForm() {
       const resData = await res.json();
 
       if (res.ok) {
-        setSuccess(t.success[language]);
+        setSuccess(t('eventSuccess', language));
         setFormData({
           title: '',
           description: '',
@@ -49,66 +50,53 @@ export default function CreateEventForm() {
           time: '',
           location: '',
           notes: '',
-          participants: [] 
+          participants: []
         });
       } else {
-        setSuccess(resData.error || t.error[language]);
+        setSuccess(resData.error || t('eventError', language));
       }
     } catch (err) {
       console.error('Upload error:', err);
-      setSuccess(t.error[language]);
+      setSuccess(t('eventError', language));
     }
-  };
-
-  const t = {
-    createTitle: { he: 'יצירת אירוע חדש', en: 'Create New Event' },
-    title: { he: 'כותרת (לא חובה)', en: 'Title (optional)' },
-    description: { he: 'תיאור האירוע *', en: 'Event Description *' },
-    date: { he: 'תאריך *', en: 'Date *' },
-    time: { he: 'שעת התחלה', en: 'Start Time' },
-    location: { he: 'מיקום (כתובת או קישור)', en: 'Location (address or link)' },
-    notes: { he: 'הערות נוספות', en: 'Additional Notes' },
-    submit: { he: 'צור אירוע', en: 'Create Event' },
-    success: { he: 'האירוע נוסף בהצלחה!', en: 'Event added successfully!' },
-    error: { he: 'שגיאה בעת יצירת האירוע', en: 'Error while creating event' },
   };
 
   return (
     <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-lg space-y-6" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <h1 className="text-3xl font-bold text-center">{t.createTitle[language]}</h1>
+      <h1 className="text-3xl font-bold text-center">{t('createEventTitle', language)}</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <label>{t.title[language]}
+        <label>{t('eventTitle', language)}
           <input name="title" value={formData.title} onChange={handleChange}
             className="border p-2 w-full rounded" />
         </label>
 
-        <label>{t.description[language]}
+        <label>{t('eventDescription', language)}
           <textarea name="description" required value={formData.description} onChange={handleChange}
             className="border p-2 w-full rounded h-24" />
         </label>
 
-        <label>{t.date[language]}
+        <label>{t('eventDate', language)}
           <input name="date" type="date" required value={formData.date} onChange={handleChange}
             className="border p-2 w-full rounded" />
         </label>
 
-        <label>{t.time[language]}
+        <label>{t('eventTime', language)}
           <input name="time" type="time" value={formData.time} onChange={handleChange}
             className="border p-2 w-full rounded" />
         </label>
 
-        <label>{t.location[language]}
+        <label>{t('eventLocation', language)}
           <input name="location" value={formData.location} onChange={handleChange}
             className="border p-2 w-full rounded" />
         </label>
 
-        <label>{t.notes[language]}
+        <label>{t('eventNotes', language)}
           <textarea name="notes" value={formData.notes} onChange={handleChange}
             className="border p-2 w-full rounded h-20" />
         </label>
 
-        <Button text={t.submit[language]} type="submit" />
+        <Button text={t('eventSubmit', language)} type="submit" />
       </form>
 
       {success && <p className="text-center text-green-600 font-bold mt-4">{success}</p>}

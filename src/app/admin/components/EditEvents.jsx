@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { getLanguage } from '../../language';
+import { t } from '@/app/utils/loadTranslations';
 import Button from '../../../components/Button';
 
 export default function EditEvents({ event, onClose, onSave }) {
@@ -13,19 +14,6 @@ export default function EditEvents({ event, onClose, onSave }) {
     window.addEventListener('languageChanged', handleLangChange);
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
-
-  const t = {
-    editTitle: { he: 'עריכת אירוע', en: 'Edit Event' },
-    title: { he: 'כותרת', en: 'Title' },
-    description: { he: 'תיאור', en: 'Description' },
-    date: { he: 'תאריך', en: 'Date' },
-    time: { he: 'שעה', en: 'Time' },
-    location: { he: 'מיקום', en: 'Location' },
-    notes: { he: 'הערות', en: 'Notes' },
-    participants: { he: 'משתתפים באירוע', en: 'Participants' },
-    save: { he: 'שמור שינויים', en: 'Save Changes' },
-    cancel: { he: 'ביטול', en: 'Cancel' },
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,10 +53,10 @@ export default function EditEvents({ event, onClose, onSave }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded shadow-lg w-full max-w-xl max-h-[90vh] overflow-y-auto" dir={language === 'he' ? 'rtl' : 'ltr'}>
-        <h2 className="text-xl font-bold text-center mb-4">{t.editTitle[language]}</h2>
+        <h2 className="text-xl font-bold text-center mb-4">{t('editEventTitle', language)}</h2>
 
         <form className="space-y-4">
-          <label>{t.title[language]}
+          <label>{t('eventTitle', language)}
             <input
               name="title"
               value={formData.title || ''}
@@ -77,7 +65,7 @@ export default function EditEvents({ event, onClose, onSave }) {
             />
           </label>
 
-          <label>{t.description[language]}
+          <label>{t('eventDescription', language)}
             <textarea
               name="description"
               value={formData.description || ''}
@@ -86,7 +74,7 @@ export default function EditEvents({ event, onClose, onSave }) {
             />
           </label>
 
-          <label>{t.date[language]}
+          <label>{t('eventDate', language)}
             <input
               type="date"
               name="date"
@@ -96,7 +84,7 @@ export default function EditEvents({ event, onClose, onSave }) {
             />
           </label>
 
-          <label>{t.time[language]}
+          <label>{t('eventTime', language)}
             <input
               type="time"
               name="time"
@@ -106,7 +94,7 @@ export default function EditEvents({ event, onClose, onSave }) {
             />
           </label>
 
-          <label>{t.location[language]}
+          <label>{t('eventLocation', language)}
             <input
               name="location"
               value={formData.location || ''}
@@ -115,7 +103,7 @@ export default function EditEvents({ event, onClose, onSave }) {
             />
           </label>
 
-          <label>{t.notes[language]}
+          <label>{t('eventNotes', language)}
             <textarea
               name="notes"
               value={formData.notes || ''}
@@ -125,10 +113,9 @@ export default function EditEvents({ event, onClose, onSave }) {
           </label>
         </form>
 
-        {/* ✅ תצוגת רשימת משתתפים */}
         {Array.isArray(formData.participants) && formData.participants.length > 0 && (
           <div className="mt-6 border-t pt-4">
-            <h3 className="font-semibold mb-2">{t.participants[language]}</h3>
+            <h3 className="font-semibold mb-2">{t('eventParticipants', language)}</h3>
             <ul className="list-disc ml-6 space-y-1 text-sm">
               {formData.participants.map((p, index) => (
                 <li key={index}>
@@ -140,9 +127,9 @@ export default function EditEvents({ event, onClose, onSave }) {
         )}
 
         <div className="flex justify-end gap-3 mt-6">
-          <Button text={t.cancel[language]} onClick={onClose} />
+          <Button text={t('cancel', language)} onClick={onClose} />
           <Button
-            text={loading ? '...' : t.save[language]}
+            text={loading ? '...' : t('saveChanges', language)}
             onClick={handleSave}
           />
         </div>

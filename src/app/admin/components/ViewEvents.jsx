@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Button from '../../../components/Button';
 import { getLanguage } from '../../language';
+import { t } from '@/app/utils/loadTranslations';
 
 export default function ViewEvents({ events, setEvents, onEdit }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -38,34 +39,22 @@ export default function ViewEvents({ events, setEvents, onEdit }) {
     }
   };
 
-  const t = {
-    updateTitle: { he: 'עדכון אירוע', en: 'Update Event' },
-    title: { he: 'כותרת', en: 'Title' },
-    date: { he: 'תאריך', en: 'Date' },
-    time: { he: 'שעה', en: 'Time' },
-    location: { he: 'מיקום', en: 'Location' },
-    delete: { he: 'מחק', en: 'Delete' },
-    edit: { he: 'ערוך', en: 'Edit' },
-    filterTitle: { he: 'סנן לפי כותרת', en: 'Filter by title' },
-    filterDate: { he: 'סנן לפי תאריך', en: 'Filter by date' },
-    togglePast: {
-      he: showPast ? 'הסתר אירועים שעברו' : 'הצג אירועים שעברו',
-      en: showPast ? 'Hide Past Events' : 'Show Past Events'
-    }
-  };
-
   const filteredEvents = events.filter((e) =>
     e.title.includes(filter.title) && (!filter.date || e.date === filter.date)
   );
 
+  const togglePastLabel = language === 'he'
+    ? showPast ? 'הסתר אירועים שעברו' : 'הצג אירועים שעברו'
+    : showPast ? 'Hide Past Events' : 'Show Past Events';
+
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <h2 className="text-2xl font-bold text-center">{t.updateTitle[language]}</h2>
+      <h2 className="text-2xl font-bold text-center">{t('editEventTitle', language)}</h2>
 
       <div className="flex gap-2 items-center" style={{ direction: 'rtl' }}>
         <input
           type="text"
-          placeholder={t.filterTitle[language]}
+          placeholder={t('filterTitle', language)}
           className="border p-2 rounded w-full"
           value={filter.title}
           onChange={(e) => setFilter({ ...filter, title: e.target.value })}
@@ -77,14 +66,14 @@ export default function ViewEvents({ events, setEvents, onEdit }) {
           onChange={(e) => setFilter({ ...filter, date: e.target.value })}
         />
         <Button
-          text={t.togglePast[language]}
+          text={togglePastLabel}
           size="sm"
           onClick={() => setShowPast(!showPast)}
         />
       </div>
 
       {filteredEvents.length === 0 ? (
-        <p className="text-center">לא נמצאו אירועים</p>
+        <p className="text-center">{t('noEventsFound', language)}</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filteredEvents.map((event, i) => (
@@ -93,8 +82,8 @@ export default function ViewEvents({ events, setEvents, onEdit }) {
               <div>{event.date} {event.time}</div>
               <div className="truncate">{event.location}</div>
               <div className="flex gap-2 mt-2" style={{ direction: 'rtl' }}>
-                <Button text={t.edit[language]} onClick={() => onEdit(event)} />
-                <Button text={t.delete[language]} color="danger" onClick={() => handleDelete(event)} />
+                <Button text={t('edit', language)} onClick={() => onEdit(event)} />
+                <Button text={t('delete', language)} color="danger" onClick={() => handleDelete(event)} />
               </div>
             </div>
           ))}

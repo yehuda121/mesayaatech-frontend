@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
 import Button from '../../../components/Button';
+import { t } from '@/app/utils/loadTranslations';
 
-export default function ambassadorRegisterForm() {
+export default function AmbassadorRegisterForm() {
   const router = useRouter();
-  const [language, setLanguage] = useState(getLanguage());
+  const [language, setLanguage] = useState(null);
   const [success, setSuccess] = useState('');
 
   const [formData, setFormData] = useState({
@@ -25,40 +26,21 @@ export default function ambassadorRegisterForm() {
     notes: '',
   });
 
+  const translatedJobFields = {
+    "הייטק": { he: "הייטק", en: "Hi-Tech" },
+    "פיננסים": { he: "פיננסים", en: "Finance" },
+    "לוגיסטיקה": { he: "לוגיסטיקה", en: "Logistics" },
+    "שיווק": { he: "שיווק", en: "Marketing" },
+    "חינוך": { he: "חינוך", en: "Education" },
+    "אחר": { he: "אחר", en: "Other" }
+  };
+
   useEffect(() => {
+    setLanguage(getLanguage());
     const handleLanguageChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLanguageChange);
     return () => window.removeEventListener('languageChanged', handleLanguageChange);
   }, []);
-
-  const t = {
-    title: { he: "הרשמה לשגריר", en: "Ambassador Registration" },
-    fullName: { he: "שם מלא", en: "Full Name" },
-    idNumber: { he: "תעודת זהות", en: "ID Number" },
-    email: { he: "אימייל", en: "Email" },
-    phone: { he: "מספר טלפון", en: "Phone" },
-    currentCompany: { he: "חברה נוכחית בה אתה עובד", en: "Current Company" },
-    position: { he: "תפקיד נוכחי", en: "Current Position" },
-    location: { he: "מיקום גאוגרפי", en: "Location" },
-    canShareJobs: { he: "האם תוכל לשתף משרות מהארגון שלך?", en: "Can you share jobs from your organization?" },
-    jobFieldsTitle: { he: "באילו תחומים יש לך גישה למשרות?", en: "Which fields do you have access to jobs in?" },
-    linkedin: { he: "לינקדאין (לא חובה)", en: "LinkedIn (optional)" },
-    notes: { he: "הערות נוספות", en: "Additional Notes" },
-    submit: { he: "שלח בקשה", en: "Submit" },
-    success: { he: "הרישום נשלח בהצלחה!", en: "Registration submitted successfully!" },
-    error: { he: "אירעה שגיאה בשליחה", en: "An error occurred during submission" },
-    login: { he: "יש לי חשבון קיים", en: "I already have an account" },
-    switchLang: { he: "English", en: "עברית" }
-  };
-
-  const translatedJobFields = {
-    "הייטק": { he: " הייטק", en: "Hi-Tech" },
-    "פיננסים": { he: " פיננסים ", en: "Finance" },
-    "לוגיסטיקה": { he: " לוגיסטיקה", en: "Logistics" },
-    "שיווק": { he: " שיווק", en: "Marketing" },
-    "חינוך": { he: " חינוך", en: "Education" },
-    "אחר": { he: " אחר", en: "Other" }
-  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -76,11 +58,10 @@ export default function ambassadorRegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const required = ['fullName', 'idNumber', 'email', 'phone', 'location', 'canShareJobs'];
     for (let key of required) {
       if (!formData[key]) {
-        setSuccess(language === 'he' ? `נא למלא את השדה: ${t[key].he}` : `Please fill out: ${t[key].en}`);
+        setSuccess(`${t('pleaseFill', language)} ${t(key, language)}`);
         return;
       }
     }
@@ -93,7 +74,7 @@ export default function ambassadorRegisterForm() {
       });
 
       if (res.ok) {
-        setSuccess(t.success[language]);
+        setSuccess(t('ambassadorSuccess', language));
         setFormData({
           userType: 'ambassador',
           status: 'pending',
@@ -110,12 +91,16 @@ export default function ambassadorRegisterForm() {
           notes: '',
         });
       } else {
-        throw new Error();
+        const errorText = await res.text();
+        console.error('שגיאה מהשרת:', errorText);
+        setSuccess(`${t('ambassadorError', language)}: ${errorText}`);
       }
     } catch {
-      setSuccess(t.error[language]);
+      setSuccess(t('ambassadorError', language));
     }
   };
+
+  if (!language) return null;
 
   return (
     <div dir={language === 'he' ? 'rtl' : 'ltr'}>
@@ -125,48 +110,48 @@ export default function ambassadorRegisterForm() {
             onClick={() => router.push('/login')}
             className="text-blue-700 font-medium hover:underline"
           >
-            {t.login[language]}
+            {t('alreadyHaveAcconut', language)}
           </button>
 
           <button onClick={() => setLanguage(toggleLanguage())}
             className="text-sm underline hover:text-blue-600"
           >
-            {t.switchLang[language]}
+            {t('switchLang', language)}
           </button>
         </div>
 
-        <h1 className="text-3xl font-bold text-center">{t.title[language]}</h1>
+        <h1 className="text-3xl font-bold text-center">{t('ambassadorRegisterTitle', language)}</h1>
 
         <form onSubmit={handleSubmit} className={`space-y-4 ${language === 'he' ? 'text-right' : 'text-left'}`}>
-        <label>{t.fullName[language]}*:
+          <label>{t('fullName', language)}*:
             <input name="fullName" required value={formData.fullName} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.idNumber[language]}*:
+          <label>{t('idNumber', language)}*:
             <input name="idNumber" required value={formData.idNumber} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.email[language]}*:
+          <label>{t('email', language)}*:
             <input name="email" type="email" required value={formData.email} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.phone[language]}*:
+          <label>{t('phone', language)}*:
             <input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.currentCompany[language]}:
+          <label>{t('currentCompany', language)}:
             <input name="currentCompany" value={formData.currentCompany} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.position[language]}:
+          <label>{t('position', language)}:
             <input name="position" value={formData.position} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.location[language]}*:
+          <label>{t('location', language)}*:
             <input name="location" required value={formData.location} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.canShareJobs[language]}*:
+          <label>{t('canShareJobs', language)}*:
             <select name="canShareJobs" required value={formData.canShareJobs} onChange={handleChange} className="border p-2 w-full rounded">
               <option value="">{language === 'he' ? 'בחר' : 'Select'}</option>
               <option value="כן">{language === 'he' ? 'כן' : 'Yes'}</option>
@@ -176,7 +161,7 @@ export default function ambassadorRegisterForm() {
           </label>
 
           <fieldset>
-            <legend className="font-semibold">{t.jobFieldsTitle[language]}</legend>
+            <legend className="font-semibold">{t('ambassadorJobFieldsTitle', language)}</legend>
             {Object.keys(translatedJobFields).map((field) => (
               <label key={field} className="block">
                 <input
@@ -192,15 +177,15 @@ export default function ambassadorRegisterForm() {
             ))}
           </fieldset>
 
-          <label>{t.linkedin[language]}:
+          <label>{t('linkedin', language)}:
             <input name="linkedin" value={formData.linkedin} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.notes[language]}:
+          <label>{t('notes', language)}:
             <textarea name="notes" value={formData.notes} onChange={handleChange} className="border p-2 w-full rounded h-24" />
           </label>
 
-          <Button text={t.submit[language]} type="submit" />
+          <Button text={t('submit', language)} type="submit" />
         </form>
 
         {success && <p className="text-green-600 text-center font-bold">{success}</p>}

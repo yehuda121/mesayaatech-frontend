@@ -14,11 +14,11 @@ body, h1, h2, h3, p, a, button {
     text-align: right;
   }
   
-  .text-ltr {
+  /* .text-ltr {
     direction: ltr;
     text-align: left;
   }
-  
+   */
   /* Tooltip */
   .tooltip-wrapper {
     position: relative;

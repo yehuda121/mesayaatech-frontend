@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Button from '@/components/Button';
 import { getLanguage } from '@/app/language';
+import { t } from '@/app/utils/loadTranslations';
 
 export default function Events({ idNumber, fullName, email }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -31,7 +32,7 @@ export default function Events({ idNumber, fullName, email }) {
 
   const handleJoin = async (eventId) => {
     if (!idNumber || !fullName || !email) {
-      alert(language === 'he' ? 'פרטי משתמש חסרים' : 'Missing user details');
+      alert(t('missingUserDetails', language));
       return;
     }
 
@@ -39,31 +40,20 @@ export default function Events({ idNumber, fullName, email }) {
       const res = await fetch('http://localhost:5000/api/join-to-event', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ eventId, idNumber: idNumber, fullName, email }),
+        body: JSON.stringify({ eventId, idNumber, fullName, email }),
       });
 
       const data = await res.json();
       if (res.ok) {
         setJoinedEvents((prev) => ({ ...prev, [eventId]: true }));
-        alert(language === 'he' ? 'נרשמת לאירוע בהצלחה' : 'Successfully joined event');
+        alert(t('successJoin', language));
       } else {
-        alert(data.error || (language === 'he' ? 'שגיאה בהרשמה' : 'Join failed'));
+        alert(data.error || t('joinError', language));
       }
     } catch (err) {
       console.error('Join error:', err);
-      alert(language === 'he' ? 'שגיאה בשרת' : 'Server error');
+      alert(t('serverError', language));
     }
-  };
-
-  const t = {
-    title: { he: 'כותרת', en: 'Title' },
-    date: { he: 'תאריך', en: 'Date' },
-    time: { he: 'שעה', en: 'Time' },
-    location: { he: 'מיקום', en: 'Location' },
-    join: { he: 'מגיע', en: 'Join' },
-    joined: { he: 'כבר נרשמת', en: 'Already Joined' },
-    filterTitle: { he: 'סנן לפי כותרת', en: 'Filter by title' },
-    filterDate: { he: 'סנן לפי תאריך', en: 'Filter by date' },
   };
 
   const filteredEvents = events.filter((e) =>
@@ -73,13 +63,13 @@ export default function Events({ idNumber, fullName, email }) {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6" dir={language === 'he' ? 'rtl' : 'ltr'}>
       <h2 className="text-2xl font-bold text-center">
-        {language === 'he' ? 'אירועים קרובים' : 'Upcoming Events'}
+        {t('upcomingEvents', language)}
       </h2>
 
       <div className="flex gap-2 items-center" style={{ direction: 'rtl' }}>
         <input
           type="text"
-          placeholder={t.filterTitle[language]}
+          placeholder={t('filterTitle', language)}
           className="border p-2 rounded w-full"
           value={filter.title}
           onChange={(e) => setFilter({ ...filter, title: e.target.value })}
@@ -94,7 +84,7 @@ export default function Events({ idNumber, fullName, email }) {
 
       {filteredEvents.length === 0 ? (
         <p className="text-center">
-          {language === 'he' ? 'לא נמצאו אירועים' : 'No events found'}
+          {t('noEventsFound', language)}
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -105,10 +95,10 @@ export default function Events({ idNumber, fullName, email }) {
               <div className="truncate">{event.location}</div>
               <div className="mt-2">
                 {joinedEvents[event.eventId] ? (
-                  <span className="text-green-600 font-semibold">{t.joined[language]}</span>
+                  <span className="text-green-600 font-semibold">{t('joined', language)}</span>
                 ) : (
                   <Button
-                    text={t.join[language]}
+                    text={t('join', language)}
                     size="sm"
                     onClick={() => handleJoin(event.eventId)}
                   />

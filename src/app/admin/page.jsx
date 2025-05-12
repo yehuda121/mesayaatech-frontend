@@ -176,15 +176,15 @@
 
 
 
-
 'use client';
 import { useEffect, useState } from 'react';
-import { getLanguage, toggleLanguage } from '../language';
+import { getLanguage } from '../language';
 import SideBar from '../../components/SideBar';
 import UsersTable from './components/usersTable';
 import CreateEvent from './components/CreateEvent';
 import ViewEvents from './components/ViewEvents';
 import EditEvents from './components/EditEvents';
+import { t } from '@/app/utils/loadTranslations';
 import './admin.css';
 
 export default function AdminPage() {
@@ -201,21 +201,21 @@ export default function AdminPage() {
 
   const navItems = [
     {
-      labelHe: "צפיה במשתמשים",
-      labelEn: "users",
+      labelHe: t('viewUsers', 'he'),
+      labelEn: t('viewUsers', 'en'),
       path: UsersTable,
       onClick: () => setView('users')
     },
     {
-      labelHe: "יצירת אירוע חדש",
-      labelEn: "Create Event",
-      path: "#create-event",
+      labelHe: t('createEvent', 'he'),
+      labelEn: t('createEvent', 'en'),
+      path: '#create-event',
       onClick: () => setView('create-event')
     },
     {
-      labelHe: "צפיה באירועים קיימים",
-      labelEn: "View Events",
-      path: "#view-events",
+      labelHe: t('viewEvents', 'he'),
+      labelEn: t('viewEvents', 'en'),
+      path: '#view-events',
       onClick: () => setView('view-events')
     },
   ];

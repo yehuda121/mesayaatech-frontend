@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
 import Button from '../../../components/Button';
+import { t } from '@/app/utils/loadTranslations';
 
-export default function reseveRegisterForm() {
+export default function ReserveRegisterForm() {
   const router = useRouter();
-  const [language, setLanguage] = useState(getLanguage());
+  const [language, setLanguage] = useState(null);
   const [success, setSuccess] = useState('');
 
   const [formData, setFormData] = useState({
@@ -24,42 +25,21 @@ export default function reseveRegisterForm() {
     notes: '',
   });
 
+  const translatedFields = {
+    "הייטק": { he: " הייטק", en: "Hi-Tech" },
+    "ניהול": { he: " ניהול", en: "Management" },
+    "לוגיסטיקה": { he: " לוגיסטיקה", en: "Logistics" },
+    "חינוך": { he: " חינוך", en: "Education" },
+    "שיווק": { he: " שיווק", en: "Marketing" },
+    "אחר": { he: " אחר", en: "Other" }
+  };
+
   useEffect(() => {
+    setLanguage(getLanguage());
     const handleLanguageChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLanguageChange);
     return () => window.removeEventListener('languageChanged', handleLanguageChange);
   }, []);
-
-  const t = {
-    title: { he: "הרשמה למילואימניק", en: "Reservist Registration" },
-    fullName: { he: "שם מלא", en: "Full Name" },
-    idNumber: { he: "תעודת זהות", en: "ID Number" },
-    email: { he: "אימייל", en: "Email" },
-    phone: { he: "מספר טלפון", en: "Phone" },
-    armyRole: { he: "תפקיד עיקרי במילואים", en: "Army Role" },
-    location: { he: "מיקום גאוגרפי", en: "Location" },
-    fieldsTitle: {
-      he: "אילו תחומי עיסוק רלוונטיים לך? (בחר כמה שרוצים)",
-      en: "Which professional fields are relevant to you? (Select all that apply)"
-    },
-    experience: { he: "ניסיון מקצועי", en: "Professional Experience" },
-    linkedin: { he: "קישור ללינקדאין (לא חובה)", en: "LinkedIn link (optional)" },
-    notes: { he: "הערות נוספות (לא חובה)", en: "Additional Notes (optional)" },
-    submit: { he: "שלח בקשה", en: "Submit" },
-    success: { he: "הבקשה נשלחה ונשמרה בהצלחה!", en: "Form submitted successfully!" },
-    error: { he: "אירעה שגיאה בשליחה", en: "An error occurred during submission" },
-    login: { he: "יש לי חשבון קיים", en: "I already have an account" },
-    switchLang: { he: "English", en: "עברית" }
-  };
-  const translatedFields = {
-    "הייטק": { he: "הייטק", en: "Hi-Tech" },
-    "ניהול": { he: "ניהול", en: "Management" },
-    "לוגיסטיקה": { he: "לוגיסטיקה", en: "Logistics" },
-    "חינוך": { he: "חינוך", en: "Education" },
-    "שיווק": { he: "שיווק", en: "Marketing" },
-    "אחר": { he: "אחר", en: "Other" }
-  };
-  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -81,7 +61,7 @@ export default function reseveRegisterForm() {
     const required = ['fullName', 'idNumber', 'email', 'phone', 'armyRole', 'location', 'experience'];
     for (let key of required) {
       if (!formData[key]) {
-        setSuccess(language === 'he' ? `נא למלא את השדה: ${t[key].he}` : `Please fill out: ${t[key].en}`);
+        setSuccess(`${t('pleaseFill', language)} ${t(key, language)}`);
         return;
       }
     }
@@ -94,7 +74,7 @@ export default function reseveRegisterForm() {
       });
 
       if (res.ok) {
-        setSuccess(t.success[language]);
+        setSuccess(t('reservistSuccess', language));
         setFormData({
           userType: 'reservist',
           status: 'pending',
@@ -110,65 +90,65 @@ export default function reseveRegisterForm() {
           notes: '',
         });
       } else {
-        // throw new Error();
         const errorText = await res.text();
         console.error('שגיאה מהשרת:', errorText);
-        setSuccess(`${t.error[language]}: ${errorText}`);
-        return;
+        setSuccess(`${t('reservistError', language)}: ${errorText}`);
       }
     } catch {
-      setSuccess(t.error[language]);
+      setSuccess(t('reservistError', language));
     }
   };
 
+  if (!language) return null;
+
   return (
     <div dir={language === 'he' ? 'rtl' : 'ltr'}>
-
       <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-lg space-y-6">
-      <div dir="ltr" className="flex justify-end gap-4 items-center w-full">
+        <div dir="ltr" className="flex justify-end gap-4 items-center w-full">
           <button
             onClick={() => router.push('/login')}
             className="text-blue-700 font-medium hover:underline"
           >
-            {t.login[language]}
+            {t('alreadyHaveAcconut', language)}
           </button>
 
-          <button onClick={() => setLanguage(toggleLanguage())}
+          <button
+            onClick={() => setLanguage(toggleLanguage())}
             className="text-sm underline hover:text-blue-600"
           >
-            {language === 'he' ? 'English' : 'עברית'}
+            {t('switchLang', language)}
           </button>
-
         </div>
 
-        <h1 className="text-3xl font-bold text-center">{t.title[language]}</h1>
+        <h1 className="text-3xl font-bold text-center">{t('reservistRegisterTitle', language)}</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <label>{t.fullName[language]}*:
+        <form onSubmit={handleSubmit} className="space-y-4" >
+          <label>{t('fullName', language)}*:
             <input name="fullName" required value={formData.fullName} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.idNumber[language]}*:
+          <label>{t('idNumber', language)}*:
             <input name="idNumber" required value={formData.idNumber} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.email[language]}*:
+          <label>{t('email', language)}*:
             <input name="email" type="email" required value={formData.email} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.phone[language]}*:
+          <label>{t('phone', language)}*:
             <input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.armyRole[language]}*:
+          <label>{t('armyRole', language)}*:
             <input name="armyRole" required value={formData.armyRole} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.location[language]}*:
+          <label>{t('location', language)}*:
             <input name="location" required value={formData.location} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
           <fieldset>
+            <legend className="font-semibold">{t('professionalFieldsSelect', language)}</legend>
             {Object.keys(translatedFields).map((field) => (
               <label key={field} className="block">
                 <input
@@ -182,22 +162,21 @@ export default function reseveRegisterForm() {
                 {translatedFields[field][language]}
               </label>
             ))}
-
           </fieldset>
 
-          <label>{t.experience[language]}*:
+          <label>{t('professionalExperience', language)}*:
             <textarea name="experience" required value={formData.experience} onChange={handleChange} className="border p-2 w-full rounded h-24" />
           </label>
 
-          <label>{t.linkedin[language]}:
+          <label>{t('linkedinLink', language)}:
             <input name="linkedin" value={formData.linkedin} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.notes[language]}:
+          <label>{t('reservistNotes', language)}:
             <textarea name="notes" value={formData.notes} onChange={handleChange} className="border p-2 w-full rounded h-24" />
           </label>
 
-          <Button text={t.submit[language]} type="submit" />
+          <Button text={t('submit', language)} type="submit" />
         </form>
 
         {success && <p className="text-green-600 text-center font-bold">{success}</p>}

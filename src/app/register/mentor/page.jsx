@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
 import Button from '../../../components/Button';
+import { t } from '@/app/utils/loadTranslations';
 
-export default function mentorRegisterForm() {
+export default function MentorRegisterForm() {
   const router = useRouter();
-  const [language, setLanguage] = useState(getLanguage());
+  const [language, setLanguage] = useState(null);
   const [success, setSuccess] = useState('');
 
   const [formData, setFormData] = useState({
@@ -27,34 +28,13 @@ export default function mentorRegisterForm() {
   });
 
   useEffect(() => {
-    const handleLanguageChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLanguageChange);
-    return () => window.removeEventListener('languageChanged', handleLanguageChange);
+    setLanguage(getLanguage());
+    const handleLangChange = () => setLanguage(getLanguage());
+    window.addEventListener('languageChanged', handleLangChange);
+    return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
-  const t = {
-    title: { he: "הרשמה למנטור", en: "Mentor Registration" },
-    fullName: { he: "שם מלא", en: "Full Name" },
-    idNumber: { he: "תעודת זהות", en: "ID Number" },
-    email: { he: "אימייל", en: "Email" },
-    phone: { he: "מספר טלפון", en: "Phone" },
-    profession: { he: "תחום עיסוק עיקרי", en: "Primary Profession" },
-    location: { he: "מיקום גאוגרפי", en: "Location" },
-    specialtiesTitle: {
-      he: "תחומי מומחיות (אפשר לבחור כמה):",
-      en: "Areas of expertise (select all that apply):"
-    },
-    experience: { he: "רקע מקצועי (ציין ניסיון רלוונטי)", en: "Professional Background" },
-    pastMentoring: { he: "ניסיון קודם בהדרכה/מנטורינג", en: "Previous mentoring experience" },
-    availability: { he: "זמינות (שעות/ימים מועדפים)", en: "Availability (preferred times/days)" },
-    linkedin: { he: "לינקדאין (לא חובה)", en: "LinkedIn (optional)" },
-    notes: { he: "הערות נוספות", en: "Additional Notes" },
-    submit: { he: "שלח בקשה", en: "Submit" },
-    success: { he: "הרישום נשלח בהצלחה!", en: "Registration sent successfully!" },
-    error: { he: "אירעה שגיאה בשליחה", en: "An error occurred during submission" },
-    login: { he: "יש לי חשבון קיים", en: "I already have an account" },
-    switchLang: { he: "English", en: "עברית" }
-  };
+  if (!language) return null; // או Spinner
 
   const translatedSpecialties = {
     "חיפוש עבודה": { he: " חיפוש עבודה", en: "Job Search" },
@@ -81,11 +61,10 @@ export default function mentorRegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const required = ['fullName', 'idNumber', 'email', 'phone', 'profession', 'location', 'experience'];
     for (let key of required) {
       if (!formData[key]) {
-        setSuccess(language === 'he' ? `נא למלא את השדה: ${t[key].he}` : `Please fill out: ${t[key].en}`);
+        setSuccess(`${t('pleaseFill', language)} ${t(key, language)}`);
         return;
       }
     }
@@ -98,7 +77,7 @@ export default function mentorRegisterForm() {
       });
 
       if (res.ok) {
-        setSuccess(t.success[language]);
+        setSuccess(t('success', language));
         setFormData({
           userType: 'mentor',
           status: 'pending',
@@ -119,7 +98,7 @@ export default function mentorRegisterForm() {
         throw new Error();
       }
     } catch {
-      setSuccess(t.error[language]);
+      setSuccess(t('error', language));
     }
   };
 
@@ -131,45 +110,45 @@ export default function mentorRegisterForm() {
             onClick={() => router.push('/login')}
             className="text-blue-700 font-medium hover:underline"
           >
-            {t.login[language]}
+            {t('mentorLogin', language)}
           </button>
 
           <button onClick={() => setLanguage(toggleLanguage())}
             className="text-sm underline hover:text-blue-600"
           >
-            {t.switchLang[language]}
+            {t('switchLang', language)}
           </button>
         </div>
 
-        <h1 className="text-3xl font-bold text-center">{t.title[language]}</h1>
+        <h1 className="text-3xl font-bold text-center">{t('mentorRegisterTitle', language)}</h1>
 
         <form onSubmit={handleSubmit} className={`space-y-4 ${language === 'he' ? 'text-right' : 'text-left'}`}>
-          <label>{t.fullName[language]}*:
+          <label>{t('fullName', language)}*:
             <input name="fullName" required value={formData.fullName} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.idNumber[language]}*:
+          <label>{t('idNumber', language)}*:
             <input name="idNumber" required value={formData.idNumber} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.email[language]}*:
+          <label>{t('email', language)}*:
             <input name="email" type="email" required value={formData.email} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.phone[language]}*:
+          <label>{t('phone', language)}*:
             <input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.profession[language]}*:
+          <label>{t('mainProfetion', language)}*:
             <input name="profession" required value={formData.profession} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.location[language]}*:
+          <label>{t('location', language)}*:
             <input name="location" required value={formData.location} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
           <fieldset>
-            <legend className="font-semibold">{t.specialtiesTitle[language]}</legend>
+            <legend className="font-semibold">{t('mentorSpecialtiesTitle', language)}</legend>
             {Object.keys(translatedSpecialties).map((field) => (
               <label key={field} className="block">
                 <input
@@ -185,27 +164,27 @@ export default function mentorRegisterForm() {
             ))}
           </fieldset>
 
-          <label>{t.experience[language]}*:
+          <label>{t('mentorExperience', language)}*:
             <textarea name="experience" required value={formData.experience} onChange={handleChange} className="border p-2 w-full rounded h-24" />
           </label>
 
-          <label>{t.pastMentoring[language]}:
+          <label>{t('mentorPastMentoring', language)}:
             <textarea name="pastMentoring" value={formData.pastMentoring} onChange={handleChange} className="border p-2 w-full rounded h-24" />
           </label>
 
-          <label>{t.availability[language]}:
+          <label>{t('mentorAvailability', language)}:
             <input name="availability" value={formData.availability} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.linkedin[language]}:
+          <label>{t('mentorLinkedin', language)}:
             <input name="linkedin" value={formData.linkedin} onChange={handleChange} className="border p-2 w-full rounded" />
           </label>
 
-          <label>{t.notes[language]}:
+          <label>{t('notes', language)}:
             <textarea name="notes" value={formData.notes} onChange={handleChange} className="border p-2 w-full rounded h-24" />
           </label>
 
-          <Button text={t.submit[language]} type="submit" />
+          <Button text={t('submit', language)} type="submit" />
         </form>
 
         {success && <p className="text-green-600 text-center font-bold">{success}</p>}
