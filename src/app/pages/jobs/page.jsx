@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { getLanguage, toggleLanguage } from "@/app/language";
 import { useRouter } from "next/navigation";
+import SideBar from "@/components/SideBar";
 import "../mentor/MentorHomePage/mentor.css";
 
 export default function JobsPage() {
@@ -74,31 +75,37 @@ export default function JobsPage() {
     if (!userType) return;
     switch (userType) {
       case "mentor": router.push("/pages/mentor/MentorHomePage"); break;
-      case "reservist": router.push("/pages/reserve/ReserveHomePage"); break;
+      case "reservist": router.push("/reservist/home"); break;
       case "ambassador": router.push("/pages/ambassador/AmbassadorHomePage"); break;
       case "admin": router.push("/admin"); break;
       default: router.push("/"); break;
     }
   };
 
+  const navItems = [
+    {
+      labelHe: "ראשי",
+      labelEn: "Home",
+      path: "#home",
+      onClick: handleNavigateHome,
+    },
+    // {
+    //   labelHe: "עברית 🇮🇱",
+    //   labelEn: "English",
+    //   path: "#lang",
+    //   onClick: () => {
+    //     const newLang = toggleLanguage();
+    //     setLanguage(newLang);
+    //   },
+    // },
+  ];
+
   const canPostJob = userType === "mentor" || userType === "ambassador" || userType === "admin";
 
   return (
     <div className="dashboard-container">
-      {/* Sidebar */}
-      <aside className="dashboard-sidebar">
-        <h2 className="dashboard-title">מסייעטק</h2>
-        <div className="language-toggle">
-          <button onClick={toggleLanguage}>
-            {language === "he" ? "English" : "עברית 🇮🇱"}
-          </button>
-        </div>
-        <nav className="dashboard-nav">
-          <button onClick={handleNavigateHome}>{language === "he" ? "ראשי" : "Home"}</button>
-        </nav>
-      </aside>
+      <SideBar navItems={navItems} />
 
-      {/* Main content */}
       <main className="dashboard-main">
         <h1>{language === "he" ? "משרות פנויות" : "Available Jobs"}</h1>
 
@@ -113,7 +120,6 @@ export default function JobsPage() {
           </div>
         )}
 
-        {/* Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div>
             <label className="font-semibold">{language === "he" ? "מיקום" : "Location"}:</label>
@@ -125,7 +131,6 @@ export default function JobsPage() {
           </div>
         </div>
 
-        {/* Jobs list */}
         <div className="dashboard-grid">
           {filteredJobs.length > 0 ? (
             filteredJobs.map((job, idx) => {

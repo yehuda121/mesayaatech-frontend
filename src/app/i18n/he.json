@@ -107,5 +107,12 @@
     "loginError": "שגיאה",
     "loginFailed": "ההתחברות נכשלה",
     "generalError": "שגיאה כללית. בדוק את הקונסול.",
-    "password": "סיסמה"
+    "password": "סיסמה",
+    "jobTitle": "שם המשרה",
+    "postNewJob": "פרסום משרה חדשה",
+    "submitJob": "שלח משרה",
+    "backToJobs": "חזרה למשרות",
+    "uploadFile": "העלה קובץ (PDF / תמונה) [לא חובה]",
+    "userNotRecognized": "משתמש לא מזוהה"
+  
 }

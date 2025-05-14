@@ -107,5 +107,12 @@
     "loginError": "Error",
     "loginFailed": "Login failed",
     "generalError": "General error. Check the console.",
-    "password": "Password"
+    "password": "Password",
+    "jobTitle": "Job Title",
+    "postNewJob": "Post New Job",
+    "submitJob": "Submit Job",
+    "backToJobs": "Back to Jobs",
+    "uploadFile": "Upload file (PDF / image) [optional]",
+    "userNotRecognized": "User not recognized"
+  
 }

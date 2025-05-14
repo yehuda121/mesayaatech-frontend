@@ -5,17 +5,6 @@
   min-height: 100vh;
 }
 
-/* שמאל לתוכן, ימין ל־sidebar */
-.dashboard-sidebar {
-  width: 16rem;
-  background-color: #1e3a8a;
-  color: white;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  text-align: right;
-}
 
 .language-toggle {
   text-align: right;

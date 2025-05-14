@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getLanguage, toggleLanguage } from "@/app/language";
+import { t } from "@/app/utils/loadTranslations";
 import "../../mentor/MentorHomePage/mentor.css";
 
 export default function AddJobPage() {
@@ -17,18 +18,17 @@ export default function AddJobPage() {
     description: "",
   });
 
-  const [file, setFile] = useState(null); // optional attachment
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     setLanguage(getLanguage());
     setUserId(localStorage.getItem("userId"));
     setUserType(localStorage.getItem("userType"));
-  }, []);
 
-  const handleToggleLanguage = () => {
-    const newLang = toggleLanguage();
-    setLanguage(newLang);
-  };
+    const onLangChange = () => setLanguage(getLanguage());
+    window.addEventListener("languageChanged", onLangChange);
+    return () => window.removeEventListener("languageChanged", onLangChange);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,36 +43,36 @@ export default function AddJobPage() {
     e.preventDefault();
 
     if (!userId || !userType) {
-      alert(language === "he" ? "משתמש לא מזוהה" : "User not recognized");
+      alert(t("userNotRecognized", language));
       return;
     }
 
-    const jobPayload = {
-      ...jobData,
-      publisherId: userId,
-      publisherType: userType,
-      attachmentUrl: "", // We’ll handle real file upload later
-    };
+    const formData = new FormData();
+    formData.append("title", jobData.title);
+    formData.append("company", jobData.company);
+    formData.append("location", jobData.location);
+    formData.append("description", jobData.description);
+    formData.append("publisherId", userId);
+    formData.append("publisherType", userType);
+    if (file) formData.append("attachment", file);
 
     try {
       const response = await fetch("http://localhost:5000/api/jobs", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(jobPayload),
+        body: formData,
       });
 
       if (response.ok) {
         router.push("/pages/jobs");
       } else {
         const error = await response.json();
-        console.error("Upload error:", error.message);
-        alert(language === "he" ? "אירעה שגיאה בהעלאת משרה." : "Failed to post job.");
+        console.error("Upload error:", error); 
+        alert(error?.error || t("eventError", language));
+
       }
     } catch (err) {
       console.error("Submit error:", err);
-      alert(language === "he" ? "שגיאה בשרת." : "Server error.");
+      alert(t("serverError", language));
     }
   };
 
@@ -81,23 +81,27 @@ export default function AddJobPage() {
       <aside className="dashboard-sidebar">
         <h2 className="dashboard-title">מסייעטק</h2>
         <div className="language-toggle">
-          <button onClick={handleToggleLanguage}>
-            {language === "he" ? "English" : "עברית 🇮🇱"}
+          <button onClick={() => {
+            toggleLanguage();
+            setLanguage(getLanguage());
+          }}>
+            {t("switchLang", language)}
           </button>
         </div>
         <nav className="dashboard-nav">
           <button onClick={() => router.push("/pages/jobs")}>
-            {language === "he" ? "חזרה למשרות" : "Back to Jobs"}
+            {t("backToJobs", language)}
           </button>
         </nav>
       </aside>
 
       <main className="dashboard-main">
-        <h1>{language === "he" ? "פרסום משרה חדשה" : "Post New Job"}</h1>
+        <h1>{t("postNewJob", language)}</h1>
+
         <form className="space-y-6 mt-8 max-w-2xl" onSubmit={handleSubmit}>
           <div>
             <label className="block font-semibold text-blue-700 mb-2">
-              {language === "he" ? "שם המשרה" : "Job Title"}:
+              {t("jobTitle", language)}
             </label>
             <input
               name="title"
@@ -110,7 +114,7 @@ export default function AddJobPage() {
 
           <div>
             <label className="block font-semibold text-blue-700 mb-2">
-              {language === "he" ? "חברה" : "Company"}:
+              {t("company", language)}
             </label>
             <input
               name="company"
@@ -123,7 +127,7 @@ export default function AddJobPage() {
 
           <div>
             <label className="block font-semibold text-blue-700 mb-2">
-              {language === "he" ? "מיקום" : "Location"}:
+              {t("location", language)}
             </label>
             <input
               name="location"
@@ -136,7 +140,7 @@ export default function AddJobPage() {
 
           <div>
             <label className="block font-semibold text-blue-700 mb-2">
-              {language === "he" ? "תיאור" : "Description"}:
+              {t("description", language)}
             </label>
             <textarea
               name="description"
@@ -149,7 +153,7 @@ export default function AddJobPage() {
 
           <div>
             <label className="block font-semibold text-blue-700 mb-2">
-              {language === "he" ? "העלה קובץ (PDF / תמונה) [לא חובה]" : "Upload file (PDF / image) [optional]"}:
+              {t("uploadFile", language)}
             </label>
             <input type="file" onChange={handleFileChange} />
           </div>
@@ -158,7 +162,7 @@ export default function AddJobPage() {
             type="submit"
             className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
           >
-            {language === "he" ? "שלח משרה" : "Submit Job"}
+            {t("submitJob", language)}
           </button>
         </form>
       </main>
