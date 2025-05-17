@@ -113,6 +113,10 @@
     "submitJob": "Submit Job",
     "backToJobs": "Back to Jobs",
     "uploadFile": "Upload file (PDF / image) [optional]",
-    "userNotRecognized": "User not recognized"
+    "userNotRecognized": "User not recognized",
+    "approvalTitle": "Thanks for registering!",
+    "approvalText": "Your application has been sent for admin approval. You'll receive an email once it's approved. No need to wait here 😊",
+    "goToHome": "Go to Homepage"
+
   
 }

@@ -77,7 +77,7 @@ export default function MentorRegisterForm() {
       });
 
       if (res.ok) {
-        setSuccess(t('success', language));
+        router.push("/pages/waitingApproval");
         setFormData({
           userType: 'mentor',
           status: 'pending',

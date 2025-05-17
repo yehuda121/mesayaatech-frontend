@@ -113,6 +113,10 @@
     "submitJob": "שלח משרה",
     "backToJobs": "חזרה למשרות",
     "uploadFile": "העלה קובץ (PDF / תמונה) [לא חובה]",
-    "userNotRecognized": "משתמש לא מזוהה"
+    "userNotRecognized": "משתמש לא מזוהה",
+    "approvalTitle": "!תודה על ההרשמה",
+    "approvalText": "😊הבקשה שלך נשלחה לאישור מנהל האתר. תקבל/י מייל ברגע שהבקשה תאושר. אין צורך להמתין כאן",
+    "goToHome": "חזרה לדף הבית"
+
   
 }

@@ -74,8 +74,7 @@ export default function AmbassadorRegisterForm() {
       });
 
       if (res.ok) {
-        setSuccess(t('ambassadorSuccess', language));
-        setFormData({
+        router.push("/pages/waitingApproval");        setFormData({
           userType: 'ambassador',
           status: 'pending',
           fullName: '',

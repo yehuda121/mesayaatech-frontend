@@ -74,7 +74,7 @@ export default function ReserveRegisterForm() {
       });
 
       if (res.ok) {
-        setSuccess(t('reservistSuccess', language));
+        router.push("/pages/waitingApproval");
         setFormData({
           userType: 'reservist',
           status: 'pending',

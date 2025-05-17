@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { getLanguage, toggleLanguage } from "@/app/language";
 import { useRouter } from "next/navigation";
 import SideBar from "@/components/SideBar";
-import "../mentor/MentorHomePage/mentor.css";
+import "./jobs.css";
 
 export default function JobsPage() {
   const [language, setLanguage] = useState(getLanguage());
@@ -120,16 +120,36 @@ export default function JobsPage() {
           </div>
         )}
 
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          <div>
-            <label className="font-semibold">{language === "he" ? "מיקום" : "Location"}:</label>
-            <input type="text" name="location" value={filters.location} onChange={handleFilterChange} className="border p-2 rounded w-full" />
-          </div>
-          <div>
-            <label className="font-semibold">{language === "he" ? "חברה" : "Company"}:</label>
-            <input type="text" name="company" value={filters.company} onChange={handleFilterChange} className="border p-2 rounded w-full" />
-          </div>
-        </div>
+<div className="jobs-filter-wrapper">
+  <div className="filter-group">
+    <label className="font-semibold">
+      {language === "he" ? ":מיקום" : "Location:"}
+    </label>
+    <input
+      type="text"
+      name="location"
+      value={filters.location}
+      onChange={handleFilterChange}
+      className="border p-2 rounded"
+    />
+  </div>
+
+  <div className="filter-group">
+    <label className="font-semibold">
+      {language === "he" ? ":חברה" : "Company:"}
+    </label>
+    <input
+      type="text"
+      name="company"
+      value={filters.company}
+      onChange={handleFilterChange}
+      className="border p-2 rounded"
+    />
+  </div>
+</div>
+
+
+
 
         <div className="dashboard-grid">
           {filteredJobs.length > 0 ? (

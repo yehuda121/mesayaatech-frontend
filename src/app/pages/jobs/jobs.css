@@ -1,0 +1,66 @@
+.dashboard-main {
+    flex-grow: 1;
+    background-color: #f3f4f6;
+    padding: 2.5rem;
+    text-align: right;
+  }
+  
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .dashboard-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: default;
+    transition: box-shadow 0.2s;
+  }
+  
+  .dashboard-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .dashboard-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1d4ed8;
+    margin-bottom: 0.5rem;
+  }
+  
+  .dashboard-card p {
+    color: #4b5563;
+  }
+
+  .jobs-filters {
+    display: flex;
+    justify-content: flex-start; /* מצמיד לשמאל */
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-inline: 2rem;
+  }
+  
+  .jobs-filters .filter-group {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    min-width: 180px;
+  }
+
+  .jobs-filter-wrapper {
+    justify-content: flex-end; 
+    padding-inline-end: 2rem;
+  }
+  
+  .jobs-filter-wrapper .filter-group {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  
+  
