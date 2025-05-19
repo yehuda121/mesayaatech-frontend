@@ -79,7 +79,7 @@ export default function EditUsersForms({ user, onClose, onSave, onDelete }) {
         <div className="flex justify-between gap-3 mt-6 flex-wrap">
           <Button
             text={t('deleteUser', language)}
-            color="danger"
+            color="red"
             onClick={() => {
               if (confirm(t('confirmDeleteUser', language))) {
                 onDelete(user);

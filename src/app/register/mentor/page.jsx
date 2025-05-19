@@ -4,12 +4,15 @@ import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
 import Button from '../../../components/Button';
 import { t } from '@/app/utils/loadTranslations';
+import '../registrationForm.css';
+
 
 export default function MentorRegisterForm() {
   const router = useRouter();
   const [language, setLanguage] = useState(null);
   const [success, setSuccess] = useState('');
 
+  // Form initial state
   const [formData, setFormData] = useState({
     userType: 'mentor',
     status: 'pending',
@@ -27,6 +30,7 @@ export default function MentorRegisterForm() {
     notes: '',
   });
 
+  // Language detection and event listener for toggling language
   useEffect(() => {
     setLanguage(getLanguage());
     const handleLangChange = () => setLanguage(getLanguage());
@@ -34,17 +38,7 @@ export default function MentorRegisterForm() {
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
-  if (!language) return null; // או Spinner
-
-  const translatedSpecialties = {
-    "חיפוש עבודה": { he: " חיפוש עבודה", en: "Job Search" },
-    "כתיבת קורות חיים": { he: " כתיבת קורות חיים", en: "Resume Writing" },
-    "הכנה לראיונות": { he: " הכנה לראיונות", en: "Interview Prep" },
-    "בניית מסלול קריירה": { he: " בניית מסלול קריירה", en: "Career Path Planning" },
-    "שיפור מיומנויות רכות": { he: " שיפור מיומנויות רכות", en: "Soft Skills Improvement" },
-    "אחר": { he: " אחר", en: "Other" }
-  };
-
+  // Form change handler (for both text inputs and checkboxes)
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
@@ -59,17 +53,70 @@ export default function MentorRegisterForm() {
     }
   };
 
+  // Validation logic
+  const validateForm = () => {
+    const errors = [];
+    const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
+    const phonePattern = /^\d{9,10}$/;
+    const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
+
+    const fullName = formData.fullName.trim();
+    const idNumber = formData.idNumber.replace(/\s/g, '');
+    const email = formData.email.trim();
+    const phone = formData.phone.trim();
+    const profession = formData.profession.trim();
+    const location = formData.location.trim();
+    const experience = formData.experience.trim();
+    const linkedin = formData.linkedin.trim();
+
+    if (!fullName) errors.push(t('fullNameRequired', language));
+    else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
+
+    if (!/^\d{9}$/.test(idNumber)) errors.push(t('idNumberInvalid', language));
+
+    if (!email) errors.push(t('emailRequired', language));
+    else if (!emailPattern.test(email)) errors.push(t('emailInvalid', language));
+
+    if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
+
+    if (!profession) errors.push(t('mainProfessionRequired', language));
+    else if (/[^\w\sא-ת]/.test(profession)) errors.push(t('mainProfessionInvalid', language));
+
+    if (!location) errors.push(t('locationRequired', language));
+
+    if (!experience) errors.push(t('experienceRequired', language));
+
+    if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
+
+    return errors;
+  };
+
+  // Submit handler with duplicate check and validation
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const required = ['fullName', 'idNumber', 'email', 'phone', 'profession', 'location', 'experience'];
-    for (let key of required) {
-      if (!formData[key]) {
-        setSuccess(`${t('pleaseFill', language)} ${t(key, language)}`);
-        return;
-      }
+
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setSuccess(validationErrors[0]);
+      return;
     }
 
     try {
+      const resUsers = await fetch(`http://localhost:5000/api/imports-user-registration-form?userType=mentor`);
+      const existingUsers = await resUsers.json();
+
+      const emailExists = existingUsers.some(user => user.email === formData.email);
+      const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
+
+      if (emailExists) {
+        setSuccess(t('emailAlreadyExists', language));
+        return;
+      }
+      if (idExists) {
+        setSuccess(t('idNumberAlreadyExists', language));
+        return;
+      }
+
       const res = await fetch('http://localhost:5000/api/upload-registration-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -95,100 +142,116 @@ export default function MentorRegisterForm() {
           notes: '',
         });
       } else {
-        throw new Error();
+        const errorText = await res.text();
+        setSuccess(`${t('mentorError', language)}: ${errorText}`);
       }
     } catch {
-      setSuccess(t('error', language));
+      setSuccess(t('mentorError', language));
     }
   };
 
+  if (!language) return null;
+
+  const translatedSpecialties = {
+    "חיפוש עבודה": { he: " חיפוש עבודה", en: "Job Search" },
+    "כתיבת קורות חיים": { he: " כתיבת קורות חיים", en: "Resume Writing" },
+    "הכנה לראיונות": { he: " הכנה לראיונות", en: "Interview Prep" },
+    "בניית מסלול קריירה": { he: " בניית מסלול קריירה", en: "Career Path Planning" },
+    "שיפור מיומנויות רכות": { he: " שיפור מיומנויות רכות", en: "Soft Skills Improvement" },
+    "אחר": { he: " אחר", en: "Other" }
+  };
+
   return (
-    <div dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-lg space-y-6">
-        <div dir="ltr" className="flex justify-end gap-4 items-center w-full">
-          <button
-            onClick={() => router.push('/login')}
-            className="text-blue-700 font-medium hover:underline"
-          >
-            {t('mentorLogin', language)}
-          </button>
+    <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
+      {/* Top buttons – always aligned right */}
+      <div className="register-form-top-buttons">
+        <button
+          onClick={() => router.push('/login')}
+          className="text-blue-700 font-medium hover:underline"
+        >
+          {t('mentorLogin', language)}
+        </button>
 
-          <button onClick={() => setLanguage(toggleLanguage())}
-            className="text-sm underline hover:text-blue-600"
-          >
-            {t('switchLang', language)}
-          </button>
-        </div>
-
-        <h1 className="text-3xl font-bold text-center">{t('mentorRegisterTitle', language)}</h1>
-
-        <form onSubmit={handleSubmit} className={`space-y-4 ${language === 'he' ? 'text-right' : 'text-left'}`}>
-          <label>{t('fullName', language)}*:
-            <input name="fullName" required value={formData.fullName} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('idNumber', language)}*:
-            <input name="idNumber" required value={formData.idNumber} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('email', language)}*:
-            <input name="email" type="email" required value={formData.email} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('phone', language)}*:
-            <input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('mainProfetion', language)}*:
-            <input name="profession" required value={formData.profession} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('location', language)}*:
-            <input name="location" required value={formData.location} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <fieldset>
-            <legend className="font-semibold">{t('mentorSpecialtiesTitle', language)}</legend>
-            {Object.keys(translatedSpecialties).map((field) => (
-              <label key={field} className="block">
-                <input
-                  type="checkbox"
-                  name="specialties"
-                  value={field}
-                  checked={formData.specialties.includes(field)}
-                  onChange={handleChange}
-                  className="mr-2"
-                />
-                {translatedSpecialties[field][language]}
-              </label>
-            ))}
-          </fieldset>
-
-          <label>{t('mentorExperience', language)}*:
-            <textarea name="experience" required value={formData.experience} onChange={handleChange} className="border p-2 w-full rounded h-24" />
-          </label>
-
-          <label>{t('mentorPastMentoring', language)}:
-            <textarea name="pastMentoring" value={formData.pastMentoring} onChange={handleChange} className="border p-2 w-full rounded h-24" />
-          </label>
-
-          <label>{t('mentorAvailability', language)}:
-            <input name="availability" value={formData.availability} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('mentorLinkedin', language)}:
-            <input name="linkedin" value={formData.linkedin} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('notes', language)}:
-            <textarea name="notes" value={formData.notes} onChange={handleChange} className="border p-2 w-full rounded h-24" />
-          </label>
-
-          <Button text={t('submit', language)} type="submit" />
-        </form>
-
-        {success && <p className="text-green-600 text-center font-bold">{success}</p>}
+        <button
+          onClick={() => setLanguage(toggleLanguage())}
+          className="text-sm underline hover:text-blue-600"
+        >
+          {t('switchLang', language)}
+        </button>
       </div>
+
+      <h1 className="text-3xl font-bold text-center">{t('mentorRegisterTitle', language)}</h1>
+
+      <form onSubmit={handleSubmit}>
+        <label>{t('fullName', language)}*:
+          <input name="fullName" value={formData.fullName} onChange={handleChange} />
+        </label>
+
+        <label>{t('idNumber', language)}*:
+          <input name="idNumber" value={formData.idNumber} onChange={handleChange} />
+        </label>
+
+        <label>{t('email', language)}*:
+          <input name="email" type="email" value={formData.email} onChange={handleChange} />
+        </label>
+
+        <label>{t('phone', language)}:
+          <input name="phone" type="tel" value={formData.phone} onChange={handleChange} />
+        </label>
+
+        <label>{t('mainProfetion', language)}*:
+          <input name="profession" value={formData.profession} onChange={handleChange} />
+        </label>
+
+        <label>{t('location', language)}*:
+          <input name="location" value={formData.location} onChange={handleChange} />
+        </label>
+
+        <fieldset>
+          <legend>{t('mentorSpecialtiesTitle', language)}</legend>
+          {Object.keys(translatedSpecialties).map((field) => (
+              <label 
+                key={field} 
+                className="register-checkbox-label"
+                style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}
+              >
+              <input
+                type="checkbox"
+                name="specialties"
+                value={field}
+                checked={formData.specialties.includes(field)}
+                onChange={handleChange}
+              />
+              {translatedSpecialties[field][language]}
+            </label>
+          ))}
+        </fieldset>
+
+        <label>{t('mentorExperience', language)}*:
+          <textarea name="experience" value={formData.experience} onChange={handleChange} className="h-24" />
+        </label>
+
+        <label>{t('mentorPastMentoring', language)}:
+          <textarea name="pastMentoring" value={formData.pastMentoring} onChange={handleChange} className="h-24" />
+        </label>
+
+        <label>{t('mentorAvailability', language)}:
+          <input name="availability" value={formData.availability} onChange={handleChange} />
+        </label>
+
+        <label>{t('mentorLinkedin', language)}:
+          <input name="linkedin" value={formData.linkedin} onChange={handleChange} />
+        </label>
+
+        <label>{t('notes', language)}:
+          <textarea name="notes" value={formData.notes} onChange={handleChange} className="h-24" />
+        </label>
+
+        <Button text={t('submit', language)} type="submit" />
+      </form>
+
+      {success && <p className="error-message">{success}</p>}
     </div>
   );
+
 }

@@ -4,12 +4,14 @@ import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
 import Button from '../../../components/Button';
 import { t } from '@/app/utils/loadTranslations';
+import '../registrationForm.css';
 
 export default function AmbassadorRegisterForm() {
   const router = useRouter();
   const [language, setLanguage] = useState(null);
   const [success, setSuccess] = useState('');
 
+  // Form initial state
   const [formData, setFormData] = useState({
     userType: 'ambassador',
     status: 'pending',
@@ -35,6 +37,7 @@ export default function AmbassadorRegisterForm() {
     "אחר": { he: "אחר", en: "Other" }
   };
 
+  // Set language on load and subscribe to language change events
   useEffect(() => {
     setLanguage(getLanguage());
     const handleLanguageChange = () => setLanguage(getLanguage());
@@ -42,6 +45,7 @@ export default function AmbassadorRegisterForm() {
     return () => window.removeEventListener('languageChanged', handleLanguageChange);
   }, []);
 
+  // Handle input and checkbox changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
@@ -56,17 +60,66 @@ export default function AmbassadorRegisterForm() {
     }
   };
 
+  // Form validation logic
+  const validateForm = () => {
+    const errors = [];
+    const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
+    const phonePattern = /^\d{9,10}$/;
+    const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
+
+    const fullName = formData.fullName.trim();
+    const idNumber = formData.idNumber.replace(/\s/g, '');
+    const email = formData.email.trim();
+    const phone = formData.phone.trim();
+    const location = formData.location.trim();
+    const canShare = formData.canShareJobs.trim();
+    const linkedin = formData.linkedin.trim();
+
+    if (!fullName) errors.push(t('fullNameRequired', language));
+    else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
+
+    if (!/^\d{9}$/.test(idNumber)) errors.push(t('idNumberInvalid', language));
+
+    if (!email) errors.push(t('emailRequired', language));
+    else if (!emailPattern.test(email)) errors.push(t('emailInvalid', language));
+
+    if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
+
+    if (!location) errors.push(t('locationRequired', language));
+
+    if (!canShare) errors.push(t('canShareRequired', language));
+
+    if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
+
+    return errors;
+  };
+
+  // Submit handler with validation and duplicate check
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const required = ['fullName', 'idNumber', 'email', 'phone', 'location', 'canShareJobs'];
-    for (let key of required) {
-      if (!formData[key]) {
-        setSuccess(`${t('pleaseFill', language)} ${t(key, language)}`);
-        return;
-      }
+
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setSuccess(validationErrors[0]);
+      return;
     }
 
     try {
+      const existingRes = await fetch(`http://localhost:5000/api/imports-user-registration-form?userType=ambassador`);
+      const existingUsers = await existingRes.json();
+
+      const emailExists = existingUsers.some(user => user.email === formData.email);
+      const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
+
+      if (emailExists) {
+        setSuccess(t('emailAlreadyExists', language));
+        return;
+      }
+      if (idExists) {
+        setSuccess(t('idNumberAlreadyExists', language));
+        return;
+      }
+
       const res = await fetch('http://localhost:5000/api/upload-registration-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -74,7 +127,8 @@ export default function AmbassadorRegisterForm() {
       });
 
       if (res.ok) {
-        router.push("/pages/waitingApproval");        setFormData({
+        router.push("/pages/waitingApproval");
+        setFormData({
           userType: 'ambassador',
           status: 'pending',
           fullName: '',
@@ -91,7 +145,6 @@ export default function AmbassadorRegisterForm() {
         });
       } else {
         const errorText = await res.text();
-        console.error('שגיאה מהשרת:', errorText);
         setSuccess(`${t('ambassadorError', language)}: ${errorText}`);
       }
     } catch {
@@ -102,93 +155,96 @@ export default function AmbassadorRegisterForm() {
   if (!language) return null;
 
   return (
-    <div dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-lg space-y-6">
-        <div dir="ltr" className="flex justify-end gap-4 items-center w-full">
-          <button
-            onClick={() => router.push('/login')}
-            className="text-blue-700 font-medium hover:underline"
-          >
-            {t('alreadyHaveAcconut', language)}
-          </button>
+    <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
+      <div className="register-form-top-buttons">
+        <button
+          onClick={() => router.push('/login')}
+          className="text-blue-700 font-medium hover:underline"
+        >
+          {t('alreadyHaveAcconut', language)}
+        </button>
 
-          <button onClick={() => setLanguage(toggleLanguage())}
-            className="text-sm underline hover:text-blue-600"
-          >
-            {t('switchLang', language)}
-          </button>
-        </div>
-
-        <h1 className="text-3xl font-bold text-center">{t('ambassadorRegisterTitle', language)}</h1>
-
-        <form onSubmit={handleSubmit} className={`space-y-4 ${language === 'he' ? 'text-right' : 'text-left'}`}>
-          <label>{t('fullName', language)}*:
-            <input name="fullName" required value={formData.fullName} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('idNumber', language)}*:
-            <input name="idNumber" required value={formData.idNumber} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('email', language)}*:
-            <input name="email" type="email" required value={formData.email} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('phone', language)}*:
-            <input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('currentCompany', language)}:
-            <input name="currentCompany" value={formData.currentCompany} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('position', language)}:
-            <input name="position" value={formData.position} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('location', language)}*:
-            <input name="location" required value={formData.location} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('canShareJobs', language)}*:
-            <select name="canShareJobs" required value={formData.canShareJobs} onChange={handleChange} className="border p-2 w-full rounded">
-              <option value="">{language === 'he' ? 'בחר' : 'Select'}</option>
-              <option value="כן">{language === 'he' ? 'כן' : 'Yes'}</option>
-              <option value="אולי">{language === 'he' ? 'אולי' : 'Maybe'}</option>
-              <option value="לא">{language === 'he' ? 'לא' : 'No'}</option>
-            </select>
-          </label>
-
-          <fieldset>
-            <legend className="font-semibold">{t('ambassadorJobFieldsTitle', language)}</legend>
-            {Object.keys(translatedJobFields).map((field) => (
-              <label key={field} className="block">
-                <input
-                  type="checkbox"
-                  name="jobFields"
-                  value={field}
-                  checked={formData.jobFields.includes(field)}
-                  onChange={handleChange}
-                  className="mr-2"
-                />
-                {translatedJobFields[field][language]}
-              </label>
-            ))}
-          </fieldset>
-
-          <label>{t('linkedin', language)}:
-            <input name="linkedin" value={formData.linkedin} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('notes', language)}:
-            <textarea name="notes" value={formData.notes} onChange={handleChange} className="border p-2 w-full rounded h-24" />
-          </label>
-
-          <Button text={t('submit', language)} type="submit" />
-        </form>
-
-        {success && <p className="text-green-600 text-center font-bold">{success}</p>}
+        <button
+          onClick={() => setLanguage(toggleLanguage())}
+          className="text-sm underline hover:text-blue-600"
+        >
+          {t('switchLang', language)}
+        </button>
       </div>
+
+      <h1 className="text-3xl font-bold text-center">{t('ambassadorRegisterTitle', language)}</h1>
+
+      <form onSubmit={handleSubmit}>
+        <label>{t('fullName', language)}*:
+          <input name="fullName" value={formData.fullName} onChange={handleChange} />
+        </label>
+
+        <label>{t('idNumber', language)}*:
+          <input name="idNumber" value={formData.idNumber} onChange={handleChange} />
+        </label>
+
+        <label>{t('email', language)}*:
+          <input name="email" type="email" value={formData.email} onChange={handleChange} />
+        </label>
+
+        <label>{t('phone', language)}:
+          <input name="phone" type="tel" value={formData.phone} onChange={handleChange} />
+        </label>
+
+        <label>{t('currentCompany', language)}:
+          <input name="currentCompany" value={formData.currentCompany} onChange={handleChange} />
+        </label>
+
+        <label>{t('position', language)}:
+          <input name="position" value={formData.position} onChange={handleChange} />
+        </label>
+
+        <label>{t('location', language)}*:
+          <input name="location" value={formData.location} onChange={handleChange} />
+        </label>
+
+        <label>{t('canShareJobs', language)}*:
+          <select name="canShareJobs" value={formData.canShareJobs} onChange={handleChange}>
+            <option value="">{language === 'he' ? 'בחר' : 'Select'}</option>
+            <option value="כן">{language === 'he' ? 'כן' : 'Yes'}</option>
+            <option value="אולי">{language === 'he' ? 'אולי' : 'Maybe'}</option>
+            <option value="לא">{language === 'he' ? 'לא' : 'No'}</option>
+          </select>
+        </label>
+
+        <fieldset>
+          <legend>{t('ambassadorJobFieldsTitle', language)}</legend>
+          {Object.keys(translatedJobFields).map((field) => (
+            <label 
+              key={field} 
+              className="register-checkbox-label"
+              style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}
+            >
+              <input
+                type="checkbox"
+                name="jobFields"
+                value={field}
+                checked={formData.jobFields.includes(field)}
+                onChange={handleChange}
+              />
+              {translatedJobFields[field][language]}
+            </label>
+          ))}
+        </fieldset>
+
+        <label>{t('linkedin', language)}:
+          <input name="linkedin" value={formData.linkedin} onChange={handleChange} />
+        </label>
+
+        <label>{t('notes', language)}:
+          <textarea name="notes" value={formData.notes} onChange={handleChange} className="h-24" />
+        </label>
+
+        <Button text={t('submit', language)} type="submit" />
+      </form>
+
+      {success && <p className="error-message">{success}</p>}
     </div>
   );
+
 }

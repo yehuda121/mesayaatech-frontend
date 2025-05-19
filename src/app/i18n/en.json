@@ -87,7 +87,6 @@
     "mentorAvailability": "Availability (preferred times/days)",
     "mentorLinkedin": "LinkedIn (optional)",
     "mentorSuccess": "Registration sent successfully!",
-    "mentorError": "An error occurred during submission",
     "mentorLogin": "I already have an account",
     "switchLang": "עברית",
     "reservistRegisterTitle": "Reservist Registration",
@@ -99,7 +98,6 @@
     "alreadyHaveAcconut": "I already have an account",
     "ambassadorRegisterTitle": "Ambassador Registration",
     "ambassadorSuccess": "Registration submitted successfully!",
-    "ambassadorError": "An error occurred during submission",
     "ambassadorJobFieldsTitle": "Which fields do you have access to jobs in?",
     "login": "Login",
     "loginButton": "Sign In",
@@ -116,7 +114,26 @@
     "userNotRecognized": "User not recognized",
     "approvalTitle": "Thanks for registering!",
     "approvalText": "Your application has been sent for admin approval. You'll receive an email once it's approved. No need to wait here 😊",
-    "goToHome": "Go to Homepage"
+    "goToHome": "Go to Homepage",
+    "fullNameRequired": "Full name is required.",
+    "fullNameInvalid": "Full name must contain only letters, no numbers or special characters.",
+    "idNumberInvalid": "ID number must be exactly 9 digits.",
+    "emailRequired": "Email is required.",
+    "emailInvalid": "Invalid email format.",
+    "phoneInvalid": "Invalid phone number.",
+    "armyRoleRequired": "Army role is required.",
+    "armyRoleInvalid": "Army role must not contain special characters.",
+    "locationRequired": "Location is required.",
+    "experienceRequired": "Experience is required.",
+    "linkedinInvalid": "LinkedIn URL is invalid.",
+    "emailAlreadyExists": "This email is already registered in the system.",
+    "idNumberAlreadyExists": "This ID number already exists in the system.",
+    "reservistError": "An error occurred while saving the form. Please try again.",
+    "mainProfessionRequired": "Profession is required.",
+    "mainProfessionInvalid": "Profession must not contain special characters.",
+    "mentorError": "An error occurred while submitting the mentor registration form.",
+    "canShareRequired": "Please select if you can share jobs.",
+    "ambassadorError": "An error occurred while submitting the ambassador registration form."
 
   
 }

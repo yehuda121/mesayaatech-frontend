@@ -1,0 +1,74 @@
+/* Main form container */
+.register-form-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Top buttons – always aligned to the right */
+.register-form-top-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  direction: ltr; /* force direction to keep buttons right aligned always */
+}
+
+/* Language-based direction */
+.register-form-direction-rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.register-form-direction-ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Label and inputs styling */
+.register-form-container label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Apply full width only to text-like inputs */
+.register-form-container input[type="text"],
+.register-form-container input[type="email"],
+.register-form-container input[type="tel"],
+.register-form-container input[type="password"],
+.register-form-container input:not([type]),
+.register-form-container select,
+.register-form-container textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+
+.register-form-container textarea {
+  resize: vertical;
+}
+
+.register-form-container fieldset {
+  border: none;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.register-form-container legend {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Error message */
+.register-form-container .error-message {
+  color: #dc2626; /* red-600 */
+  text-align: center;
+  font-weight: bold;
+}
+
+

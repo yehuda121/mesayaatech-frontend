@@ -4,6 +4,9 @@ import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
 import Button from '../../../components/Button';
 import { t } from '@/app/utils/loadTranslations';
+import '../registrationForm.css';
+import { MoveRight } from 'lucide-react';
+
 
 export default function ReserveRegisterForm() {
   const router = useRouter();
@@ -34,6 +37,7 @@ export default function ReserveRegisterForm() {
     "אחר": { he: " אחר", en: "Other" }
   };
 
+  // Language detection and event listener for toggling language
   useEffect(() => {
     setLanguage(getLanguage());
     const handleLanguageChange = () => setLanguage(getLanguage());
@@ -55,18 +59,79 @@ export default function ReserveRegisterForm() {
     }
   };
 
+  const validateForm = () => {
+    const errors = [];
+    const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
+    const phonePattern = /^\d{9,10}$/;
+    const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
+
+    // Trim inputs before validation
+    const fullName = formData.fullName.trim();
+    const idNumber = formData.idNumber.replace(/\s/g, '');
+    const email = formData.email.trim();
+    const phone = formData.phone.trim();
+    const armyRole = formData.armyRole.trim();
+    const location = formData.location.trim();
+    const experience = formData.experience.trim();
+    const linkedin = formData.linkedin.trim();
+
+    // Validate full name (required, letters only)
+    if (!fullName) errors.push(t('fullNameRequired', language));
+    else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
+
+    // Validate ID number (required, 9 digits)
+    if (!/^\d{9}$/.test(idNumber)) errors.push(t('idNumberInvalid', language));
+
+    // Validate email (required, valid format)
+    if (!email) errors.push(t('emailRequired', language));
+    else if (!emailPattern.test(email)) errors.push(t('emailInvalid', language));
+
+    // Validate phone (optional, valid if exists)
+    if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
+
+    // Validate army role (required, no special characters)
+    if (!armyRole) errors.push(t('armyRoleRequired', language));
+    else if (/[^\w\sא-ת]/.test(armyRole)) errors.push(t('armyRoleInvalid', language));
+
+    // Validate location (required)
+    if (!location) errors.push(t('locationRequired', language));
+
+    // Validate experience (required)
+    if (!experience) errors.push(t('experienceRequired', language));
+
+    // Validate linkedin (optional, must be valid URL if provided)
+    if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
+
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const required = ['fullName', 'idNumber', 'email', 'phone', 'armyRole', 'location', 'experience'];
-    for (let key of required) {
-      if (!formData[key]) {
-        setSuccess(`${t('pleaseFill', language)} ${t(key, language)}`);
-        return;
-      }
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setSuccess(validationErrors[0]); // Show first error only
+      return;
     }
 
     try {
+      // Check for duplicate email or ID
+      const existingRes = await fetch(`http://localhost:5000/api/imports-user-registration-form?userType=reservist`);
+
+      const existingUsers = await existingRes.json();
+
+      const emailExists = existingUsers.some(user => user.email === formData.email);
+      const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
+
+      if (emailExists) {
+        setSuccess(t('emailAlreadyExists', language));
+        return;
+      }
+      if (idExists) {
+        setSuccess(t('idNumberAlreadyExists', language));
+        return;
+      }
+
       const res = await fetch('http://localhost:5000/api/upload-registration-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -91,7 +156,7 @@ export default function ReserveRegisterForm() {
         });
       } else {
         const errorText = await res.text();
-        console.error('שגיאה מהשרת:', errorText);
+        console.error('Server error:', errorText);
         setSuccess(`${t('reservistError', language)}: ${errorText}`);
       }
     } catch {
@@ -102,85 +167,85 @@ export default function ReserveRegisterForm() {
   if (!language) return null;
 
   return (
-    <div dir={language === 'he' ? 'rtl' : 'ltr'} className={language === 'he' ? 'text-right' : 'text-left'}>
-      <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-lg space-y-6">
-        <div dir="ltr" className="flex justify-end gap-4 items-center w-full">
-          <button
-            onClick={() => router.push('/login')}
-            className="text-blue-700 font-medium hover:underline"
-          >
-            {t('alreadyHaveAcconut', language)}
-          </button>
+    <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
+      {/* Top buttons – always aligned to the right */}
+      <div className="register-form-top-buttons">
+        <button
+          onClick={() => router.push('/login')}
+          className="text-blue-700 font-medium hover:underline"
+        >
+          {t('alreadyHaveAcconut', language)}
+        </button>
 
-          <button
-            onClick={() => setLanguage(toggleLanguage())}
-            className="text-sm underline hover:text-blue-600"
-          >
-            {t('switchLang', language)}
-          </button>
-        </div>
-
-        <h1 className="text-3xl font-bold text-center">{t('reservistRegisterTitle', language)}</h1>
-
-        <form onSubmit={handleSubmit} className="space-y-4" >
-          <label>{t('fullName', language)}*:
-            <input name="fullName" required value={formData.fullName} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('idNumber', language)}*:
-            <input name="idNumber" required value={formData.idNumber} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('email', language)}*:
-            <input name="email" type="email" required value={formData.email} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('phone', language)}*:
-            <input name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('armyRole', language)}*:
-            <input name="armyRole" required value={formData.armyRole} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('location', language)}*:
-            <input name="location" required value={formData.location} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <fieldset>
-            <legend className="font-semibold">{t('professionalFieldsSelect', language)}</legend>
-            {Object.keys(translatedFields).map((field) => (
-              <label key={field} className="block">
-                <input
-                  type="checkbox"
-                  name="fields"
-                  value={field}
-                  checked={formData.fields.includes(field)}
-                  onChange={handleChange}
-                  className="mr-2"
-                />
-                {translatedFields[field][language]}
-              </label>
-            ))}
-          </fieldset>
-
-          <label>{t('professionalExperience', language)}*:
-            <textarea name="experience" required value={formData.experience} onChange={handleChange} className="border p-2 w-full rounded h-24" />
-          </label>
-
-          <label>{t('linkedinLink', language)}:
-            <input name="linkedin" value={formData.linkedin} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-
-          <label>{t('reservistNotes', language)}:
-            <textarea name="notes" value={formData.notes} onChange={handleChange} className="border p-2 w-full rounded h-24" />
-          </label>
-
-          <Button text={t('submit', language)} type="submit" />
-        </form>
-
-        {success && <p className="text-green-600 text-center font-bold">{success}</p>}
+        <button
+          onClick={() => setLanguage(toggleLanguage())}
+          className="text-sm underline hover:text-blue-600"
+        >
+          {t('switchLang', language)}
+        </button>
       </div>
+
+      <h1 className="text-3xl font-bold text-center">{t('reservistRegisterTitle', language)}</h1>
+
+      <form onSubmit={handleSubmit}>
+        <label>{t('fullName', language)}*:
+          <input name="fullName" value={formData.fullName} onChange={handleChange} />
+        </label>
+
+        <label>{t('idNumber', language)}*:
+          <input name="idNumber" value={formData.idNumber} onChange={handleChange} />
+        </label>
+
+        <label>{t('email', language)}*:
+          <input name="email" type="email" value={formData.email} onChange={handleChange} />
+        </label>
+
+        <label>{t('phone', language)}:
+          <input name="phone" type="tel" value={formData.phone} onChange={handleChange} />
+        </label>
+
+        <label>{t('armyRole', language)}*:
+          <input name="armyRole" value={formData.armyRole} onChange={handleChange} />
+        </label>
+
+        <label>{t('location', language)}*:
+          <input name="location" value={formData.location} onChange={handleChange} />
+        </label>
+
+        <fieldset>
+          <legend>{t('professionalFieldsSelect', language)}</legend>
+          {Object.keys(translatedFields).map((field) => (
+            <label key={field}>
+              <input
+                type="checkbox"
+                name="fields"
+                value={field}
+                checked={formData.fields.includes(field)}
+                onChange={handleChange}
+              />
+              {translatedFields[field][language]}
+            </label>
+
+          ))}
+        </fieldset>
+
+        <label>{t('professionalExperience', language)}*:
+          <textarea name="experience" value={formData.experience} onChange={handleChange} className="h-24" />
+        </label>
+
+        <label>{t('linkedinLink', language)}:
+          <input name="linkedin" value={formData.linkedin} onChange={handleChange} />
+        </label>
+
+        <label>{t('reservistNotes', language)}:
+          <textarea name="notes" value={formData.notes} onChange={handleChange} className="h-24" />
+        </label>
+
+        <Button text={t('submit', language)} type="submit" />
+      </form>
+
+      {success && <p className="error-message">{success}</p>}
     </div>
   );
+
 }
