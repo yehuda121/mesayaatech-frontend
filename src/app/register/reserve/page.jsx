@@ -102,7 +102,7 @@ export default function ReserveRegisterForm() {
   if (!language) return null;
 
   return (
-    <div dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div dir={language === 'he' ? 'rtl' : 'ltr'} className={language === 'he' ? 'text-right' : 'text-left'}>
       <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-lg space-y-6">
         <div dir="ltr" className="flex justify-end gap-4 items-center w-full">
           <button
