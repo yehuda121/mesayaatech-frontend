@@ -5,7 +5,7 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import Button from '@/components/Button';
 
-export default function EditReservistForm({ userData, onSave }) {
+export default function EditMentorForm({ userData, onSave }) {
   const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState(userData || {});
   const [initialData, setInitialData] = useState(userData || {});
@@ -25,10 +25,20 @@ export default function EditReservistForm({ userData, onSave }) {
     }
   }, [userData]);
 
-  const keys = [
-    'fullName', 'email', 'phone', 'armyRole', 'location',
-    'fields', 'experience', 'linkedin', 'notes'
-  ];
+  const labels = {
+    fullName: 'fullName',
+    email: 'email',
+    phone: 'phone',
+    armyRole: 'armyRole',
+    profession: 'profession',
+    fields: 'fields',
+    specialties: 'specialties',
+    experience: 'experience',
+    linkedin: 'linkedin',
+    notes: 'notes'
+  };
+
+  const keys = Object.keys(labels);
 
   const handleChange = (key, value) => {
     setFormData({ ...formData, [key]: value });
@@ -93,7 +103,7 @@ export default function EditReservistForm({ userData, onSave }) {
       <div className="flex justify-between mt-6">
         <Button
           text={t('backToHome', language)}
-          onClick={() => router.push('/pages/reserve/ReserveHomePage')}
+          onClick={() => router.push('/pages/mentor/MentorHomePage')}
         />
 
         <div className="flex gap-2">

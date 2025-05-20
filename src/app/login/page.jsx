@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { getLanguage, toggleLanguage } from '../language';
 import { t } from '@/app/utils/loadTranslations';
+import './login.css';
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -62,39 +64,43 @@ export default function LoginPage() {
   if (!language) return null;
 
   return (
-    <div dir={language === 'he' ? 'rtl' : 'ltr'} className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-sm space-y-4">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">{t('login', language)}</h1>
+    <div dir={language === 'he' ? 'rtl' : 'ltr'} className="login-page">
+      <div className="login-overlay">
+        <div className="login-title">
+          <span>{t('login', language)}</span>
           <button onClick={() => setLanguage(toggleLanguage())} className="text-sm underline">
             {t('switchLang', language)}
           </button>
         </div>
+
         <form onSubmit={handleLogin} className="space-y-4" autoComplete="on">
-          <input
-            type="email"
-            value={email}
-            placeholder={t('email', language)}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full p-2 border rounded"
-            autoComplete="email"
-          />
-          <input
-            type="password"
-            value={password}
-            placeholder={t('password', language)}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full p-2 border rounded"
-            autoComplete="current-password"
-          />
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-          >
-            {t('loginButton', language)}
-          </button>
+        <input
+          type="email"
+          value={email}
+          placeholder={t('email', language)}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="login-input"
+          autoComplete="email"
+        />
+
+        <input
+          type="password"
+          value={password}
+          placeholder={t('password', language)}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="login-input"
+          autoComplete="current-password"
+        />
+
+        <button
+          type="submit"
+          className="login-button"
+        >
+          {t('loginButton', language)}
+        </button>
+
         </form>
         {message && <p className="text-center text-red-500">{message}</p>}
       </div>

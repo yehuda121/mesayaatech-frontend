@@ -133,5 +133,12 @@
     "mainProfessionInvalid": "תחום העיסוק לא יכול להכיל תווים מיוחדים.",
     "mentorError": "אירעה שגיאה בעת שליחת טופס ההרשמה למנטור.",
     "canShareRequired": "יש לבחור אם באפשרותך לשתף משרות.",
-    "ambassadorError": "אירעה שגיאה בעת שליחת טופס השגריר."
+    "ambassadorError": "אירעה שגיאה בעת שליחת טופס השגריר.",
+    "mentorProfileTitle": "הפרופיל שלי",
+    "backToDashboard": "חזרה לדף הבית",
+    "backToHome": "חזרה לעמוד הבית",
+    "saveSuccess": "הפרטים נשמרו בהצלחה",
+    "saveError": "שגיאה בעת שמירה"
+
+
 }

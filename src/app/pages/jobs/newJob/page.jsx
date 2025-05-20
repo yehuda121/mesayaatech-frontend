@@ -1,23 +1,21 @@
-"use client";
+'use client';
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getLanguage, toggleLanguage } from "@/app/language";
+import { getLanguage } from "@/app/language";
 import { t } from "@/app/utils/loadTranslations";
-import "../../mentor/MentorHomePage/mentor.css";
+import SideBar from "@/components/SideBar";
 
 export default function AddJobPage() {
   const router = useRouter();
   const [language, setLanguage] = useState(getLanguage());
   const [userId, setUserId] = useState(null);
   const [userType, setUserType] = useState(null);
-
   const [jobData, setJobData] = useState({
     title: "",
     company: "",
     location: "",
-    description: "",
+    description: ""
   });
-
   const [file, setFile] = useState(null);
 
   useEffect(() => {
@@ -66,9 +64,8 @@ export default function AddJobPage() {
         router.push("/pages/jobs");
       } else {
         const error = await response.json();
-        console.error("Upload error:", error); 
+        console.error("Upload error:", error);
         alert(error?.error || t("eventError", language));
-
       }
     } catch (err) {
       console.error("Submit error:", err);
@@ -76,29 +73,23 @@ export default function AddJobPage() {
     }
   };
 
+  const navItems = [
+    {
+      labelHe: "חזרה לרשימת משרות",
+      labelEn: "Back to Jobs",
+      onClick: () => router.push("/pages/jobs")
+    }
+  ];
+
   return (
     <div className="dashboard-container">
-      <aside className="dashboard-sidebar">
-        <h2 className="dashboard-title">מסייעטק</h2>
-        <div className="language-toggle">
-          <button onClick={() => {
-            toggleLanguage();
-            setLanguage(getLanguage());
-          }}>
-            {t("switchLang", language)}
-          </button>
-        </div>
-        <nav className="dashboard-nav">
-          <button onClick={() => router.push("/pages/jobs")}>
-            {t("backToJobs", language)}
-          </button>
-        </nav>
-      </aside>
+      <SideBar navItems={navItems} />
 
       <main className="dashboard-main">
-        <h1>{t("postNewJob", language)}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("postNewJob", language)}</h1>
 
-        <form className="space-y-6 mt-8 max-w-2xl" onSubmit={handleSubmit}>
+      <div dir={language === 'he' ? 'rtl' : 'ltr'} className={`${language === 'he' ? 'text-right' : 'text-left'}`}>
+        <form className="space-y-6 max-w-2xl" onSubmit={handleSubmit}>
           <div>
             <label className="block font-semibold text-blue-700 mb-2">
               {t("jobTitle", language)}
@@ -165,6 +156,7 @@ export default function AddJobPage() {
             {t("submitJob", language)}
           </button>
         </form>
+        </div>
       </main>
     </div>
   );

@@ -133,7 +133,15 @@
     "mainProfessionInvalid": "Profession must not contain special characters.",
     "mentorError": "An error occurred while submitting the mentor registration form.",
     "canShareRequired": "Please select if you can share jobs.",
-    "ambassadorError": "An error occurred while submitting the ambassador registration form."
+    "ambassadorError": "An error occurred while submitting the ambassador registration form.",
+    "mentorProfileTitle": "My Profile",
+    "backToDashboard": "Back to Dashboard",
+    "backToHome": "Back to Home",
+    "saveSuccess": "Details saved successfully",
+    "saveError": "Error while saving"
+
+
+
 
   
 }

@@ -27,8 +27,7 @@ export default function MentorDashboard() {
     { labelHe: "משרות רלוונטיות", labelEn: "Job Matches", path: "/mentor/job-matches" },
     { labelHe: "פרסום משרה", labelEn: "Post Job", path: "/pages/jobs/newJob" },
     { labelHe: "פידבקים שהתקבלו", labelEn: "Feedback", path: "/mentor/feedback" },
-    { labelHe: "סטטיסטיקות", labelEn: "Statistics", path: "/mentor/stats" },
-    { labelHe: "הפרופיל שלי", labelEn: "My Profile", path: "/mentor/profile" },
+    { labelHe: "הפרופיל שלי", labelEn: "My Profile", path: "/pages/mentor/profile" },
   ];
 
   return (
