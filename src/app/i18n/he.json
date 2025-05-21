@@ -138,7 +138,11 @@
     "backToDashboard": "חזרה לדף הבית",
     "backToHome": "חזרה לעמוד הבית",
     "saveSuccess": "הפרטים נשמרו בהצלחה",
-    "saveError": "שגיאה בעת שמירה"
+    "saveError": "שגיאה בעת שמירה",
+    "cognitoDeleteError": "שגיאה במחיקת המשתמש מ־Cognito",
+    "dynamoDeleteError": "שגיאה במחיקת המשתמש ממסד הנתונים",
+    "userDeletedSuccessfully": "המשתמש נמחק בהצלחה",
+    "generalDeleteError": "אירעה שגיאה כללית בעת מחיקת המשתמש"
 
 
 }

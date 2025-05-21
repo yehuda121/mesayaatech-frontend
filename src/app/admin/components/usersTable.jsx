@@ -87,8 +87,57 @@ export default function UsersTable() {
     }
   };
 
+  // const handleDeleteUser = async (user) => {
+  //   try {
+  //     // Attempt to delete from Cognito if approved
+  //     if (user.status === 'approved' && user.email) {
+  //       await fetch('http://localhost:5000/api/delete-cognito-user', {
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/json' },
+  //         body: JSON.stringify({ email: user.email })
+  //       });
+  //     }
+
+  //     const res = await fetch('http://localhost:5000/api/delete-user-form', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         userType: user.userType,
+  //         idNumber: user.idNumber,
+  //       }),
+  //     });
+
+  //     if (!res.ok) {
+  //       console.error('שגיאה במחיקת משתמש:', await res.text());
+  //       return;
+  //     }
+
+  //     setUsers(prev => prev.filter(u =>
+  //       !(u.idNumber === user.idNumber && u.userType === user.userType)
+  //     ));
+  //     setSelectedForm(null);
+  //   } catch (err) {
+  //     console.error('שגיאה במחיקת משתמש:', err);
+  //   }
+  // };
   const handleDeleteUser = async (user) => {
     try {
+      // Attempt to delete from Cognito if approved
+      if (user.status === 'approved' && user.email) {
+        const cognitoRes = await fetch('http://localhost:5000/api/delete-cognito-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: user.email })
+        });
+
+        if (!cognitoRes.ok) {
+          const text = await cognitoRes.text();
+          console.error('error deleteing the user from cognito: ', text);
+          alert(t('cognitoDeleteError', language));
+        }
+      }
+
+      // Delete from DynamoDB
       const res = await fetch('http://localhost:5000/api/delete-user-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -99,18 +148,26 @@ export default function UsersTable() {
       });
 
       if (!res.ok) {
-        console.error('שגיאה במחיקת משתמש:', await res.text());
+        const text = await res.text();
+        console.error('error deleteing user registration form: ', text);
+        alert(t('dynamoDeleteError', language));
         return;
       }
 
-      setUsers(prev => prev.filter(u =>
-        !(u.idNumber === user.idNumber && u.userType === user.userType)
-      ));
+      setUsers(prev =>
+        prev.filter(u =>
+          !(u.idNumber === user.idNumber && u.userType === user.userType)
+        )
+      );
       setSelectedForm(null);
+      alert(t('userDeletedSuccessfully', language));
+
     } catch (err) {
-      console.error('שגיאה במחיקת משתמש:', err);
+      console.error('error deleting user: ', err);
+      alert(t('generalDeleteError', language));
     }
   };
+
 
   const statusMap = {
     pending: t('pending', language),

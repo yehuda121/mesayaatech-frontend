@@ -138,8 +138,11 @@
     "backToDashboard": "Back to Dashboard",
     "backToHome": "Back to Home",
     "saveSuccess": "Details saved successfully",
-    "saveError": "Error while saving"
-
+    "saveError": "Error while saving",
+    "cognitoDeleteError": "Error deleting the user from Cognito",
+    "dynamoDeleteError": "Error deleting the user from the database",
+    "userDeletedSuccessfully": "User deleted successfully",
+    "generalDeleteError": "A general error occurred while deleting the user"
 
 
 
