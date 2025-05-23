@@ -94,22 +94,26 @@ export default function ReservistHomePage() {
     <div className="reservist-container">
       <SideBar navItems={navItems} />
 
-      <main className={`reservist-main ${language === 'he' ? 'direction-rtl' : 'direction-ltr'}`}>
+      <main className={`reservist-main`}>
         <h1 className="reservist-welcome">
           {`${t('welcome', language)}${fullName ? ', ' + fullName : (language === 'he' ? '!' : ' Reservist!')}`}
         </h1>
 
         {view === 'dashboard' && (
           <>
-            <h2 className="reservist-section-title text-center mb-6">
+            <h2
+              className="reservist-section-title text-center mb-6"
+              dir={language === 'he' ? 'rtl' : 'ltr'}
+            >
               {t('whatsNew', language)}
             </h2>
 
+
             <div className="reservist-columns">
-              {/* משרות */}
+              {/* jobs */}
               <div className="reservist-column">
                 <h3 className="reservist-column-title">
-                  {language === 'he' ? 'משרות אחרונות' : 'Latest Jobs'}
+                  {t('jobs', language)}
                 </h3>
                 {jobs.length > 0 ? jobs.slice().reverse().map((job, index) => (
                   <div
@@ -126,7 +130,7 @@ export default function ReservistHomePage() {
                 )}
               </div>
 
-              {/* אירועים */}
+              {/* events */}
               <div className="reservist-column">
                 <Events idNumber={idNumber} fullName={fullName} email={email} />
               </div>

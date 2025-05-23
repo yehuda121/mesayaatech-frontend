@@ -28,7 +28,7 @@
     "createEvent": "יצירת אירוע חדש",
     "viewEvents": "צפיה באירועים קיימים",
     "createEventTitle": "יצירת אירוע חדש",
-    "eventDescription": "תיאור האירוע *",
+    "eventDescription": "תיאור האירוע",
     "eventDate": "תאריך",
     "startTime": "שעת התחלה",
     "eventLocation": "מיקום (כתובת או קישור)",
@@ -157,5 +157,7 @@
     "navJobs": "משרות",
     "navInterviewPrep": "הכנה לראיונות",
     "navMeetings": "פגישות קרובות",
-    "navFeedback": "פידבקים מהמנטור"
+    "navFeedback": "פידבקים מהמנטור",
+    "jobs": "משרות",
+    "eventOrganizer": "מארגן"
 }

@@ -28,7 +28,7 @@
     "viewEvents": "View Events",
     "createEventTitle": "Create New Event",
     "eventTitle": "Title",
-    "eventDescription": "Event Description *",
+    "eventDescription": "Event Description",
     "startTime": "Start Time",
     "eventLocation": "Location (address or link)",
     "eventNotes": "Additional Notes",
@@ -157,7 +157,9 @@
     "navJobs": "Jobs",
     "navInterviewPrep": "Interview Prep",
     "navMeetings": "Upcoming Meetings",
-    "navFeedback": "Mentor Feedback"
+    "navFeedback": "Mentor Feedback",
+    "jobs": "jobs",
+    "eventOrganizer": "Organizer"
 
 
 
