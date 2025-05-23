@@ -82,31 +82,55 @@ export default function EditJob({ job, onClose, onSave }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-xl max-h-[90vh] overflow-y-auto" dir={language === 'he' ? 'rtl' : 'ltr'}>
-        <h2 className="text-xl font-bold text-center mb-4">{t('editJobTitle', language)}</h2>
+    <div className="modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
+        <div className="modal-box">
+        <h2 className="form-title">{t('editJobTitle', language)}</h2>
 
-        <form className="space-y-4">
-          <label>{t('jobTitle', language)}
-            <input name="title" value={formData.title || ''} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-          <label>{t('company', language)}
-            <input name="company" value={formData.company || ''} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-          <label>{t('location', language)}
-            <input name="location" value={formData.location || ''} onChange={handleChange} className="border p-2 w-full rounded" />
-          </label>
-          <label>{t('description', language)}
-            <textarea name="description" value={formData.description || ''} onChange={handleChange} className="border p-2 w-full rounded h-24" />
-          </label>
+        <form className="form-wrapper">
+            <label className="form-label">
+            {t('jobTitle', language)}
+            <input
+                name="title"
+                value={formData.title || ''}
+                onChange={handleChange}
+            />
+            </label>
+
+            <label className="form-label">
+            {t('company', language)}
+            <input
+                name="company"
+                value={formData.company || ''}
+                onChange={handleChange}
+            />
+            </label>
+
+            <label className="form-label">
+            {t('location', language)}
+            <input
+                name="location"
+                value={formData.location || ''}
+                onChange={handleChange}
+            />
+            </label>
+
+            <label className="form-label">
+            {t('description', language)}
+            <textarea
+                name="description"
+                value={formData.description || ''}
+                onChange={handleChange}
+            />
+            </label>
         </form>
 
-        <div className="flex justify-end gap-3 mt-6">
-          <Button text={t('delete', language)} color="red" onClick={handleDelete} />
-          <Button text={loading ? '...' : t('saveChanges', language)} onClick={handleSave} />
-          <Button text={t('cancel', language)} onClick={onClose} />
+        <div className="form-actions">
+            <Button text={t('delete', language)} color="red" onClick={handleDelete} />
+            <Button text={loading ? '...' : t('saveChanges', language)} onClick={handleSave} />
+            <Button text={t('cancel', language)} onClick={onClose} />
         </div>
-      </div>
+        </div>
     </div>
-  );
+    );
+
 }

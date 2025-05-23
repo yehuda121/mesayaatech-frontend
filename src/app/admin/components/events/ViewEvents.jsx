@@ -48,20 +48,19 @@ export default function ViewEvents({ events, setEvents, onEdit }) {
     : showPast ? 'Hide Past Events' : 'Show Past Events';
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <h2 className="text-2xl font-bold text-center">{t('editEventTitle', language)}</h2>
+    <div className="view-events-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
+      <h2 className="view-events-title">{t('editEventTitle', language)}</h2>
 
-      <div className="flex gap-2 items-center" style={{ direction: 'rtl' }}>
+      <div className="event-filters">
         <input
           type="text"
           placeholder={t('filterTitle', language)}
-          className="border p-2 rounded w-full"
           value={filter.title}
           onChange={(e) => setFilter({ ...filter, title: e.target.value })}
         />
         <input
           type="date"
-          className="border p-2 rounded"
+          className="event-filter-input date"
           value={filter.date}
           onChange={(e) => setFilter({ ...filter, date: e.target.value })}
         />
@@ -73,15 +72,15 @@ export default function ViewEvents({ events, setEvents, onEdit }) {
       </div>
 
       {filteredEvents.length === 0 ? (
-        <p className="text-center">{t('noEventsFound', language)}</p>
+        <p className="event-empty-message">{t('noEventsFound', language)}</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="event-grid">
           {filteredEvents.map((event, i) => (
-            <div key={i} className="border p-4 rounded shadow flex flex-col gap-2 overflow-hidden">
-              <div className="text-lg font-bold truncate">{event.title}</div>
-              <div>{event.date} {event.time}</div>
-              <div className="truncate">{event.location}</div>
-              <div className="flex gap-2 mt-2" style={{ direction: 'rtl' }}>
+            <div key={i} className="event-card">
+              <div className="event-title">{event.title}</div>
+              <div className="event-date-time">{event.date} {event.time}</div>
+              <div className="event-location">{event.location}</div>
+              <div className="event-actions">
                 <Button text={t('edit', language)} onClick={() => onEdit(event)} />
                 <Button text={t('delete', language)} color="danger" onClick={() => handleDelete(event)} />
               </div>
@@ -91,4 +90,5 @@ export default function ViewEvents({ events, setEvents, onEdit }) {
       )}
     </div>
   );
+
 }

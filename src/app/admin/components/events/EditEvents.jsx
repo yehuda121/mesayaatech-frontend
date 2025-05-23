@@ -51,72 +51,73 @@ export default function EditEvents({ event, onClose, onSave }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-xl max-h-[90vh] overflow-y-auto" dir={language === 'he' ? 'rtl' : 'ltr'}>
-        <h2 className="text-xl font-bold text-center mb-4">{t('editEventTitle', language)}</h2>
+    <div className="modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
+      <div className="modal-box">
+        <h2 className="form-title">{t('editEventTitle', language)}</h2>
 
-        <form className="space-y-4">
-          <label>{t('eventTitle', language)}
+        <form className="form-wrapper">
+          <label className="form-label">
+            {t('eventTitle', language)}
             <input
               name="title"
               value={formData.title || ''}
               onChange={handleChange}
-              className="border p-2 w-full rounded"
             />
           </label>
 
-          <label>{t('eventDescription', language)}
+          <label className="form-label">
+            {t('eventDescription', language)}
             <textarea
               name="description"
               value={formData.description || ''}
               onChange={handleChange}
-              className="border p-2 w-full rounded h-24"
             />
           </label>
 
-          <label>{t('eventDate', language)}
+          <label className="form-label">
+            {t('eventDate', language)}
             <input
               type="date"
               name="date"
               value={formData.date || ''}
               onChange={handleChange}
-              className="border p-2 w-full rounded"
             />
           </label>
 
-          <label>{t('eventTime', language)}
+          <label className="form-label">
+            {t('eventTime', language)}
             <input
               type="time"
               name="time"
               value={formData.time || ''}
               onChange={handleChange}
-              className="border p-2 w-full rounded"
             />
           </label>
 
-          <label>{t('eventLocation', language)}
+          <label className="form-label">
+            {t('eventLocation', language)}
             <input
               name="location"
               value={formData.location || ''}
               onChange={handleChange}
-              className="border p-2 w-full rounded"
             />
           </label>
 
-          <label>{t('eventNotes', language)}
+          <label className="form-label">
+            {t('eventNotes', language)}
             <textarea
               name="notes"
               value={formData.notes || ''}
               onChange={handleChange}
-              className="border p-2 w-full rounded h-20"
+              className="form-textarea short"
             />
           </label>
         </form>
 
         {Array.isArray(formData.participants) && formData.participants.length > 0 && (
-          <div className="mt-6 border-t pt-4">
-            <h3 className="font-semibold mb-2">{t('eventParticipants', language)}</h3>
-            <ul className="list-disc ml-6 space-y-1 text-sm">
+          <div className="event-participants">
+            <h3 className="participants-title">{t('eventParticipants', language)}</h3>
+            <ul className="participants-list">
               {formData.participants.map((p, index) => (
                 <li key={index}>
                   {p.fullName} - {p.email} - {p.idNumber}
@@ -126,7 +127,7 @@ export default function EditEvents({ event, onClose, onSave }) {
           </div>
         )}
 
-        <div className="flex justify-end gap-3 mt-6">
+        <div className="form-actions">
           <Button text={t('cancel', language)} onClick={onClose} />
           <Button
             text={loading ? '...' : t('saveChanges', language)}

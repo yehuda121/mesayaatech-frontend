@@ -171,7 +171,15 @@
     "jobDeleted": "המשרה נמחקה בהצלחה",
     "deleteFailed": "מחיקת המשרה נכשלה",
     "loading": "טוען",
-    "addJob": "פרסום משרה"
+    "addJob": "פרסום משרה",
+    "fetchErrorNotArray": "השרת לא החזיר מערך תקין",
+    "fetchUsersError": "שגיאה בשליפת משתמשים",
+    "cognitoCreateError": "שגיאה ביצירת משתמש ב־Cognito",
+    "emailSendFail": "שליחת האימייל נכשלה – ודא שכתובת הדוא\"ל תקינה",
+    "dynamoStatusError": "שגיאה בעדכון סטטוס ב־DynamoDB",
+    "statusGeneralError": "שגיאה כללית במהלך שינוי סטטוס",
+    "generalStatusError": "אירעה שגיאה בעת שינוי הסטטוס",
+    "updateUserError": "שגיאה בעדכון פרטי המשתמש"
 
 
 }

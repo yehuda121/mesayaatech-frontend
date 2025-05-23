@@ -61,45 +61,74 @@ export default function CreateEventForm() {
     }
   };
 
-  return (
-    <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-lg space-y-6" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <h1 className="text-3xl font-bold text-center">{t('createEventTitle', language)}</h1>
+ return (
+  <div className="create-event-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <h1 className="form-title">{t('createEventTitle', language)}</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <label>{t('eventTitle', language)}
-          <input name="title" value={formData.title} onChange={handleChange}
-            className="border p-2 w-full rounded" />
-        </label>
+    <form onSubmit={handleSubmit} className="form-wrapper">
+      <label className="form-label">
+        {t('eventTitle', language)}
+        <input
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+        />
+      </label>
 
-        <label>{t('eventDescription', language)}
-          <textarea name="description" required value={formData.description} onChange={handleChange}
-            className="border p-2 w-full rounded h-24" />
-        </label>
+      <label className="form-label">
+        {t('eventDescription', language)}
+        <textarea
+          name="description"
+          required
+          value={formData.description}
+          onChange={handleChange}
+        />
+      </label>
 
-        <label>{t('eventDate', language)}
-          <input name="date" type="date" required value={formData.date} onChange={handleChange}
-            className="border p-2 w-full rounded" />
-        </label>
+      <label className="form-label">
+        {t('eventDate', language)}
+        <input
+          name="date"
+          type="date"
+          required
+          value={formData.date}
+          onChange={handleChange}
+        />
+      </label>
 
-        <label>{t('eventTime', language)}
-          <input name="time" type="time" value={formData.time} onChange={handleChange}
-            className="border p-2 w-full rounded" />
-        </label>
+      <label className="form-label">
+        {t('eventTime', language)}
+        <input
+          name="time"
+          type="time"
+          value={formData.time}
+          onChange={handleChange}
+        />
+      </label>
 
-        <label>{t('eventLocation', language)}
-          <input name="location" value={formData.location} onChange={handleChange}
-            className="border p-2 w-full rounded" />
-        </label>
+      <label className="form-label">
+        {t('eventLocation', language)}
+        <input
+          name="location"
+          value={formData.location}
+          onChange={handleChange}
+        />
+      </label>
 
-        <label>{t('eventNotes', language)}
-          <textarea name="notes" value={formData.notes} onChange={handleChange}
-            className="border p-2 w-full rounded h-20" />
-        </label>
+      <label className="form-label">
+        {t('eventNotes', language)}
+        <textarea
+          name="notes"
+          value={formData.notes}
+          onChange={handleChange}
+        />
+      </label>
 
-        <Button text={t('eventSubmit', language)} type="submit" />
-      </form>
+      <Button text={t('eventSubmit', language)} type="submit" />
+    </form>
 
-      {success && <p className="text-center text-green-600 font-bold mt-4">{success}</p>}
-    </div>
+    {success && <p className="form-success">{success}</p>}
+  </div>
   );
+
 }

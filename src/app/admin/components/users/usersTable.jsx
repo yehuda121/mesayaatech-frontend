@@ -1,4 +1,6 @@
+// UsersTable.jsx
 'use client';
+
 import { useEffect, useState } from 'react';
 import { getLanguage } from '../../../language';
 import { t } from '@/app/utils/loadTranslations';
@@ -23,16 +25,14 @@ export default function UsersTable() {
     try {
       const res = await fetch(`http://localhost:5000/api/imports-user-registration-form/all`);
       const data = await res.json();
-
       if (!Array.isArray(data)) {
-        console.error('שגיאה: השרת לא החזיר מערך:', data);
+        console.error(t('fetchErrorNotArray', language));
         setUsers([]);
         return;
       }
-
       setUsers(data);
     } catch (err) {
-      console.error('שגיאה בשליפת משתמשים:', err);
+      console.error(t('fetchUsersError', language), err);
     }
   };
 
@@ -47,13 +47,12 @@ export default function UsersTable() {
             name: user.fullName,
             role: user.userType,
             idNumber: user.idNumber
-          }),
+          })
         });
-
         if (!createRes.ok) {
           const errorText = await createRes.text();
-          console.error('Error creating Cognito user:', errorText);
-          alert('Failed to send email – please verify the email address is valid');
+          console.error(t('cognitoCreateError', language), errorText);
+          alert(t('emailSendFail', language));
           return;
         }
       }
@@ -65,12 +64,11 @@ export default function UsersTable() {
           fullName: user.fullName,
           idNumber: user.idNumber,
           userType: user.userType,
-          status,
-        }),
+          status
+        })
       });
-
       if (!res.ok) {
-        console.error('Error updating status in DynamoDB:', await res.text());
+        console.error(t('dynamoStatusError', language), await res.text());
         return;
       }
 
@@ -82,92 +80,49 @@ export default function UsersTable() {
         )
       );
     } catch (err) {
-      console.error('General error during status change:', err);
-      alert('A general error occurred. Check the console for details.');
+      console.error(t('statusGeneralError', language), err);
+      alert(t('generalStatusError', language));
     }
   };
 
-  // const handleDeleteUser = async (user) => {
-  //   try {
-  //     // Attempt to delete from Cognito if approved
-  //     if (user.status === 'approved' && user.email) {
-  //       await fetch('http://localhost:5000/api/delete-cognito-user', {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify({ email: user.email })
-  //       });
-  //     }
-
-  //     const res = await fetch('http://localhost:5000/api/delete-user-form', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({
-  //         userType: user.userType,
-  //         idNumber: user.idNumber,
-  //       }),
-  //     });
-
-  //     if (!res.ok) {
-  //       console.error('שגיאה במחיקת משתמש:', await res.text());
-  //       return;
-  //     }
-
-  //     setUsers(prev => prev.filter(u =>
-  //       !(u.idNumber === user.idNumber && u.userType === user.userType)
-  //     ));
-  //     setSelectedForm(null);
-  //   } catch (err) {
-  //     console.error('שגיאה במחיקת משתמש:', err);
-  //   }
-  // };
   const handleDeleteUser = async (user) => {
     try {
-      // Attempt to delete from Cognito if approved
       if (user.status === 'approved' && user.email) {
         const cognitoRes = await fetch('http://localhost:5000/api/delete-cognito-user', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: user.email })
         });
-
         if (!cognitoRes.ok) {
           const text = await cognitoRes.text();
-          console.error('error deleteing the user from cognito: ', text);
+          console.error(t('cognitoDeleteError', language), text);
           alert(t('cognitoDeleteError', language));
         }
       }
 
-      // Delete from DynamoDB
       const res = await fetch('http://localhost:5000/api/delete-user-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userType: user.userType,
-          idNumber: user.idNumber,
-        }),
+          idNumber: user.idNumber
+        })
       });
-
       if (!res.ok) {
         const text = await res.text();
-        console.error('error deleteing user registration form: ', text);
+        console.error(t('dynamoDeleteError', language), text);
         alert(t('dynamoDeleteError', language));
         return;
       }
 
-      setUsers(prev =>
-        prev.filter(u =>
-          !(u.idNumber === user.idNumber && u.userType === user.userType)
-        )
-      );
+      setUsers(prev => prev.filter(u => !(u.idNumber === user.idNumber && u.userType === user.userType)));
       setSelectedForm(null);
       alert(t('userDeletedSuccessfully', language));
-
     } catch (err) {
-      console.error('error deleting user: ', err);
+      console.error(t('generalDeleteError', language), err);
       alert(t('generalDeleteError', language));
     }
   };
-
 
   const statusMap = {
     pending: t('pending', language),
@@ -199,11 +154,11 @@ export default function UsersTable() {
       const res = await fetch('http://localhost:5000/api/update-user-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedUser),
+        body: JSON.stringify(updatedUser)
       });
 
       if (!res.ok) {
-        console.error('שגיאה בעדכון משתמש:', await res.text());
+        console.error(t('updateUserError', language), await res.text());
         return;
       }
 
@@ -216,25 +171,24 @@ export default function UsersTable() {
       );
       setSelectedForm(null);
     } catch (err) {
-      console.error('שגיאה בעדכון משתמש:', err);
+      console.error(t('updateUserError', language), err);
     }
   };
 
   return (
-    <div dir="rtl" className="space-y-4">
-      <div className="flex flex-wrap gap-4">
+    <div dir="rtl" className="users-table-container">
+      <div className="users-filters">
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder={t('searchPlaceholder', language)}
-          className="border rounded p-2 flex-1"
         />
 
         <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="border rounded p-2"
+          className="users-filter-select"
         >
           <option value="type">{t('userType', language)}</option>
           <option value="reservist">{t('reservist', language)}</option>
@@ -245,7 +199,7 @@ export default function UsersTable() {
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="border rounded p-2"
+          className="users-filter-select"
         >
           <option value="status">{t('status', language)}</option>
           <option value="pending">{t('pending', language)}</option>
@@ -254,32 +208,32 @@ export default function UsersTable() {
         </select>
       </div>
 
-      <table className="w-full border text-right">
+      <table className="table-style">
         <thead>
-          <tr className="bg-gray-100">
-            <th className="p-2">{t('name', language)}</th>
-            <th className="p-2">{t('id', language)}</th>
-            <th className="p-2">{t('status', language)}</th>
-            <th className="p-2">{t('userType', language)}</th>
-            <th className="p-2">{t('actions', language)}</th>
+          <tr>
+            <th>{t('name', language)}</th>
+            <th>{t('id', language)}</th>
+            <th>{t('status', language)}</th>
+            <th>{t('userType', language)}</th>
+            <th>{t('actions', language)}</th>
           </tr>
         </thead>
         <tbody>
           {filteredUsers.map((user) => (
-            <tr key={`${user.userType}-${user.idNumber}`} className="border-t cursor-pointer" onClick={() => setSelectedForm(user)}>
-              <td className="p-2">{user.fullName}</td>
-              <td className="p-2">{user.idNumber}</td>
-              <td className="p-2">{statusMap[user.status] || user.status}</td>
-              <td className="p-2">{userTypeMap[user.userType] || user.userType}</td>
-              <td className="p-2">
-                <div className="flex gap-2 justify-end">
+            <tr key={`${user.userType}-${user.idNumber}`} onClick={() => setSelectedForm(user)}>
+              <td>{user.fullName}</td>
+              <td>{user.idNumber}</td>
+              <td>{statusMap[user.status] || user.status}</td>
+              <td>{userTypeMap[user.userType] || user.userType}</td>
+              <td>
+                <div className="users-buttons">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       if (user.status !== 'approved') handleStatusChange(user, 'approved');
                     }}
                     disabled={user.status === 'approved'}
-                    className={`px-3 py-1 rounded text-white ${user.status === 'approved' ? 'bg-green-300 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600'}`}
+                    className={`users-button approve ${user.status === 'approved' ? 'disabled' : ''}`}
                   >
                     {t('approve', language)}
                   </button>
@@ -290,7 +244,7 @@ export default function UsersTable() {
                       if (user.status !== 'denied') handleStatusChange(user, 'denied');
                     }}
                     disabled={user.status === 'denied'}
-                    className={`px-3 py-1 rounded text-white ${user.status === 'denied' ? 'bg-red-300 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600'}`}
+                    className={`users-button deny ${user.status === 'denied' ? 'disabled' : ''}`}
                   >
                     {t('deny', language)}
                   </button>

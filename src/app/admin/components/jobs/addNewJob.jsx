@@ -1,4 +1,4 @@
-// AddNewJob.jsx (centered form style like CreateEvent)
+// AddNewJob.jsx 
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -76,44 +76,69 @@ export default function AddNewJob({ onClose, onSave }) {
   };
 
   return (
-    <div className="flex justify-center p-6">
-      <div className="w-full max-w-2xl bg-white p-6 rounded-lg shadow-md" dir={language === 'he' ? 'rtl' : 'ltr'}>
-        <h2 className="text-2xl font-bold text-center mb-6">{t("postNewJob", language)}</h2>
+    <div className="add-job-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
+        <div className="add-job-box">
+        <h2 className="form-title">{t("postNewJob", language)}</h2>
 
-        <form className="space-y-6"onSubmit={handleSubmit}>
-          <div>
-            <label className="block font-semibold text-blue-700 mb-2">{t("jobTitle", language)}</label>
-            <input name="title" value={jobData.title} onChange={handleChange} className="w-full p-2 border rounded" required />
-          </div>
-          <div>
-            <label className="block font-semibold text-blue-700 mb-2">{t("company", language)}</label>
-            <input name="company" value={jobData.company} onChange={handleChange} className="w-full p-2 border rounded" required />
-          </div>
-          <div>
-            <label className="block font-semibold text-blue-700 mb-2">{t("location", language)}</label>
-            <input name="location" value={jobData.location} onChange={handleChange} className="w-full p-2 border rounded" required />
-          </div>
-          <div>
-            <label className="block font-semibold text-blue-700 mb-2">{t("description", language)}</label>
-            <textarea name="description" value={jobData.description} onChange={handleChange} className="w-full p-2 border rounded h-24" required />
-          </div>
-          <div>
-            <label className="block font-semibold text-blue-700 mb-2">{t("uploadFile", language)}</label>
+        <form className="form-wrapper" onSubmit={handleSubmit}>
+            <div>
+            <label className="form-label">{t("jobTitle", language)}</label>
+            <input
+                name="title"
+                value={jobData.title}
+                onChange={handleChange}
+                required
+            />
+            </div>
+
+            <div>
+            <label className="form-label">{t("company", language)}</label>
+            <input
+                name="company"
+                value={jobData.company}
+                onChange={handleChange}
+                required
+            />
+            </div>
+
+            <div>
+            <label className="form-label">{t("location", language)}</label>
+            <input
+                name="location"
+                value={jobData.location}
+                onChange={handleChange}
+                required
+            />
+            </div>
+
+            <div>
+            <label className="form-label">{t("description", language)}</label>
+            <textarea
+                name="description"
+                value={jobData.description}
+                onChange={handleChange}
+                required
+            />
+            </div>
+
+            <div>
+            <label className="form-label">{t("uploadFile", language)}</label>
             <input type="file" onChange={handleFileChange} />
-          </div>
-          <div className="flex justify-end gap-3">
+            </div>
+
+            <div className="form-actions">
             <Button
-              text={t("cancel", language)}
-              onClick={onClose}
-              type="button"
+                text={t("cancel", language)}
+                onClick={onClose}
+                type="button"
             />
             <Button
-              text={loading ? '...' : t("submitJob", language)}
-              type="submit"
+                text={loading ? '...' : t("submitJob", language)}
+                type="submit"
             />
-          </div>
+            </div>
         </form>
-      </div>
+        </div>
     </div>
-  );
+    );
 }

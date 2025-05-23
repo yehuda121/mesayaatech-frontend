@@ -50,53 +50,52 @@ export default function ViewJobs() {
   };
 
   return (
-    <div className="p-6" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <h2 className="text-2xl font-bold mb-4">{t('jobList', language)}</h2>
+    <div className="view-jobs-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
+        <h2 className="view-jobs-title">{t('jobList', language)}</h2>
 
-      <div className="flex gap-4 mb-4">
+        <div className="job-filters">
         <input
-          type="text"
-          name="location"
-          placeholder={t('filterByLocation', language)}
-          value={filters.location}
-          onChange={handleFilterChange}
-          className="border p-2 rounded w-full"
+            type="text"
+            name="location"
+            placeholder={t('filterByLocation', language)}
+            value={filters.location}
+            onChange={handleFilterChange}
         />
         <input
-          type="text"
-          name="company"
-          placeholder={t('filterByCompany', language)}
-          value={filters.company}
-          onChange={handleFilterChange}
-          className="border p-2 rounded w-full"
+            type="text"
+            name="company"
+            placeholder={t('filterByCompany', language)}
+            value={filters.company}
+            onChange={handleFilterChange}
         />
-      </div>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="job-grid">
         {filteredJobs.map((job) => (
-          <div
+            <div
             key={job.jobId}
-            className="border rounded p-4 shadow hover:shadow-md cursor-pointer flex flex-col gap-2"
+            className="job-card"
             onClick={() => setSelectedJob(job)}
-          >
-            <h3 className="font-bold text-blue-700 truncate">{job.title}</h3>
+            >
+            <h3 className="job-title">{job.title}</h3>
             <p>{t('company', language)}: {job.company}</p>
             <p>{t('location', language)}: {job.location}</p>
-          </div>
+            </div>
         ))}
-      </div>
+        </div>
 
-      {selectedJob && (
+        {selectedJob && (
         <EditJob
-          job={selectedJob}
-          onClose={() => setSelectedJob(null)}
-          onSave={(updatedJob) => {
+            job={selectedJob}
+            onClose={() => setSelectedJob(null)}
+            onSave={(updatedJob) => {
             setJobs(prev => prev.map(j => j.jobId === updatedJob.jobId ? updatedJob : j));
             setFilteredJobs(prev => prev.map(j => j.jobId === updatedJob.jobId ? updatedJob : j));
             setSelectedJob(null);
-          }}
+            }}
         />
-      )}
+        )}
     </div>
-  );
+    );
+
 }

@@ -171,7 +171,15 @@
     "jobDeleted": "Job deleted successfully",
     "deleteFailed": "Failed to delete job",
     "loading": "Loading",
-    "addJob": "Add Job"
+    "addJob": "Add Job",
+    "fetchErrorNotArray": "Server did not return an array",
+    "fetchUsersError": "Error fetching users",
+    "cognitoCreateError": "Error creating Cognito user",
+    "emailSendFail": "Failed to send email – please verify the email address is valid",
+    "dynamoStatusError": "Error updating status in DynamoDB",
+    "statusGeneralError": "General error during status change",
+    "generalStatusError": "An error occurred while changing status",
+    "updateUserError": "Error updating user"
 
   
 }

@@ -66,17 +66,15 @@ export default function EditUsersForms({ user, onClose, onSave, onDelete }) {
   const fieldsToRender = keysByType[formData.userType] || [];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-xl overflow-y-auto max-h-[90vh]" dir={language === 'he' ? 'rtl' : 'ltr'}>
-        <h2 className="text-xl font-bold mb-4 text-center">
-          {t('editUserDetails', language)}
-        </h2>
+    <div className="modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
+      <div className="modal-box">
+        <h2 className="form-title">{t('editUserDetails', language)}</h2>
 
-        <form className="space-y-4">
+        <form className="form-wrapper">
           {fieldsToRender.map(renderField)}
         </form>
 
-        <div className="flex justify-between gap-3 mt-6 flex-wrap">
+        <div className="form-actions">
           <Button
             text={t('deleteUser', language)}
             color="red"
@@ -86,19 +84,17 @@ export default function EditUsersForms({ user, onClose, onSave, onDelete }) {
               }
             }}
           />
-
-          <div className="flex gap-2 ml-auto">
-            <Button
-              text={t('cancel', language)}
-              onClick={onClose}
-            />
-            <Button
-              text={t('saveChanges', language)}
-              onClick={() => onSave(formData)}
-            />
-          </div>
+          <Button
+            text={t('cancel', language)}
+            onClick={onClose}
+          />
+          <Button
+            text={t('saveChanges', language)}
+            onClick={() => onSave(formData)}
+          />
         </div>
       </div>
     </div>
   );
+
 }
