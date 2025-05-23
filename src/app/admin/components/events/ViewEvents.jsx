@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import Button from '../../components/Button';
-import { getLanguage } from '../../language';
+import Button from '../../../components/Button';
+import { getLanguage } from '../../../language';
 import { t } from '@/app/utils/loadTranslations';
 
 export default function ViewEvents({ events, setEvents, onEdit }) {

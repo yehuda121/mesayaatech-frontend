@@ -180,12 +180,14 @@
 import { useEffect, useState } from 'react';
 import { getLanguage } from '../language';
 import SideBar from '../components/SideBar';
-import UsersTable from './components/usersTable';
-import CreateEvent from './components/CreateEvent';
-import ViewEvents from './components/ViewEvents';
-import EditEvents from './components/EditEvents';
+import UsersTable from './components/users/usersTable';
+import CreateEvent from './components/events/CreateEvent';
+import ViewEvents from './components/events/ViewEvents';
+import EditEvents from './components/events/EditEvents';
 import { t } from '@/app/utils/loadTranslations';
+import AddJob from './components/jobs/addNewJob';
 import './admin.css';
+import ViewJobs from './components/jobs/viewJobs';
 
 export default function AdminPage() {
   const [language, setLanguage] = useState(getLanguage());
@@ -218,6 +220,19 @@ export default function AdminPage() {
       path: '#view-events',
       onClick: () => setView('view-events')
     },
+    {
+      labelHe: t('manageJobs', 'he'),
+      labelEn: t('manageJobs', 'en'),
+      path: '#manage-jobs',
+      onClick: () => setView('view-jobs')
+    },
+    {
+      labelHe: t('addJob', 'he'),
+      labelEn: t('addJob', 'en'),
+      path: '#add-job',
+      onClick: () => setView('add-job')
+    }
+
   ];
 
   return (
@@ -226,6 +241,8 @@ export default function AdminPage() {
       <div className="admin-container">
         <main className="admin-main">
           {view === 'create-event' && <CreateEvent />}
+          {view === 'view-jobs' && <ViewJobs />}
+          {view === 'add-job' && <AddJob />}
           {view === 'view-events' && (
             <ViewEvents
               events={events}

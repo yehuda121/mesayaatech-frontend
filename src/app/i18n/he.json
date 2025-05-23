@@ -159,5 +159,19 @@
     "navMeetings": "פגישות קרובות",
     "navFeedback": "פידבקים מהמנטור",
     "jobs": "משרות",
-    "eventOrganizer": "מארגן"
+    "eventOrganizer": "מארגן",
+    "manageJobs": "ניהול משרות",
+    "filterByCompany": "חיפוש לפי חברה",
+    "filterByLocation": "חיפוש לפי מיקום",
+    "company": "חברה",
+    "jobList": "רשימת משרות",
+    "editJobTitle": "עריכת משרה",
+    "saveFailed": "שמירת המשרה נכשלה",
+    "confirmDelete": "האם אתה בטוח שברצונך למחוק את המשרה?",
+    "jobDeleted": "המשרה נמחקה בהצלחה",
+    "deleteFailed": "מחיקת המשרה נכשלה",
+    "loading": "טוען",
+    "addJob": "פרסום משרה"
+
+
 }

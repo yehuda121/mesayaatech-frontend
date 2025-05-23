@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { getLanguage } from '../../language';
+import { getLanguage } from '../../../language';
 import { t } from '@/app/utils/loadTranslations';
 import EditUsersForms from './EditUsersForms';
 
