@@ -27,36 +27,42 @@ export default function AdminPage() {
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
+  const handleNavigation = (newView) => {
+    setEventToEdit(null);       
+    setSelectedJob(null);       
+    setView(newView); 
+  };
+
   const navItems = [
     {
       labelHe: t('viewUsers', 'he'),
       labelEn: t('viewUsers', 'en'),
       path: '#view-users',
-      onClick: () => setView('users')
+      onClick: () => handleNavigation('users')
     },
     {
       labelHe: t('createEvent', 'he'),
       labelEn: t('createEvent', 'en'),
       path: '#create-event',
-      onClick: () => setView('create-event')
+      onClick: () => handleNavigation('create-event')
     },
     {
       labelHe: t('viewEvents', 'he'),
       labelEn: t('viewEvents', 'en'),
       path: '#view-events',
-      onClick: () => setView('view-events')
+      onClick: () => handleNavigation('view-events')
     },
     {
       labelHe: t('manageJobs', 'he'),
       labelEn: t('manageJobs', 'en'),
       path: '#view-jobs',
-      onClick: () => setView('view-jobs')
+      onClick: () => handleNavigation('view-jobs')
     },
     {
       labelHe: t('addJob', 'he'),
       labelEn: t('addJob', 'en'),
       path: '#add-job',
-      onClick: () => setView('add-job')
+      onClick: () => handleNavigation('add-job')
     }
   ];
 

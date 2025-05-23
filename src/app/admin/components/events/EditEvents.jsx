@@ -117,7 +117,7 @@ export default function EditEvents({ event, onClose, onSave }) {
         {Array.isArray(formData.participants) && formData.participants.length > 0 && (
           <div className="event-participants">
             <h3 className="participants-title">{t('eventParticipants', language)}</h3>
-            <ul className="participants-list">
+            <ul className="participants-list" dir={language === 'he' ? 'rtl' : 'ltr'}>
               {formData.participants.map((p, index) => (
                 <li key={index}>
                   {p.fullName} - {p.email} - {p.idNumber}

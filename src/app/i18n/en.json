@@ -179,7 +179,8 @@
     "dynamoStatusError": "Error updating status in DynamoDB",
     "statusGeneralError": "General error during status change",
     "generalStatusError": "An error occurred while changing status",
-    "updateUserError": "Error updating user"
+    "updateUserError": "Error updating user",
+    "confirmDeleteEvent": "Are you sure you want to delete this event?"
 
   
 }

@@ -22,7 +22,6 @@
 .admin-main h1 {
   font-size: 1.875rem;
   font-weight: bold;
-  color: #1e3a8a;
   margin-bottom: 1.5rem;
 }
 
@@ -59,15 +58,20 @@
 }
 
 .participants-title {
-  font-weight: 600;
+  font-size: large;
+  font-weight: bold;
   margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 .participants-list {
-  margin-left: 1.5rem;
   list-style: disc;
   font-size: 0.875rem;
-  line-height: 1.5;
+  margin-inline-start: 1.5rem;
+}
+
+.participants-list li {
+  text-align: start;
 }
 
 .modal-overlay {
@@ -90,7 +94,6 @@
   width: 100%;
 }
 
-
 .form-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -107,7 +110,6 @@
 .form-label {
   display: block;
   font-weight: 500;
-  color: #1d4ed8;
 }
 
 .form-textarea.short {
@@ -121,12 +123,6 @@
 }
 
 /* === ViewEvents.jsx === */
-.view-events-container {
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 1.5rem;
-}
-
 .view-events-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -136,14 +132,24 @@
 
 .event-filters {
   display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  direction: rtl;
+  flex-wrap: wrap;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.event-filter-input.date {
-  max-width: 11rem;
+.event-filters input[type="text"] {
+  flex: 0 0 50%;
+  max-width: 45%;
+}
+
+.event-filters input[type="date"] {
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+
+.event-filters button {
+  flex: 0 0 25%;
+  max-width: 20%;
 }
 
 .event-empty-message {
@@ -294,9 +300,46 @@
 
 .users-filters {
   display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  direction: rtl;
+}
+
+.users-filters input[type="text"] {
+  flex: 0 0 45%;
+}
+
+.users-table-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.users-filters {
+  display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  margin-bottom: 1rem;
 }
+
+.users-filters input[type="text"] {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.users-filters select {
+  flex: 0 0 25%;
+  max-width: 20%;
+}
+
+@media (max-width: 768px) {
+  .users-filters input[type="text"],
+  .users-filters select {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
 
 .users-filter-select {
   padding: 0.5rem;
@@ -338,6 +381,7 @@
 .form-wrapper label {
   display: block;
   margin-bottom: 0.5rem;
+  text-align: start;
 }
 
 .form-wrapper span {

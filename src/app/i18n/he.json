@@ -179,6 +179,7 @@
     "dynamoStatusError": "שגיאה בעדכון סטטוס ב־DynamoDB",
     "statusGeneralError": "שגיאה כללית במהלך שינוי סטטוס",
     "generalStatusError": "אירעה שגיאה בעת שינוי הסטטוס",
+    "confirmDeleteEvent": "האם אתה בטוח שברצונך למחוק את האירוע?",
     "updateUserError": "שגיאה בעדכון פרטי המשתמש"
 
 

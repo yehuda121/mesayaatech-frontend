@@ -64,7 +64,6 @@ export default function CreateEventForm() {
  return (
   <div className="create-event-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
     <h1 className="form-title">{t('createEventTitle', language)}</h1>
-
     <form onSubmit={handleSubmit} className="form-wrapper">
       <label className="form-label">
         {t('eventTitle', language)}

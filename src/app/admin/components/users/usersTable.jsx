@@ -174,95 +174,94 @@ export default function UsersTable() {
       console.error(t('updateUserError', language), err);
     }
   };
-
   return (
     <div dir="rtl" className="users-table-container">
-      <div className="users-filters">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder={t('searchPlaceholder', language)}
-        />
+      <div className="users-table-wrapper">
+        <div className="users-filters">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder={t('searchPlaceholder', language)}
+          />
 
-        <select
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-          className="users-filter-select"
-        >
-          <option value="type">{t('userType', language)}</option>
-          <option value="reservist">{t('reservist', language)}</option>
-          <option value="mentor">{t('mentor', language)}</option>
-          <option value="ambassador">{t('ambassador', language)}</option>
-        </select>
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+          >
+            <option value="type">{t('userType', language)}</option>
+            <option value="reservist">{t('reservist', language)}</option>
+            <option value="mentor">{t('mentor', language)}</option>
+            <option value="ambassador">{t('ambassador', language)}</option>
+          </select>
 
-        <select
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-          className="users-filter-select"
-        >
-          <option value="status">{t('status', language)}</option>
-          <option value="pending">{t('pending', language)}</option>
-          <option value="approved">{t('approved', language)}</option>
-          <option value="denied">{t('denied', language)}</option>
-        </select>
-      </div>
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+          >
+            <option value="status">{t('status', language)}</option>
+            <option value="pending">{t('pending', language)}</option>
+            <option value="approved">{t('approved', language)}</option>
+            <option value="denied">{t('denied', language)}</option>
+          </select>
+        </div>
 
-      <table className="table-style">
-        <thead>
-          <tr>
-            <th>{t('name', language)}</th>
-            <th>{t('id', language)}</th>
-            <th>{t('status', language)}</th>
-            <th>{t('userType', language)}</th>
-            <th>{t('actions', language)}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map((user) => (
-            <tr key={`${user.userType}-${user.idNumber}`} onClick={() => setSelectedForm(user)}>
-              <td>{user.fullName}</td>
-              <td>{user.idNumber}</td>
-              <td>{statusMap[user.status] || user.status}</td>
-              <td>{userTypeMap[user.userType] || user.userType}</td>
-              <td>
-                <div className="users-buttons">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (user.status !== 'approved') handleStatusChange(user, 'approved');
-                    }}
-                    disabled={user.status === 'approved'}
-                    className={`users-button approve ${user.status === 'approved' ? 'disabled' : ''}`}
-                  >
-                    {t('approve', language)}
-                  </button>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (user.status !== 'denied') handleStatusChange(user, 'denied');
-                    }}
-                    disabled={user.status === 'denied'}
-                    className={`users-button deny ${user.status === 'denied' ? 'disabled' : ''}`}
-                  >
-                    {t('deny', language)}
-                  </button>
-                </div>
-              </td>
+        <table className="table-style">
+          <thead>
+            <tr>
+              <th>{t('name', language)}</th>
+              <th>{t('id', language)}</th>
+              <th>{t('status', language)}</th>
+              <th>{t('userType', language)}</th>
+              <th>{t('actions', language)}</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredUsers.map((user) => (
+              <tr key={`${user.userType}-${user.idNumber}`} onClick={() => setSelectedForm(user)}>
+                <td>{user.fullName}</td>
+                <td>{user.idNumber}</td>
+                <td>{statusMap[user.status] || user.status}</td>
+                <td>{userTypeMap[user.userType] || user.userType}</td>
+                <td>
+                  <div className="users-buttons">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (user.status !== 'approved') handleStatusChange(user, 'approved');
+                      }}
+                      disabled={user.status === 'approved'}
+                      className={`users-button approve ${user.status === 'approved' ? 'disabled' : ''}`}
+                    >
+                      {t('approve', language)}
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (user.status !== 'denied') handleStatusChange(user, 'denied');
+                      }}
+                      disabled={user.status === 'denied'}
+                      className={`users-button deny ${user.status === 'denied' ? 'disabled' : ''}`}
+                    >
+                      {t('deny', language)}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      {selectedForm && (
-        <EditUsersForms
-          user={selectedForm}
-          onClose={() => setSelectedForm(null)}
-          onSave={handleSaveUser}
-          onDelete={handleDeleteUser}
-        />
-      )}
+        {selectedForm && (
+          <EditUsersForms
+            user={selectedForm}
+            onClose={() => setSelectedForm(null)}
+            onSave={handleSaveUser}
+            onDelete={handleDeleteUser}
+          />
+        )}
+      </div>
     </div>
   );
+
 }

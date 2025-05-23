@@ -60,7 +60,6 @@ export default function ViewEvents({ events, setEvents, onEdit }) {
         />
         <input
           type="date"
-          className="event-filter-input date"
           value={filter.date}
           onChange={(e) => setFilter({ ...filter, date: e.target.value })}
         />
@@ -82,7 +81,15 @@ export default function ViewEvents({ events, setEvents, onEdit }) {
               <div className="event-location">{event.location}</div>
               <div className="event-actions">
                 <Button text={t('edit', language)} onClick={() => onEdit(event)} />
-                <Button text={t('delete', language)} color="danger" onClick={() => handleDelete(event)} />
+                <Button
+                  text={t('delete', language)}
+                  color="red"
+                  onClick={() => {
+                    if (confirm(t('confirmDeleteEvent', language))) {
+                      handleDelete(event);
+                    }
+                  }}
+                />
               </div>
             </div>
           ))}
@@ -90,5 +97,6 @@ export default function ViewEvents({ events, setEvents, onEdit }) {
       )}
     </div>
   );
+
 
 }
