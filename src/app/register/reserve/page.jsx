@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
-import Button from '../../../components/Button';
+import Button from '../../components/Button';
 import { t } from '@/app/utils/loadTranslations';
 import '../registrationForm.css';
 import { MoveRight } from 'lucide-react';
@@ -29,12 +29,12 @@ export default function ReserveRegisterForm() {
   });
 
   const translatedFields = {
-    "הייטק": { he: " הייטק", en: "Hi-Tech" },
-    "ניהול": { he: " ניהול", en: "Management" },
-    "לוגיסטיקה": { he: " לוגיסטיקה", en: "Logistics" },
-    "חינוך": { he: " חינוך", en: "Education" },
-    "שיווק": { he: " שיווק", en: "Marketing" },
-    "אחר": { he: " אחר", en: "Other" }
+    "הייטק": { he: " הייטק", en: " Hi-Tech" },
+    "ניהול": { he: " ניהול", en: " Management" },
+    "לוגיסטיקה": { he: " לוגיסטיקה", en: " Logistics" },
+    "חינוך": { he: " חינוך", en: " Education" },
+    "שיווק": { he: " שיווק", en: " Marketing" },
+    "אחר": { he: " אחר", en: " Other" }
   };
 
   // Language detection and event listener for toggling language

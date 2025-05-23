@@ -179,7 +179,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { getLanguage } from '../language';
-import SideBar from '../../components/SideBar';
+import SideBar from '../components/SideBar';
 import UsersTable from './components/usersTable';
 import CreateEvent from './components/CreateEvent';
 import ViewEvents from './components/ViewEvents';

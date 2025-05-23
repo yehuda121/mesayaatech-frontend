@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { getLanguage } from '../../language';
 import { t } from '@/app/utils/loadTranslations';
-import Button from '../../../components/Button';
+import Button from '../../components/Button';
 
 export default function EditUsersForms({ user, onClose, onSave, onDelete }) {
   const [language, setLanguage] = useState(getLanguage());

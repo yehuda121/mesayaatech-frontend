@@ -142,7 +142,20 @@
     "cognitoDeleteError": "שגיאה במחיקת המשתמש מ־Cognito",
     "dynamoDeleteError": "שגיאה במחיקת המשתמש ממסד הנתונים",
     "userDeletedSuccessfully": "המשתמש נמחק בהצלחה",
-    "generalDeleteError": "אירעה שגיאה כללית בעת מחיקת המשתמש"
+    "generalDeleteError": "אירעה שגיאה כללית בעת מחיקת המשתמש",
 
 
+    "welcome": "ברוך הבא",
+    "whatsNew": "מה חדש השבוע?",
+    "newJobPosted": "משרה חדשה פורסמה:",
+    "noNewJobs": "לא פורסמו משרות חדשות.",
+    "upcomingEvent": "אירוע קרוב:",
+    "noUpcomingEvents": "אין אירועים קרובים כרגע.",
+    "navDashboard": "ראשי",
+    "navPersonalDetails": "פרטים אישיים",
+    "navEvents": "אירועים קרובים",
+    "navJobs": "משרות",
+    "navInterviewPrep": "הכנה לראיונות",
+    "navMeetings": "פגישות קרובות",
+    "navFeedback": "פידבקים מהמנטור"
 }

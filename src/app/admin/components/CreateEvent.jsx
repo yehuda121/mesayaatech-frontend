@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { getLanguage } from '../../language';
 import { t } from '@/app/utils/loadTranslations';
-import Button from '../../../components/Button';
+import Button from '../../components/Button';
 
 export default function CreateEventForm() {
   const [language, setLanguage] = useState(getLanguage());

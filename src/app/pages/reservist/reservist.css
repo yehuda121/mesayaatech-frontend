@@ -1,0 +1,159 @@
+
+/* כיווניות כללית */
+.direction-rtl {
+  direction: rtl;
+  text-align: right;
+}
+.direction-ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* תוכן עיקרי */
+.reservist-main {
+  margin-right: 265px;
+  flex-grow: 1;
+  padding: 2rem;
+  background-color: #fff;
+}
+
+@media (max-width: 768px) {
+  .reservist-main {
+    margin-right: 0;
+    padding: 1rem;
+  }
+}
+
+/* כותרת פתיחה */
+.reservist-welcome {
+  font-size: 1.75rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* כרטיסים */
+.reservist-dashboard-card {
+  background-color: #e3e8f0;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.reservist-dashboard-card:hover {
+  transform: translateY(-2px);
+}
+.reservist-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.reservist-card-desc {
+  font-size: 1rem;
+  color: #444;
+}
+
+/* מקטע מה חדש */
+.reservist-news-section {
+  background-color: #fff;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.reservist-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.reservist-news-label-blue {
+  color: #2563eb;
+  font-weight: 500;
+}
+.reservist-news-label-green {
+  color: #059669;
+  font-weight: 500;
+}
+.reservist-news-item {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.reservist-news-empty {
+  color: #666;
+}
+.reservist-divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 1rem 0;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+
+
+.reservist-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .reservist-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.reservist-column {
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reservist-column-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.reservist-list-item {
+  background: #fff;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 0 2px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

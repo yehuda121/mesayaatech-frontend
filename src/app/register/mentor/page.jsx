@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
-import Button from '../../../components/Button';
+import Button from '../../components/Button';
 import { t } from '@/app/utils/loadTranslations';
 import '../registrationForm.css';
 
@@ -153,12 +153,12 @@ export default function MentorRegisterForm() {
   if (!language) return null;
 
   const translatedSpecialties = {
-    "חיפוש עבודה": { he: " חיפוש עבודה", en: "Job Search" },
-    "כתיבת קורות חיים": { he: " כתיבת קורות חיים", en: "Resume Writing" },
-    "הכנה לראיונות": { he: " הכנה לראיונות", en: "Interview Prep" },
-    "בניית מסלול קריירה": { he: " בניית מסלול קריירה", en: "Career Path Planning" },
-    "שיפור מיומנויות רכות": { he: " שיפור מיומנויות רכות", en: "Soft Skills Improvement" },
-    "אחר": { he: " אחר", en: "Other" }
+    "חיפוש עבודה": { he: " חיפוש עבודה", en: " Job Search" },
+    "כתיבת קורות חיים": { he: " כתיבת קורות חיים", en: " Resume Writing" },
+    "הכנה לראיונות": { he: " הכנה לראיונות", en: " Interview Prep" },
+    "בניית מסלול קריירה": { he: " בניית מסלול קריירה", en: " Career Path Planning" },
+    "שיפור מיומנויות רכות": { he: " שיפור מיומנויות רכות", en: " Soft Skills Improvement" },
+    "אחר": { he: " אחר", en: " Other" }
   };
 
   return (

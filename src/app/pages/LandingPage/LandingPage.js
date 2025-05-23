@@ -56,9 +56,9 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { getLanguage } from "../language";
+import { getLanguage } from "../../language";
 import SideBar from "../../components/SideBar";
-import { t } from "@/app/utils/loadTranslations"; // ← חדש
+import { t } from "@/app/utils/loadTranslations";
 import "./LandingPage.css";
 
 export default function LandingPage() {
@@ -80,8 +80,8 @@ export default function LandingPage() {
   const navItems = [
     { labelHe: t('signup', 'he'), labelEn: t('signup', 'en'), path: "/register" },
     { labelHe: t('login', 'he'), labelEn: t('login', 'en'), path: "/login" },
-    { labelHe: t('mentorHome', 'he'), labelEn: t('mentorHome', 'en'), path: "/pages/mentor/MentorHomePage" },
-    { labelHe: t('reserveHome', 'he'), labelEn: t('reserveHome', 'en'), path: "/pages/reserve/ReserveHomePage" },
+    { labelHe: t('mentorHome', 'he'), labelEn: t('mentorHome', 'en'), path: "/pages/mentor/home" },
+    { labelHe: t('reserveHome', 'he'), labelEn: t('reserveHome', 'en'), path: "/pages/reservist/home" },
     { labelHe: t('admin', 'he'), labelEn: t('admin', 'en'), path: "/admin" },
     { labelHe: t('events', 'he'), labelEn: t('events', 'en'), path: "/events" },
   ];

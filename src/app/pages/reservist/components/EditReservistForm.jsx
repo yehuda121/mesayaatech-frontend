@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
-import Button from '@/components/Button';
+import Button from '@/app/components/Button';
 
 export default function EditReservistForm({ userData, onSave }) {
   const [language, setLanguage] = useState(getLanguage());

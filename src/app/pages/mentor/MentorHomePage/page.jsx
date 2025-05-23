@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { getLanguage } from "../../../language";
-import SideBar from "../../../../components/SideBar";
+import SideBar from "../../../components/SideBar";
 import "./mentor.css";
 
 export default function MentorDashboard() {

@@ -139,9 +139,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import "../LandingPage/LandingPage.css";
-import Button from "../../components/Button";
-import SideBar from "../../components/SideBar";
+import "./../pages/LandingPage/LandingPage.css";
+import Button from "../components/Button";
+import SideBar from "../components/SideBar";
 import { getLanguage } from "../language";
 
 export default function RegisterPage() {

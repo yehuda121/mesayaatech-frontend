@@ -142,7 +142,22 @@
     "cognitoDeleteError": "Error deleting the user from Cognito",
     "dynamoDeleteError": "Error deleting the user from the database",
     "userDeletedSuccessfully": "User deleted successfully",
-    "generalDeleteError": "A general error occurred while deleting the user"
+    "generalDeleteError": "A general error occurred while deleting the user",
+
+
+    "welcome": "Welcome",
+    "whatsNew": "What's New This Week?",
+    "newJobPosted": "New job posted:",
+    "noNewJobs": "No new jobs this week.",
+    "upcomingEvent": "Upcoming Event:",
+    "noUpcomingEvents": "No upcoming events for now.",
+    "navDashboard": "Dashboard",
+    "navPersonalDetails": "Personal Details",
+    "navEvents": "Upcoming Events",
+    "navJobs": "Jobs",
+    "navInterviewPrep": "Interview Prep",
+    "navMeetings": "Upcoming Meetings",
+    "navFeedback": "Mentor Feedback"
 
 
 

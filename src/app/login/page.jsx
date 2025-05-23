@@ -46,10 +46,12 @@ export default function LoginPage() {
         localStorage.setItem('userType', role);
         localStorage.setItem('idToken', data.idToken);
 
-        if (role === 'mentor') router.push('/pages/mentor/MentorHomePage');
-        else if (role === 'reservist') router.push('/reservist/home');
-        else if (role === 'ambassador') router.push('/ambassador/home');
+        if (role === 'admin') router.push('./admin');
+        else if (role === 'mentor') router.push('/pages/mentor/home');
+        else if (role === 'reservist') router.push('/pages/reservist/home');
+        else if (role === 'ambassador') router.push('/pages/ambassador/home');
         else router.push('/');
+
 
         setMessage(t('loginSuccess', language));
       } else {
