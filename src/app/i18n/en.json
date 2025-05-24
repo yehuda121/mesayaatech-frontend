@@ -143,8 +143,6 @@
     "dynamoDeleteError": "Error deleting the user from the database",
     "userDeletedSuccessfully": "User deleted successfully",
     "generalDeleteError": "A general error occurred while deleting the user",
-
-
     "welcome": "Welcome",
     "whatsNew": "What's New This Week?",
     "newJobPosted": "New job posted:",
@@ -154,7 +152,6 @@
     "navDashboard": "Dashboard",
     "navPersonalDetails": "Personal Details",
     "navEvents": "Upcoming Events",
-    "navJobs": "Jobs",
     "navInterviewPrep": "Interview Prep",
     "navMeetings": "Upcoming Meetings",
     "navFeedback": "Mentor Feedback",
@@ -170,7 +167,7 @@
     "confirmDelete": "Are you sure you want to delete this job?",
     "jobDeleted": "Job deleted successfully",
     "deleteFailed": "Failed to delete job",
-    "loading": "Loading",
+    "loading": "Loading...",
     "addJob": "Add Job",
     "fetchErrorNotArray": "Server did not return an array",
     "fetchUsersError": "Error fetching users",
@@ -181,6 +178,7 @@
     "generalStatusError": "An error occurred while changing status",
     "updateUserError": "Error updating user",
     "confirmDeleteEvent": "Are you sure you want to delete this event?",
-    "publisher": "publisher"
+    "publisher": "publisher",
+    "noPendingUsers": "no pending users"
   
 }

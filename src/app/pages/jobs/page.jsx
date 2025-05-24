@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
-import ViewJob from '../reservist/components/viewJob';
+import ViewJob from './viewJob';
 import './jobs.css';
 
 export default function ViewJobsReadOnly() {

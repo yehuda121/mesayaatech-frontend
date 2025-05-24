@@ -158,7 +158,7 @@ import { useEffect, useState } from 'react';
 import SideBar from '@/app/components/SideBar';
 import Events from '@/app/pages/events/page';
 import EditReservistForm from '../components/EditReservistForm';
-import ViewJob from '../components/viewJob';
+import ViewJob from '../../jobs/viewJob';
 import ViewJobsReadOnly from '@/app/pages/jobs/page';
 import { getLanguage } from '@/app/language';
 import { useRouter } from 'next/navigation';
@@ -260,9 +260,13 @@ export default function ReservistHomePage() {
         )}
 
         {view === 'form' && userData && Object.keys(userData).length > 0 && (
-          <EditReservistForm userData={userData} onSave={(updated) => setUserData(updated)} />
+          <EditReservistForm
+            userData={userData}
+            onSave={(updated) => setUserData(updated)}
+            onBack={() => setView('dashboard')}
+          />
         )}
-
+        
         {view === 'events' && idNumber && fullName && email && (
           <Events idNumber={idNumber} fullName={fullName} email={email} />
         )}

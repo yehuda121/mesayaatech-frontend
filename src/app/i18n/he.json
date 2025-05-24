@@ -170,7 +170,7 @@
     "confirmDelete": "האם אתה בטוח שברצונך למחוק את המשרה?",
     "jobDeleted": "המשרה נמחקה בהצלחה",
     "deleteFailed": "מחיקת המשרה נכשלה",
-    "loading": "טוען",
+    "loading": "...טוען",
     "addJob": "פרסום משרה",
     "fetchErrorNotArray": "השרת לא החזיר מערך תקין",
     "fetchUsersError": "שגיאה בשליפת משתמשים",
@@ -181,7 +181,8 @@
     "generalStatusError": "אירעה שגיאה בעת שינוי הסטטוס",
     "confirmDeleteEvent": "האם אתה בטוח שברצונך למחוק את האירוע?",
     "updateUserError": "שגיאה בעדכון פרטי המשתמש",
-    "publisher": "מפרסם"
+    "publisher": "מפרסם",
+    "noPendingUsers": "אין משתמשים שממתינים לאישור"
 
 
 }

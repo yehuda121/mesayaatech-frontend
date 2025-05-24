@@ -10,8 +10,8 @@
   margin-right: 250px;
   padding: 2rem;
   width: calc(100% - 250px);
+  margin-top: 70px;
 }
-
 
 @media (min-width: 769px) {
   .admin-main {

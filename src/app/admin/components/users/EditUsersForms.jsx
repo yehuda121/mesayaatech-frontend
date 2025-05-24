@@ -51,15 +51,15 @@ export default function EditUsersForms({ user, onClose, onSave, onDelete }) {
   const keysByType = {
     reservist: [
       'fullName', 'idNumber', 'email', 'phone', 'armyRole', 'location',
-      'fields', 'experience', 'linkedin', 'notes', 'status'
+      'fields', 'experience', 'linkedin', 'notes'
     ],
     mentor: [
       'fullName', 'idNumber', 'email', 'phone', 'profession', 'location',
-      'specialties', 'experience', 'pastMentoring', 'availability', 'linkedin', 'notes', 'status'
+      'specialties', 'experience', 'pastMentoring', 'availability', 'linkedin', 'notes'
     ],
     ambassador: [
       'fullName', 'idNumber', 'email', 'phone', 'currentCompany', 'position',
-      'location', 'canShareJobs', 'jobFields', 'linkedin', 'notes', 'status'
+      'location', 'canShareJobs', 'jobFields', 'linkedin', 'notes'
     ]
   };
 

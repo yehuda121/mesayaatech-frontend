@@ -5,7 +5,7 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import Button from '@/app/components/Button';
 
-export default function EditReservistForm({ userData, onSave }) {
+export default function EditReservistForm({ userData, onSave, onBack }) {
   const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState(userData || {});
   const [initialData, setInitialData] = useState(userData || {});
@@ -70,7 +70,11 @@ export default function EditReservistForm({ userData, onSave }) {
 
       <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {keys.map((key) => (
-          <label key={key} className="block">
+          <label 
+            key={key}
+            className={`block ${language === 'he' ? 'text-right' : 'text-left'}`}
+            dir={language === 'he' ? 'rtl' : 'ltr'}
+          >
             <span className="font-medium">{t(key, language)}</span>
             {(key === 'experience' || key === 'notes') ? (
               <textarea
@@ -89,18 +93,14 @@ export default function EditReservistForm({ userData, onSave }) {
           </label>
         ))}
       </form>
-
-      <div className="flex justify-between mt-6">
-        <Button
-          text={t('backToHome', language)}
-          onClick={() => router.push('/pages/reservist/home')}
-        />
-
+      <div className="flex  mt-6">
         <div className="flex gap-2">
           <Button
             text={t('cancel', language)}
-            onClick={handleCancel}
-            disabled={!isModified}
+            onClick={() => {
+              handleCancel();
+              onBack();
+            }}
           />
           <Button
             text={saving ? '...' : t('saveChanges', language)}

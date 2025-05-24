@@ -6,7 +6,7 @@ import { getLanguage } from '../../../language';
 import { t } from '@/app/utils/loadTranslations';
 import EditUsersForms from './EditUsersForms';
 
-export default function UsersTable() {
+export default function UsersTable({ defaultStatusFilter = null }) {
   const [users, setUsers] = useState([]);
   const [selectedForm, setSelectedForm] = useState(null);
   const [language, setLanguage] = useState(getLanguage());
