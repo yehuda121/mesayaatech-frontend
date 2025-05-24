@@ -1,66 +1,66 @@
-.dashboard-main {
-    flex-grow: 1;
-    background-color: #f3f4f6;
-    padding: 2.5rem;
-    text-align: right;
-  }
-  
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
-  }
-  
-  .dashboard-card {
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    cursor: default;
-    transition: box-shadow 0.2s;
-  }
-  
-  .dashboard-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .dashboard-card h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #1d4ed8;
-    margin-bottom: 0.5rem;
-  }
-  
-  .dashboard-card p {
-    color: #4b5563;
-  }
+/* === ViewJobsReadOnly.jsx === */
 
-  .jobs-filters {
-    display: flex;
-    justify-content: flex-start; /* מצמיד לשמאל */
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding-inline: 2rem;
-  }
-  
-  .jobs-filters .filter-group {
-    display: flex;
-    flex-direction: column;
-    width: auto;
-    min-width: 180px;
-  }
+.view-jobs-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-  .jobs-filter-wrapper {
-    justify-content: flex-end; 
-    padding-inline-end: 2rem;
-  }
-  
-  .jobs-filter-wrapper .filter-group {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  
-  
+.view-jobs-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.job-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  justify-content: space-between;
+  /* flex-wrap: wrap; */
+}
+
+.job-filters input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.375rem;
+  width: 48%; 
+  min-width: 200px;
+}
+
+.job-grid {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+.job-card {
+  flex: 0 0 200px; 
+  max-width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 0;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.job-card:hover {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.job-title {
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.job-card p {
+  font-size: 0.95rem;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}

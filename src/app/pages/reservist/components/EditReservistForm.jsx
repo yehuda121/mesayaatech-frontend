@@ -93,7 +93,7 @@ export default function EditReservistForm({ userData, onSave }) {
       <div className="flex justify-between mt-6">
         <Button
           text={t('backToHome', language)}
-          onClick={() => router.push('/pages/reserve/ReserveHomePage')}
+          onClick={() => router.push('/pages/reservist/home')}
         />
 
         <div className="flex gap-2">

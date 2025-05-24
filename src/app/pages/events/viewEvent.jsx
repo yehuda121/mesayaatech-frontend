@@ -1,15 +1,19 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 
 export default function ViewEvent({ event, onClose }) {
+  const [language, setLanguage] = useState('he'); // default fallback
+
+  useEffect(() => {
+    setLanguage(getLanguage());
+  }, []);
+
   if (!event) return null;
 
-  const language = getLanguage();
-
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
       <div className="modal-content">
         <button className="modal-close" onClick={onClose}>✖</button>
         <h2 className="text-xl font-bold mb-4">{event.title}</h2>
