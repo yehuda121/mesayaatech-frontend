@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Button from "./Button";
 import { getLanguage, toggleLanguage } from "../language";
 import "./SideBar.css";
+import { t } from "@/app/utils/loadTranslations";
+
 
 export default function SideBar({ navItems }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -111,20 +113,34 @@ export default function SideBar({ navItems }) {
 
 
           <div className="divider"></div>
+
           {navItems.map(({ labelHe, labelEn, path, onClick }) => (
             <Button
               key={labelEn}
               text={language === "he" ? labelHe : labelEn}
               onClick={() => {
                 setMenuOpen(false);
-                if (typeof onClick === 'function') {
-                  onClick(); // קריאה לפעולה פנימית
-                } else if (typeof path === 'string') {
-                  router.push(path); // התנהגות רגילה
+                if (typeof onClick === "function") {
+                  onClick();
+                } else if (typeof path === "string") {
+                  router.push(path);
                 }
               }}
             />
           ))}
+
+          <div className="divider"></div>
+
+          <Button
+            text={t("logout", language)}
+            onClick={() => {
+              localStorage.removeItem("idToken");
+              localStorage.removeItem("userId");
+              localStorage.removeItem("userType");
+              router.push("/");
+            }}
+          />
+
         </div>
       </nav>
     </header>

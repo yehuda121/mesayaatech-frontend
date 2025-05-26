@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getLanguage } from "@/app/language";
 import { t } from "@/app/utils/loadTranslations";
-import SideBar from "@/components/SideBar";
+import SideBar from "@/app/components/SideBar";
 
 export default function AddJobPage() {
   const router = useRouter();
@@ -85,7 +85,7 @@ export default function AddJobPage() {
     <div className="dashboard-container">
       <SideBar navItems={navItems} />
 
-      <main className="dashboard-main">
+      <main className="dashboard-main" style={{ paddingTop: '65px' }}>
       <h1 className="text-2xl font-bold mb-6">{t("postNewJob", language)}</h1>
 
       <div dir={language === 'he' ? 'rtl' : 'ltr'} className={`${language === 'he' ? 'text-right' : 'text-left'}`}>

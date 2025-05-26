@@ -179,6 +179,7 @@
     "updateUserError": "Error updating user",
     "confirmDeleteEvent": "Are you sure you want to delete this event?",
     "publisher": "publisher",
-    "noPendingUsers": "no pending users"
+    "noPendingUsers": "no pending users",
+    "logout": "Logout"
   
 }

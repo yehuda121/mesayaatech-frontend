@@ -182,7 +182,8 @@
     "confirmDeleteEvent": "האם אתה בטוח שברצונך למחוק את האירוע?",
     "updateUserError": "שגיאה בעדכון פרטי המשתמש",
     "publisher": "מפרסם",
-    "noPendingUsers": "אין משתמשים שממתינים לאישור"
+    "noPendingUsers": "אין משתמשים שממתינים לאישור",
+    "logout": "התנתקות"
 
 
 }
