@@ -56,43 +56,43 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { getLanguage } from "../../language";
-import SideBar from "../../components/SideBar";
+import { useRouter } from "next/navigation";
+import { getLanguage, toggleLanguage } from "../../language";
 import { t } from "@/app/utils/loadTranslations";
 import "./LandingPage.css";
 
 export default function LandingPage() {
+  const router = useRouter();
   const [language, setLanguage] = useState(getLanguage());
 
   useEffect(() => {
     setLanguage(getLanguage());
 
-    const handleLanguageChange = () => {
-      setLanguage(getLanguage());
-    };
-
+    const handleLanguageChange = () => setLanguage(getLanguage());
     window.addEventListener("languageChanged", handleLanguageChange);
-    return () => {
-      window.removeEventListener("languageChanged", handleLanguageChange);
-    };
+    return () => window.removeEventListener("languageChanged", handleLanguageChange);
   }, []);
-
-  const navItems = [
-    { labelHe: t('signup', 'he'), labelEn: t('signup', 'en'), path: "/register" },
-    { labelHe: t('login', 'he'), labelEn: t('login', 'en'), path: "/login" },
-    { labelHe: t('mentorHome', 'he'), labelEn: t('mentorHome', 'en'), path: "/pages/mentor/home" },
-    { labelHe: t('reserveHome', 'he'), labelEn: t('reserveHome', 'en'), path: "/pages/reservist/home" },
-    { labelHe: t('admin', 'he'), labelEn: t('admin', 'en'), path: "/admin" },
-    { labelHe: t('events', 'he'), labelEn: t('events', 'en'), path: "/events" },
-  ];
 
   return (
     <div>
-      <SideBar navItems={navItems} />
+      <header className="landing-header">
+      <div className="landing-logo">
+      <img src="/logo.png" alt="Logo" className="logo-img" />
+      </div>
+        <div className="landing-buttons">
+          <button onClick={() => router.push("/login")}>
+            {t('login', language)}
+          </button>
+          <button onClick={() => router.push("/register")}>
+            {t('signup', language)}
+          </button>
+        </div>
+      </header>
+
       <div className="LPtop_Section">
         <h1>{t('landingTitle', language)}</h1>
         <p>{t('landingSubtitle', language)}</p>
-        <button onClick={() => window.location.href = "#signup"}>
+        <button onClick={() => window.location.href = "#aboutSection"}>
           {t('getStarted', language)}
         </button>
       </div>

@@ -1,17 +1,20 @@
 .LPtop_Section {
   background-color: #002855;
   color: #fff;
-  /* padding: 60px 20px; */
   text-align: center;
   margin: 0;
-  /* border: none; */
-  width: 100vw;           
-  box-sizing: border-box; 
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 60px 20px;           
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
 }
 
 .LPtop_Section h1 {
   font-size: 2.5em;
   margin-bottom: 20px;
+  padding-inline-start: 30px;
 }
 
 .LPtop_Section p {
@@ -24,6 +27,9 @@
   background: linear-gradient(135deg, #f0f4ff, #ffffff);
   text-align: center;
   direction: rtl;
+  width: 100vw;           
+  box-sizing: border-box; 
+  margin: 0; 
 }
 
 .aboutSection h2 {
@@ -48,11 +54,53 @@
 }
 
 @media (min-width: 769px) {
-  .LPtop_Section {
-    padding-inline-end: 250px;
-  }
 
   .dashboard-main {
-    margin-right: 250px;
+    text-align: center;
   }
+}
+
+.landing-header {
+  background-color: #002855;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.landing-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.landing-logo img,
+.logo-img {
+  height: 100px;
+  object-fit: contain;
+  padding: 0.5rem;
+}
+
+
+.landing-buttons button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  margin-left: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.landing-buttons button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.landing-buttons {
+  display: flex;
+  gap: 1rem;
 }
