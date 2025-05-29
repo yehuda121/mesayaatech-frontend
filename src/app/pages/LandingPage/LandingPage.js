@@ -76,15 +76,25 @@ export default function LandingPage() {
   return (
     <div>
       <header className="landing-header">
-      <div className="landing-logo">
-      <img src="/logo.png" alt="Logo" className="logo-img" />
-      </div>
+        <div className="landing-logo">
+          <img src="/logo.png" alt="Logo" className="logo-img" />
+        </div>
         <div className="landing-buttons">
           <button onClick={() => router.push("/login")}>
             {t('login', language)}
           </button>
           <button onClick={() => router.push("/register")}>
             {t('signup', language)}
+          </button>
+          <button
+            className="lang-button"
+            onClick={() => {
+              const newLang = toggleLanguage();
+              setLanguage(newLang);
+            }}
+          >
+            <span className="lang-icon">🌐</span>
+            <span className="lang-text">{language === 'he' ? 'English' : 'עברית'}</span>
           </button>
         </div>
       </header>
@@ -106,3 +116,4 @@ export default function LandingPage() {
     </div>
   );
 }
+
