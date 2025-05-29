@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { getLanguage } from '@/app/language';
 import EditMentorForm from './EditMentorForm';
 import { t } from '@/app/utils/loadTranslations';
-import '@/app/reservist/reservist.css';
+import '../../reservist/reservist.css';
 
 export default function MentorProfilePage() {
   const [language, setLanguage] = useState(getLanguage());

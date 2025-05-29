@@ -225,7 +225,7 @@ export default function ReservistHomePage() {
     { labelHe: t('navPersonalDetails', 'he'), labelEn: t('navPersonalDetails', 'en'), path: '#form', onClick: () => setView('form') },
     { labelHe: t('navEvents', 'he'), labelEn: t('navEvents', 'en'), path: '#events-section', onClick: () => setView('events') },
     { labelHe: t('navJobs', 'he'), labelEn: t('navJobs', 'en'), path: '/pages/jobs' },
-    { labelHe: t('navInterviewPrep', 'he'), labelEn: t('navInterviewPrep', 'en'), path: '/reserve/interview-prep' },
+    { labelHe: t('navInterviewPrep', 'he'), labelEn: t('navInterviewPrep', 'en'), path: '/pages/interviewPrep' },
     { labelHe: t('navMeetings', 'he'), labelEn: t('navMeetings', 'en'), path: '/reserve/meetings' },
     { labelHe: t('navFeedback', 'he'), labelEn: t('navFeedback', 'en'), path: '/reserve/feedback' }
   ];

@@ -28,6 +28,8 @@ export default function MentorDashboard() {
     { labelHe: "פרסום משרה", labelEn: "Post Job", path: "/pages/jobs/newJob" },
     { labelHe: "פידבקים שהתקבלו", labelEn: "Feedback", path: "/mentor/feedback" },
     { labelHe: "הפרופיל שלי", labelEn: "My Profile", path: "/pages/mentor/profile" },
+    { labelHe: "שאלות לראיונות", labelEn: "Interview Prep", path: "/pages/interviewPrep" },
+
   ];
 
   return (

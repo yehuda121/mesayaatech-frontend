@@ -183,6 +183,16 @@
     "updateUserError": "שגיאה בעדכון פרטי המשתמש",
     "publisher": "מפרסם",
     "noPendingUsers": "אין משתמשים שממתינים לאישור",
-    "logout": "התנתקות"
-   
+    "logout": "התנתקות",
+    "interviewPrepTitle": "שאלות הכנה לראיונות עבודה",
+    "noQuestionsFound": "לא נמצאו שאלות",
+    "addAnswer": "הוסף תשובה",
+    "interviewQuestions": "שאלות הכנה לראיונות עבודה",
+    "questionText": "שאלה",
+    "questionCategory": "קטגוריה",
+    "selectCategory": "בחר קטגוריה",
+    "addQuestion": "הוסף שאלה",
+    "questionAdded": "השאלה נוספה בהצלחה",
+    "errorAddingQuestion": "אירעה שגיאה בהוספת שאלה"
+        
 }

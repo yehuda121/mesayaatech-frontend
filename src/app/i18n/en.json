@@ -180,6 +180,17 @@
     "confirmDeleteEvent": "Are you sure you want to delete this event?",
     "publisher": "publisher",
     "noPendingUsers": "no pending users",
-    "logout": "Logout"
-  
+    "logout": "Logout",
+    "interviewPrepTitle": "Interview Preparation Questions",
+    "noQuestionsFound": "No questions found",
+    "addAnswer": "Add Answer",
+    "interviewQuestions": "Interview Preparation Questions",
+    "questionText": "Question",
+    "questionCategory": "Category",
+    "selectCategory": "Select a category",
+    "addQuestion": "Add Question",
+    "questionAdded": "Question added successfully",
+    "errorAddingQuestion": "Error adding question"
+
+
 }
