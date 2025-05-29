@@ -190,7 +190,10 @@
     "selectCategory": "Select a category",
     "addQuestion": "Add Question",
     "questionAdded": "Question added successfully",
-    "errorAddingQuestion": "Error adding question"
+    "errorAddingQuestion": "Error adding question",
+    "yourAnswer": "Your answer",
+    "missingAnswer": "Please enter an answer",
+    "unknownUser": "Unknown user"
 
 
 }

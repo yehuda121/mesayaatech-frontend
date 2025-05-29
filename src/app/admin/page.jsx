@@ -217,6 +217,11 @@ export default function AdminPage() {
       labelEn: t('addJob', 'en'),
       path: '#add-job',
       onClick: () => handleNavigation('add-job')
+    },
+    {
+      labelHe: t('navInterviewPrep', 'he'),
+      labelEn: t('navInterviewPrep', 'en'),
+      path: '/pages/interviewPrep'
     }
   ];
 

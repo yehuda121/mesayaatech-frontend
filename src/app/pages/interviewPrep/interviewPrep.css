@@ -29,8 +29,11 @@
   }
   
   .answer-item {
+    direction: rtl;
+    text-align: right;
     padding: 0.25rem 0;
     color: #333;
+    line-height: 1.6;
   }
   
   .add-answer-btn {
@@ -45,4 +48,12 @@
   .add-answer-btn:hover {
     background-color: #004b97;
   }
+  
+  .answer-meta {
+    font-weight: 500;
+    color: #555;
+    margin-left: 0.5rem;
+    display: inline;
+  }
+  
   

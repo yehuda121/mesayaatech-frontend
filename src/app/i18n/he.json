@@ -193,6 +193,11 @@
     "selectCategory": "בחר קטגוריה",
     "addQuestion": "הוסף שאלה",
     "questionAdded": "השאלה נוספה בהצלחה",
-    "errorAddingQuestion": "אירעה שגיאה בהוספת שאלה"
+    "errorAddingQuestion": "אירעה שגיאה בהוספת שאלה",
+    "yourAnswer": "התשובה שלך",
+    "missingAnswer": "יש להזין תשובה",
+    "unknownUser": "משתמש לא ידוע"
+
+    
         
 }

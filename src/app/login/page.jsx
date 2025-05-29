@@ -45,6 +45,7 @@ export default function LoginPage() {
         localStorage.setItem('userId', decoded.sub);
         localStorage.setItem('userType', role);
         localStorage.setItem('idToken', data.idToken);
+        localStorage.setItem('fullName', decoded.name);
 
         if (role === 'admin') router.push('./admin');
         else if (role === 'mentor') router.push('/pages/mentor/MentorHomePage');

@@ -66,7 +66,7 @@ export default function InterviewPrepPage() {
     <div className="p-4" dir={language === 'he' ? 'rtl' : 'ltr'}>
       
 
-      <QuestionList />
+      <QuestionList userType={userType} />
 
       {(userType === 'admin' || userType === 'mentor') && (
         <form className="question-form mt-8 max-w-xl mx-auto" onSubmit={handleSubmit}>
