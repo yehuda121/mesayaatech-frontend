@@ -4,14 +4,14 @@ import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
 import Button from '../../components/Button';
 import { t } from '@/app/utils/loadTranslations';
+import AlertMessage from '@/app/components/notifications/AlertMessage'; 
 import '../registrationForm.css';
 
 export default function AmbassadorRegisterForm() {
   const router = useRouter();
   const [language, setLanguage] = useState(null);
-  const [success, setSuccess] = useState('');
+  const [alert, setAlert] = useState(null); 
 
-  // Form initial state
   const [formData, setFormData] = useState({
     userType: 'ambassador',
     status: 'pending',
@@ -37,7 +37,6 @@ export default function AmbassadorRegisterForm() {
     "אחר": { he: " אחר", en: " Other" }
   };
 
-  // Set language on load and subscribe to language change events
   useEffect(() => {
     setLanguage(getLanguage());
     const handleLanguageChange = () => setLanguage(getLanguage());
@@ -45,7 +44,6 @@ export default function AmbassadorRegisterForm() {
     return () => window.removeEventListener('languageChanged', handleLanguageChange);
   }, []);
 
-  // Handle input and checkbox changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
@@ -60,7 +58,6 @@ export default function AmbassadorRegisterForm() {
     }
   };
 
-  // Form validation logic
   const validateForm = () => {
     const errors = [];
     const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
@@ -94,13 +91,12 @@ export default function AmbassadorRegisterForm() {
     return errors;
   };
 
-  // Submit handler with validation and duplicate check
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
-      setSuccess(validationErrors[0]);
+      setAlert({ message: validationErrors[0], type: 'error' });
       return;
     }
 
@@ -112,11 +108,11 @@ export default function AmbassadorRegisterForm() {
       const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
 
       if (emailExists) {
-        setSuccess(t('emailAlreadyExists', language));
+        setAlert({ message: t('emailAlreadyExists', language), type: 'error' });
         return;
       }
       if (idExists) {
-        setSuccess(t('idNumberAlreadyExists', language));
+        setAlert({ message: t('idNumberAlreadyExists', language), type: 'error' });
         return;
       }
 
@@ -145,10 +141,10 @@ export default function AmbassadorRegisterForm() {
         });
       } else {
         const errorText = await res.text();
-        setSuccess(`${t('ambassadorError', language)}: ${errorText}`);
+        setAlert({ message: `${t('ambassadorError', language)}: ${errorText}`, type: 'error' });
       }
     } catch {
-      setSuccess(t('ambassadorError', language));
+      setAlert({ message: t('ambassadorError', language), type: 'error' });
     }
   };
 
@@ -215,8 +211,8 @@ export default function AmbassadorRegisterForm() {
         <fieldset>
           <legend>{t('ambassadorJobFieldsTitle', language)}</legend>
           {Object.keys(translatedJobFields).map((field) => (
-            <label 
-              key={field} 
+            <label
+              key={field}
               className="register-checkbox-label"
               style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}
             >
@@ -243,8 +239,13 @@ export default function AmbassadorRegisterForm() {
         <Button text={t('submit', language)} type="submit" />
       </form>
 
-      {success && <p className="error-message">{success}</p>}
+      {alert && (
+        <AlertMessage
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
     </div>
   );
-
 }

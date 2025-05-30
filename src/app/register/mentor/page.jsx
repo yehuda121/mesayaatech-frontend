@@ -4,15 +4,14 @@ import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
 import Button from '../../components/Button';
 import { t } from '@/app/utils/loadTranslations';
+import AlertMessage from '@/app/components/notifications/AlertMessage'; 
 import '../registrationForm.css';
-
 
 export default function MentorRegisterForm() {
   const router = useRouter();
   const [language, setLanguage] = useState(null);
-  const [success, setSuccess] = useState('');
+  const [alert, setAlert] = useState(null); 
 
-  // Form initial state
   const [formData, setFormData] = useState({
     userType: 'mentor',
     status: 'pending',
@@ -30,7 +29,6 @@ export default function MentorRegisterForm() {
     notes: '',
   });
 
-  // Language detection and event listener for toggling language
   useEffect(() => {
     setLanguage(getLanguage());
     const handleLangChange = () => setLanguage(getLanguage());
@@ -38,7 +36,6 @@ export default function MentorRegisterForm() {
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
-  // Form change handler (for both text inputs and checkboxes)
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
@@ -53,7 +50,6 @@ export default function MentorRegisterForm() {
     }
   };
 
-  // Validation logic
   const validateForm = () => {
     const errors = [];
     const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
@@ -91,13 +87,12 @@ export default function MentorRegisterForm() {
     return errors;
   };
 
-  // Submit handler with duplicate check and validation
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
-      setSuccess(validationErrors[0]);
+      setAlert({ message: validationErrors[0], type: 'error' });
       return;
     }
 
@@ -109,11 +104,11 @@ export default function MentorRegisterForm() {
       const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
 
       if (emailExists) {
-        setSuccess(t('emailAlreadyExists', language));
+        setAlert({ message: t('emailAlreadyExists', language), type: 'error' });
         return;
       }
       if (idExists) {
-        setSuccess(t('idNumberAlreadyExists', language));
+        setAlert({ message: t('idNumberAlreadyExists', language), type: 'error' });
         return;
       }
 
@@ -143,10 +138,10 @@ export default function MentorRegisterForm() {
         });
       } else {
         const errorText = await res.text();
-        setSuccess(`${t('mentorError', language)}: ${errorText}`);
+        setAlert({ message: `${t('mentorError', language)}: ${errorText}`, type: 'error' });
       }
     } catch {
-      setSuccess(t('mentorError', language));
+      setAlert({ message: t('mentorError', language), type: 'error' });
     }
   };
 
@@ -163,7 +158,6 @@ export default function MentorRegisterForm() {
 
   return (
     <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
-      {/* Top buttons – always aligned right */}
       <div className="register-form-top-buttons">
         <button
           onClick={() => router.push('/login')}
@@ -199,7 +193,7 @@ export default function MentorRegisterForm() {
           <input name="phone" type="tel" value={formData.phone} onChange={handleChange} />
         </label>
 
-        <label>{t('mainProfetion', language)}*:
+        <label>{t('mainProfession', language)}*:
           <input name="profession" value={formData.profession} onChange={handleChange} />
         </label>
 
@@ -210,11 +204,11 @@ export default function MentorRegisterForm() {
         <fieldset>
           <legend>{t('mentorSpecialtiesTitle', language)}</legend>
           {Object.keys(translatedSpecialties).map((field) => (
-              <label 
-                key={field} 
-                className="register-checkbox-label"
-                style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}
-              >
+            <label
+              key={field}
+              className="register-checkbox-label"
+              style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}
+            >
               <input
                 type="checkbox"
                 name="specialties"
@@ -250,8 +244,13 @@ export default function MentorRegisterForm() {
         <Button text={t('submit', language)} type="submit" />
       </form>
 
-      {success && <p className="error-message">{success}</p>}
+      {alert && (
+        <AlertMessage
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
     </div>
   );
-
 }

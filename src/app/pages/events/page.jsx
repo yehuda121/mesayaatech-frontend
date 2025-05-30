@@ -5,6 +5,7 @@ import Button from '@/app/components/Button';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ViewEvent from './viewEvent';
+import ToastMessage from '@/app/components/notifications/ToastMessage';
 
 export default function Events({ idNumber, fullName, email }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -12,6 +13,7 @@ export default function Events({ idNumber, fullName, email }) {
   const [events, setEvents] = useState([]);
   const [joinedEvents, setJoinedEvents] = useState({});
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [toast, setToast] = useState(null); 
 
   useEffect(() => {
     fetchEvents();
@@ -29,12 +31,13 @@ export default function Events({ idNumber, fullName, email }) {
       setEvents(futureEvents);
     } catch (err) {
       console.error('Failed to load events:', err);
+      setToast({ message: t('serverError', language), type: 'error' });
     }
   };
 
   const handleJoin = async (eventId) => {
     if (!idNumber || !fullName || !email) {
-      alert(t('missingUserDetails', language));
+      setToast({ message: t('missingUserDetails', language), type: 'error' });
       return;
     }
 
@@ -48,13 +51,13 @@ export default function Events({ idNumber, fullName, email }) {
       const data = await res.json();
       if (res.ok) {
         setJoinedEvents((prev) => ({ ...prev, [eventId]: true }));
-        alert(t('successJoin', language));
+        setToast({ message: t('successJoin', language), type: 'success' });
       } else {
-        alert(data.error || t('joinError', language));
+        setToast({ message: data.error || t('joinError', language), type: 'error' });
       }
     } catch (err) {
       console.error('Join error:', err);
-      alert(t('serverError', language));
+      setToast({ message: t('serverError', language), type: 'error' });
     }
   };
 
@@ -116,6 +119,15 @@ export default function Events({ idNumber, fullName, email }) {
 
       {selectedEvent && (
         <ViewEvent event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+      )}
+
+      {toast && (
+        <ToastMessage
+          message={toast.message}
+          type={toast.type}
+          duration={3000}
+          onClose={() => setToast(null)}
+        />
       )}
     </div>
   );

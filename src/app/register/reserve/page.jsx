@@ -4,14 +4,13 @@ import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
 import Button from '../../components/Button';
 import { t } from '@/app/utils/loadTranslations';
+import AlertMessage from '@/app/components/notifications/AlertMessage'; 
 import '../registrationForm.css';
-import { MoveRight } from 'lucide-react';
-
 
 export default function ReserveRegisterForm() {
   const router = useRouter();
   const [language, setLanguage] = useState(null);
-  const [success, setSuccess] = useState('');
+  const [alert, setAlert] = useState(null); 
 
   const [formData, setFormData] = useState({
     userType: 'reservist',
@@ -37,7 +36,6 @@ export default function ReserveRegisterForm() {
     "אחר": { he: " אחר", en: " Other" }
   };
 
-  // Language detection and event listener for toggling language
   useEffect(() => {
     setLanguage(getLanguage());
     const handleLanguageChange = () => setLanguage(getLanguage());
@@ -65,7 +63,6 @@ export default function ReserveRegisterForm() {
     const phonePattern = /^\d{9,10}$/;
     const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
 
-    // Trim inputs before validation
     const fullName = formData.fullName.trim();
     const idNumber = formData.idNumber.replace(/\s/g, '');
     const email = formData.email.trim();
@@ -75,31 +72,23 @@ export default function ReserveRegisterForm() {
     const experience = formData.experience.trim();
     const linkedin = formData.linkedin.trim();
 
-    // Validate full name (required, letters only)
     if (!fullName) errors.push(t('fullNameRequired', language));
     else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
 
-    // Validate ID number (required, 9 digits)
     if (!/^\d{9}$/.test(idNumber)) errors.push(t('idNumberInvalid', language));
 
-    // Validate email (required, valid format)
     if (!email) errors.push(t('emailRequired', language));
     else if (!emailPattern.test(email)) errors.push(t('emailInvalid', language));
 
-    // Validate phone (optional, valid if exists)
     if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
 
-    // Validate army role (required, no special characters)
     if (!armyRole) errors.push(t('armyRoleRequired', language));
     else if (/[^\w\sא-ת]/.test(armyRole)) errors.push(t('armyRoleInvalid', language));
 
-    // Validate location (required)
     if (!location) errors.push(t('locationRequired', language));
 
-    // Validate experience (required)
     if (!experience) errors.push(t('experienceRequired', language));
 
-    // Validate linkedin (optional, must be valid URL if provided)
     if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
 
     return errors;
@@ -110,25 +99,23 @@ export default function ReserveRegisterForm() {
 
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
-      setSuccess(validationErrors[0]); // Show first error only
+      setAlert({ message: validationErrors[0], type: 'error' });
       return;
     }
 
     try {
-      // Check for duplicate email or ID
       const existingRes = await fetch(`http://localhost:5000/api/imports-user-registration-form?userType=reservist`);
-
       const existingUsers = await existingRes.json();
 
       const emailExists = existingUsers.some(user => user.email === formData.email);
       const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
 
       if (emailExists) {
-        setSuccess(t('emailAlreadyExists', language));
+        setAlert({ message: t('emailAlreadyExists', language), type: 'error' });
         return;
       }
       if (idExists) {
-        setSuccess(t('idNumberAlreadyExists', language));
+        setAlert({ message: t('idNumberAlreadyExists', language), type: 'error' });
         return;
       }
 
@@ -157,10 +144,10 @@ export default function ReserveRegisterForm() {
       } else {
         const errorText = await res.text();
         console.error('Server error:', errorText);
-        setSuccess(`${t('reservistError', language)}: ${errorText}`);
+        setAlert({ message: `${t('reservistError', language)}: ${errorText}`, type: 'error' });
       }
     } catch {
-      setSuccess(t('reservistError', language));
+      setAlert({ message: t('reservistError', language), type: 'error' });
     }
   };
 
@@ -224,7 +211,6 @@ export default function ReserveRegisterForm() {
               />
               {translatedFields[field][language]}
             </label>
-
           ))}
         </fieldset>
 
@@ -243,8 +229,13 @@ export default function ReserveRegisterForm() {
         <Button text={t('submit', language)} type="submit" />
       </form>
 
-      {success && <p className="error-message">{success}</p>}
+      {alert && (
+        <AlertMessage
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
     </div>
   );
-
 }
