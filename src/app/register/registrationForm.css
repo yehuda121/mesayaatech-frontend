@@ -1,3 +1,69 @@
+.LPtop_Section {
+  background-color: #002855;
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 60px 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.LPtop_Section h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.LPtop_Section p {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.aboutSection {
+  padding: 4rem 2rem;
+  direction: rtl;
+  width: 100%;
+}
+
+.register-options-section {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.register-options-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.register-buttons-group {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.register-layout {
+  padding-top: 75px;
+  padding-right: 250px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .register-layout {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+
 /* Main form container */
 .register-form-container {
   max-width: 720px;

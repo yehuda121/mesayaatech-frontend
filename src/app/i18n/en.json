@@ -193,7 +193,12 @@
     "errorAddingQuestion": "Error adding question",
     "yourAnswer": "Your answer",
     "missingAnswer": "Please enter an answer",
-    "unknownUser": "Unknown user"
-
+    "unknownUser": "Unknown user",
+    "registerWelcomeTitle": "Welcome to Mesayaatech",
+    "registerWelcomeSubtitle": "Register and join the community",
+    "registerAs": "Register as",
+    "registerAs_reserve": "Reservist",
+    "registerAs_mentor": "Mentor",
+    "registerAs_ambassador": "Ambassador"
 
 }

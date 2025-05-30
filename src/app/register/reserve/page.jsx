@@ -168,7 +168,6 @@ export default function ReserveRegisterForm() {
 
   return (
     <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
-      {/* Top buttons – always aligned to the right */}
       <div className="register-form-top-buttons">
         <button
           onClick={() => router.push('/login')}

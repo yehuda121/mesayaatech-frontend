@@ -135,14 +135,105 @@
 //     </div>
 //   );
 // }
+// 'use client';
+
+// import { useEffect, useState } from "react";
+// import { useRouter } from "next/navigation";
+// import Button from "../components/Button";
+// import SideBar from "../components/SideBar";
+// import { getLanguage } from "../language";
+// import './registrationForm.css';
+// import { t } from "@/app/utils/loadTranslations";
+
+// export default function RegisterPage() {
+//   const [language, setLanguage] = useState(getLanguage());
+//   const router = useRouter();
+
+//   useEffect(() => {
+//     const handleLanguageChange = () => {
+//       setLanguage(getLanguage());
+//     };
+
+//     setLanguage(getLanguage());
+//     window.addEventListener("languageChanged", handleLanguageChange);
+//     return () => window.removeEventListener("languageChanged", handleLanguageChange);
+//   }, []);
+
+//   const tooltips = {
+//     reserve: {
+//       he: "מחפש ליווי מקצועי ומציאת עבודה?",
+//       en: "Looking for job search guidance and career support?"
+//     },
+//     mentor: {
+//       he: "רוצה ללוות ולכוון משרתי מילואים בדרכם התעסוקתית?",
+//       en: "Want to guide and support reservists on their career path?"
+//     },
+//     ambassador: {
+//       he: "יש לך אפשרות לסייע עם משרות? הצטרף כשגריר!",
+//       en: "Can you help by sharing job opportunities? Join as an ambassador!"
+//     }
+//   };
+
+//   const getTooltip = (type) => tooltips[type][language];
+
+//   const navItems = [
+//     { labelHe: "דף הבית", labelEn: "Home", path: "/" },
+//     { labelHe: "התחברות", labelEn: "Login", path: "/login" },
+//   ];
+
+//   return (
+//     <div>
+//       <SideBar navItems={navItems} />
+
+//       <div className="register-layout">
+//         <div className="LPtop_Section">
+//           <h1>{language === "he" ? "ברוך הבא למסייעטק" : "Welcome to Mesayaatech"}</h1>
+//           <p>{language === "he" ? "הירשם והצטרף לקהילה" : "Register and join the community"}</p>
+//         </div>
+
+//         <main className="dashboard-main">
+//           <section className="aboutSection" id="registerForm">
+//             <div className="flex flex-col items-center justify-center p-8 space-y-8">
+//               <div className="space-y-4 text-center">
+//                 <p className="text-xl">
+//                   {language === "he" ? "הירשם עכשיו בתור" : "Register as"}
+//                 </p>
+
+//                 <div className="flex flex-row gap-x-4 justify-center">
+//                   {["reserve", "mentor", "ambassador"].map((type) => (
+//                     <div className="tooltip-wrapper" key={type}>
+//                       <span className="tooltip-text">{getTooltip(type)}</span>
+//                       <Button
+//                         text={
+//                           language === "he"
+//                             ? type === "reserve" ? "מילואימניק"
+//                               : type === "mentor" ? "מנטור" : "שגריר"
+//                             : type === "reserve" ? "Reservist"
+//                               : type === "mentor" ? "Mentor" : "Ambassador"
+//                         }
+//                         onClick={() => router.push(`/register/${type}`)}
+//                       />
+//                     </div>
+//                   ))}
+//                 </div>
+//               </div>
+//             </div>
+//           </section>
+//         </main>
+//       </div>
+//     </div>
+//   );
+
+// }
 'use client';
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import "./../pages/LandingPage/LandingPage.css";
 import Button from "../components/Button";
 import SideBar from "../components/SideBar";
 import { getLanguage } from "../language";
+import { t } from "@/app/utils/loadTranslations";
+import './registrationForm.css';
 
 export default function RegisterPage() {
   const [language, setLanguage] = useState(getLanguage());
@@ -158,65 +249,69 @@ export default function RegisterPage() {
     return () => window.removeEventListener("languageChanged", handleLanguageChange);
   }, []);
 
-  const tooltips = {
-    reserve: {
-      he: "מחפש ליווי מקצועי ומציאת עבודה?",
-      en: "Looking for job search guidance and career support?"
-    },
-    mentor: {
-      he: "רוצה ללוות ולכוון משרתי מילואים בדרכם התעסוקתית?",
-      en: "Want to guide and support reservists on their career path?"
-    },
-    ambassador: {
-      he: "יש לך אפשרות לסייע עם משרות? הצטרף כשגריר!",
-      en: "Can you help by sharing job opportunities? Join as an ambassador!"
-    }
-  };
-
-  const getTooltip = (type) => tooltips[type][language];
-
   const navItems = [
     { labelHe: "דף הבית", labelEn: "Home", path: "/" },
     { labelHe: "התחברות", labelEn: "Login", path: "/login" },
   ];
 
+  // return (
+  //   <div>
+  //     <SideBar navItems={navItems} />
+
+  //     <div className="register-layout">
+  //       <div className="LPtop_Section">
+  //         <h1>{t('registerWelcomeTitle', language)}</h1>
+  //         <p>{t('registerWelcomeSubtitle', language)}</p>
+  //       </div>
+
+  //       <main className="dashboard-main">
+  //         <section className="aboutSection" id="registerForm">
+  //           <div className="flex flex-col items-center justify-center p-8 space-y-8">
+  //             <div className="space-y-4 text-center">
+  //               <p className="text-xl">{t('registerAs', language)}</p>
+
+  //               <div className="flex flex-row gap-x-4 justify-center">
+  //                 {["reserve", "mentor", "ambassador"].map((type) => (
+  //                   <div className="tooltip-wrapper" key={type}>
+  //                     <Button
+  //                       text={t(`registerAs_${type}`, language)}
+  //                       onClick={() => router.push(`/register/${type}`)}
+  //                     />
+  //                   </div>
+  //                 ))}
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </section>
+  //       </main>
+  //     </div>
+  //   </div>
+  // );
   return (
-    <div>
-      <SideBar navItems={navItems} />
+  <div>
+    <SideBar navItems={navItems} />
+
+    <div className="register-layout">
       <div className="LPtop_Section">
-        <h1>{language === "he" ? "ברוך הבא למסייעטק" : "Welcome to Mesayaatech"}</h1>
-        <p>{language === "he" ? "הירשם והצטרף לקהילה" : "Register and join the community"}</p>
+        <h1>{t('registerWelcomeTitle', language)}</h1>
+        <p>{t('registerWelcomeSubtitle', language)}</p>
       </div>
 
-      <main className="dashboard-main">
-        <section className="aboutSection" id="registerForm">
-          <div className="flex flex-col items-center justify-center p-8 space-y-8">
-            <div className="space-y-4 text-center">
-              <p className="text-xl">
-                {language === "he" ? "הירשם עכשיו בתור" : "Register as"}
-              </p>
-
-              <div className="flex flex-row gap-x-4 justify-center">
-                {["reserve", "mentor", "ambassador"].map((type) => (
-                  <div className="tooltip-wrapper" key={type}>
-                    <span className="tooltip-text">{getTooltip(type)}</span>
-                    <Button
-                      text={
-                        language === "he"
-                          ? type === "reserve" ? "מילואימניק" :
-                            type === "mentor" ? "מנטור" : "שגריר"
-                          : type === "reserve" ? "Reservist" :
-                            type === "mentor" ? "Mentor" : "Ambassador"
-                      }
-                      onClick={() => router.push(`/register/${type}`)}
-                    />
-                  </div>
-                ))}
-              </div>
+      <div className="register-options-section">
+        <p className="register-options-title">{t('registerAs', language)}</p>
+        <div className="register-buttons-group">
+          {["reserve", "mentor", "ambassador"].map((type) => (
+            <div className="tooltip-wrapper" key={type}>
+              <Button
+                text={t(`registerAs_${type}`, language)}
+                onClick={() => router.push(`/register/${type}`)}
+              />
             </div>
-          </div>
-        </section>
-      </main>
+          ))}
+        </div>
+      </div>
     </div>
-  );
+  </div>
+);
+
 }

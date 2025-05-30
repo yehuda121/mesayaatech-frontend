@@ -196,8 +196,12 @@
     "errorAddingQuestion": "אירעה שגיאה בהוספת שאלה",
     "yourAnswer": "התשובה שלך",
     "missingAnswer": "יש להזין תשובה",
-    "unknownUser": "משתמש לא ידוע"
-
-    
+    "unknownUser": "משתמש לא ידוע",
+    "registerWelcomeTitle": "ברוך הבא למסייעטק",
+    "registerWelcomeSubtitle": "הירשם והצטרף לקהילה",
+    "registerAs": "הירשם עכשיו בתור",
+    "registerAs_reserve": "מילואימניק",
+    "registerAs_mentor": "מנטור",
+    "registerAs_ambassador": "שגריר"
         
 }
