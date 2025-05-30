@@ -206,6 +206,11 @@
     "navMyReservists": "My Reservists",
     "navRequests": "New Requests",
     "navJobMatches": "Job Matches",
-    "navPostJob": "Post Job"
+    "navPostJob": "Post Job",
+    "noJobsPosted": "You haven't posted any jobs yet",
+    "postedJobsTitle": "Posted Jobs",
+    "myJobsList": "my jobs list",
+    "myPostedJobs": "My Posted Jobs",
+    "jobPostedSuccess": "job posted successfully"
 
 }

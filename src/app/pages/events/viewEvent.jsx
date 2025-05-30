@@ -13,7 +13,22 @@ export default function ViewEvent({ event, onClose }) {
   if (!event) return null;
 
   return (
-    <div className="modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div 
+      className="modal-overlay" 
+      dir={language === 'he' ? 'rtl' : 'ltr'} 
+      style={{
+        width: '30%',
+        height: '30%',
+        backgroundColor: 'white',
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        borderRadius: '8px',
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+        padding: '1.5rem',
+        zIndex: 1000,
+      }}>
       <div className="modal-content">
         <button className="modal-close" onClick={onClose}>✖</button>
         <h2 className="text-xl font-bold mb-4">{event.title}</h2>

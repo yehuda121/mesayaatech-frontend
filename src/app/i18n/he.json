@@ -207,6 +207,11 @@
     "navMyReservists": "רשימת המלווים שלי",
     "navRequests": "פניות חדשות לליווי",
     "navJobMatches": "משרות רלוונטיות",
-    "navPostJob": "פרסום משרה"
+    "navPostJob": "פרסום משרה",
+    "noJobsPosted": "לא פרסמת משרות עדיין",
+    "postedJobsTitle": "משרות שפורסמו",
+    "myJobsList": "המשרות שפרסמתי",
+    "jobPostedSuccess": "המשרה פורסמה בהצלחה",
+    "myPostedJobs": "המשרות שפרסמת"
         
 }
