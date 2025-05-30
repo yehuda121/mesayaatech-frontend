@@ -143,8 +143,6 @@
     "dynamoDeleteError": "שגיאה במחיקת המשתמש ממסד הנתונים",
     "userDeletedSuccessfully": "המשתמש נמחק בהצלחה",
     "generalDeleteError": "אירעה שגיאה כללית בעת מחיקת המשתמש",
-
-
     "welcome": "ברוך הבא",
     "whatsNew": "מה חדש השבוע?",
     "newJobPosted": "משרה חדשה פורסמה:",
@@ -202,6 +200,13 @@
     "registerAs": "הירשם עכשיו בתור",
     "registerAs_reserve": "מילואימניק",
     "registerAs_mentor": "מנטור",
-    "registerAs_ambassador": "שגריר"
+    "registerAs_ambassador": "שגריר",
+    "mentorWelcomeTitle": "שלום {{name}}!",
+    "mentorWelcomeSubtitle": "כאן תוכל לנהל את כל הפעולות שלך כמנטור.",
+    "navMentees": "חניכים",
+    "navMyReservists": "רשימת המלווים שלי",
+    "navRequests": "פניות חדשות לליווי",
+    "navJobMatches": "משרות רלוונטיות",
+    "navPostJob": "פרסום משרה"
         
 }

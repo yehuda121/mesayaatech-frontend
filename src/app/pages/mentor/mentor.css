@@ -1,0 +1,148 @@
+/* ---home page --- */
+.mentor-welcome {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.mentor-subtitle {
+  font-size: 1.25rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.mentor-main {
+  padding-top: 100px;     /* space for fixed header */
+  padding-right: 280px;  /* space for fixed sidebar */
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .mentor-main {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+
+/* === EditMentorForm Layout === */
+.edit-mentor-container {
+  max-width: 768px;  
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 1.5rem; 
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-mentor-title {
+  font-size: 1.25rem;   
+  font-weight: bold;
+  text-align: center;
+}
+
+.edit-mentor-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .edit-mentor-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.edit-mentor-label {
+  display: block;
+  text-align: start;
+}
+
+.edit-mentor-label-text {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.edit-mentor-input,
+.edit-mentor-textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+
+.edit-mentor-textarea {
+  height: 6rem;
+  resize: vertical;
+}
+
+.edit-mentor-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.edit-mentor-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* === PostJob === */
+.post-job-form {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: start;
+}
+
+.post-job-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.post-job-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.post-job-label {
+  display: block;
+  font-weight: 500;
+}
+
+.post-job-input,
+.post-job-textarea,
+.post-job-file {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  border: 1px solid #cbd5e0; 
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+
+.post-job-textarea {
+  height: 7rem;
+  resize: vertical;
+}
+
+.post-job-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+
+
+

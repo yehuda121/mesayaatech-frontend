@@ -1,4 +1,18 @@
-.LPtop_Section {
+/* ===== Register Page Layout (Top Section, Buttons, Structure) ===== */
+.register-layout {
+  padding-top: 75px;
+  padding-right: 250px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .register-layout {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+.register-top-section {
   background-color: #002855;
   color: #fff;
   width: 100%;
@@ -12,12 +26,12 @@
   text-align: center;
 }
 
-.LPtop_Section h1 {
+.register-top-section h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
-.LPtop_Section p {
+.register-top-section p {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -50,21 +64,8 @@
   flex-wrap: wrap;
 }
 
-.register-layout {
-  padding-top: 75px;
-  padding-right: 250px;
-  box-sizing: border-box;
-}
 
-@media (max-width: 768px) {
-  .register-layout {
-    padding-right: 0;
-    padding-left: 0;
-  }
-}
-
-
-/* Main form container */
+/* ===== Shared Form Container (All Roles) ===== */
 .register-form-container {
   max-width: 720px;
   margin: 0 auto;
@@ -74,15 +75,16 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* ===== Shared Form Utilities ===== */
 /* Top buttons – always aligned to the right */
 .register-form-top-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  direction: ltr; /* force direction to keep buttons right aligned always */
+  direction: ltr;
 }
 
-/* Language-based direction */
+/* Directional layout */
 .register-form-direction-rtl {
   direction: rtl;
   text-align: right;
@@ -93,14 +95,14 @@
   text-align: left;
 }
 
-/* Label and inputs styling */
+/* Label and input styles */
 .register-form-container label {
   display: block;
   margin-bottom: 1rem;
   font-weight: 500;
 }
 
-/* Apply full width only to text-like inputs */
+/* Input and select styles */
 .register-form-container input[type="text"],
 .register-form-container input[type="email"],
 .register-form-container input[type="tel"],
@@ -119,6 +121,7 @@
   resize: vertical;
 }
 
+/* Fieldset styles */
 .register-form-container fieldset {
   border: none;
   margin-bottom: 1rem;
@@ -130,11 +133,18 @@
   margin-bottom: 0.5rem;
 }
 
-/* Error message */
+/* Error message styling */
 .register-form-container .error-message {
-  color: #dc2626; /* red-600 */
+  color: #dc2626;
   text-align: center;
   font-weight: bold;
 }
 
 
+/* ===== Optional Shared Checkbox Label Utility ===== */
+.register-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}

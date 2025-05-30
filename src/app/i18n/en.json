@@ -199,6 +199,13 @@
     "registerAs": "Register as",
     "registerAs_reserve": "Reservist",
     "registerAs_mentor": "Mentor",
-    "registerAs_ambassador": "Ambassador"
+    "registerAs_ambassador": "Ambassador",
+    "mentorWelcomeTitle": "Hello {{name}}!",
+    "mentorWelcomeSubtitle": "Here you can manage all your actions as a mentor.",
+    "navMentees": "Mentees",
+    "navMyReservists": "My Reservists",
+    "navRequests": "New Requests",
+    "navJobMatches": "Job Matches",
+    "navPostJob": "Post Job"
 
 }

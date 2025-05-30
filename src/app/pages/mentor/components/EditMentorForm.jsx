@@ -75,50 +75,53 @@ export default function EditMentorForm({ userData, onSave }) {
   };
 
   return (
-    <div dir={language === 'he' ? 'rtl' : 'ltr'} className="max-w-3xl mx-auto bg-white p-6 rounded shadow space-y-6">
-      <h2 className="text-xl font-bold text-center">{t('editUserDetails', language)}</h2>
+  <div
+    dir={language === 'he' ? 'rtl' : 'ltr'}
+    className="edit-mentor-container"
+  >
+    <h2 className="edit-mentor-title">
+      {t('editUserDetails', language)}
+    </h2>
 
-      <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {keys.map((key) => (
-          <label key={key} className="block">
-            <span className="font-medium">{t(key, language)}</span>
-            {(key === 'experience' || key === 'notes') ? (
-              <textarea
-                className="w-full border p-2 rounded h-24"
-                value={formData[key] || ''}
-                onChange={(e) => handleChange(key, e.target.value)}
-              />
-            ) : (
-              <input
-                type="text"
-                className="w-full border p-2 rounded"
-                value={formData[key] || ''}
-                onChange={(e) => handleChange(key, e.target.value)}
-              />
-            )}
-          </label>
-        ))}
-      </form>
+    <form className="edit-mentor-form">
+      {keys.map((key) => (
+        <label key={key} className="edit-mentor-label">
+          <span className="edit-mentor-label-text">
+            {t(key, language)}
+          </span>
+          {(key === 'experience' || key === 'notes') ? (
+            <textarea
+              className="edit-mentor-textarea"
+              value={formData[key] || ''}
+              onChange={(e) => handleChange(key, e.target.value)}
+            />
+          ) : (
+            <input
+              type="text"
+              className="edit-mentor-input"
+              value={formData[key] || ''}
+              onChange={(e) => handleChange(key, e.target.value)}
+            />
+          )}
+        </label>
+      ))}
+    </form>
 
-      <div className="flex justify-between mt-6">
+    <div className="edit-mentor-footer">
+      <div className="edit-mentor-buttons">
         <Button
-          text={t('backToHome', language)}
-          onClick={() => router.push('/pages/mentor/MentorHomePage')}
+          text={t('cancel', language)}
+          onClick={handleCancel}
+          disabled={!isModified}
         />
-
-        <div className="flex gap-2">
-          <Button
-            text={t('cancel', language)}
-            onClick={handleCancel}
-            disabled={!isModified}
-          />
-          <Button
-            text={saving ? '...' : t('saveChanges', language)}
-            onClick={handleSubmit}
-            disabled={!isModified}
-          />
-        </div>
+        <Button
+          text={saving ? '...' : t('saveChanges', language)}
+          onClick={handleSubmit}
+          disabled={!isModified}
+        />
       </div>
     </div>
-  );
+  </div>
+);
+
 }
