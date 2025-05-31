@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { getLanguage, toggleLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import SideBar from '@/app/components/SideBar';
+import { jwtDecode } from 'jwt-decode';
 import '@/app/pages/ambassador/home/ambassador.css';
 
 export default function AmbassadorHomePage() {
@@ -12,16 +13,43 @@ export default function AmbassadorHomePage() {
   const [language, setLanguage] = useState(getLanguage());
   const [fullName, setFullName] = useState('');
 
+  // ✅ Validate JWT and redirect if role is invalid
   useEffect(() => {
     setLanguage(getLanguage());
 
-    const tokenName = localStorage.getItem('fullName');
-    if (tokenName) setFullName(tokenName);
+    const token = localStorage.getItem('idToken');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const role = decoded['custom:role'];
+        const expectedRole = 'ambassador';
+
+        const roleToPath = {
+          reservist: '/pages/reservist/home',
+          mentor: '/pages/mentor',
+          ambassador: '/pages/ambassador/home',
+          admin: '/admin'
+        };
+
+        if (role !== expectedRole) {
+          router.push(roleToPath[role] || '/login');
+          return;
+        }
+
+        // fallback name in case Cognito fails to populate localStorage['fullName']
+        setFullName(decoded.name || '');
+      } catch (err) {
+        console.error('Token decoding failed:', err);
+        router.push('/login');
+      }
+    } else {
+      router.push('/login');
+    }
 
     const handleLangChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLangChange);
     return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  }, [router]);
 
   const navItems = [
     {

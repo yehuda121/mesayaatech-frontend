@@ -1,4 +1,4 @@
-// // AdminPage.jsx
+
 // 'use client';
 // import { useEffect, useState } from 'react';
 // import { getLanguage } from '../language';
@@ -20,11 +20,35 @@
 //   const [events, setEvents] = useState([]);
 //   const [jobs, setJobs] = useState([]);
 //   const [selectedJob, setSelectedJob] = useState(null);
-  
+//   const [pendingUsers, setPendingUsers] = useState([]);
+//   const [loadingPending, setLoadingPending] = useState(true);
+
 //   useEffect(() => {
 //     const handleLangChange = () => setLanguage(getLanguage());
 //     window.addEventListener('languageChanged', handleLangChange);
 //     return () => window.removeEventListener('languageChanged', handleLangChange);
+//   }, []);
+
+//   useEffect(() => {
+//     const fetchPendingUsers = async () => {
+//       try {
+//         const res = await fetch('http://localhost:5000/api/imports-user-registration-form/all');
+//         const data = await res.json();
+//         if (Array.isArray(data)) {
+//           const filtered = data.filter(u => u.status === 'pending');
+//           setPendingUsers(filtered);
+//         } else {
+//           setPendingUsers([]);
+//         }
+//       } catch (err) {
+//         console.error('Failed to fetch users', err);
+//         setPendingUsers([]);
+//       } finally {
+//         setLoadingPending(false);
+//       }
+//     };
+
+//     fetchPendingUsers();
 //   }, []);
 
 //   const handleNavigation = (newView) => {
@@ -63,6 +87,11 @@
 //       labelEn: t('addJob', 'en'),
 //       path: '#add-job',
 //       onClick: () => handleNavigation('add-job')
+//     },
+//     {
+//       labelHe: t('navInterviewPrep', 'he'),
+//       labelEn: t('navInterviewPrep', 'en'),
+//       path: '/pages/interviewPrep'
 //     }
 //   ];
 
@@ -71,6 +100,19 @@
 //       <SideBar navItems={navItems} />
 //       <div className="admin-container">
 //         <main className="admin-main">
+
+//           {view === '' && (
+//             <>
+//               {loadingPending ? (
+//                 <p>{t('loading', language)}</p>
+//               ) : pendingUsers.length > 0 ? (
+//                 <UsersTable users={pendingUsers} />
+//               ) : (
+//                 <p>{t('noPendingUsers', language)}</p>
+//               )}
+//             </>
+//           )}
+
 //           {view === 'create-event' && <CreateEvent />}
 //           {view === 'view-events' && (
 //             <ViewEvents
@@ -127,8 +169,8 @@
 //     </div>
 //   );
 // }
-
 'use client';
+
 import { useEffect, useState } from 'react';
 import { getLanguage } from '../language';
 import SideBar from '../components/SideBar';
@@ -139,6 +181,8 @@ import EditEvents from './components/events/EditEvents';
 import ViewJobs from './components/jobs/viewJobs';
 import EditJob from './components/jobs/editJob';
 import AddJob from './components/jobs/addNewJob';
+import { jwtDecode } from 'jwt-decode';
+import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import './admin.css';
 
@@ -151,6 +195,34 @@ export default function AdminPage() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [pendingUsers, setPendingUsers] = useState([]);
   const [loadingPending, setLoadingPending] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem('idToken');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const role = decoded['custom:role'];
+        const expectedRole = 'admin';
+        const roleToPath = {
+          admin: '/admin',
+          mentor: '/pages/mentor',
+          reservist: '/pages/reservist/home',
+          ambassador: '/pages/ambassador/home'
+        };
+
+        if (role !== expectedRole) {
+          router.push(roleToPath[role] || '/login');
+          return;
+        }
+      } catch (err) {
+        console.error('Token decode failed:', err);
+        router.push('/login');
+      }
+    } else {
+      router.push('/login');
+    }
+  }, [router]);
 
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
@@ -158,7 +230,6 @@ export default function AdminPage() {
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
-  // ריצה פעם אחת בלבד: להביא משתמשים עם pending
   useEffect(() => {
     const fetchPendingUsers = async () => {
       try {
@@ -182,9 +253,9 @@ export default function AdminPage() {
   }, []);
 
   const handleNavigation = (newView) => {
-    setEventToEdit(null);       
-    setSelectedJob(null);       
-    setView(newView); 
+    setEventToEdit(null);
+    setSelectedJob(null);
+    setView(newView);
   };
 
   const navItems = [
@@ -230,8 +301,6 @@ export default function AdminPage() {
       <SideBar navItems={navItems} />
       <div className="admin-container">
         <main className="admin-main">
-
-          {/* ברירת מחדל: הצגת משתמשים ממתינים לאישור */}
           {view === '' && (
             <>
               {loadingPending ? (

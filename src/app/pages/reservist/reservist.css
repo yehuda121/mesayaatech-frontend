@@ -1,6 +1,6 @@
 /* === Main layout area next to sidebar === */
 .reservist-main {
-  margin-right: 265px; /* leave space for sidebar */
+  margin-right: 250px; /* leave space for sidebar */
   flex-grow: 1;
   padding: 2rem;
   background-color: #fff;

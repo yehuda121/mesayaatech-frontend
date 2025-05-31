@@ -11,6 +11,7 @@ import PostJob from './components/jobs/PostJob';
 import MyJobsList from './components/jobs/MyJobsList';
 import EditMentorJob from './components/jobs/editJob';
 import EventsPage from '@/app/pages/events/page';
+// import interviewPrep from '../interviewPrep';
 
 import './mentor.css';
 
@@ -20,10 +21,12 @@ export default function MentorHomePage() {
   const [idNumber, setIdNumber] = useState(null);
   const [view, setView] = useState('dashboard');
   const [userData, setUserData] = useState(null);
-  const router = useRouter();
-  const [selectedJobForEdit, setSelectedJobForEdit] = useState(null);
   const [email, setEmail] = useState('');
+  const [selectedJobForEdit, setSelectedJobForEdit] = useState(null);
 
+  const router = useRouter();
+
+  // Token and role validation
   useEffect(() => {
     setLanguage(getLanguage());
     const handleLangChange = () => setLanguage(getLanguage());
@@ -33,11 +36,27 @@ export default function MentorHomePage() {
     if (token) {
       try {
         const decoded = jwtDecode(token);
+        const role = decoded['custom:role'];
+        const expectedRole = 'mentor';
+        const roleToPath = {
+          reservist: '/pages/reservist/home',
+          mentor: '/pages/mentor',
+          ambassador: '/pages/ambassador/home',
+          admin: '/admin'
+        };
+
+
+        if (role !== expectedRole) {
+          router.push(roleToPath[role] || '/login');
+          return;
+        }
+
         setFullName(decoded.name);
         setIdNumber(decoded['custom:idNumber'] || decoded.sub);
         setEmail(decoded.email);
       } catch (err) {
         console.error('Failed to decode token:', err);
+        router.push('/login');
       }
     } else {
       router.push('/login');
@@ -95,7 +114,12 @@ export default function MentorHomePage() {
       path: '#events',
       onClick: () => handleNavigation('events')
     },
-
+    {
+      labelHe: t('navInterviewPrep', language),
+      labelEn: t('navInterviewPrep', language),
+      path: '#interview-prep',
+      onClick: () => handleNavigation('interview-prep')
+    }
     // {
     //   labelHe: t('navMyReservists', language),
     //   labelEn: t('navMyReservists', language),
@@ -120,17 +144,14 @@ export default function MentorHomePage() {
     //   path: '#feedback',
     //   onClick: () => handleNavigation('feedback')
     // },
-    // {
-    //   labelHe: t('navInterviewPrep', language),
-    //   labelEn: t('navInterviewPrep', language),
-    //   path: '#interview-prep',
-    //   onClick: () => handleNavigation('interview-prep')
-    // }
+
   ];
+
 
   return (
     <div className="mentor-container">
       <SideBar navItems={navItems} />
+
       <main className="mentor-main">
         {view === 'dashboard' && (
           <>
@@ -151,9 +172,6 @@ export default function MentorHomePage() {
           />
         )}
 
-        {view === 'my-reservists' && <MyReservists />}
-        {view === 'requests' && <Requests />}
-        {view === 'job-matches' && <JobMatches />}
         {view === 'post-job' && (
           <PostJob
             publisherId={idNumber}
@@ -161,15 +179,17 @@ export default function MentorHomePage() {
             onSuccess={() => setView('dashboard')}
           />
         )}
+
         {view === 'myJobsList' && (
           <MyJobsList
             publisherId={idNumber}
             onEdit={(job) => {
-            setSelectedJobForEdit(job);
-            setView('edit-job');
-          }}
+              setSelectedJobForEdit(job);
+              setView('edit-job');
+            }}
           />
         )}
+
         {view === 'edit-job' && selectedJobForEdit && (
           <EditMentorJob
             job={selectedJobForEdit}
@@ -183,6 +203,7 @@ export default function MentorHomePage() {
             }}
           />
         )}
+
         {view === 'events' && (
           <EventsPage
             idNumber={idNumber}
@@ -190,9 +211,6 @@ export default function MentorHomePage() {
             email={email}
           />
         )}
-
-        {view === 'feedback' && <FeedbackList />}
-        {view === 'interview-prep' && <InterviewPrep />}
       </main>
     </div>
   );
