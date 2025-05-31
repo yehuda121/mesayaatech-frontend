@@ -1,28 +1,50 @@
-/* ===== Register Page Layout (Top Section, Buttons, Structure) ===== */
-.register-layout {
-  padding-top: 75px;
-  padding-right: 250px;
-  box-sizing: border-box;
+/* ==== HEADER (copy of landing but renamed) ==== */
+.register-header {
+  background-color: #002855;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  direction: ltr;
 }
 
-@media (max-width: 768px) {
-  .register-layout {
-    padding-right: 0;
-    padding-left: 0;
-  }
+.register-logo-img {
+  height: 100px;
+  object-fit: contain;
+  padding: 0.5rem;
 }
 
+.register-header-buttons {
+  display: flex;
+  gap: 1rem;
+  direction: ltr;
+}
+
+.register-header-buttons button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-header-buttons button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ==== TOP SECTION ==== */
 .register-top-section {
   background-color: #002855;
   color: #fff;
   width: 100%;
   box-sizing: border-box;
   padding: 60px 20px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   text-align: center;
 }
 
@@ -36,17 +58,9 @@
   margin-bottom: 1rem;
 }
 
-.aboutSection {
+/* ==== ABOUT SECTION (now contains buttons) ==== */
+.register-about-section {
   padding: 4rem 2rem;
-  direction: rtl;
-  width: 100%;
-}
-
-.register-options-section {
-  margin-top: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   text-align: center;
 }
 
@@ -54,7 +68,6 @@
   font-size: 1.75rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: #333;
 }
 
 .register-buttons-group {
@@ -64,87 +77,11 @@
   flex-wrap: wrap;
 }
 
-
-/* ===== Shared Form Container (All Roles) ===== */
-.register-form-container {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* === Optional: Language Icon === */
+.lang-icon {
+  font-size: 20px;
 }
 
-/* ===== Shared Form Utilities ===== */
-/* Top buttons – always aligned to the right */
-.register-form-top-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  direction: ltr;
-}
-
-/* Directional layout */
-.register-form-direction-rtl {
-  direction: rtl;
-  text-align: right;
-}
-
-.register-form-direction-ltr {
-  direction: ltr;
-  text-align: left;
-}
-
-/* Label and input styles */
-.register-form-container label {
-  display: block;
-  margin-bottom: 1rem;
-  font-weight: 500;
-}
-
-/* Input and select styles */
-.register-form-container input[type="text"],
-.register-form-container input[type="email"],
-.register-form-container input[type="tel"],
-.register-form-container input[type="password"],
-.register-form-container input:not([type]),
-.register-form-container select,
-.register-form-container textarea {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 0.375rem;
-  font-size: 1rem;
-}
-
-.register-form-container textarea {
-  resize: vertical;
-}
-
-/* Fieldset styles */
-.register-form-container fieldset {
-  border: none;
-  margin-bottom: 1rem;
-  padding: 0;
-}
-
-.register-form-container legend {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-/* Error message styling */
-.register-form-container .error-message {
-  color: #dc2626;
-  text-align: center;
-  font-weight: bold;
-}
-
-
-/* ===== Optional Shared Checkbox Label Utility ===== */
-.register-checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+.lang-text {
+  color: white !important;
 }
