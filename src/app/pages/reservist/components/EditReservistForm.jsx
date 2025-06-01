@@ -4,15 +4,17 @@ import { useRouter } from 'next/navigation';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import Button from '@/app/components/Button';
-import AlertMessage from '@/app/components/notifications/AlertMessage'; // For validation and success messages
+import AlertMessage from '@/app/components/notifications/AlertMessage';
+import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 
 export default function EditReservistForm({ userData, onSave, onBack }) {
   const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState(userData || {});
   const [initialData, setInitialData] = useState(userData || {});
   const [saving, setSaving] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(null); // Message box
+  const [alertMessage, setAlertMessage] = useState(null);
   const router = useRouter();
+  const [confirmClearMentor, setConfirmClearMentor] = useState(false);
 
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
@@ -22,8 +24,14 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
 
   useEffect(() => {
     if (userData) {
-      setFormData(userData);
-      setInitialData(userData);
+      setFormData({
+        ...userData,
+        mentorId: userData.mentorId || null, // default to null if missing
+      });
+      setInitialData({
+        ...userData,
+        mentorId: userData.mentorId || null,
+      });
     }
   }, [userData]);
 
@@ -32,14 +40,12 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
     'fields', 'experience', 'linkedin', 'notes'
   ];
 
-  // Handle form field changes
   const handleChange = (key, value) => {
     setFormData({ ...formData, [key]: value });
   };
 
   const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
 
-  // Validation logic for key fields
   const validateForm = () => {
     const errors = [];
     const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
@@ -73,7 +79,6 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
     return errors;
   };
 
-  // Submit updated user form
   const handleSubmit = async () => {
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
@@ -119,6 +124,19 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
           onClose={() => setAlertMessage(null)}
         />
       )}
+      {confirmClearMentor && (
+        <ConfirmDialog
+          title={t('confirmRemoveMentorTitle', language)}
+          message={t('confirmRemoveMentorText', language)}
+          onConfirm={() => {
+            handleChange('mentorId', 'notInterested');
+            setConfirmClearMentor(false);
+          }}
+          onCancel={() => {
+            setConfirmClearMentor(false);
+          }}
+        />
+      )}
 
       <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {keys.map((key) => (
@@ -146,6 +164,30 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
         ))}
       </form>
 
+      {/* Mentor toggle switch */}
+      <div className="mt-4 flex items-center gap-2">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={formData.mentorId === 'notInterested'}
+            onChange={(e) => {
+              const checked = e.target.checked;
+
+              // If user already has a mentor, ask for confirmation before unassigning
+              if (checked && initialData.mentorId && initialData.mentorId !== 'notInterested') {
+                setConfirmClearMentor(true); // Show confirmation dialog
+              } else {
+                handleChange('mentorId', checked ? 'notInterested' : null);
+              }
+            }}
+          />
+          <span className="text-sm font-medium">
+            {t('notInterestedInMentor', language)}
+          </span>
+        </label>
+      </div>
+
+      {/* Actions */}
       <div className="flex mt-6">
         <div className="flex gap-2">
           <Button

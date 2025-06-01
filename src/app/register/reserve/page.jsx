@@ -15,6 +15,7 @@ export default function ReserveRegisterForm() {
   const [formData, setFormData] = useState({
     userType: 'reservist',
     status: 'pending',
+    mentorId: null,
     fullName: '',
     idNumber: '',
     email: '',

@@ -11,7 +11,11 @@ import PostJob from './components/jobs/PostJob';
 import MyJobsList from './components/jobs/MyJobsList';
 import EditMentorJob from './components/jobs/editJob';
 import EventsPage from '@/app/pages/events/page';
-// import interviewPrep from '../interviewPrep';
+import InterviewPrep from '../interviewPrep/page';
+import FindReservist from './components/FindReservist';
+// import AlertMessage from '@/app/components/notifications/AlertMessage';
+// import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
+import ToastMessage from '@/app/components/notifications/ToastMessage';
 
 import './mentor.css';
 
@@ -23,10 +27,10 @@ export default function MentorHomePage() {
   const [userData, setUserData] = useState(null);
   const [email, setEmail] = useState('');
   const [selectedJobForEdit, setSelectedJobForEdit] = useState(null);
+  const [toast, setToast] = useState(null);
 
   const router = useRouter();
 
-  // Token and role validation
   useEffect(() => {
     setLanguage(getLanguage());
     const handleLangChange = () => setLanguage(getLanguage());
@@ -44,7 +48,6 @@ export default function MentorHomePage() {
           ambassador: '/pages/ambassador/home',
           admin: '/admin'
         };
-
 
         if (role !== expectedRole) {
           router.push(roleToPath[role] || '/login');
@@ -75,11 +78,12 @@ export default function MentorHomePage() {
         setUserData(data);
       } catch (err) {
         console.error('Failed to load mentor form:', err);
+        setToast({ message: t('errorLoadingForm', language), type: 'error' });
       }
     };
 
     fetchUserForm();
-  }, [idNumber]);
+  }, [idNumber, language]);
 
   const handleNavigation = (newView) => setView(newView);
 
@@ -119,7 +123,14 @@ export default function MentorHomePage() {
       labelEn: t('navInterviewPrep', language),
       path: '#interview-prep',
       onClick: () => handleNavigation('interview-prep')
+    },
+    {
+      labelHe: t('findReservist', language),
+      labelEn: t('findReservist', language),
+      path: '#find-reservist',
+      onClick: () => handleNavigation('find-reservist')
     }
+
     // {
     //   labelHe: t('navMyReservists', language),
     //   labelEn: t('navMyReservists', language),
@@ -144,9 +155,7 @@ export default function MentorHomePage() {
     //   path: '#feedback',
     //   onClick: () => handleNavigation('feedback')
     // },
-
   ];
-
 
   return (
     <div className="mentor-container">
@@ -176,7 +185,10 @@ export default function MentorHomePage() {
           <PostJob
             publisherId={idNumber}
             publisherType="mentor"
-            onSuccess={() => setView('dashboard')}
+            onSuccess={() => {
+              setToast({ message: t('jobPostedSuccess', language), type: 'success' });
+              setView('dashboard');
+            }}
           />
         )}
 
@@ -199,6 +211,7 @@ export default function MentorHomePage() {
             }}
             onSave={(updated) => {
               setSelectedJobForEdit(null);
+              setToast({ message: t('jobUpdatedSuccess', language), type: 'success' });
               setView('myJobsList');
             }}
           />
@@ -209,6 +222,25 @@ export default function MentorHomePage() {
             idNumber={idNumber}
             fullName={fullName}
             email={email}
+          />
+        )}
+
+        {view === 'interview-prep' && (
+          <InterviewPrep />
+        )}
+
+        {view === 'find-reservist' && (
+          <FindReservist
+            mentorId={idNumber}
+            onBack={() => setView('dashboard')}
+          />
+        )}
+
+        {toast && (
+          <ToastMessage
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
           />
         )}
       </main>

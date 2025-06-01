@@ -210,6 +210,24 @@
     "postedJobsTitle": "משרות שפורסמו",
     "myJobsList": "המשרות שפרסמתי",
     "jobPostedSuccess": "המשרה פורסמה בהצלחה",
-    "myPostedJobs": "המשרות שפרסמת"
+    "myPostedJobs": "המשרות שפרסמת",
+    "findReservist": "מצא מילואימניק",
+    "showContact": "הצג פרטי קשר",
+    "hideContact": "הסתר פרטי קשר",
+    "addToMyReservists": "הוסף למלווים שלי",
+    "back": "חזור",
+    "confirmAssignTitle": "אישור שיוך",
+    "confirmAssignText": "האם לשייך את",
+    "assignedSuccess": "המילואימניק שויך בהצלחה",
+    "assignedFail": "התרחשה שגיאה בשיוך",
+    "errorLoadingReservists": "אירעה שגיאה בטעינת מילואימניקים",
+    "noReservistsAvailable": "אין כרגע מילואימניקים זמינים",
+    "notInterestedInMentor": "לא מעוניין כרגע במנטור",
+    "confirmRemoveMentorTitle": "ביטול שיוך למנטור",
+    "confirmRemoveMentorText": "האם אתה בטוח שברצונך לבטל את השיוך למנטור שלך?",
+    "reservistDetails": "פרטי מילואימניק",
+    "viewDetails": "צפיה בפרטים"
+
+
         
 }

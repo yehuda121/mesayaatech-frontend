@@ -210,6 +210,24 @@
     "postedJobsTitle": "Posted Jobs",
     "myJobsList": "my jobs list",
     "myPostedJobs": "My Posted Jobs",
-    "jobPostedSuccess": "job posted successfully"
+    "jobPostedSuccess": "job posted successfully",
+    "findReservist": "Find a Reservist",
+    "showContact": "Show Contact Info",
+    "hideContact": "Hide Contact Info",
+    "addToMyReservists": "Add to My Reservists",
+    "back": "Back",
+    "confirmAssignTitle": "Confirm Assignment",
+    "confirmAssignText": "Do you want to assign",
+    "assignedSuccess": "Reservist successfully assigned",
+    "assignedFail": "An error occurred during assignment",
+    "errorLoadingReservists": "An error occurred while loading reservists",
+    "noReservistsAvailable": "No available reservists at the moment",
+    "notInterestedInMentor": "Not interested in a mentor right now",
+    "confirmRemoveMentorTitle": "Remove Mentor Assignment",
+    "confirmRemoveMentorText": "Are you sure you want to remove your assigned mentor?",
+    "reservistDetails": "Reservist Details",
+    "viewDetails": "View details"
+
+
 
 }
