@@ -226,7 +226,10 @@
     "confirmRemoveMentorTitle": "Remove Mentor Assignment",
     "confirmRemoveMentorText": "Are you sure you want to remove your assigned mentor?",
     "reservistDetails": "Reservist Details",
-    "viewDetails": "View details"
+    "viewDetails": "View details",
+    "noMentorAssigned": "No mentor assigned",
+    "assignedReservists": "Assigned Reservists",
+    "noReservistsAssigned": "No reservists assigned"
 
 
 

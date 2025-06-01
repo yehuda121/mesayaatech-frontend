@@ -222,11 +222,16 @@
     "assignedFail": "התרחשה שגיאה בשיוך",
     "errorLoadingReservists": "אירעה שגיאה בטעינת מילואימניקים",
     "noReservistsAvailable": "אין כרגע מילואימניקים זמינים",
-    "notInterestedInMentor": "לא מעוניין כרגע במנטור",
     "confirmRemoveMentorTitle": "ביטול שיוך למנטור",
     "confirmRemoveMentorText": "האם אתה בטוח שברצונך לבטל את השיוך למנטור שלך?",
     "reservistDetails": "פרטי מילואימניק",
-    "viewDetails": "צפיה בפרטים"
+    "viewDetails": "צפיה בפרטים",
+    "assignedReservists": "מילואימניקים משויכים",
+    "noReservistsAssigned": "אין מילואימניקים משויכים",
+    "notInterestedInMentor": "המילואימניק לא מעוניין במנטור",
+    "noMentorAssigned": "אין מנטור משויך",
+    "mentorDataUnavailable": "פרטי המנטור אינם זמינים",
+    "assignedMentor": "מנטור משויך"
 
 
         
