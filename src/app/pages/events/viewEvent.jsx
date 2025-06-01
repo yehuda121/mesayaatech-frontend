@@ -4,7 +4,7 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 
 export default function ViewEvent({ event, onClose }) {
-  const [language, setLanguage] = useState('he'); // default fallback
+  const [language, setLanguage] = useState('he'); 
 
   useEffect(() => {
     setLanguage(getLanguage());
@@ -16,19 +16,7 @@ export default function ViewEvent({ event, onClose }) {
     <div 
       className="modal-overlay" 
       dir={language === 'he' ? 'rtl' : 'ltr'} 
-      style={{
-        width: '30%',
-        height: '30%',
-        backgroundColor: 'white',
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        borderRadius: '8px',
-        boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-        padding: '1.5rem',
-        zIndex: 1000,
-      }}>
+      >
       <div className="modal-content">
         <button className="modal-close" onClick={onClose}>✖</button>
         <h2 className="text-xl font-bold mb-4">{event.title}</h2>

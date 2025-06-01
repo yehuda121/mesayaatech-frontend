@@ -6,7 +6,7 @@ import { t } from '@/app/utils/loadTranslations';
 import ViewJob from './viewJob';
 import './jobs.css';
 
-export default function ViewJobsReadOnly() {
+export default function ViewAllJobs() {
   const [language, setLanguage] = useState(getLanguage());
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);

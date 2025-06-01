@@ -92,7 +92,7 @@ export default function Events({ idNumber, fullName, email }) {
           {filteredEvents.map((event, i) => (
             <div
               key={i}
-              className="border p-4 rounded shadow flex flex-col gap-2 overflow-hidden cursor-pointer"
+              className="border p-4 rounded shadow flex flex-col gap-2 overflow-hidden cursor-pointer bg-white"
               onClick={() => setSelectedEvent(event)}
             >
               <div className="text-lg font-bold truncate">{event.title}</div>

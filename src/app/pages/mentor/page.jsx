@@ -7,12 +7,14 @@ import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { t } from '@/app/utils/loadTranslations';
 import EditMentorForm from './components/EditMentorForm';
-import PostJob from './components/jobs/PostJob';
+import PostJob from '../jobs/PostJob';
 import MyJobsList from './components/jobs/MyJobsList';
 import EditMentorJob from './components/jobs/editJob';
 import EventsPage from '@/app/pages/events/page';
 import InterviewPrep from '../interviewPrep/page';
 import FindReservist from './components/FindReservist';
+import ViewAllJobs from '../jobs/ViewAllJobs';
+import Button from '@/app/components/Button';
 // import AlertMessage from '@/app/components/notifications/AlertMessage';
 // import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
@@ -101,17 +103,23 @@ export default function MentorHomePage() {
       onClick: () => handleNavigation('form')
     },
     {
-      labelHe: t('navPostJob', language),
-      labelEn: t('navPostJob', language),
-      path: '#post-job',
-      onClick: () => handleNavigation('post-job')
+      labelHe: t('jobs', language),
+      labelEn: t('jobs', language),
+      path: '#vallJobs',
+      onClick: () => handleNavigation('allJobs')
     },
-    {
-      labelHe: t('myJobsList', language),
-      labelEn: t('myJobsList', language),
-      path: '#my-jobs',
-      onClick: () => handleNavigation('myJobsList')
-    },
+    // {
+    //   labelHe: t('navPostJob', language),
+    //   labelEn: t('navPostJob', language),
+    //   path: '#post-job',
+    //   onClick: () => handleNavigation('post-job')
+    // },
+    // {
+    //   labelHe: t('myJobsList', language),
+    //   labelEn: t('myJobsList', language),
+    //   path: '#my-jobs',
+    //   onClick: () => handleNavigation('myJobsList')
+    // },
     {
       labelHe: t('events', language),
       labelEn: t('events', language),
@@ -129,7 +137,7 @@ export default function MentorHomePage() {
       labelEn: t('findReservist', language),
       path: '#find-reservist',
       onClick: () => handleNavigation('find-reservist')
-    }
+    },
 
     // {
     //   labelHe: t('navMyReservists', language),
@@ -170,7 +178,34 @@ export default function MentorHomePage() {
             <p className="mentor-subtitle">
               {t('mentorWelcomeSubtitle', language)}
             </p>
+            <EventsPage
+              idNumber={idNumber}
+              fullName={fullName}
+              email={email}
+            />
           </>
+        )}
+
+        {view === 'allJobs' && (
+          <>
+            <div className="flex gap-2 mt-4 justify-start" dir="rtl">
+              <Button
+                text={t('myJobsList', language)}
+                onClick={() => {
+                  handleNavigation('myJobsList')
+                }}
+              />
+              <Button
+                text={t('postJob', language)}
+                // size="sm"
+                onClick={() => {
+                  handleNavigation('post-job')
+                }}
+              />
+            </div>
+            <ViewAllJobs/>
+          </>
+
         )}
 
         {view === 'form' && userData && (

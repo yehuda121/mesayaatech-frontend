@@ -136,7 +136,7 @@ import SideBar from '@/app/components/SideBar';
 import Events from '@/app/pages/events/page';
 import EditReservistForm from '../components/EditReservistForm';
 import ViewJob from '../../jobs/viewJob';
-import ViewJobsReadOnly from '@/app/pages/jobs/page';
+import ViewJobsReadOnly from '@/app/pages/jobs/ViewAllJobs';
 import { getLanguage } from '@/app/language';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
