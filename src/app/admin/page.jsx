@@ -180,7 +180,7 @@ import ViewEvents from './components/events/ViewEvents';
 import EditEvents from './components/events/EditEvents';
 import ViewJobs from './components/jobs/viewJobs';
 import EditJob from './components/jobs/editJob';
-import AddJob from './components/jobs/addNewJob';
+import AddJob from '../components/jobs/addNewJob';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';

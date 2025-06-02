@@ -30,7 +30,7 @@
 
 
 /* === EditMentorForm Layout === */
-.edit-mentor-container {
+/* .edit-mentor-container {
   max-width: 768px;  
   margin: 0 auto;
   background-color: #ffffff;
@@ -91,7 +91,7 @@
 .edit-mentor-buttons {
   display: flex;
   gap: 0.5rem;
-}
+} */
 
 /* === PostJob === */
 .post-job-form {

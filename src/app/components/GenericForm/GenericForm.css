@@ -1,0 +1,111 @@
+.generic-form-container {
+  max-width: 768px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: rgb(237, 237, 237);
+}
+
+.generic-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .generic-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.generic-form-title {
+  grid-column: span 2;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.generic-form-label {
+  display: block;
+  text-align: start;
+}
+
+.generic-form-label-text {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.generic-form-input,
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+
+textarea {
+  height: 6rem;
+  resize: vertical;
+}
+
+.readonly-value {
+  padding: 0.5rem;
+  background-color: #f9f9f9;
+  border-radius: 0.375rem;
+  color: #333;
+}
+
+.generic-form-buttons {
+  grid-column: span 2;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.generic-form-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.checkbox-label-text {
+  font-weight: 500;
+}
+
+input[type="file"] {
+  margin-top: 0.25rem;
+}
+
+.generic-form-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.checkbox-label-text {
+  font-weight: 500;
+}
+
+.generic-form-extra {
+  grid-column: span 2;
+  margin-top: 1rem;
+}
+.delete-button {
+  background-color: red !important; 
+  color: white;
+  font-weight: bold;
+  border-radius: 7px !important;
+  padding: 0.5rem 1.25rem;
+}
+
+.delete-button:hover {
+  background-color: #b91c1c !important;
+}

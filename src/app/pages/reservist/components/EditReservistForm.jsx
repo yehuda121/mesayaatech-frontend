@@ -1,11 +1,11 @@
 'use client';
+
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
-import Button from '@/app/components/Button';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
+import GenericForm from '@/app/components/GenericForm/GenericForm';
 
 export default function EditReservistForm({ userData, onSave, onBack }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -13,7 +13,6 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
   const [initialData, setInitialData] = useState(userData || {});
   const [saving, setSaving] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
-  const router = useRouter();
   const [confirmClearMentor, setConfirmClearMentor] = useState(false);
 
   useEffect(() => {
@@ -26,7 +25,7 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
     if (userData) {
       setFormData({
         ...userData,
-        mentorId: userData.mentorId || null, // default to null if missing
+        mentorId: userData.mentorId || null,
       });
       setInitialData({
         ...userData,
@@ -35,16 +34,41 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
     }
   }, [userData]);
 
-  const keys = [
-    'fullName', 'email', 'phone', 'armyRole', 'location',
-    'fields', 'experience', 'linkedin', 'notes'
+  const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
+
+  const fields = [
+    { key: 'fullName' },
+    { key: 'email' },
+    { key: 'phone' },
+    { key: 'armyRole' },
+    { key: 'location' },
+    { key: 'fields' },
+    { key: 'experience', type: 'textarea' },
+    { key: 'linkedin' },
+    { key: 'notes', type: 'textarea' },
+    {
+      key: 'mentorId',
+      type: 'checkbox',
+      labelOverride: 'notInterestedInMentor',
+      transform: {
+        toValue: (val) => val === 'notInterested',
+        fromEvent: (checked) => checked ? 'notInterested' : null
+      }
+    }
   ];
 
-  const handleChange = (key, value) => {
-    setFormData({ ...formData, [key]: value });
+  const handleFieldChange = (newData) => {
+    // intercept mentorId change for confirmation
+    if (
+      newData.mentorId === 'notInterested' &&
+      initialData.mentorId &&
+      initialData.mentorId !== 'notInterested'
+    ) {
+      setConfirmClearMentor(true);
+    } else {
+      setFormData(newData);
+    }
   };
-
-  const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
 
   const validateForm = () => {
     const errors = [];
@@ -64,16 +88,13 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
     else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
 
     if (email && !emailPattern.test(email)) errors.push(t('emailInvalid', language));
-
     if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
 
     if (!armyRole) errors.push(t('armyRoleRequired', language));
     else if (/[^\w\sא-ת]/.test(armyRole)) errors.push(t('armyRoleInvalid', language));
 
     if (!location) errors.push(t('locationRequired', language));
-
     if (!experience) errors.push(t('experienceRequired', language));
-
     if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
 
     return errors;
@@ -111,12 +132,11 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
 
   const handleCancel = () => {
     setFormData(initialData);
+    onBack();
   };
 
   return (
-    <div dir={language === 'he' ? 'rtl' : 'ltr'} className="max-w-3xl mx-auto bg-white p-6 rounded shadow space-y-6">
-      <h2 className="text-xl font-bold text-center">{t('editUserDetails', language)}</h2>
-
+    <>
       {alertMessage && (
         <AlertMessage
           message={alertMessage.message}
@@ -124,86 +144,30 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
           onClose={() => setAlertMessage(null)}
         />
       )}
+
       {confirmClearMentor && (
         <ConfirmDialog
           title={t('confirmRemoveMentorTitle', language)}
           message={t('confirmRemoveMentorText', language)}
           onConfirm={() => {
-            handleChange('mentorId', 'notInterested');
+            setFormData({ ...formData, mentorId: 'notInterested' });
             setConfirmClearMentor(false);
           }}
-          onCancel={() => {
-            setConfirmClearMentor(false);
-          }}
+          onCancel={() => setConfirmClearMentor(false)}
         />
       )}
 
-      <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {keys.map((key) => (
-          <label
-            key={key}
-            className={`block ${language === 'he' ? 'text-right' : 'text-left'}`}
-            dir={language === 'he' ? 'rtl' : 'ltr'}
-          >
-            <span className="font-medium">{t(key, language)}</span>
-            {(key === 'experience' || key === 'notes') ? (
-              <textarea
-                className="w-full border p-2 rounded h-24"
-                value={formData[key] || ''}
-                onChange={(e) => handleChange(key, e.target.value)}
-              />
-            ) : (
-              <input
-                type="text"
-                className="w-full border p-2 rounded"
-                value={formData[key] || ''}
-                onChange={(e) => handleChange(key, e.target.value)}
-              />
-            )}
-          </label>
-        ))}
-      </form>
-
-      {/* Mentor toggle switch */}
-      <div className="mt-4 flex items-center gap-2">
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={formData.mentorId === 'notInterested'}
-            onChange={(e) => {
-              const checked = e.target.checked;
-
-              // If user already has a mentor, ask for confirmation before unassigning
-              if (checked && initialData.mentorId && initialData.mentorId !== 'notInterested') {
-                setConfirmClearMentor(true); // Show confirmation dialog
-              } else {
-                handleChange('mentorId', checked ? 'notInterested' : null);
-              }
-            }}
-          />
-          <span className="text-sm font-medium">
-            {t('notInterestedInMentor', language)}
-          </span>
-        </label>
-      </div>
-
-      {/* Actions */}
-      <div className="flex mt-6">
-        <div className="flex gap-2">
-          <Button
-            text={t('cancel', language)}
-            onClick={() => {
-              handleCancel();
-              onBack();
-            }}
-          />
-          <Button
-            text={saving ? '...' : t('saveChanges', language)}
-            onClick={handleSubmit}
-            disabled={!isModified}
-          />
-        </div>
-      </div>
-    </div>
+      <GenericForm
+        titleKey="editUserDetails"
+        fields={fields}
+        data={formData}
+        onChange={handleFieldChange}
+        onPrimary={handleSubmit}
+        onSecondary={handleCancel}
+        primaryLabel={saving ? '' : 'saveChanges'}
+        secondaryLabel="cancel"
+        disabledPrimary={!isModified}
+      />
+    </>
   );
 }

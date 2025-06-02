@@ -228,14 +228,16 @@
     "viewDetails": "צפיה בפרטים",
     "assignedReservists": "מילואימניקים משויכים",
     "noReservistsAssigned": "אין מילואימניקים משויכים",
-    "notInterestedInMentor": "המילואימניק לא מעוניין במנטור",
+    "notInterestedInMentor": "אני לא מעוניין במנטור",
     "noMentorAssigned": "אין מנטור משויך",
     "mentorDataUnavailable": "פרטי המנטור אינם זמינים",
     "assignedMentor": "מנטור משויך",
     "postJob": "פרסם משרה חדשה",
-    "noJobsFound": "לא נמצאו משרות"
-
-
+    "noJobsFound": "לא נמצאו משרות",
+    "mentorId": "ID מנטור",
+    "showPast":"הצג אירועים שעברו",
+    "hidePast": "הסתר אירועים שעברו",
+    "confirmDeleteJob": "האם אתה בטוח שברצונך למחוק את המשרה?"
 
         
 }

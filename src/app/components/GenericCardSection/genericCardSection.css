@@ -17,12 +17,21 @@
 }
 
 /* === Filters Row === */
-.card-section-filters {
+/* .card-section-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
   margin-top: 0.5rem;
+} */
+ .card-filter {
+  padding: 0.5rem;
+  border: 2px solid #ddd;
+  border-radius: 0.5rem;
+  background-color: #f9fafb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s ease;
+  min-width: 120px;
 }
 
 /* === Filter Base === */
@@ -51,15 +60,28 @@
   min-width: 220px;
   max-width: 520px;
 }
-
-.card-filter.date-filter {
-  flex: 0 0 140px;
-  max-width: 140px;
+.card-filter.button-filter {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  height: 100%;
+  color: white;
 }
 
-.card-filter.flexible {
+/* .card-filter.date-filter {
+  flex: 0 0 140px;
+  max-width: 140px;
+} */
+.card-filter.date-filter {
+  flex: 0 0 160px;
+}
+/* .card-filter.flexible {
   flex: 1 1 calc(100% - 160px);
   min-width: 200px;
+} */
+.card-filter.flexible {
+  flex: 1 1 0%;
+  min-width: 200px;
+  max-width: 100%;
 }
 
 /* === Responsive fallback === */
