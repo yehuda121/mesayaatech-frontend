@@ -4,6 +4,7 @@
   flex-grow: 1;
   padding: 2rem;
   background-color: #fff;
+  min-height: 745px;
 }
 
 @media (max-width: 768px) {
@@ -35,62 +36,3 @@
   }
 }
 
-/* === Box for each column (jobs / events) === */
-.reservist-column {
-  background: #f9fafb;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.reservist-column-title {
-  font-weight: bold;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-}
-
-/* === List item for each job or event === */
-.reservist-list-item {
-  background: #fff;
-  padding: 0.75rem;
-  border-radius: 0.375rem;
-  margin-bottom: 0.5rem;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.05);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* === Modal styling for event/job details === */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  position: relative;
-}
-
-.modal-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.75rem;
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-}

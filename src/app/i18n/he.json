@@ -199,7 +199,7 @@
     "registerAs_reserve": "מילואימניק",
     "registerAs_mentor": "מנטור",
     "registerAs_ambassador": "שגריר",
-    "mentorWelcomeTitle": "שלום {{name}}!",
+    "mentorWelcomeTitle": "ברוך הבא, {{name}}",
     "mentorWelcomeSubtitle": "כאן תוכל לנהל את כל הפעולות שלך כמנטור.",
     "navMentees": "חניכים",
     "navMyReservists": "רשימת המלווים שלי",
@@ -232,7 +232,8 @@
     "noMentorAssigned": "אין מנטור משויך",
     "mentorDataUnavailable": "פרטי המנטור אינם זמינים",
     "assignedMentor": "מנטור משויך",
-    "postJob": "פרסם משרה חדשה"
+    "postJob": "פרסם משרה חדשה",
+    "noJobsFound": "לא נמצאו משרות"
 
 
 

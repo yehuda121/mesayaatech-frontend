@@ -199,7 +199,7 @@
     "registerAs_reserve": "Reservist",
     "registerAs_mentor": "Mentor",
     "registerAs_ambassador": "Ambassador",
-    "mentorWelcomeTitle": "Hello {{name}}!",
+    "mentorWelcomeTitle": "Welcome, {{name}}",
     "mentorWelcomeSubtitle": "Here you can manage all your actions as a mentor.",
     "navMentees": "Mentees",
     "navMyReservists": "My Reservists",
@@ -230,7 +230,8 @@
     "noMentorAssigned": "No mentor assigned",
     "assignedReservists": "Assigned Reservists",
     "noReservistsAssigned": "No reservists assigned",
-    "postJob": "Post a new job"
+    "postJob": "Post a new job",
+    "noJobsFound": "No jobs has found"
 
 
 

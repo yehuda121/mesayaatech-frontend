@@ -10,10 +10,12 @@ import EditMentorForm from './components/EditMentorForm';
 import PostJob from '../jobs/PostJob';
 import MyJobsList from './components/jobs/MyJobsList';
 import EditMentorJob from './components/jobs/editJob';
-import EventsPage from '@/app/pages/events/page';
+// import EventsPage from '@/app/pages/events/page';
+import EventsPage from '@/app/components/events/ViewAllEvents';
 import InterviewPrep from '../interviewPrep/page';
 import FindReservist from './components/FindReservist';
-import ViewAllJobs from '../jobs/ViewAllJobs';
+// import ViewAllJobs from '../jobs/ViewAllJobs';
+import ViewAllJobs from '../../components/jobs/ViewAllJobs';
 import Button from '@/app/components/Button';
 // import AlertMessage from '@/app/components/notifications/AlertMessage';
 // import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
@@ -170,14 +172,12 @@ export default function MentorHomePage() {
       <SideBar navItems={navItems} />
 
       <main className="mentor-main">
+        <h1 className="mentor-welcome">
+          {t('mentorWelcomeTitle', language).replace('{{name}}', fullName)}
+        </h1>
+
         {view === 'dashboard' && (
           <>
-            <h1 className="mentor-welcome">
-              {t('mentorWelcomeTitle', language).replace('{{name}}', fullName)}
-            </h1>
-            <p className="mentor-subtitle">
-              {t('mentorWelcomeSubtitle', language)}
-            </p>
             <EventsPage
               idNumber={idNumber}
               fullName={fullName}

@@ -1,0 +1,117 @@
+/* === Container & Title === */
+.card-section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+}
+
+.card-section-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* === Filters Row === */
+.card-section-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+/* === Filter Base === */
+.card-filter {
+  padding: 0.5rem;
+  border: 2px solid #ddd;
+  border-radius: 0.5rem;
+  background-color: #f9fafb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s ease;
+}
+
+.card-filter:focus {
+  outline: none;
+  border-color: #3b82f6; /* blue */
+}
+
+/* === Layout logic === */
+.card-section-filters.single-filter .card-filter {
+  flex: 1 1 50%;
+  max-width: 600px;
+}
+
+.card-section-filters.double-filter .card-filter {
+  flex: 1 1 48%;
+  min-width: 220px;
+  max-width: 520px;
+}
+
+.card-filter.date-filter {
+  flex: 0 0 140px;
+  max-width: 140px;
+}
+
+.card-filter.flexible {
+  flex: 1 1 calc(100% - 160px);
+  min-width: 200px;
+}
+
+/* === Responsive fallback === */
+@media (max-width: 640px) {
+  .card-section-filters {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card-section-filters .card-filter {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .card-filter.date-filter {
+    width: 100%;
+  }
+
+  .card-filter.flexible {
+    width: 100%;
+  }
+}
+
+/* === Grid & Cards === */
+.card-section-empty {
+  text-align: center;
+  font-size: 1rem;
+  color: #555;
+}
+
+.card-section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+}
+@media (max-width: 768px) {
+  .card-section-grid {
+    grid-template-columns: 1fr; 
+  }
+}
+
+.card-section-item {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.card-section-item:hover {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}

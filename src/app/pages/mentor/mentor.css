@@ -1,6 +1,6 @@
 /* ---home page --- */
 .mentor-welcome {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   font-weight: bold;
   text-align: center;
   margin-bottom: 2rem;
@@ -17,6 +17,8 @@
   padding-top: 100px;     /* space for fixed header */
   padding-right: 280px;  /* space for fixed sidebar */
   box-sizing: border-box;
+  background-color: white;
+  min-height: 750px;
 }
 
 @media (max-width: 768px) {

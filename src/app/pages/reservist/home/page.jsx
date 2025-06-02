@@ -2,10 +2,11 @@
 
 // import { useEffect, useState } from 'react';
 // import SideBar from '@/app/components/SideBar';
-// import Events from '@/app/pages/events/page';
+// // import Events from '@/app/pages/events/page';
+// import Events from '@/app/components/events/ViewAllEvents';
 // import EditReservistForm from '../components/EditReservistForm';
-// import ViewJob from '../../jobs/viewJob';
-// import ViewJobsReadOnly from '@/app/pages/jobs/page';
+// // import ViewJobs from '@/app/pages/jobs/ViewAllJobs';
+// import ViewJobs from '@/app/components/jobs/ViewAllJobs';
 // import { getLanguage } from '@/app/language';
 // import { useRouter } from 'next/navigation';
 // import { jwtDecode } from 'jwt-decode';
@@ -20,7 +21,6 @@
 //   const [userType, setUserType] = useState('');
 //   const [userData, setUserData] = useState(null);
 //   const [view, setView] = useState('dashboard'); 
-//   const [selectedJob, setSelectedJob] = useState(null);
 //   const [selectedEvent, setSelectedEvent] = useState(null);
 
 //   const router = useRouter();
@@ -30,16 +30,32 @@
 //     const handleLangChange = () => setLanguage(getLanguage());
 //     window.addEventListener('languageChanged', handleLangChange);
 
+//     // If the roll not as expacted then logout
 //     const token = localStorage.getItem('idToken');
 //     if (token) {
 //       try {
 //         const decoded = jwtDecode(token);
+//         const role = decoded['custom:role'];
+//         const expectedRole = 'reservist';
+//         const roleToPath = {
+//           reservist: '/pages/reservist/home',
+//           mentor: '/pages/mentor',
+//           ambassador: '/pages/ambassador/home',
+//           admin: '/admin'
+//         };
+
+//         if (role !== expectedRole) {
+//           router.push(roleToPath[role] || '/login');
+//           return;
+//         }
+
 //         setIdNumber(decoded['custom:idNumber'] || decoded.sub);
 //         setFullName(decoded.name);
 //         setEmail(decoded.email);
-//         setUserType(decoded['custom:role']);
+//         setUserType(role);
 //       } catch (err) {
 //         console.error('Failed to decode token:', err);
+//         router.push('/login');
 //       }
 //     } else {
 //       router.push('/login');
@@ -87,17 +103,12 @@
 
 //         {view === 'dashboard' && (
 //           <>
-//             <h2 className="reservist-section-title text-center mb-6" dir={language === 'he' ? 'rtl' : 'ltr'}>
-//               {t('whatsNew', language)}
-//             </h2>
-
+//             <h2 className="reservist-section-title text-center mb-6" dir={language === 'he' ? 'rtl' : 'ltr'}></h2>
 //             <div className="reservist-columns">
-//               {/* jobs */}
 //               <div className="reservist-column">
-//                 <ViewJobsReadOnly limit={4} setSelectedJob={setSelectedJob} />
+//                 <ViewJobs limit={4}/>
 //               </div>
 
-//               {/* events */}
 //               <div className="reservist-column">
 //                 <Events limit={4} idNumber={idNumber} fullName={fullName} email={email} />
 //               </div>
@@ -116,27 +127,25 @@
 //         {view === 'events' && idNumber && fullName && email && (
 //           <Events idNumber={idNumber} fullName={fullName} email={email} />
 //         )}
+
 //         {view === 'jobs' && (
 //           <div className="reservist-jobs-section">
-//             <ViewJobsReadOnly setSelectedJob={setSelectedJob} />
+//             <ViewJobs/>
 //           </div>
 //         )}
-
-
-//         {selectedJob && <ViewJob job={selectedJob} onClose={() => setSelectedJob(null)} />}
 //         {selectedEvent && <ViewEvent event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
 //       </main>
 //     </div>
 //   );
 // }
+// ReservistHomePage.jsx
 'use client';
 
 import { useEffect, useState } from 'react';
 import SideBar from '@/app/components/SideBar';
-import Events from '@/app/pages/events/page';
+import Events from '@/app/components/events/ViewAllEvents';
 import EditReservistForm from '../components/EditReservistForm';
-import ViewJob from '../../jobs/viewJob';
-import ViewJobsReadOnly from '@/app/pages/jobs/ViewAllJobs';
+import ViewJobs from '@/app/components/jobs/ViewAllJobs';
 import { getLanguage } from '@/app/language';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
@@ -150,13 +159,9 @@ export default function ReservistHomePage() {
   const [email, setEmail] = useState('');
   const [userType, setUserType] = useState('');
   const [userData, setUserData] = useState(null);
-  const [view, setView] = useState('dashboard'); 
-  const [selectedJob, setSelectedJob] = useState(null);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
+  const [view, setView] = useState('dashboard');
   const router = useRouter();
 
-  // Token + role validation
   useEffect(() => {
     setLanguage(getLanguage());
     const handleLangChange = () => setLanguage(getLanguage());
@@ -234,16 +239,13 @@ export default function ReservistHomePage() {
 
         {view === 'dashboard' && (
           <>
-            <h2 className="reservist-section-title text-center mb-6" dir={language === 'he' ? 'rtl' : 'ltr'}>
-              {t('whatsNew', language)}
-            </h2>
-
+            <h2 className="reservist-section-title text-center mb-6" dir={language === 'he' ? 'rtl' : 'ltr'}></h2>
             <div className="reservist-columns">
-              <div className="reservist-column">
-                <ViewJobsReadOnly limit={4} setSelectedJob={setSelectedJob} />
+              <div>
+                <ViewJobs limit={4} />
               </div>
 
-              <div className="reservist-column">
+              <div>
                 <Events limit={4} idNumber={idNumber} fullName={fullName} email={email} />
               </div>
             </div>
@@ -257,19 +259,16 @@ export default function ReservistHomePage() {
             onBack={() => setView('dashboard')}
           />
         )}
-        
+
         {view === 'events' && idNumber && fullName && email && (
           <Events idNumber={idNumber} fullName={fullName} email={email} />
         )}
 
         {view === 'jobs' && (
           <div className="reservist-jobs-section">
-            <ViewJobsReadOnly setSelectedJob={setSelectedJob} />
+            <ViewJobs />
           </div>
         )}
-
-        {selectedJob && <ViewJob job={selectedJob} onClose={() => setSelectedJob(null)} />}
-        {selectedEvent && <ViewEvent event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
       </main>
     </div>
   );
