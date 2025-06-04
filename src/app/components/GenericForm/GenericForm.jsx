@@ -39,19 +39,19 @@ export default function GenericForm({
 
             {fields.map((field) => {
                 const {
-                key,
-                type,
-                readonly,
-                labelOverride,
-                transform
+                    key,
+                    type,
+                    readonly,
+                    labelOverride,
+                    transform
                 } = field;
                 const label = t(labelOverride || key, language);
                 const rawValue = data[key];
                 const value = type === 'checkbox'
-                ? transform?.toValue
+                    ? transform?.toValue
                     ? transform.toValue(rawValue)
                     : !!rawValue
-                : rawValue || '';
+                    : rawValue || '';
 
                 if (type === 'checkbox') {
                 return (
@@ -120,7 +120,6 @@ export default function GenericForm({
                 );
             })}
 
-            {/* Optional custom content (e.g. participants list) */}
             {children && (
                 <div className="generic-form-extra">
                 {children}

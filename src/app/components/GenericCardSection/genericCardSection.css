@@ -17,14 +17,15 @@
 }
 
 /* === Filters Row === */
-/* .card-section-filters {
+.card-section-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
   margin-top: 0.5rem;
-} */
- .card-filter {
+}
+
+.card-filter {
   padding: 0.5rem;
   border: 2px solid #ddd;
   border-radius: 0.5rem;

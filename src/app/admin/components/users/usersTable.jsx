@@ -255,14 +255,32 @@ export default function UsersTable({ defaultStatusFilter = null }) {
         </table>
 
         {selectedForm && selectedForm.userType === 'reservist' && (
-          <EditReservistForm user={selectedForm} onClose={() => setSelectedForm(null)} />
+          <EditReservistForm
+            user={selectedForm}
+            onClose={() => setSelectedForm(null)}
+            onSave={handleSaveUser}
+            onDelete={handleDeleteUser}
+          />
         )}
+
         {selectedForm && selectedForm.userType === 'mentor' && (
-          <EditMentorForm user={selectedForm} onClose={() => setSelectedForm(null)} />
+          <EditMentorForm
+            user={selectedForm}
+            onClose={() => setSelectedForm(null)}
+            onSave={handleSaveUser}
+            onDelete={handleDeleteUser}
+          />
         )}
+
         {selectedForm && selectedForm.userType === 'ambassador' && (
-          <EditAmbassadorForm user={selectedForm} onClose={() => setSelectedForm(null)} />
+          <EditAmbassadorForm
+            user={selectedForm}
+            onClose={() => setSelectedForm(null)}
+            onSave={handleSaveUser}
+            onDelete={handleDeleteUser}
+          />
         )}
+        
       </div>
     </div>
   );

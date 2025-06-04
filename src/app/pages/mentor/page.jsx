@@ -1,30 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import SideBar from '@/app/components/SideBar';
 import { getLanguage } from '@/app/language';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { t } from '@/app/utils/loadTranslations';
 import EditMentorForm from './components/EditMentorForm';
-import PostJob from '../jobs/PostJob';
+import PostNewJob from '@/app/components/jobs/PostNewJob';
 import MyJobsList from './components/jobs/MyJobsList';
-import EditMentorJob from './components/jobs/editJob';
-// import EventsPage from '@/app/pages/events/page';
+import EditMentorJob from '@/app/components/jobs/EditJob';
 import EventsPage from '@/app/components/events/ViewAllEvents';
 import InterviewPrep from '../interviewPrep/page';
 import FindReservist from './components/FindReservist';
-// import ViewAllJobs from '../jobs/ViewAllJobs';
-import ViewAllJobs from '../../components/jobs/ViewAllJobs';
+import ViewAllJobs from '@/app/components/jobs/ViewAllJobs';
 import Button from '@/app/components/Button';
-// import AlertMessage from '@/app/components/notifications/AlertMessage';
-// import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
 
 import './mentor.css';
 
 export default function MentorHomePage() {
-  const [language, setLanguage] = useState(getLanguage());
+  const [language, setLanguage] = useState(null);
   const [fullName, setFullName] = useState('');
   const [idNumber, setIdNumber] = useState(null);
   const [view, setView] = useState('dashboard');
@@ -36,40 +32,44 @@ export default function MentorHomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    setLanguage(getLanguage());
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
+    if (typeof window !== 'undefined') {
+      const lang = getLanguage();
+      setLanguage(lang);
 
-    const token = localStorage.getItem('idToken');
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        const role = decoded['custom:role'];
-        const expectedRole = 'mentor';
-        const roleToPath = {
-          reservist: '/pages/reservist/home',
-          mentor: '/pages/mentor',
-          ambassador: '/pages/ambassador/home',
-          admin: '/admin'
-        };
+      const handleLangChange = () => setLanguage(getLanguage());
+      window.addEventListener('languageChanged', handleLangChange);
 
-        if (role !== expectedRole) {
-          router.push(roleToPath[role] || '/login');
-          return;
+      const token = localStorage.getItem('idToken');
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          const role = decoded['custom:role'];
+          const expectedRole = 'mentor';
+          const roleToPath = {
+            reservist: '/pages/reservist/home',
+            mentor: '/pages/mentor',
+            ambassador: '/pages/ambassador/home',
+            admin: '/admin'
+          };
+
+          if (role !== expectedRole) {
+            router.push(roleToPath[role] || '/login');
+            return;
+          }
+
+          setFullName(decoded.name);
+          setIdNumber(decoded['custom:idNumber'] || decoded.sub);
+          setEmail(decoded.email);
+        } catch (err) {
+          console.error('Failed to decode token:', err);
+          router.push('/login');
         }
-
-        setFullName(decoded.name);
-        setIdNumber(decoded['custom:idNumber'] || decoded.sub);
-        setEmail(decoded.email);
-      } catch (err) {
-        console.error('Failed to decode token:', err);
+      } else {
         router.push('/login');
       }
-    } else {
-      router.push('/login');
-    }
 
-    return () => window.removeEventListener('languageChanged', handleLangChange);
+      return () => window.removeEventListener('languageChanged', handleLangChange);
+    }
   }, [router]);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function MentorHomePage() {
         setUserData(data);
       } catch (err) {
         console.error('Failed to load mentor form:', err);
-        setToast({ message: t('errorLoadingForm', language), type: 'error' });
+        if (language) setToast({ message: t('errorLoadingForm', language), type: 'error' });
       }
     };
 
@@ -91,121 +91,73 @@ export default function MentorHomePage() {
 
   const handleNavigation = (newView) => setView(newView);
 
-  const navItems = [
-    {
-      labelHe: t('navDashboard', language),
-      labelEn: t('navDashboard', language),
-      path: '#dashboard',
-      onClick: () => handleNavigation('dashboard')
-    },
-    {
-      labelHe: t('navPersonalDetails', language),
-      labelEn: t('navPersonalDetails', language),
-      path: '#form',
-      onClick: () => handleNavigation('form')
-    },
-    {
-      labelHe: t('jobs', language),
-      labelEn: t('jobs', language),
-      path: '#vallJobs',
-      onClick: () => handleNavigation('allJobs')
-    },
-    // {
-    //   labelHe: t('navPostJob', language),
-    //   labelEn: t('navPostJob', language),
-    //   path: '#post-job',
-    //   onClick: () => handleNavigation('post-job')
-    // },
-    // {
-    //   labelHe: t('myJobsList', language),
-    //   labelEn: t('myJobsList', language),
-    //   path: '#my-jobs',
-    //   onClick: () => handleNavigation('myJobsList')
-    // },
-    {
-      labelHe: t('events', language),
-      labelEn: t('events', language),
-      path: '#events',
-      onClick: () => handleNavigation('events')
-    },
-    {
-      labelHe: t('navInterviewPrep', language),
-      labelEn: t('navInterviewPrep', language),
-      path: '#interview-prep',
-      onClick: () => handleNavigation('interview-prep')
-    },
-    {
-      labelHe: t('findReservist', language),
-      labelEn: t('findReservist', language),
-      path: '#find-reservist',
-      onClick: () => handleNavigation('find-reservist')
-    },
+  const navItems = useMemo(() => {
+    if (!language) return [];
+    return [
+      {
+        labelHe: t('navDashboard', language),
+        labelEn: t('navDashboard', language),
+        path: '#dashboard',
+        onClick: () => handleNavigation('dashboard')
+      },
+      {
+        labelHe: t('navPersonalDetails', language),
+        labelEn: t('navPersonalDetails', language),
+        path: '#form',
+        onClick: () => handleNavigation('form')
+      },
+      {
+        labelHe: t('jobs', language),
+        labelEn: t('jobs', language),
+        path: '#vallJobs',
+        onClick: () => handleNavigation('allJobs')
+      },
+      {
+        labelHe: t('events', language),
+        labelEn: t('events', language),
+        path: '#events',
+        onClick: () => handleNavigation('events')
+      },
+      {
+        labelHe: t('navInterviewPrep', language),
+        labelEn: t('navInterviewPrep', language),
+        path: '#interview-prep',
+        onClick: () => handleNavigation('interview-prep')
+      },
+      {
+        labelHe: t('findReservist', language),
+        labelEn: t('findReservist', language),
+        path: '#find-reservist',
+        onClick: () => handleNavigation('find-reservist')
+      },
+    ];
+  }, [language]);
 
-    // {
-    //   labelHe: t('navMyReservists', language),
-    //   labelEn: t('navMyReservists', language),
-    //   path: '#my-reservists',
-    //   onClick: () => handleNavigation('my-reservists')
-    // },
-    // {
-    //   labelHe: t('navRequests', language),
-    //   labelEn: t('navRequests', language),
-    //   path: '#requests',
-    //   onClick: () => handleNavigation('requests')
-    // },
-    // {
-    //   labelHe: t('navJobMatches', language),
-    //   labelEn: t('navJobMatches', language),
-    //   path: '#job-matches',
-    //   onClick: () => handleNavigation('job-matches')
-    // },
-    // {
-    //   labelHe: t('navFeedback', language),
-    //   labelEn: t('navFeedback', language),
-    //   path: '#feedback',
-    //   onClick: () => handleNavigation('feedback')
-    // },
-  ];
+  if (!language || !idNumber) return null;
 
   return (
     <div className="mentor-container">
       <SideBar navItems={navItems} />
 
       <main className="mentor-main">
-        <h1 className="mentor-welcome">
-          {t('mentorWelcomeTitle', language).replace('{{name}}', fullName)}
-        </h1>
 
         {view === 'dashboard' && (
           <>
-            <EventsPage
-              idNumber={idNumber}
-              fullName={fullName}
-              email={email}
-            />
+            <h1 className="mentor-welcome">
+              {t('mentorWelcomeTitle', language).replace('{{name}}', fullName)}
+            </h1>
+            <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
           </>
         )}
 
         {view === 'allJobs' && (
           <>
-            <div className="flex gap-2 mt-4 justify-start" dir="rtl">
-              <Button
-                text={t('myJobsList', language)}
-                onClick={() => {
-                  handleNavigation('myJobsList')
-                }}
-              />
-              <Button
-                text={t('postJob', language)}
-                // size="sm"
-                onClick={() => {
-                  handleNavigation('post-job')
-                }}
-              />
+            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+              <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
+              <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
             </div>
-            <ViewAllJobs/>
+            <ViewAllJobs />
           </>
-
         )}
 
         {view === 'form' && userData && (
@@ -217,19 +169,20 @@ export default function MentorHomePage() {
         )}
 
         {view === 'post-job' && (
-          <PostJob
-            publisherId={idNumber}
+          <PostNewJob
+            publisherId={`${email}#${idNumber}`}
             publisherType="mentor"
-            onSuccess={() => {
+            onSave={() => {
               setToast({ message: t('jobPostedSuccess', language), type: 'success' });
               setView('dashboard');
             }}
+            onClose={() => setView('dashboard')}
           />
         )}
-
+        
         {view === 'myJobsList' && (
           <MyJobsList
-            publisherId={idNumber}
+            publisherId={`${email}#${idNumber}`}
             onEdit={(job) => {
               setSelectedJobForEdit(job);
               setView('edit-job');
@@ -253,22 +206,13 @@ export default function MentorHomePage() {
         )}
 
         {view === 'events' && (
-          <EventsPage
-            idNumber={idNumber}
-            fullName={fullName}
-            email={email}
-          />
+          <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
         )}
 
-        {view === 'interview-prep' && (
-          <InterviewPrep />
-        )}
+        {view === 'interview-prep' && <InterviewPrep />}
 
         {view === 'find-reservist' && (
-          <FindReservist
-            mentorId={idNumber}
-            onBack={() => setView('dashboard')}
-          />
+          <FindReservist mentorId={idNumber} onBack={() => setView('dashboard')} />
         )}
 
         {toast && (

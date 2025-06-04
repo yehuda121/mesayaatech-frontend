@@ -237,7 +237,25 @@
     "mentorId": "ID מנטור",
     "showPast":"הצג אירועים שעברו",
     "hidePast": "הסתר אירועים שעברו",
-    "confirmDeleteJob": "האם אתה בטוח שברצונך למחוק את המשרה?"
+    "confirmDeleteJob": "האם אתה בטוח שברצונך למחוק את המשרה?",
+    "users": "משתמשים",
+    "jobName": "שם המשרה *",
+    "companyName": "שם החברה *",
+    "role": "תפקיד",
+    "submitEmail": "מייל להגשה",
+    "submitLink": "לינק להגשה",
+    "companyWebsite": "לינק לאתר החברה",
+    "jobViewLink": "לינק לצפייה במשרה",
+    "jobAddedSuccessfully": "המשרה נוספה בהצלחה!",
+    "uploadJobError": "אירעה שגיאה בעת הוספת המשרה",
+    "minExperience": "ניסיון מינימלי",
+    "requirements": "דרישות",
+    "advantages": "יתרונות",
+    "noCompany": "לא צוינה חברה",
+    "jobsLoadError": "שגיאה בטעינת המשרות",
+    "jobsServerError": "אירעה שגיאה בעת שליפת המשרות מהשרת",
+    "publisherIdMissing": "לא ניתן לטעון משרות – חסר מזהה מפרסם",
+    "filterByDate": "סינון לפי תאריך"
 
         
 }

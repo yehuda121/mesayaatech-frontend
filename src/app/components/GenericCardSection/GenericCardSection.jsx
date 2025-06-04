@@ -22,7 +22,6 @@ export default function GenericCardSection({
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
-  // קביעת קלאס נוסף לפילטרים לפי מספרם
   const filtersWrapperClass = `card-section-filters ${
     filters.length === 1 ? 'single-filter' :
     filters.length === 2 ? 'double-filter' : ''

@@ -235,8 +235,25 @@
     "mentorId": "mentor ID",
     "showPast":"Show Past Events",
     "hidePast": "Hide Past Events",
-    "confirmDeleteJob": "Are you sure you want to delete this job?"
-
+    "confirmDeleteJob": "Are you sure you want to delete this job?",
+    "users": "Users",
+    "jobName": "Job name",
+    "companyName":  "Company Name *",
+    "role": "Role",
+    "minExperience": "Minimum Years of Experience",
+    "requirements": "Requirements",
+    "advantages": "Advantages",
+    "jobAddedSuccessfully": "Job posted successfully!",
+    "uploadJobError": "Error while posting the job",
+    "submitEmail": "Submission Email",
+    "submitLink": "Submission Link",
+    "companyWebsite": "Company Website",
+    "jobViewLink": "Job View Link",  
+    "noCompany": "No Company",
+    "jobsLoadError": "Error loading job list",
+    "jobsServerError": "Server error while fetching jobs",
+    "publisherIdMissing": "Cannot load jobs – missing publisher ID",
+    "filterByDate": "Filter by date"
 
 
 }
