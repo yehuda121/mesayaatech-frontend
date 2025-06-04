@@ -5,6 +5,7 @@
 // import { t } from '@/app/utils/loadTranslations';
 // import GenericForm from '@/app/components/GenericForm/GenericForm';
 // import ToastMessage from '@/app/components/Notifications/ToastMessage';
+// import Button from '@/app/components/Button';
 
 // export default function PostNewJob({ publisherId, publisherType, onSave, onClose }) {
 //   const [language, setLanguage] = useState(getLanguage());
@@ -20,7 +21,8 @@
 //     submitLink: '',
 //     companyWebsite: '',
 //     jobViewLink: '',
-//     attachment: null
+//     jobTextInput: '',
+//     attachment: null,
 //   });
 //   const [loading, setLoading] = useState(false);
 //   const [toast, setToast] = useState(null);
@@ -71,7 +73,50 @@
 //     }
 //   };
 
+//   const handleAutoFillFromText = async () => {
+//     if (!jobData.jobTextInput) return;
+
+//     try {
+//       const res = await fetch('http://localhost:5000/api/parse-job-text', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ text: jobData.jobTextInput }),
+//       });
+//       const result = await res.json();
+//       setJobData((prev) => ({ ...prev, ...result }));
+//       setToast({ message: t('fieldsAutoFilled', language), type: 'success' });
+//     } catch (err) {
+//       console.error(err);
+//       setToast({ message: t('autoFillFailed', language), type: 'error' });
+//     }
+//   };
+
+//   const handleImageUploadAndExtract = async (file) => {
+//     if (!file) return;
+
+//     const formData = new FormData();
+//     formData.append('image', file);
+
+//     try {
+//       const res = await fetch('http://localhost:5000/api/extract-image-text', {
+//         method: 'POST',
+//         body: formData,
+//       });
+//       const result = await res.json();
+//       if (result?.text) {
+//         setJobData((prev) => ({ ...prev, jobTextInput: result.text }));
+//         await handleAutoFillFromText();
+//       } else {
+//         setToast({ message: t('textExtractionFailed', language), type: 'error' });
+//       }
+//     } catch (err) {
+//       console.error(err);
+//       setToast({ message: t('textExtractionFailed', language), type: 'error' });
+//     }
+//   };
+
 //   const fields = [
+//     { key: 'jobTextInput', type: 'textarea', labelOverride: 'pasteFullJobText' },
 //     { key: 'company', required: true },
 //     { key: 'location' },
 //     { key: 'role' },
@@ -83,7 +128,12 @@
 //     { key: 'submitLink' },
 //     { key: 'companyWebsite' },
 //     { key: 'jobViewLink' },
-//     { key: 'attachment', type: 'file', labelOverride: 'uploadFile' }
+//     {
+//       key: 'attachment',
+//       type: 'file',
+//       labelOverride: 'uploadFile',
+//       onChange: (file) => handleImageUploadAndExtract(file),
+//     },
 //   ];
 
 //   return (
@@ -100,6 +150,13 @@
 //           secondaryLabel="cancel"
 //           disabledPrimary={loading}
 //         />
+//         <div className="mt-2">
+//           <Button
+//             text={t('autoFillButton', language)}
+//             onClick={handleAutoFillFromText}
+//             disabled={!jobData.jobTextInput}
+//           />
+//         </div>
 //       </div>
 //       {toast && (
 //         <ToastMessage
@@ -111,14 +168,16 @@
 //     </div>
 //   );
 // }
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import Button from '@/app/components/Button';
+import './jobs.css';
 
 export default function PostNewJob({ publisherId, publisherType, onSave, onClose }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -140,8 +199,82 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
 
+  const fileInputRef = useRef();
+
   const handleFormChange = (newData) => {
     setJobData(newData);
+  };
+
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      setLanguage(getLanguage());
+    };
+    window.addEventListener('languageChanged', handleLanguageChange);
+    return () => window.removeEventListener('languageChanged', handleLanguageChange);
+  }, []);
+
+
+  const handleAutoFill = async () => {
+    const { jobTextInput, attachment } = jobData;
+
+    if (jobTextInput && attachment) {
+      setToast({ message: t('onlyOneInputAllowed', language), type: 'error' });
+      return;
+    }
+
+    if (!jobTextInput && !attachment) {
+      setToast({ message: t('textOrImageRequired', language), type: 'error' });
+      return;
+    }
+
+    try {
+      if (jobTextInput) {
+        const res = await fetch('http://localhost:5000/api/parse-job-text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: jobTextInput }),
+        });
+        const result = await res.json();
+        setJobData((prev) => ({
+          ...prev,
+          ...result,
+          jobTextInput: '',
+          attachment: null,
+        }));
+      }
+
+      if (attachment) {
+        const formData = new FormData();
+        formData.append('image', attachment);
+        const res = await fetch('http://localhost:5000/api/extract-image-text', {
+          method: 'POST',
+          body: formData,
+        });
+        const result = await res.json();
+        if (result?.text) {
+          const fillRes = await fetch('http://localhost:5000/api/parse-job-text', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: result.text }),
+          });
+          const parsed = await fillRes.json();
+          setJobData((prev) => ({
+            ...prev,
+            ...parsed,
+            jobTextInput: '',
+            attachment: null,
+          }));
+          if (fileInputRef.current) fileInputRef.current.value = null;
+        } else {
+          setToast({ message: t('textExtractionFailed', language), type: 'error' });
+        }
+      }
+
+      setToast({ message: t('fieldsAutoFilled', language), type: 'success' });
+    } catch (err) {
+      console.error('Auto-fill error:', err);
+      setToast({ message: t('autoFillFailed', language), type: 'error' });
+    }
   };
 
   const handleSubmit = async () => {
@@ -152,11 +285,8 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
 
     const formData = new FormData();
     Object.entries(jobData).forEach(([key, value]) => {
-      if (value instanceof File) {
-        formData.append(key, value);
-      } else {
-        formData.append(key, value || '');
-      }
+      if (value instanceof File) formData.append(key, value);
+      else formData.append(key, value || '');
     });
 
     formData.append('publisherId', publisherId);
@@ -186,50 +316,7 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
     }
   };
 
-  const handleAutoFillFromText = async () => {
-    if (!jobData.jobTextInput) return;
-
-    try {
-      const res = await fetch('http://localhost:5000/api/parse-job-text', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: jobData.jobTextInput }),
-      });
-      const result = await res.json();
-      setJobData((prev) => ({ ...prev, ...result }));
-      setToast({ message: t('fieldsAutoFilled', language), type: 'success' });
-    } catch (err) {
-      console.error(err);
-      setToast({ message: t('autoFillFailed', language), type: 'error' });
-    }
-  };
-
-  const handleImageUploadAndExtract = async (file) => {
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-      const res = await fetch('http://localhost:5000/api/extract-image-text', {
-        method: 'POST',
-        body: formData,
-      });
-      const result = await res.json();
-      if (result?.text) {
-        setJobData((prev) => ({ ...prev, jobTextInput: result.text }));
-        await handleAutoFillFromText();
-      } else {
-        setToast({ message: t('textExtractionFailed', language), type: 'error' });
-      }
-    } catch (err) {
-      console.error(err);
-      setToast({ message: t('textExtractionFailed', language), type: 'error' });
-    }
-  };
-
   const fields = [
-    { key: 'jobTextInput', type: 'textarea', labelOverride: 'pasteFullJobText' },
     { key: 'company', required: true },
     { key: 'location' },
     { key: 'role' },
@@ -241,17 +328,40 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
     { key: 'submitLink' },
     { key: 'companyWebsite' },
     { key: 'jobViewLink' },
-    {
-      key: 'attachment',
-      type: 'file',
-      labelOverride: 'uploadFile',
-      onChange: (file) => handleImageUploadAndExtract(file),
-    },
   ];
 
   return (
     <div className="add-job-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <div className="add-job-box">
+      
+      <div className="auto-fill-box">
+        <h2 className="auto-fill-title">{t('autoFillTitle', language)}</h2>
+        <p className="auto-fill-description">{t('autoFillExplanation', language)}</p>
+
+        <textarea
+          className="auto-fill-textarea"
+          value={jobData.jobTextInput}
+          onChange={(e) => setJobData((prev) => ({ ...prev, jobTextInput: e.target.value }))}
+          placeholder={t('textInputPlaceholder', language)}
+        />
+
+        <div className="upload-section">
+          <label>{t('uploadImageLabel', language)}</label>
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              setJobData((prev) => ({ ...prev, attachment: file }));
+            }}
+          />
+        </div>
+
+        <Button text={t('autoFillButton', language)} onClick={handleAutoFill} />
+      </div>
+
+
+      <div className="add-job-box mt-4">
         <GenericForm
           titleKey="postNewJob"
           fields={fields}
@@ -263,14 +373,8 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
           secondaryLabel="cancel"
           disabledPrimary={loading}
         />
-        <div className="mt-2">
-          <Button
-            text={t('autoFillButton', language)}
-            onClick={handleAutoFillFromText}
-            disabled={!jobData.jobTextInput}
-          />
-        </div>
       </div>
+
       {toast && (
         <ToastMessage
           message={toast.message}

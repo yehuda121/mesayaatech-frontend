@@ -1,4 +1,4 @@
-.generic-form-container {
+/* .generic-form-container {
   max-width: 768px;
   margin: 0 auto;
   background-color: white;
@@ -108,4 +108,118 @@ input[type="file"] {
 
 .delete-button:hover {
   background-color: #b91c1c !important;
+} */
+.generic-form-container {
+  max-width: 768px;
+  max-height: 90vh;
+  margin: auto;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.generic-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .generic-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.generic-form-title {
+  grid-column: span 2;
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.generic-form-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.generic-form-label-text {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: #444;
+}
+
+.generic-form-input,
+textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.generic-form-input:focus,
+textarea:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.readonly-value {
+  padding: 0.5rem;
+  background-color: #f3f3f3;
+  border-radius: 0.5rem;
+  color: #555;
+  border: 1px solid #ddd;
+}
+
+.generic-form-buttons {
+  grid-column: span 2;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.generic-form-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 500;
+}
+
+.checkbox-label-text {
+  margin-left: 0.25rem;
+}
+
+input[type="file"] {
+  margin-top: 0.4rem;
+}
+
+.generic-form-extra {
+  grid-column: span 2;
+  margin-top: 1.25rem;
+}
+
+.delete-button {
+  background-color: #e53935 !important;
+  color: white;
+  font-weight: bold;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1.25rem;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #b71c1c !important;
 }

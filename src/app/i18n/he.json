@@ -260,7 +260,12 @@
     "autoFillButton": "מלא אוטומטית",
     "fieldsAutoFilled": "השדות מולאו אוטומטית",
     "autoFillFailed": "המילוי האוטומטי נכשל",
-    "textExtractionFailed": "הטקסט מהתמונה לא זוהה"
-
+    "textExtractionFailed": "הטקסט מהתמונה לא זוהה",
+    "autoFillTitle": "מילוי אוטומטי",
+    "onlyOneInputAllowed": "עליך להזין טקסט או להעלות תמונה – לא שניהם",
+    "textOrImageRequired": "עליך להזין טקסט או להעלות תמונה כדי להשתמש במילוי אוטומטי",
+    "autoFillExplanation": "באפשרותך להדביק טקסט חופשי של משרה או להעלות תמונה של מודעת דרושים. המערכת תזהה את המידע ותמלא את השדות הרלוונטיים.",
+    "textInputPlaceholder": "הדבק כאן את טקסט המשרה המלא...",
+    "uploadImageLabel": "או העלה תמונה של מודעת דרושים"
         
 }
