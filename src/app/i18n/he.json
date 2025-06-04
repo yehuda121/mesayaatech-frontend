@@ -255,7 +255,12 @@
     "jobsLoadError": "שגיאה בטעינת המשרות",
     "jobsServerError": "אירעה שגיאה בעת שליפת המשרות מהשרת",
     "publisherIdMissing": "לא ניתן לטעון משרות – חסר מזהה מפרסם",
-    "filterByDate": "סינון לפי תאריך"
+    "filterByDate": "סינון לפי תאריך",
+    "pasteFullJobText": "הדבק טקסט חופשי של משרה",
+    "autoFillButton": "מלא אוטומטית",
+    "fieldsAutoFilled": "השדות מולאו אוטומטית",
+    "autoFillFailed": "המילוי האוטומטי נכשל",
+    "textExtractionFailed": "הטקסט מהתמונה לא זוהה"
 
         
 }

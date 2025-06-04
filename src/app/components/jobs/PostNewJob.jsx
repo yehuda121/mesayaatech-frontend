@@ -1,81 +1,88 @@
 // 'use client';
 
-// import { useEffect, useState } from 'react';
+// import { useState } from 'react';
 // import { getLanguage } from '@/app/language';
 // import { t } from '@/app/utils/loadTranslations';
 // import GenericForm from '@/app/components/GenericForm/GenericForm';
+// import ToastMessage from '@/app/components/Notifications/ToastMessage';
 
-// export default function AddNewJob({ onClose, onSave }) {
+// export default function PostNewJob({ publisherId, publisherType, onSave, onClose }) {
 //   const [language, setLanguage] = useState(getLanguage());
-//   const [userId, setUserId] = useState(null);
-//   const [userType, setUserType] = useState(null);
 //   const [jobData, setJobData] = useState({
-//     title: '',
 //     company: '',
 //     location: '',
+//     role: '',
+//     minExperience: '',
 //     description: '',
-//     attachment: null,
+//     requirements: '',
+//     advantages: '',
+//     submitEmail: '',
+//     submitLink: '',
+//     companyWebsite: '',
+//     jobViewLink: '',
+//     attachment: null
 //   });
 //   const [loading, setLoading] = useState(false);
-
-//   useEffect(() => {
-//     setUserId(localStorage.getItem("userId"));
-//     setUserType(localStorage.getItem("userType"));
-//     const handleLangChange = () => setLanguage(getLanguage());
-//     window.addEventListener("languageChanged", handleLangChange);
-//     return () => window.removeEventListener("languageChanged", handleLangChange);
-//   }, []);
+//   const [toast, setToast] = useState(null);
 
 //   const handleFormChange = (newData) => {
 //     setJobData(newData);
 //   };
 
 //   const handleSubmit = async () => {
-//     if (!userId || !userType) {
-//       alert(t("userNotRecognized", language));
+//     if (!publisherId || !publisherType) {
+//       setToast({ message: t('userNotRecognized', language), type: 'error' });
 //       return;
 //     }
 
 //     const formData = new FormData();
-//     formData.append("title", jobData.title);
-//     formData.append("company", jobData.company);
-//     formData.append("location", jobData.location);
-//     formData.append("description", jobData.description);
-//     formData.append("publisherId", userId);
-//     formData.append("publisherType", userType);
-//     if (jobData.attachment instanceof File) {
-//       formData.append("attachment", jobData.attachment);
-//     }
+//     Object.entries(jobData).forEach(([key, value]) => {
+//       if (value instanceof File) {
+//         formData.append(key, value);
+//       } else {
+//         formData.append(key, value || '');
+//       }
+//     });
+
+//     formData.append('publisherId', publisherId);
+//     formData.append('publisherType', publisherType);
 
 //     setLoading(true);
 //     try {
-//       const response = await fetch("http://localhost:5000/api/jobs", {
-//         method: "POST",
+//       const response = await fetch('http://localhost:5000/api/jobs', {
+//         method: 'POST',
 //         body: formData,
 //       });
 
 //       if (response.ok) {
 //         const result = await response.json();
+//         setToast({ message: t('jobAddedSuccessfully', language), type: 'success' });
 //         onSave(result);
 //         onClose();
 //       } else {
 //         const error = await response.json();
-//         console.error("Upload error:", error);
-//         alert(error?.error || t("eventError", language));
+//         setToast({ message: error?.error || t('eventError', language), type: 'error' });
 //       }
 //     } catch (err) {
-//       console.error("Submit error:", err);
-//       alert(t("serverError", language));
+//       console.error('Submit error:', err);
+//       setToast({ message: t('serverError', language), type: 'error' });
 //     } finally {
 //       setLoading(false);
 //     }
 //   };
 
 //   const fields = [
-//     { key: 'title' },
-//     { key: 'company' },
+//     { key: 'company', required: true },
 //     { key: 'location' },
+//     { key: 'role' },
+//     { key: 'minExperience' },
 //     { key: 'description', type: 'textarea' },
+//     { key: 'requirements', type: 'textarea' },
+//     { key: 'advantages', type: 'textarea' },
+//     { key: 'submitEmail' },
+//     { key: 'submitLink' },
+//     { key: 'companyWebsite' },
+//     { key: 'jobViewLink' },
 //     { key: 'attachment', type: 'file', labelOverride: 'uploadFile' }
 //   ];
 
@@ -94,6 +101,13 @@
 //           disabledPrimary={loading}
 //         />
 //       </div>
+//       {toast && (
+//         <ToastMessage
+//           message={toast.message}
+//           type={toast.type}
+//           onClose={() => setToast(null)}
+//         />
+//       )}
 //     </div>
 //   );
 // }
@@ -104,6 +118,7 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
+import Button from '@/app/components/Button';
 
 export default function PostNewJob({ publisherId, publisherType, onSave, onClose }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -119,7 +134,8 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
     submitLink: '',
     companyWebsite: '',
     jobViewLink: '',
-    attachment: null
+    jobTextInput: '',
+    attachment: null,
   });
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
@@ -170,7 +186,50 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
     }
   };
 
+  const handleAutoFillFromText = async () => {
+    if (!jobData.jobTextInput) return;
+
+    try {
+      const res = await fetch('http://localhost:5000/api/parse-job-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: jobData.jobTextInput }),
+      });
+      const result = await res.json();
+      setJobData((prev) => ({ ...prev, ...result }));
+      setToast({ message: t('fieldsAutoFilled', language), type: 'success' });
+    } catch (err) {
+      console.error(err);
+      setToast({ message: t('autoFillFailed', language), type: 'error' });
+    }
+  };
+
+  const handleImageUploadAndExtract = async (file) => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const res = await fetch('http://localhost:5000/api/extract-image-text', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await res.json();
+      if (result?.text) {
+        setJobData((prev) => ({ ...prev, jobTextInput: result.text }));
+        await handleAutoFillFromText();
+      } else {
+        setToast({ message: t('textExtractionFailed', language), type: 'error' });
+      }
+    } catch (err) {
+      console.error(err);
+      setToast({ message: t('textExtractionFailed', language), type: 'error' });
+    }
+  };
+
   const fields = [
+    { key: 'jobTextInput', type: 'textarea', labelOverride: 'pasteFullJobText' },
     { key: 'company', required: true },
     { key: 'location' },
     { key: 'role' },
@@ -182,7 +241,12 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
     { key: 'submitLink' },
     { key: 'companyWebsite' },
     { key: 'jobViewLink' },
-    { key: 'attachment', type: 'file', labelOverride: 'uploadFile' }
+    {
+      key: 'attachment',
+      type: 'file',
+      labelOverride: 'uploadFile',
+      onChange: (file) => handleImageUploadAndExtract(file),
+    },
   ];
 
   return (
@@ -199,6 +263,13 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
           secondaryLabel="cancel"
           disabledPrimary={loading}
         />
+        <div className="mt-2">
+          <Button
+            text={t('autoFillButton', language)}
+            onClick={handleAutoFillFromText}
+            disabled={!jobData.jobTextInput}
+          />
+        </div>
       </div>
       {toast && (
         <ToastMessage

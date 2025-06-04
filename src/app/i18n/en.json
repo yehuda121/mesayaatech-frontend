@@ -253,7 +253,12 @@
     "jobsLoadError": "Error loading job list",
     "jobsServerError": "Server error while fetching jobs",
     "publisherIdMissing": "Cannot load jobs – missing publisher ID",
-    "filterByDate": "Filter by date"
+    "filterByDate": "Filter by date",
+    "pasteFullJobText": "Paste full job text",
+    "autoFillButton": "Auto-fill",
+    "fieldsAutoFilled": "Fields were auto-filled",
+    "autoFillFailed": "Auto-fill failed",
+    "textExtractionFailed": "Text could not be extracted from the image"
 
 
 }
