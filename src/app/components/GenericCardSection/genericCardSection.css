@@ -127,14 +127,76 @@
 }
 
 .card-section-item {
-  background-color: #fff;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: box-shadow 0.3s ease;
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #e0e0e0;
+  position: relative;
 }
 
 .card-section-item:hover {
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card-section-item h3,
+.job-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #002855;
+  margin-bottom: 0.5rem;
+}
+
+.card-section-item p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+.filter-with-icon {
+  position: relative;
+  flex: 1 1 260px;
+  max-width: 360px;
+}
+
+.filter-with-icon input {
+  width: 100%;
+  padding: 0.65rem 1rem 0.65rem 2.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.filter-with-icon input:focus {
+  outline: none;
+  border-color: #002855;
+}
+
+.filter-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: #888;
+  pointer-events: none;
+}
+
+.clear-filters-btn {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 0.95rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s ease;
+}
+
+.clear-filters-btn:hover {
+  color: #000;
 }

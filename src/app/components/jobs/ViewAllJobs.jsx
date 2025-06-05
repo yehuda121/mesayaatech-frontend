@@ -146,23 +146,36 @@ export default function ViewAllJobs() {
       <GenericCardSection
         titleKey="jobList"
         filters={[
-          <input
-            key="location"
-            name="location"
-            placeholder={t('filterByLocation', language)}
-            value={filters.location}
-            onChange={handleFilterChange}
-            className="card-filter"
-          />,
-          <input
-            key="company"
-            name="company"
-            placeholder={t('filterByCompany', language)}
-            value={filters.company}
-            onChange={handleFilterChange}
-            className="card-filter"
-          />
+          <div className="filter-with-icon" key="location">
+            <span className="filter-icon">📍</span>
+            <input
+              type="text"
+              name="location"
+              placeholder={t('filterByLocation', language)}
+              value={filters.location}
+              onChange={handleFilterChange}
+            />
+          </div>,
+        
+          <div className="filter-with-icon" key="company">
+            <span className="filter-icon">🏢</span>
+            <input
+              type="text"
+              name="company"
+              placeholder={t('filterByCompany', language)}
+              value={filters.company}
+              onChange={handleFilterChange}
+            />
+          </div>,
+        
+          <button key="clear" className="clear-filters-btn" onClick={() => {
+            setFilters({ location: '', company: '' });
+            setFilteredJobs(jobs);
+          }}>
+            ✕ {t('clearFilters', language)}
+          </button>
         ]}
+        
         data={filteredJobs}
         renderCard={(job) => (
           <>
