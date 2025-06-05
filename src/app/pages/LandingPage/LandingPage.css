@@ -1,54 +1,4 @@
-.LPtop_Section {
-  background-color: #002855;
-  color: #fff;
-  text-align: center;
-  margin: 0;
-  width: 100vw;
-  box-sizing: border-box;
-  padding: 60px 20px;           
-  display: flex;
-  flex-direction: column;
-}
-
-.LPtop_Section h1 {
-  font-size: 2.5em;
-  margin-bottom: 20px;
-  padding-inline-start: 30px;
-}
-
-.LPtop_Section p {
-  font-size: 1.2em;
-  margin-bottom: 20px;
-}
-
-.LPaboutSection {
-  text-align: center;
-}
-
-.LPaboutSection h2 {
-  font-size: 2.5rem;
-  color: #1a237e;
-  margin-bottom: 1rem;
-}
-
-.LPaboutSection p {
-  font-size: 1.25rem;
-  line-height: 1.8;
-}
-
-.footer {
-  background-color: #002855;
-  color: #fff;
-  text-align: center;
-  padding: 10px 20px;
-}
-
-@media (min-width: 769px) {
-  .LPabout_main {
-    text-align: center;
-  }
-}
-
+/* Header */
 .landing-header {
   background-color: #002855;
   color: white;
@@ -69,9 +19,14 @@
 
 .landing-logo img,
 .logo-img {
-  height: 100px;
+  height: 80px;
   object-fit: contain;
   padding: 0.5rem;
+}
+
+.landing-buttons {
+  display: flex;
+  direction: ltr;
 }
 
 .landing-buttons button {
@@ -89,15 +44,157 @@
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-.landing-buttons {
-  display: flex;
-  direction: ltr;
-}
-
 .lang-icon {
   font-size: 20px;
 }
 
 .lang-text {
   color: white !important;
+}
+
+/* Top Section with Image */
+.LPtop_Section.with-image {
+  position: relative;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  height: 460px; 
+  }
+
+.LPtop_Section.with-image img.LPimage {
+  width: 120%; 
+  height: 100%; 
+  object-fit: cover;
+  opacity: 0.7; 
+  position: absolute;
+  top: 0.2%; 
+  z-index: 0;
+  transition: transform 0.6s ease-in-out, opacity 0.3s ease-in-out;
+}
+.LPtop_Section.with-image:hover img.LPimage {
+  transform: scale(1.02);
+  opacity: 0.65;
+}
+
+.LPtop_Content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 4rem;
+  max-width: 800px;
+  color: #002855;
+  background: rgba(230, 229, 244, 0.4);  
+  border-radius: 12px;
+  backdrop-filter: blur(2px);
+  box-shadow: 0 4px 10px rgba(217, 213, 238, 0.79);
+}
+
+.LPtop_Content h1 {
+  font-size: 2.6em;
+  margin-bottom: 1rem;
+  border-bottom: 6px solid #002855;
+  display: inline-block;
+  padding-bottom: 0.3rem;
+  font-weight: 700;
+}
+
+
+.LPtop_Content p {
+  font-size: 1.7em;
+  font-weight: 700;
+  margin: 0;
+}
+
+
+.LPaboutSection {
+  text-align: center;
+  background-color: #f9f9fb;
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  margin: 2rem auto;
+  max-width: 1000px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+.LPaboutGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+  .LPaboutGrid {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.LPaboutCard {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  flex: 1;
+}
+
+.LPaboutCard h3 {
+  color: #002855;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.LPaboutCard p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.cta-button {
+  margin-top: 2rem;
+  background-color: #002855;
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #021c40;
+}
+
+
+.LPaboutSection {
+  text-align: center;
+}
+
+.LPaboutSection h2 {
+  font-size: 2.5rem;
+  color: #1a237e;
+  margin-bottom: 1rem;
+}
+
+.LPaboutSection p {
+  font-size: 1.25rem;
+  line-height: 1.8;
+}
+
+/* Footer */
+.footer {
+  background-color: #002855;
+  color: #fff;
+  text-align: center;
+  padding: 10px 20px;
+}
+.LPtop_Gradient {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #f9f9fb 100%);
+  z-index: 1;
 }

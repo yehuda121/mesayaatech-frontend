@@ -151,6 +151,7 @@ export default function AmbassadorRegisterForm() {
   if (!language) return null;
 
   return (
+    <div className="register-page">
     <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
       <div className="register-form-top-buttons">
         <button
@@ -247,5 +248,6 @@ export default function AmbassadorRegisterForm() {
         />
       )}
     </div>
+  </div>
   );
 }

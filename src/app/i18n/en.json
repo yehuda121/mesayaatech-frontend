@@ -264,5 +264,13 @@
     "textOrImageRequired": "You must enter text or upload an image to use auto-fill",
     "autoFillExplanation": "You can paste a job description text or upload an image of a job ad. The system will extract the relevant details automatically.",
     "textInputPlaceholder": "Paste the full job description here...",
-    "uploadImageLabel": "Or upload an image of the job ad"
+    "uploadImageLabel": "Or upload an image of the job ad",
+    "aboutGoalTitle": "🎯 Our Mission",
+    "aboutGoalText": "To help Israeli reservists reintegrate efficiently into the workforce.",
+    "aboutFeaturesTitle": "🛠 What’s Included?",
+    "aboutFeaturesText": "Smart mentor matching, personal mentoring folder, interview prep, and more.",
+    "aboutAudienceTitle": "👥 Who is it for?",
+    "aboutAudienceText": "Reservists, mentors, ambassadors – anyone who wants to help or be helped.",
+    "joinNow": "Join Now"
+
 }

@@ -157,6 +157,7 @@ export default function MentorRegisterForm() {
   };
 
   return (
+    <div className="register-page">
     <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
       <div className="register-form-top-buttons">
         <button
@@ -252,5 +253,6 @@ export default function MentorRegisterForm() {
         />
       )}
     </div>
+  </div>
   );
 }

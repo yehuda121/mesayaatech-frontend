@@ -1,4 +1,29 @@
 /* ===== Register Page Layout (Top Section, Buttons, Structure) ===== */
+.register-page {
+  position: relative;
+  background: url('/logo-bg.png') no-repeat center center fixed;
+  background-size: 100vw;
+  background-color: rgba(255, 255, 255, 0.8);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-blend-mode: lighten;
+}
+
+.register-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 0;
+}
+
+.register-layout,
+.register-form-container {
+  position: relative;
+  z-index: 1;
+}
+
 .register-layout {
   padding-top: 75px;
   padding-right: 250px;
@@ -67,12 +92,17 @@
 
 /* ===== Shared Form Container (All Roles) ===== */
 .register-form-container {
-  max-width: 720px;
-  margin: 0 auto;
+  max-width: 800px;
+  width: 95%;       
+  margin: 2rem auto;
   padding: 2rem;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.35); 
+  backdrop-filter: blur(2px);
   border-radius: 0.5rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+  transition: background-color 0.3s ease;
 }
 
 /* ===== Shared Form Utilities ===== */
