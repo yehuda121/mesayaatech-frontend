@@ -293,7 +293,15 @@
     "missingQuestionText": "שדה השאלה הוא חובה",
     "missingCategory": "יש לבחור קטגוריה",
     "missingCreatedBy": "שגיאה במזהה המשתמש",
-    "updatedAt": "תאריך עדכון אחרון"
-
+    "updatedAt": "תאריך עדכון אחרון",
+    "myQuestions": "השאלות שלי",
+    "education": "חינוך",
+    "editQuestion": "ערוך שאלה",
+    "save": "שמור",
+    "postAnswer": "פרסם תשובה",
+    "answer": "תשובה",
+    "answerPosted": "תשובתך התקבלה",
+    "management": "ניהול",
+    "tech": "הייטק"
 
 }

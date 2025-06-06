@@ -293,7 +293,16 @@
     "missingQuestionText": "Question text is required",
     "missingCategory": "Category must be selected",
     "missingCreatedBy": "User identity is missing",
-    "updatedAt": "Updated at"
+    "updatedAt": "Updated at",
+    "myQuestions": "My questions",
+    "education": "Education",
+    "editQuestion": "Edit Question",
+    "save": "Save",
+    "postAnswer": "Post an answer",
+    "answer": "Answer",
+    "answerPosted": "Answer posted",
+    "management": "Mnagement",
+    "tech": "tech"
 
 
 }

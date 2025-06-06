@@ -6,15 +6,17 @@ import { t } from '@/app/utils/loadTranslations';
 import ViewQuestion from './ViewQuestion'; 
 import Button from '@/app/components/Button';
 import { ThumbsUp } from 'lucide-react';
+import { jwtDecode } from 'jwt-decode';
 
 
-export default function QuestionsPage() {
+export default function QuestionsPage({ onAnswer }) {
   const [language, setLanguage] = useState(getLanguage());
   const [questions, setQuestions] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState('');
   const [sortMode, setSortMode] = useState('newest');
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [userType, setUserType] = useState(null);
   const [idNumber, setIdNumber] = useState(null);
 
   const categories = [
@@ -28,11 +30,29 @@ export default function QuestionsPage() {
   ];
 
   useEffect(() => {
-    setUserId(localStorage.getItem("userId"));
-    setIdNumber(localStorage.getItem("idNumber"));
     const handleLangChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLangChange);
+
+    const fullName = localStorage.getItem('fullName');
+    const idToken = localStorage.getItem('idToken');
+
+    const decodedType = jwtDecode(idToken);
+    setUserType(decodedType['custom:role']);
+
+    let idNumber = null;
+    if (idToken) {
+      try {
+        const decoded = jwtDecode(idToken);
+        idNumber = decoded['custom:idNumber'] || decoded['sub'];
+        setIdNumber(idNumber);
+      } catch (err) {
+        console.error('Failed to decode idToken:', err);
+      }
+    }
+
+    setUserId(localStorage.getItem("userId"));
     fetchQuestions();
+
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
@@ -46,23 +66,42 @@ export default function QuestionsPage() {
     }
   };
 
-  const handleLike = async (questionId) => {
+  const hasLiked = (likes = []) => {
+    return likes.some(like => like.idNumber === idNumber);
+  };
+
+  const handleLike = async (questionId, alreadyLiked) => {
     try {
       const fullName = localStorage.getItem('fullName');
-      await fetch('http://localhost:5000/api/interview/like-question', {
+
+      const res = await fetch('http://localhost:5000/api/toggle-question-like', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ questionId, idNumber, fullName })
       });
-      fetchQuestions();
+
+      if (!res.ok) {
+        console.error('Like toggle failed');
+        return;
+      }
+
+      setQuestions((prev) =>
+        prev.map((q) => {
+          if (q.questionId !== questionId) return q;
+
+          const prevLikes = q.likes || [];
+          const updatedLikes = alreadyLiked
+            ? prevLikes.filter((like) => like.idNumber !== idNumber)
+            : [...prevLikes, { idNumber, fullName, likedAt: new Date().toISOString() }];
+
+          return { ...q, likes: updatedLikes };
+        })
+      );
     } catch (err) {
       console.error('Like failed:', err);
     }
   };
 
-  const hasLiked = (likes = []) => {
-    return likes.some(like => like.idNumber === idNumber);
-  };
 
   const filteredAndSorted = questions
     .filter(q => !filteredCategory || q.category === filteredCategory)
@@ -146,9 +185,30 @@ export default function QuestionsPage() {
               {t('viewQestion', language)}
             </Button>
 
+            {userType !== 'reservist' && (
+              <Button
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAnswer && onAnswer(q);
+                }}
+              >
+                {t('postAnswer', language)}
+              </Button>
+            )}
+
             <div
-              onClick={() => handleLike(q.questionId)}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', marginTop: '4px' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleLike(q.questionId, hasLiked(q.likes));
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                cursor: 'pointer',
+                marginTop: '4px'
+              }}
             >
               <ThumbsUp
                 size={22}
@@ -156,10 +216,8 @@ export default function QuestionsPage() {
               />
               <span>{q.likes?.length || 0}</span>
             </div>
-
           </div>
         )}
-
       />
 
       {selectedQuestion && (

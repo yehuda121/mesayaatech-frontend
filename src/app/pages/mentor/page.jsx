@@ -17,7 +17,9 @@ import ViewAllJobs from '@/app/components/jobs/ViewAllJobs';
 import Button from '@/app/components/Button';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
 import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
-
+import MyQuestions from '@/app/components/interviewQestions/MyQuestions';
+import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
+import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
 import './mentor.css';
 
 export default function MentorHomePage() {
@@ -29,6 +31,9 @@ export default function MentorHomePage() {
   const [email, setEmail] = useState('');
   const [selectedJobForEdit, setSelectedJobForEdit] = useState(null);
   const [toast, setToast] = useState(null);
+  const [questionToEdit, setQuestionToEdit] = useState(null);
+  const [questionToAnswer, setQuestionToAnswer] = useState(null);
+
 
   const router = useRouter();
 
@@ -134,7 +139,9 @@ export default function MentorHomePage() {
     ];
   }, [language]);
 
-  if (!language || !idNumber) return null;
+  if (!language || !idNumber) {
+    return <p style={{ padding: '2rem' }}>{t('loading', language || 'he')}</p>;
+  }
 
   return (
     <div className="mentor-container">
@@ -191,6 +198,48 @@ export default function MentorHomePage() {
           />
         )}
 
+        {view === 'my-questions' && (
+          <MyQuestions
+            fullName={fullName}
+            idNumber={idNumber}
+            onEdit={(question) => {
+              setQuestionToEdit(question);
+              setView('edit-question');
+            }}
+            onAnswer={(question) => {
+              setQuestionToAnswer(question);
+              setView('post-answer');
+            }}
+          />
+        )}
+
+        {view === 'edit-question' && questionToEdit && (
+          <EditQuestion
+            question={questionToEdit}
+            onClose={() => {
+              setQuestionToEdit(null);
+              setView('my-questions');
+            }}
+            onSave={() => {
+              setQuestionToEdit(null);
+              setView('my-questions');
+            }}
+          />
+        )}
+
+        {view === 'post-answer' && questionToAnswer && (
+          <PostAnswer
+            questionId={questionToAnswer.questionId}
+            fullName={fullName}
+            idNumber={idNumber}
+            onSuccess={() => {
+              setToast({ message: t('answerPosted', language), type: 'success' });
+              setView('dashboard');
+            }}
+            onCancel={() => setView('dashboard')}
+          />
+        )}
+
         {view === 'edit-job' && selectedJobForEdit && (
           <EditMentorJob
             job={selectedJobForEdit}
@@ -214,10 +263,15 @@ export default function MentorHomePage() {
           <>
             <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
               <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
+              <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
             </div>
-            <InterviewPrep />
+            <InterviewPrep
+              onAnswer={(question) => {
+                setQuestionToAnswer(question);
+                setView('post-answer');
+              }}
+            />
           </>
-          
         }
 
         {view === 'AddNewQues' && (

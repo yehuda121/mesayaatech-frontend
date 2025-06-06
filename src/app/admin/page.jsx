@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getLanguage } from '../language';
-import SideBar from '../components/SideBar';
+import SideBar from '@/app/components/SideBar';
 import UsersTable from './components/users/usersTable';
 import CreateEvent from './components/events/CreateEvent';
 import ViewEvents from './components/events/ViewEvents';
@@ -14,7 +14,10 @@ import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import './admin.css';
-import InterviewQues from '@/app/components/interviewQestions/QuestionsList';
+import AdminQuestions from './components/interviewQestions/AdminQuestions';
+import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
+import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
+import ViewQuestion from '@/app/components/interviewQestions/ViewQuestion';
 
 export default function AdminPage() {
   const [language, setLanguage] = useState(getLanguage());
@@ -25,7 +28,12 @@ export default function AdminPage() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [pendingUsers, setPendingUsers] = useState([]);
   const [loadingPending, setLoadingPending] = useState(true);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [answerQuestionId, setAnswerQuestionId] = useState(null);
   const router = useRouter();
+  const [fullName, setFullName] = useState('');
+  const [idNumber, setIdNumber] = useState('');
+  const [questionToView, setQuestionToView] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('idToken');
@@ -40,6 +48,8 @@ export default function AdminPage() {
           reservist: '/pages/reservist/home',
           ambassador: '/pages/ambassador/home'
         };
+        setFullName(decoded.name || '');
+        setIdNumber(decoded['custom:idNumber'] || decoded.sub || '');
 
         if (role !== expectedRole) {
           router.push(roleToPath[role] || '/login');
@@ -85,6 +95,8 @@ export default function AdminPage() {
   const handleNavigation = (newView) => {
     setEventToEdit(null);
     setSelectedJob(null);
+    setSelectedQuestion(null);
+    setAnswerQuestionId(null);
     setView(newView);
   };
 
@@ -113,7 +125,6 @@ export default function AdminPage() {
       path: '#interviewQues',
       onClick: () => handleNavigation('interviewQues')
     },
-    
   ];
 
   return (
@@ -125,13 +136,13 @@ export default function AdminPage() {
             <>
               {loadingPending ? (
                 <p className='adminHomePageTitle'>{t('loading', language)}</p>
-                  ) : pendingUsers.length > 0 ? (
+              ) : pendingUsers.length > 0 ? (
                 <UsersTable users={pendingUsers} />
-                  ) : (
-                  <>
-                    <p className='adminHomePageTitle'>{t('noPendingUsers', language)}</p>
-                    <CreateEvent/>
-                  </>
+              ) : (
+                <>
+                  <p className='adminHomePageTitle'>{t('noPendingUsers', language)}</p>
+                  <CreateEvent />
+                </>
               )}
             </>
           )}
@@ -146,6 +157,7 @@ export default function AdminPage() {
               handleNavigation={handleNavigation}
             />
           )}
+
           {view === 'view-jobs' && (
             <ViewJobs
               jobs={jobs}
@@ -154,6 +166,7 @@ export default function AdminPage() {
               handleNavigation={handleNavigation}
             />
           )}
+
           {view === 'add-job' && (
             <AddJob
               onClose={() => setView('')}
@@ -163,9 +176,52 @@ export default function AdminPage() {
               }}
             />
           )}
+
           {view === 'users' && <UsersTable />}
 
-          {view === 'interviewQues' && <InterviewQues />}
+          {view === 'interviewQues' && (
+            <AdminQuestions
+              onEdit={(q) => setSelectedQuestion(q)}
+              onAnswer={(qid) => setAnswerQuestionId(qid)}
+              onView={(q) => setQuestionToView(q)}
+            />
+          )}
+
+          {answerQuestionId && (
+            <div className="modal-overlay">
+              <PostAnswer
+                questionId={answerQuestionId}
+                fullName={fullName}
+                idNumber={idNumber}
+                onSuccess={() => {
+                  setAnswerQuestionId(null);
+                }}
+              />
+            </div>
+          )}
+          {questionToView && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <ViewQuestion
+                  question={questionToView}
+                  onClose={() => setQuestionToView(null)}
+                />
+              </div>
+            </div>
+          )}
+
+          {selectedQuestion && (
+            <div className="modal-overlay">
+              <EditQuestion
+                question={selectedQuestion}
+                onClose={() => setSelectedQuestion(null)}
+                onSave={() => {
+                  setSelectedQuestion(null);
+                }}
+              />
+            </div>
+          )}
+
         </main>
       </div>
 
@@ -194,6 +250,7 @@ export default function AdminPage() {
           }}
         />
       )}
+
     </div>
   );
 }
