@@ -219,7 +219,17 @@ export default function MentorHomePage() {
           </>
           
         }
-        {view === 'AddNewQues' && <AddNewQues/>}
+
+        {view === 'AddNewQues' && (
+          <AddNewQues
+            fullName={fullName}
+            idNumber={idNumber}
+            onSuccess={() => {
+              setToast({ message: t('questionAdded', language), type: 'success' });
+              setView('interview-ques');
+            }}
+          />
+        )}
 
         {view === 'find-reservist' && (
           <FindReservist mentorId={idNumber} onBack={() => setView('dashboard')} />

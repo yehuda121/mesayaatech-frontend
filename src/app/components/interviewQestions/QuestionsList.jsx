@@ -28,7 +28,6 @@ export default function QuestionsPage() {
   ];
 
   useEffect(() => {
-    console.log(localStorage);
     setUserId(localStorage.getItem("userId"));
     setIdNumber(localStorage.getItem("idNumber"));
     const handleLangChange = () => setLanguage(getLanguage());
