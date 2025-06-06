@@ -275,7 +275,7 @@
     "InterviewPrep": "Interview preparation",
     "question": "Question",
     "category": "Category",
-    "createdAt": "Date",
+    "createdAt": "Created at",
     "createdBy": "Created By",
     "likes": "Likes",
     "answers": "Answers",
@@ -292,7 +292,8 @@
     "questionCategory": "Question category",
     "missingQuestionText": "Question text is required",
     "missingCategory": "Category must be selected",
-    "missingCreatedBy": "User identity is missing"
+    "missingCreatedBy": "User identity is missing",
+    "updatedAt": "Updated at"
 
 
 }

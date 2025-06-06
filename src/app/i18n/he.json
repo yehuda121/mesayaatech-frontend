@@ -275,7 +275,7 @@
     "joinNow": "הירשם עכשיו",
     "clearFilters": "נקה חיפוש",
     "interviewQues": "שאלות הכנה לראיונות",
-    "createdAt": "תאריך",
+    "createdAt": "תאריך יצירה",
     "createdBy": "נוצר על ידי",
     "likes": "לייקים",
     "answers": "תשובות",
@@ -292,7 +292,8 @@
     "questionCategory": "קטגורית השאלה",
     "missingQuestionText": "שדה השאלה הוא חובה",
     "missingCategory": "יש לבחור קטגוריה",
-    "missingCreatedBy": "שגיאה במזהה המשתמש"
+    "missingCreatedBy": "שגיאה במזהה המשתמש",
+    "updatedAt": "תאריך עדכון אחרון"
 
 
 }
