@@ -1,0 +1,40 @@
+/* === ViewQestion === */
+.answers-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 2rem 0 1rem;
+}
+
+.answer-list {
+  list-style: none;
+  padding: 0;
+}
+
+.answer-item {
+  border-top: 1px solid #eee;
+  padding: 1rem 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.answer-meta-row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.answer-meta-name {
+  font-weight: bold;
+}
+
+.answer-meta-dot {
+  opacity: 0.6;
+}
+
+.answer-meta-date {
+  color: #666;
+  font-size: 0.9rem;
+}

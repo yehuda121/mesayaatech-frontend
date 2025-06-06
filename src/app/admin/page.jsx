@@ -14,6 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import './admin.css';
+import InterviewQues from '@/app/components/interviewQestions/QuestionsList';
 
 export default function AdminPage() {
   const [language, setLanguage] = useState(getLanguage());
@@ -107,10 +108,12 @@ export default function AdminPage() {
       onClick: () => handleNavigation('view-jobs')
     },
     {
-      labelHe: t('navInterviewPrep', 'he'),
-      labelEn: t('navInterviewPrep', 'en'),
-      path: '/pages/interviewPrep'
-    }
+      labelHe: t('interviewQues', 'he'),
+      labelEn: t('interviewQues', 'en'),
+      path: '#interviewQues',
+      onClick: () => handleNavigation('interviewQues')
+    },
+    
   ];
 
   return (
@@ -125,7 +128,10 @@ export default function AdminPage() {
                   ) : pendingUsers.length > 0 ? (
                 <UsersTable users={pendingUsers} />
                   ) : (
-                <p className='adminHomePageTitle'>{t('noPendingUsers', language)}</p>
+                  <>
+                    <p className='adminHomePageTitle'>{t('noPendingUsers', language)}</p>
+                    <CreateEvent/>
+                  </>
               )}
             </>
           )}
@@ -158,6 +164,8 @@ export default function AdminPage() {
             />
           )}
           {view === 'users' && <UsersTable />}
+
+          {view === 'interviewQues' && <InterviewQues />}
         </main>
       </div>
 

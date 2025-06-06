@@ -74,20 +74,37 @@ export default function GenericForm({
                 }
 
                 if (type === 'file') {
-                return (
-                    <label key={key} className="generic-form-label">
-                    <span className="generic-form-label-text">{label}</span>
-                    <input
-                        type="file"
-                        onChange={(e) =>
-                        handleFieldChange(
-                            key,
-                            e.target.files?.[0] || null
-                        )
-                        }
-                    />
-                    </label>
-                );
+                    return (
+                        <label key={key} className="generic-form-label">
+                        <span className="generic-form-label-text">{label}</span>
+                        <input
+                            type="file"
+                            onChange={(e) =>
+                            handleFieldChange(
+                                key,
+                                e.target.files?.[0] || null
+                            )
+                            }
+                        />
+                        </label>
+                    );
+                } else if (type === 'select') {
+                    return (
+                        <label key={key} className="generic-form-label">
+                        <span className="generic-form-label-text">{label}</span>
+                        <select
+                            className="generic-form-input"
+                            value={value}
+                            onChange={(e) => handleFieldChange(key, e.target.value)}
+                        >
+                            {(field.options || []).map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                                {opt.label}
+                            </option>
+                            ))}
+                        </select>
+                        </label>
+                    );
                 }
 
                 return (

@@ -1,4 +1,3 @@
-// components/GenericCardSection.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -43,7 +42,7 @@ export default function GenericCardSection({
             <div
               key={i}
               className="card-section-item"
-              onClick={() => onCardClick(item)}
+              onClick={onCardClick ? () => onCardClick(item) : undefined}
             >
               {renderCard(item)}
             </div>

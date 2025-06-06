@@ -11,11 +11,12 @@ import PostNewJob from '@/app/components/jobs/PostNewJob';
 import MyJobsList from './components/jobs/MyJobsList';
 import EditMentorJob from '@/app/components/jobs/EditJob';
 import EventsPage from '@/app/components/events/ViewAllEvents';
-import InterviewPrep from '../interviewPrep/page';
+import InterviewPrep from '@/app/components/interviewQestions/QuestionsList';
 import FindReservist from './components/FindReservist';
 import ViewAllJobs from '@/app/components/jobs/ViewAllJobs';
 import Button from '@/app/components/Button';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
+import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
 
 import './mentor.css';
 
@@ -119,10 +120,10 @@ export default function MentorHomePage() {
         onClick: () => handleNavigation('events')
       },
       {
-        labelHe: t('navInterviewPrep', language),
-        labelEn: t('navInterviewPrep', language),
+        labelHe: t('interviewQuesTitle', language),
+        labelEn: t('interviewQuesTitle', language),
         path: '#interview-prep',
-        onClick: () => handleNavigation('interview-prep')
+        onClick: () => handleNavigation('interview-ques')
       },
       {
         labelHe: t('findReservist', language),
@@ -209,7 +210,16 @@ export default function MentorHomePage() {
           <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
         )}
 
-        {view === 'interview-prep' && <InterviewPrep />}
+        {view === 'interview-ques' && 
+          <>
+            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+              <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
+            </div>
+            <InterviewPrep />
+          </>
+          
+        }
+        {view === 'AddNewQues' && <AddNewQues/>}
 
         {view === 'find-reservist' && (
           <FindReservist mentorId={idNumber} onBack={() => setView('dashboard')} />
