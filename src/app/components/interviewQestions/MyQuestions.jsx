@@ -4,7 +4,7 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import Button from '@/app/components/Button';
-import { Edit2 } from 'lucide-react';
+import { Edit2, Trash2 } from 'lucide-react';
 
 export default function MyQuestions({ idNumber, fullName, onEdit }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -28,6 +28,27 @@ export default function MyQuestions({ idNumber, fullName, onEdit }) {
     }
   };
 
+  const handleDelete = async (questionId) => {
+    if (!confirm(t('confirmDeleteQuestion', language))) return;
+
+    try {
+      const res = await fetch('http://localhost:5000/api/delete-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ questionId, idNumber, fullName })
+      });
+
+      if (res.ok) {
+        setMyQuestions(prev => prev.filter(q => q.questionId !== questionId));
+      } else {
+        alert(t('deleteFailed', language));
+      }
+    } catch (err) {
+      console.error('Error deleting question:', err);
+      alert(t('serverError', language));
+    }
+  };
+
   return (
     <div dir={language === 'he' ? 'rtl' : 'ltr'}>
       <GenericCardSection
@@ -40,15 +61,27 @@ export default function MyQuestions({ idNumber, fullName, onEdit }) {
             <p><strong>{t('category', language)}:</strong> {t(q.category, language)}</p>
             <p><strong>{t('createdAt', language)}:</strong> {new Date(q.createdAt).toLocaleDateString(language === 'he' ? 'he-IL' : 'en-US')}</p>
 
-            <Button
-              icon={<Edit2 size={18} />}
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onEdit) onEdit(q);
-              }}
-              text={t('edit', language)}
-            />
+            <div className="flex gap-2 mt-2">
+              <Button
+                icon={<Edit2 size={18} />}
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onEdit) onEdit(q);
+                }}
+                text={t('edit', language)}
+              />
+              <Button
+                icon={<Trash2 size={18} />}
+                size="sm"
+                color='red'
+                text={t('delete', language)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(q.questionId);
+                }}
+              />
+            </div>
           </div>
         )}
         emptyTextKey="noQuestionsFound"

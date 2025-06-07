@@ -177,67 +177,99 @@ export default function MentorHomePage() {
         )}
 
         {view === 'post-job' && (
-          <PostNewJob
-            publisherId={`${email}#${idNumber}`}
-            publisherType="mentor"
-            onSave={() => {
-              setToast({ message: t('jobPostedSuccess', language), type: 'success' });
-              setView('dashboard');
-            }}
-            onClose={() => setView('dashboard')}
-          />
+          <>
+            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+              <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
+              <Button text={t('jobs', language)} onClick={() => handleNavigation('allJobs')} />
+            </div>
+            <PostNewJob
+              publisherId={`${email}#${idNumber}`}
+              publisherType="mentor"
+              onSave={() => {
+                setToast({ message: t('jobPostedSuccess', language), type: 'success' });
+                setView('dashboard');
+              }}
+              onClose={() => setView('dashboard')}
+            />
+          </>
         )}
         
         {view === 'myJobsList' && (
-          <MyJobsList
-            publisherId={`${email}#${idNumber}`}
-            onEdit={(job) => {
-              setSelectedJobForEdit(job);
-              setView('edit-job');
-            }}
-          />
+          <>
+            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+                <Button text={t('jobs', language)} onClick={() => handleNavigation('allJobs')} />
+                <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
+              </div>
+            <MyJobsList
+              publisherId={`${email}#${idNumber}`}
+              onEdit={(job) => {
+                setSelectedJobForEdit(job);
+                setView('edit-job');
+              }}
+            />
+          </>
         )}
 
         {view === 'my-questions' && (
-          <MyQuestions
-            fullName={fullName}
-            idNumber={idNumber}
-            onEdit={(question) => {
-              setQuestionToEdit(question);
-              setView('edit-question');
-            }}
-            onAnswer={(question) => {
-              setQuestionToAnswer(question);
-              setView('post-answer');
-            }}
-          />
+          <>
+            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+              <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
+              <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
+            </div>
+            <MyQuestions
+              fullName={fullName}
+              idNumber={idNumber}
+              onEdit={(question) => {
+                setQuestionToEdit(question);
+                setView('edit-question');
+              }}
+              onAnswer={(question) => {
+                setQuestionToAnswer(question);
+                setView('post-answer');
+              }}
+            />
+          </>
         )}
 
         {view === 'edit-question' && questionToEdit && (
-          <EditQuestion
-            question={questionToEdit}
-            onClose={() => {
-              setQuestionToEdit(null);
-              setView('my-questions');
-            }}
-            onSave={() => {
-              setQuestionToEdit(null);
-              setView('my-questions');
-            }}
-          />
+          <>
+            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+              <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
+              <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
+              <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
+            </div>
+            <EditQuestion
+              question={questionToEdit}
+              onClose={() => {
+                setQuestionToEdit(null);
+                setView('my-questions');
+              }}
+              onSave={() => {
+                setQuestionToEdit(null);
+                setView('my-questions');
+              }}
+            />
+          </>
         )}
 
         {view === 'post-answer' && questionToAnswer && (
-          <PostAnswer
-            questionId={questionToAnswer.questionId}
-            fullName={fullName}
-            idNumber={idNumber}
-            onSuccess={() => {
-              setToast({ message: t('answerPosted', language), type: 'success' });
-              setView('dashboard');
-            }}
-            onCancel={() => setView('dashboard')}
-          />
+          <>
+            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+              <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
+              <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
+              <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
+            </div>
+            <PostAnswer
+              questionId={questionToAnswer.questionId}
+              fullName={fullName}
+              idNumber={idNumber}
+              onSuccess={() => {
+                setToast({ message: t('answerPosted', language), type: 'success' });
+                setView('dashboard');
+              }}
+              onCancel={() => setView('dashboard')}
+            />
+          </>
         )}
 
         {view === 'edit-job' && selectedJobForEdit && (
@@ -275,14 +307,20 @@ export default function MentorHomePage() {
         }
 
         {view === 'AddNewQues' && (
-          <AddNewQues
-            fullName={fullName}
-            idNumber={idNumber}
-            onSuccess={() => {
-              setToast({ message: t('questionAdded', language), type: 'success' });
-              setView('interview-ques');
-            }}
-          />
+          <>
+            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+              <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
+              <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
+            </div>
+            <AddNewQues
+              fullName={fullName}
+              idNumber={idNumber}
+              onSuccess={() => {
+                setToast({ message: t('questionAdded', language), type: 'success' });
+                setView('interview-ques');
+              }}
+            />
+          </>
         )}
 
         {view === 'find-reservist' && (
