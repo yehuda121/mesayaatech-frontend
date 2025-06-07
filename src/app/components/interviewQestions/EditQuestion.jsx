@@ -85,6 +85,7 @@ export default function EditQuestion({ question, onClose, onSave }) {
         onChange={setFormData}
         onPrimary={handleSubmit}
         onSecondary={onClose}
+        onCloseIcon={onClose}
         primaryLabel="save"
         secondaryLabel="cancel"
       />

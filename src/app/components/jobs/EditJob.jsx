@@ -78,26 +78,25 @@ export default function AdminEditJob({ job, onClose, onSave }) {
 
   return (
     <div className="modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <div className="modal-box">
-        <GenericForm
-          titleKey="editJobTitle"
-          fields={fields}
-          data={formData}
-          onChange={setFormData}
-          onPrimary={handleSave}
-          onSecondary={onClose}
-          primaryLabel={loading ? '' : 'saveChanges'}
-          secondaryLabel="cancel"
-          disabledPrimary={loading}
+      <GenericForm
+        titleKey="editJobTitle"
+        fields={fields}
+        data={formData}
+        onChange={setFormData}
+        onPrimary={handleSave}
+        onSecondary={onClose}
+        onCloseIcon={onClose}
+        primaryLabel={loading ? '' : 'saveChanges'}
+        secondaryLabel="cancel"
+        disabledPrimary={loading}
+      />
+      {toast && (
+        <ToastMessage
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
         />
-        {toast && (
-          <ToastMessage
-            message={toast.message}
-            type={toast.type}
-            onClose={() => setToast(null)}
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 }

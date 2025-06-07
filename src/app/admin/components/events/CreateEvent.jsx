@@ -199,7 +199,7 @@ export default function CreateEventForm() {
   ];
 
   return (
-    <div className="create-event-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div dir={language === 'he' ? 'rtl' : 'ltr'}>
       <GenericForm
         titleKey="createEventTitle"
         fields={fields}

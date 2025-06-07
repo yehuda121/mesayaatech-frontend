@@ -86,26 +86,24 @@ export default function EditReservistFormAdmin({ user, mentorsMap, onClose, onSa
 
   return (
     <div className="modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <div className="modal-box">
-        <GenericForm
-          titleKey="editUserDetails"
-          fields={fields}
-          data={formData}
-          onChange={handleChange}
-          onPrimary={() => onSave(formData)}
-          onSecondary={onClose}
-          onDelete={handleDeleteClick}
-          primaryLabel="saveChanges"
-          secondaryLabel="cancel"
-          deleteLabel="deleteUser"
-        >
-          <div className="mt-4">
-            <span className="font-medium block">{t('mentor', language)}:</span>
-            {renderMentorDetails()}
-          </div>
-        </GenericForm>
-
-      </div>
+      <GenericForm
+        titleKey="editUserDetails"
+        fields={fields}
+        data={formData}
+        onChange={handleChange}
+        onPrimary={() => onSave(formData)}
+        onSecondary={onClose}
+        onCloseIcon={onClose}
+        onDelete={handleDeleteClick}
+        primaryLabel="saveChanges"
+        secondaryLabel="cancel"
+        deleteLabel="deleteUser"
+      >
+        <div className="mt-4">
+          <span className="font-medium block">{t('mentor', language)}:</span>
+          {renderMentorDetails()}
+        </div>
+      </GenericForm>
     </div>
   );
 }

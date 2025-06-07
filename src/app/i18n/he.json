@@ -285,7 +285,7 @@
     "sortByPopularity": "הכי פופולריות",
     "noItemsFound": "לא נמצאו שאלות",
     "questionDetails": "פרטי השאלה",
-    "viewQestion": "צפיה בשאלה",
+    "viewQestion": "צפיה בשאלה ובתשובות",
     "addNewQuestion": "הוספת שאלה חדשה",
     "questionText": "טקסט השאלה",
     "AddNewQues": "הוספת שאלה חדשה",
@@ -304,6 +304,8 @@
     "management": "ניהול",
     "tech": "הייטק",
     "confirmDeleteQuestion": "האם אתה בטוח שברצונך למחוק את השאלה?",
-    "missingAnswerText": "נא למלא תשובה"
+    "missingAnswerText": "נא למלא תשובה",
+    "logistics": "לוגיקה",
+    "viewJob": "צפיה במשרה"
 
 }

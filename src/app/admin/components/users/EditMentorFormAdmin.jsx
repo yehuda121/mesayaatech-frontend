@@ -60,7 +60,6 @@ export default function EditMentorFormAdmin({ user, onClose, onSave, onDelete, r
 
   return (
     <div className="modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <div className="modal-box">
         <GenericForm
           titleKey="editUserDetails"
           fields={fields}
@@ -68,6 +67,7 @@ export default function EditMentorFormAdmin({ user, onClose, onSave, onDelete, r
           onChange={handleChange}
           onPrimary={() => onSave(formData)}
           onSecondary={onClose}
+          onCloseIcon={onClose}
           onDelete={() => {
             if (confirm(t('confirmDeleteUser', language))) onDelete(user);
           }}
@@ -90,7 +90,6 @@ export default function EditMentorFormAdmin({ user, onClose, onSave, onDelete, r
             )}
           </div>
         </GenericForm>
-      </div>
     </div>
   );
 }

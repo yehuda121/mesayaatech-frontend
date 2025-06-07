@@ -101,7 +101,6 @@ export default function ViewQuestion({ question, onClose }) {
     likes: question.likes?.length || 0
   };
 
-  // סגירה בלחיצה על רקע
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains('modal-overlay')) {
       onClose();
@@ -115,19 +114,12 @@ export default function ViewQuestion({ question, onClose }) {
       onClick={handleOverlayClick}
     >
       <div className="relative max-w-xl w-full mx-auto">
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-3xl font-bold z-50"
-          aria-label="Close"
-        >
-          ×
-        </button>
-
         <GenericForm
           titleKey="questionDetails"
           fields={[]}
           data={{}}
           onChange={() => {}}
+          onCloseIcon={onClose}
         >
           <div className="question-details-text">
             <p><strong>{t('question', language)}:</strong> {displayData.text}</p>

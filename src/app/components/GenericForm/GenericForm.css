@@ -9,6 +9,7 @@
   overflow-y: auto;
   scrollbar-width: thin;
   text-align: start;
+  margin-top: 120px;
 }
 
 .generic-form-grid {
@@ -112,4 +113,21 @@ input[type="file"] {
 
 .delete-button:hover {
   background-color: #b71c1c !important;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  /* right: 15px; */
+  font-size: 22px;
+  font-weight: bold;
+  color: #666;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.modal-close:hover {
+  color: #e53e3e;
 }

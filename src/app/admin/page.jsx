@@ -18,6 +18,9 @@ import AdminQuestions from './components/interviewQestions/AdminQuestions';
 import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
 import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
 import ViewQuestion from '@/app/components/interviewQestions/ViewQuestion';
+import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
+import Button from '../components/Button';
+
 
 export default function AdminPage() {
   const [language, setLanguage] = useState(getLanguage());
@@ -36,7 +39,10 @@ export default function AdminPage() {
   const [questionToView, setQuestionToView] = useState(null);
 
   useEffect(() => {
+    // Check JWT token and handle user authentication
     const token = localStorage.getItem('idToken');
+    const handleLangChange = () => setLanguage(getLanguage());
+
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -48,6 +54,7 @@ export default function AdminPage() {
           reservist: '/pages/reservist/home',
           ambassador: '/pages/ambassador/home'
         };
+
         setFullName(decoded.name || '');
         setIdNumber(decoded['custom:idNumber'] || decoded.sub || '');
 
@@ -62,13 +69,16 @@ export default function AdminPage() {
     } else {
       router.push('/login');
     }
+
+    // Listen to language change events
+    window.addEventListener('languageChanged', handleLangChange);
+
+    // Cleanup the event listener on unmount
+    return () => {
+      window.removeEventListener('languageChanged', handleLangChange);
+    };
   }, [router]);
 
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
 
   useEffect(() => {
     const fetchPendingUsers = async () => {
@@ -180,25 +190,32 @@ export default function AdminPage() {
           {view === 'users' && <UsersTable />}
 
           {view === 'interviewQues' && (
-            <AdminQuestions
-              onEdit={(q) => setSelectedQuestion(q)}
-              onAnswer={(qid) => setAnswerQuestionId(qid)}
-              onView={(q) => setQuestionToView(q)}
-            />
+            <>
+              <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+                <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
+              </div>
+              <AdminQuestions
+                onEdit={(q) => setSelectedQuestion(q)}
+                onAnswer={(qid) => setAnswerQuestionId(qid)}
+                onView={(q) => setQuestionToView(q)}
+              />
+            </>
           )}
-
-          {/* {answerQuestionId && (
-            <div className="modal-overlay">
-              <PostAnswer
-                questionId={answerQuestionId}
+          {view === 'AddNewQues' && (
+            <>
+              <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+                <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interviewQues')} />
+              </div>
+              <AddNewQues
                 fullName={fullName}
                 idNumber={idNumber}
                 onSuccess={() => {
-                  setAnswerQuestionId(null);
+                  setToast({ message: t('questionAdded', language), type: 'success' });
+                  setView('interviewQues');
                 }}
               />
-            </div>
-          )} */}
+            </>
+          )}
           {answerQuestionId && (
             <div
               className="modal-overlay"
@@ -274,7 +291,6 @@ export default function AdminPage() {
           }}
         />
       )}
-
     </div>
   );
 }

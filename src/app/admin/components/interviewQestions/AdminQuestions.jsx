@@ -26,6 +26,13 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
 
     fetchQuestions();
   }, []);
+  
+  useEffect(() => {
+    const handleLangChange = () => setLanguage(getLanguage());
+    window.addEventListener('languageChanged', handleLangChange);
+    return () => window.removeEventListener('languageChanged', handleLangChange);
+  }, []);
+
 
   const fetchQuestions = async () => {
     try {

@@ -86,13 +86,19 @@ export default function ViewAllJobs() {
         
         data={filteredJobs}
         renderCard={(job) => (
-          <>
+          <div className="job-card-content">
             <h3 className="font-bold text-lg">{job?.company || t('noCompany', language)}</h3>
             {job?.location && <p>{t('location', language)}: {job.location}</p>}
             {job?.description && <p>{t('description', language)}: {job.description.slice(0, 100)}...</p>}
-          </>
+
+            <div style={{ marginTop: '0.5rem' }}>
+              <Button
+                text={t('viewJob', language)}
+                onClick={() => setSelectedJob(job)}
+              />
+            </div>
+          </div>
         )}
-        onCardClick={(job) => setSelectedJob(job)}
         emptyTextKey="noJobsFound"
       />
 

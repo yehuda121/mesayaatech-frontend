@@ -159,26 +159,30 @@ export default function MentorHomePage() {
         )}
 
         {view === 'allJobs' && (
-          <>
-            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+          <div>
+            <div className="mentor-button-group">
               <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
               <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
             </div>
             <ViewAllJobs />
-          </>
+          </div>
         )}
 
+
         {view === 'form' && userData && (
-          <EditMentorForm
-            userData={userData}
-            onSave={(updated) => setUserData(updated)}
-            onBack={() => setView('dashboard')}
-          />
+          <div>
+            <EditMentorForm
+              userData={userData}
+              onSave={(updated) => setUserData(updated)}
+              onBack={() => setView('dashboard')}
+              onClose={() => setView('dashboard')}
+            />
+          </div>
         )}
 
         {view === 'post-job' && (
-          <>
-            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+          <div>
+            <div className="mentor-button-group">
               <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
               <Button text={t('jobs', language)} onClick={() => handleNavigation('allJobs')} />
             </div>
@@ -189,14 +193,13 @@ export default function MentorHomePage() {
                 setToast({ message: t('jobPostedSuccess', language), type: 'success' });
                 setView('dashboard');
               }}
-              onClose={() => setView('dashboard')}
             />
-          </>
+          </div>
         )}
         
         {view === 'myJobsList' && (
-          <>
-            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+          <div>
+            <div className="mentor-button-group">
                 <Button text={t('jobs', language)} onClick={() => handleNavigation('allJobs')} />
                 <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
               </div>
@@ -207,12 +210,12 @@ export default function MentorHomePage() {
                 setView('edit-job');
               }}
             />
-          </>
+          </div>
         )}
 
         {view === 'my-questions' && (
-          <>
-            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+          <div>
+            <div className="mentor-button-group">
               <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
             </div>
@@ -228,12 +231,12 @@ export default function MentorHomePage() {
                 setView('post-answer');
               }}
             />
-          </>
+          </div>
         )}
 
         {view === 'edit-question' && questionToEdit && (
-          <>
-            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+          <div>
+            <div className="mentor-button-group">
               <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
               <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
@@ -249,12 +252,12 @@ export default function MentorHomePage() {
                 setView('my-questions');
               }}
             />
-          </>
+          </div>
         )}
 
         {view === 'post-answer' && questionToAnswer && (
-          <>
-            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+          <div>
+            <div className="mentor-button-group">
               <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
               <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
@@ -267,9 +270,9 @@ export default function MentorHomePage() {
                 setToast({ message: t('answerPosted', language), type: 'success' });
                 setView('dashboard');
               }}
-              onCancel={() => setView('dashboard')}
+              onClose={() => setView('interview-ques')}
             />
-          </>
+          </div>
         )}
 
         {view === 'edit-job' && selectedJobForEdit && (
@@ -288,12 +291,14 @@ export default function MentorHomePage() {
         )}
 
         {view === 'events' && (
-          <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
+          <div className="mentor-main-view">
+            <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
+          </div>
         )}
 
         {view === 'interview-ques' && 
-          <>
-            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+          <div>
+            <div className='mentor-button-group'>
               <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
             </div>
@@ -303,12 +308,12 @@ export default function MentorHomePage() {
                 setView('post-answer');
               }}
             />
-          </>
+          </div>
         }
 
         {view === 'AddNewQues' && (
-          <>
-            <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
+          <div>
+            <div className='mentor-button-group'>
               <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
               <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
             </div>
@@ -320,11 +325,13 @@ export default function MentorHomePage() {
                 setView('interview-ques');
               }}
             />
-          </>
+          </div>
         )}
 
         {view === 'find-reservist' && (
-          <FindReservist mentorId={idNumber} onBack={() => setView('dashboard')} />
+          <div className='mentor-main-view'>
+            <FindReservist mentorId={idNumber} onBack={() => setView('dashboard')} />
+          </div>
         )}
 
         {toast && (
