@@ -6,7 +6,7 @@ import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 
-export default function PostAnswer({ questionId, fullName, idNumber, onSuccess }) {
+export default function PostAnswer({ questionId, fullName, idNumber, onSuccess, onClose }) {
   const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState({ text: '' });
   const [toast, setToast] = useState(null);
@@ -40,7 +40,11 @@ export default function PostAnswer({ questionId, fullName, idNumber, onSuccess }
       if (res.ok) {
         setToast({ message: t('answerPosted', language), type: 'success' });
         setFormData({ text: '' });
-        if (onSuccess) onSuccess();
+        setTimeout(() => {
+          if (onSuccess) onSuccess();
+          if (onClose) onClose();
+          location.reload();
+        }, 300);
       } else {
         const data = await res.json();
         setToast({ message: data?.error || t('serverError', language), type: 'error' });
@@ -59,24 +63,47 @@ export default function PostAnswer({ questionId, fullName, idNumber, onSuccess }
     }
   ];
 
-  return (
-    <>
-      <GenericForm
-        titleKey="postAnswer"
-        fields={fields}
-        data={formData}
-        onChange={setFormData}
-        onPrimary={handleSubmit}
-        primaryLabel="submit"
-      />
+  const handleOverlayClick = (e) => {
+    if (e.target.classList.contains('modal-overlay')) {
+      if (onClose) onClose();
+    }
+  };
 
-      {toast && (
-        <ToastMessage
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
+  return (
+    <div
+      className="modal-overlay"
+      onClick={handleOverlayClick}
+      dir={language === 'he' ? 'rtl' : 'ltr'}
+    >
+      <div
+        className="relative max-w-xl w-full mx-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-3xl font-bold z-50"
+          aria-label="Close"
+        >
+          ×
+        </button>
+
+        <GenericForm
+          titleKey="postAnswer"
+          fields={fields}
+          data={formData}
+          onChange={setFormData}
+          onPrimary={handleSubmit}
+          primaryLabel="submit"
         />
-      )}
-    </>
+
+        {toast && (
+          <ToastMessage
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
+      </div>
+    </div>
   );
 }

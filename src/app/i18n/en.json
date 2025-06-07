@@ -303,7 +303,8 @@
     "answerPosted": "Answer posted",
     "management": "Mnagement",
     "tech": "tech",
-    "confirmDeleteQuestion": "Are you sure you want to delete this question?"
+    "confirmDeleteQuestion": "Are you sure you want to delete this question?",
+    "missingAnswerText": "Missing answer"
 
 
 

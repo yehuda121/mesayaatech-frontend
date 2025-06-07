@@ -303,6 +303,7 @@
     "answerPosted": "תשובתך התקבלה",
     "management": "ניהול",
     "tech": "הייטק",
-    "confirmDeleteQuestion": "האם אתה בטוח שברצונך למחוק את השאלה?"
+    "confirmDeleteQuestion": "האם אתה בטוח שברצונך למחוק את השאלה?",
+    "missingAnswerText": "נא למלא תשובה"
 
 }

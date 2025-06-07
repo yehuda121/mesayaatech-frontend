@@ -5,7 +5,7 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import Button from '@/app/components/Button';
-import { ThumbsUp, Edit2, MessageCircle, Eye } from 'lucide-react';
+import { ThumbsUp, Edit2, MessageCircle, Eye, Trash2 } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 
 export default function AdminQuestions({ onEdit, onAnswer, onView }) {
@@ -34,6 +34,27 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
       setQuestions(data);
     } catch (err) {
       console.error('Error fetching questions:', err);
+    }
+  };
+
+    const handleDelete = async (questionId) => {
+    if (!confirm(t('confirmDeleteQuestion', language))) return;
+
+    try {
+      const res = await fetch('http://localhost:5000/api/delete-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ questionId, idNumber, fullName })
+      });
+
+      if (res.ok) {
+        setMyQuestions(prev => prev.filter(q => q.questionId !== questionId));
+      } else {
+        alert(t('deleteFailed', language));
+      }
+    } catch (err) {
+      console.error('Error deleting question:', err);
+      alert(t('serverError', language));
     }
   };
 
@@ -68,7 +89,6 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
     }
   };
 
-
   return (
     <div dir={language === 'he' ? 'rtl' : 'ltr'}>
       <GenericCardSection
@@ -100,6 +120,13 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
                 size="sm"
                 text={t('postAnswer', language)}
                 onClick={() => onAnswer && onAnswer(q.questionId)}
+              />
+              <Button
+                icon={<Trash2 size={18} />}
+                size="sm"
+                color='red'
+                text={t('delete', language)}
+                onClick={() => handleDelete(q.questionId, q.createdBy)}
               />
               <div
                 onClick={() => handleLike(q.questionId, hasLiked(q.likes))}

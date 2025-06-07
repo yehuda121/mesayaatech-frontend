@@ -187,7 +187,7 @@ export default function AdminPage() {
             />
           )}
 
-          {answerQuestionId && (
+          {/* {answerQuestionId && (
             <div className="modal-overlay">
               <PostAnswer
                 questionId={answerQuestionId}
@@ -198,7 +198,31 @@ export default function AdminPage() {
                 }}
               />
             </div>
+          )} */}
+          {answerQuestionId && (
+            <div
+              className="modal-overlay"
+              onClick={(e) => {
+                if (e.target.classList.contains('modal-overlay')) {
+                  setAnswerQuestionId(null); 
+                }
+              }}
+            >
+              <div
+                className="relative max-w-xl w-full mx-auto"
+                onClick={(e) => e.stopPropagation()} 
+              >
+                <PostAnswer
+                  questionId={answerQuestionId}
+                  fullName={fullName}
+                  idNumber={idNumber}
+                  onSuccess={() => setAnswerQuestionId(null)}  
+                  onClose={() => setAnswerQuestionId(null)} 
+                />
+              </div>
+            </div>
           )}
+
           {questionToView && (
             <div className="modal-overlay">
               <div className="modal-content">
