@@ -308,8 +308,9 @@
     "logistics": "Logistics",
     "assignedMentor": "Assigned mentor",
     "mentorDataUnavailable": "Mentor data is unavailable",
-    "viewJob": "View job"
-
-
-
+    "viewJob": "View job",
+    "aboutMeIntro": "Tell us a bit about yourself (optional, but will help us match you with the right mentor)",
+    "aboutMeIntroMentor": "Tell us a bit about yourself (optional, but will help us match you with the right reservist)",
+    "aboutMePlaceholder": "For example: I'm 30 years old, recently completed reserve service, and interested in tech...",
+    "aboutMePlaceholderMentor": "For example: I'm a software engineer with 10 years of experience, and I want to help reservists in the tech field..."
 }

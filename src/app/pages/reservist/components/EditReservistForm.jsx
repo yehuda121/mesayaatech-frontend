@@ -45,6 +45,7 @@ export default function EditReservistForm({ userData, onSave, onBack }) {
     { key: 'fields' },
     { key: 'experience', type: 'textarea' },
     { key: 'linkedin' },
+    { key: 'aboutMeIntro', type: 'textarea' },
     { key: 'notes', type: 'textarea' },
     {
       key: 'mentorId',

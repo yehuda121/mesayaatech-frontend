@@ -41,6 +41,7 @@ export default function EditMentorForm({ userData, onSave }) {
     { key: 'experience', type: 'textarea' },
     { key: 'pastMentoring', type: 'textarea' },
     { key: 'linkedin' },
+    { key: 'aboutMeIntroMentor', type: 'textarea' },
     { key: 'notes', type: 'textarea' },
   ];
 

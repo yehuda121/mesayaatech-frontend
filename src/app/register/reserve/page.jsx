@@ -141,6 +141,8 @@ export default function ReserveRegisterForm() {
           experience: '',
           linkedin: '',
           notes: '',
+          aboutMe: '',
+
         });
       } else {
         const errorText = await res.text();
@@ -227,6 +229,18 @@ export default function ReserveRegisterForm() {
         <label>{t('reservistNotes', language)}:
           <textarea name="notes" value={formData.notes} onChange={handleChange} className="h-24" />
         </label>
+
+        <label>
+          {t('aboutMeIntro', language)}:
+          <textarea
+            name="aboutMe"
+            value={formData.aboutMe}
+            onChange={handleChange}
+            placeholder={t('aboutMePlaceholder', language)}
+            className="h-24"
+          />
+        </label>
+
 
         <Button text={t('submit', language)} type="submit" />
       </form>

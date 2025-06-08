@@ -135,6 +135,7 @@ export default function MentorRegisterForm() {
           availability: '',
           linkedin: '',
           notes: '',
+          aboutMe: '',
         });
       } else {
         const errorText = await res.text();
@@ -241,6 +242,18 @@ export default function MentorRegisterForm() {
         <label>{t('notes', language)}:
           <textarea name="notes" value={formData.notes} onChange={handleChange} className="h-24" />
         </label>
+
+        <label>
+          {t('aboutMeIntroMentor', language)}:
+          <textarea
+            name="aboutMe"
+            value={formData.aboutMe}
+            onChange={handleChange}
+            placeholder={t('aboutMePlaceholderMentor', language)}
+            className="h-24"
+          />
+        </label>
+
 
         <Button text={t('submit', language)} type="submit" />
       </form>
