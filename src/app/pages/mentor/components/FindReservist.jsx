@@ -6,7 +6,8 @@ import { t } from '@/app/utils/loadTranslations';
 import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
 import ReservistDetailsModal from './ReservistDetails';
-
+import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
+import Button from '@/app/components/Button';
 
 export default function FindReservist({ mentorId, onBack }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -25,11 +26,11 @@ export default function FindReservist({ mentorId, onBack }) {
   useEffect(() => {
     const fetchReservists = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/filter-users?userType=reservist&filter=availableForMentor`);
+        const res = await fetch(`http://localhost:5000/api/match-reservists-to-mentor?mentorId=${mentorId}`);
         const data = await res.json();
         setReservists(data);
       } catch (err) {
-        console.error('Error loading reservists:', err);
+        console.error('Error loading matches:', err);
         setToast({ message: t('errorLoadingReservists', language), type: 'error' });
       }
     };
@@ -55,67 +56,62 @@ export default function FindReservist({ mentorId, onBack }) {
       setToast({ message: t('assignedFail', language), type: 'error' });
     }
   };
-  return (
-    <div 
-      className="find-reservist-container"
-      dir={language === 'he' ? 'rtl' : 'ltr'}
-    >
-      <h2 className="text-xl font-bold mb-4">{t('findReservist', language)}</h2>
 
-      {reservists.length === 0 ? (
-        <p>{t('noReservistsAvailable', language)}</p>
-      ) : (
-        <div className="reservist-grid">
-          {reservists.map((r) => (
-            <div key={r.idNumber} className="reservist-card">
-              <h3 className="text-lg font-bold text-blue-700 mb-2">{r.fullName}</h3>
+  const renderCard = (r) => (
+    <div key={r.idNumber} className="reservist-card">
+      <h3 className="text-lg font-bold text-blue-700 mb-2">{r.fullName}</h3>
+      <p><strong>{t('fields', language)}:</strong> {r.fields?.join(', ')}</p>
+      <p><strong>{t('location', language)}:</strong> {r.location}</p>
+      <p><strong>{t('matchScore', language)}:</strong> {r.matchScore || 0}%</p>
+      {r.aboutMe && (
+        <p><strong>{t('aboutMe', language)}:</strong> {r.aboutMe}</p>
+      )}
 
-              <p><strong>{t('fields', language)}:</strong> {r.fields?.join(', ')}</p>
-              <p><strong>{t('location', language)}:</strong> {r.location}</p>
-
-              {showContact === r.idNumber && (
-                <>
-                  <p><strong>{t('email', language)}:</strong> {r.email}</p>
-                  <p><strong>{t('phone', language)}:</strong> {r.phone}</p>
-                </>
-              )}
-
-              <div className="mt-3 flex justify-between gap-2">
-                <button
-                  className="btn btn-outline"
-                  onClick={() =>
-                    setShowContact((prev) => (prev === r.idNumber ? null : r.idNumber))
-                  }
-                >
-                  {showContact === r.idNumber
-                    ? t('hideContact', language)
-                    : t('showContact', language)}
-                </button>
-
-                <button
-                  className="btn"
-                  onClick={() =>
-                    setConfirmData({
-                      reservistId: r.idNumber,
-                      fullName: r.fullName,
-                    })
-                  }
-                >
-                  {t('addToMyReservists', language)}
-                </button>
-                <button
-                  className="btn"
-                  onClick={() => setSelectedReservist(r)}
-                >
-                  {t('viewDetails', language)}
-                </button>
-
-
-              </div>
-            </div>
-          ))}
+      {showContact === r.idNumber && (
+        <div className="text-sm mt-1 text-gray-600">
+          <p><strong>{t('email', language)}:</strong> {r.email}</p>
+          <p><strong>{t('phone', language)}:</strong> {r.phone}</p>
+          {r.scoreBreakdown && (
+            <>
+              <p>{t('breakdownProfession', language)}: {r.scoreBreakdown.professionMatch}</p>
+              <p>{t('breakdownLocation', language)}: {r.scoreBreakdown.locationMatch}</p>
+              <p>{t('breakdownKeywords', language)}: {r.scoreBreakdown.keywordMatch}</p>
+            </>
+          )}
         </div>
       )}
+
+      <div className="flex flex-wrap gap-2 mt-3">
+        <Button
+          text={showContact === r.idNumber ? t('hideContact', language) : t('showContact', language)}
+          onClick={() => setShowContact(prev => prev === r.idNumber ? null : r.idNumber)}
+        />
+
+        <Button
+          text={t('addToMyReservists', language)}
+          onClick={() => setConfirmData({ reservistId: r.idNumber, fullName: r.fullName })}
+        />
+
+        <Button
+          text={t('viewDetails', language)}
+          onClick={() => setSelectedReservist(r)}
+        />
+      </div>
+
+
+    </div>
+  );
+
+  return (
+    <div className="find-reservist-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
+      <h2 className="text-xl font-bold mb-4">{t('findReservist', language)}</h2>
+
+      <GenericCardSection
+        titleKey="recommendedReservists"
+        filters={[]}
+        data={reservists}
+        renderCard={renderCard}
+      />
 
       {toast && (
         <ToastMessage
@@ -136,6 +132,7 @@ export default function FindReservist({ mentorId, onBack }) {
           onCancel={() => setConfirmData(null)}
         />
       )}
+
       {selectedReservist && (
         <ReservistDetailsModal
           reservist={selectedReservist}
@@ -144,5 +141,4 @@ export default function FindReservist({ mentorId, onBack }) {
       )}
     </div>
   );
-
 }
