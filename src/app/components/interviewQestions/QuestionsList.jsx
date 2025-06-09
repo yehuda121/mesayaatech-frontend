@@ -5,7 +5,7 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ViewQuestion from './ViewQuestion'; 
 import Button from '@/app/components/Button';
-import { ThumbsUp } from 'lucide-react';
+import { ThumbsUp, FileSearch, MessageCircleMore } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 
 
@@ -181,7 +181,7 @@ export default function QuestionsPage({ onAnswer }) {
               {q.createdBy?.split('#')[0] || t('unknownUser', language)}
             </p>
 
-            <Button size="sm" onClick={(e) => { e.stopPropagation(); setSelectedQuestion(q); }}>
+            {/* <Button size="sm" onClick={(e) => { e.stopPropagation(); setSelectedQuestion(q); }}>
               {t('viewQestion', language)}
             </Button>
 
@@ -214,7 +214,44 @@ export default function QuestionsPage({ onAnswer }) {
                 size={22}
                 color={hasLiked(q.likes) ? '#007bff' : '#ccc'}
               />
-              <span>{q.likes?.length || 0}</span>
+              <span>{q.likes?.length || 0}</span> */}
+              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedQuestion(q);
+                  }}
+                  title={t('viewQestion', language)}
+                >
+                  <FileSearch size={18} />
+                </button>
+
+                {userType !== 'reservist' && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAnswer && onAnswer(q);
+                    }}
+                    title={t('postAnswer', language)}
+                  >
+                    <MessageCircleMore size={18} />
+                  </button>
+                )}
+
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLike(q.questionId, hasLiked(q.likes));
+                  }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer' }}
+                  title={t('like', language)}
+                >
+                  <ThumbsUp
+                    size={22}
+                    color={hasLiked(q.likes) ? '#007bff' : '#ccc'}
+                  />
+                  <span>{q.likes?.length || 0}</span>
+                </div>
             </div>
           </div>
         )}

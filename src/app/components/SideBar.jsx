@@ -107,7 +107,6 @@ export default function SideBar({ navItems }) {
           }}>
             <span className="lang-text">{language === "he" ? "English" : "עברית"}</span>
             <img src="/icons/globe-icon.png" alt="globe" className="lang-img" />
-            
           </button>
 
 

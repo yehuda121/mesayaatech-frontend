@@ -8,14 +8,15 @@ import ToastMessage from '@/app/components/notifications/ToastMessage';
 import ReservistDetailsModal from './ReservistDetails';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import Button from '@/app/components/Button';
+import { UserPlus , FileSearch , EyeOff, Eye, Trash2 } from 'lucide-react';
 
 export default function FindReservist({ mentorId, onBack }) {
   const [language, setLanguage] = useState(getLanguage());
   const [reservists, setReservists] = useState([]);
-  const [showContact, setShowContact] = useState(null);
   const [toast, setToast] = useState(null);
   const [confirmData, setConfirmData] = useState(null);
   const [selectedReservist, setSelectedReservist] = useState(null);
+  const [expandedScore, setExpandedScore] = useState(null);
 
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
@@ -62,40 +63,45 @@ export default function FindReservist({ mentorId, onBack }) {
       <h3 className="text-lg font-bold text-blue-700 mb-2">{r.fullName}</h3>
       <p><strong>{t('fields', language)}:</strong> {r.fields?.join(', ')}</p>
       <p><strong>{t('location', language)}:</strong> {r.location}</p>
-      <p><strong>{t('matchScore', language)}:</strong> {r.matchScore || 0}%</p>
       {r.aboutMe && (
         <p><strong>{t('aboutMe', language)}:</strong> {r.aboutMe}</p>
       )}
 
-      {showContact === r.idNumber && (
-        <div className="text-sm mt-1 text-gray-600">
-          <p><strong>{t('email', language)}:</strong> {r.email}</p>
-          <p><strong>{t('phone', language)}:</strong> {r.phone}</p>
-          {r.scoreBreakdown && (
-            <>
-              <p>{t('breakdownProfession', language)}: {r.scoreBreakdown.professionMatch}</p>
-              <p>{t('breakdownLocation', language)}: {r.scoreBreakdown.locationMatch}</p>
-              <p>{t('breakdownKeywords', language)}: {r.scoreBreakdown.keywordMatch}</p>
-            </>
-          )}
+      <p className="flex items-center gap-2">
+        <strong>{t('matchScore', language)}:</strong> {r.matchScore || 0}%
+        <button
+          title={t('viewScoreDetails', language)}
+          onClick={() =>
+            setExpandedScore(prev => prev === r.idNumber ? null : r.idNumber)
+          }
+          className="ml-1 text-blue-600 hover:text-blue-800"
+        >
+          {expandedScore === r.idNumber ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      </p>
+
+      {expandedScore === r.idNumber && r.scoreBreakdown && (
+        <div className="text-sm ml-4 mt-1 space-y-1">
+          <p>{t('breakdownProfession', language)}: {r.scoreBreakdown.professionMatch}</p>
+          <p>{t('breakdownLocation', language)}: {r.scoreBreakdown.locationMatch}</p>
+          <p>{t('breakdownKeywords', language)}: {r.scoreBreakdown.keywordMatch}</p>
         </div>
       )}
 
-      <div className="flex flex-wrap gap-2 mt-3">
-        <Button
-          text={showContact === r.idNumber ? t('hideContact', language) : t('showContact', language)}
-          onClick={() => setShowContact(prev => prev === r.idNumber ? null : r.idNumber)}
-        />
-
-        <Button
-          text={t('addToMyReservists', language)}
+      <div className="flex flex-wrap gap-4 mt-3">
+        <button
           onClick={() => setConfirmData({ reservistId: r.idNumber, fullName: r.fullName })}
-        />
+          title={t('addToMyReservists', language)}
+        >
+          <UserPlus size={18} />
+        </button>
 
-        <Button
-          text={t('viewDetails', language)}
+        <button
           onClick={() => setSelectedReservist(r)}
-        />
+          title={t('viewDetails', language)}
+        >
+          <FileSearch size={18} />
+        </button>
       </div>
 
 

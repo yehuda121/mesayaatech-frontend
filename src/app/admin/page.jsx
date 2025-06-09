@@ -151,13 +151,19 @@ export default function AdminPage() {
               ) : (
                 <>
                   <p className='adminHomePageTitle'>{t('noPendingUsers', language)}</p>
-                  <CreateEvent />
+                  <div className='CreateEventClass'>
+                    <CreateEvent />
+                  </div>
                 </>
               )}
             </>
           )}
 
-          {view === 'create-event' && <CreateEvent />}
+          {view === 'create-event' && 
+            <div className='CreateEventClass'>
+              <CreateEvent />
+            </div>
+          }
 
           {view === 'view-events' && (
             <ViewEvents

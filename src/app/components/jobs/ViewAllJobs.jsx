@@ -8,6 +8,7 @@ import GenericCardSection from '@/app/components/GenericCardSection/GenericCardS
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import './jobs.css';
 import Button from '../Button';
+import { FileSearch } from 'lucide-react';
 
 export default function ViewAllJobs() {
   const [language, setLanguage] = useState(getLanguage());
@@ -91,11 +92,15 @@ export default function ViewAllJobs() {
             {job?.location && <p>{t('location', language)}: {job.location}</p>}
             {job?.description && <p>{t('description', language)}: {job.description.slice(0, 100)}...</p>}
 
-            <div style={{ marginTop: '0.5rem' }}>
-              <Button
-                text={t('viewJob', language)}
+            <div className="mt-2 flex items-center gap-2">
+              <button
                 onClick={() => setSelectedJob(job)}
-              />
+                title={t('viewJob', language)}
+                className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
+              >
+                <FileSearch size={18} />
+                <span>{t('viewJob', language)}</span>
+              </button>
             </div>
           </div>
         )}

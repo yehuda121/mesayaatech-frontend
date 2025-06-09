@@ -7,6 +7,7 @@ import { t } from '@/app/utils/loadTranslations';
 import Button from '@/app/components/Button';
 import EditEvents from './EditEvents';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
+import { Edit2, Trash2 } from 'lucide-react';
 
 export default function ViewEvents({ events, setEvents, handleNavigation }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -108,13 +109,20 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
               <span className="font-bold">{t('location', language)}:</span> {event.location}
             </div>
 
-            <div className="mt-2 flex gap-2">
-              <Button size="sm" onClick={(e) => { e.stopPropagation(); setEditingEvent(event); }}>
+            <div className="mt-2 flex gap-4">
+              <button title={t('editevent', language)} onClick={(e) => { e.stopPropagation(); setEditingEvent(event); }}>
+                <Edit2 size={18}/>
+              </button>
+              <button title={t('deleteEvent', language)} onClick={(e) => { e.stopPropagation(); handleDelete(event); }}>
+                <Trash2 size={18} />
+              </button>
+
+              {/* <Button size="sm" onClick={(e) => { e.stopPropagation(); setEditingEvent(event); }}>
                 {t('edit', language)}
               </Button>
               <Button size="sm" color="red" onClick={(e) => { e.stopPropagation(); handleDelete(event); }}>
                 {t('delete', language)}
-              </Button>
+              </Button> */}
             </div>
           </>
 

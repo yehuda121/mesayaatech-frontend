@@ -177,3 +177,8 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+
+.CreateEventClass{
+  margin-top: -70px;
+}

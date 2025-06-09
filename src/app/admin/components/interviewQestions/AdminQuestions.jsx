@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
-import Button from '@/app/components/Button';
 import { ThumbsUp, Edit2, MessageCircle, Eye, Trash2 } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 
@@ -109,32 +108,20 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
             <p><strong>{t('createdAt', language)}:</strong> {new Date(q.createdAt).toLocaleDateString(language === 'he' ? 'he-IL' : 'en-US')}</p>
             <p><strong>{t('createdBy', language)}:</strong> {q.createdBy?.split('#')[0] || '-'}</p>
 
-            <div className="flex gap-2 mt-2">
-              <Button
-                icon={<Eye size={18} />}
-                size="sm"
-                text={t('viewQestion', language)}
-                onClick={() => onView && onView(q)}
-              />
-              <Button
-                icon={<Edit2 size={18} />}
-                size="sm"
-                text={t('edit', language)}
-                onClick={() => onEdit && onEdit(q)}
-              />
-              <Button
-                icon={<MessageCircle size={18} />}
-                size="sm"
-                text={t('postAnswer', language)}
-                onClick={() => onAnswer && onAnswer(q.questionId)}
-              />
-              <Button
-                icon={<Trash2 size={18} />}
-                size="sm"
-                color='red'
-                text={t('delete', language)}
-                onClick={() => handleDelete(q.questionId, q.createdBy)}
-              />
+            <div className="flex gap-4 mt-2">
+              <button title={t('viewAnswers', language)} onClick={() => onView && onView(q)}>
+                <Eye size={18} />
+              </button>
+              <button title={t('editQuestion', language)} onClick={() => onEdit && onEdit(q)}>
+                <Edit2 size={18}/>
+              </button>
+              <button title={t('answerQuestion', language)} onClick={() => onAnswer && onAnswer(q.questionId)}>
+                <MessageCircle size={18} />
+              </button>
+              <button title={t('deleteQuestion', language)} onClick={() => handleDelete(q.questionId, q.createdBy)}>
+                <Trash2 size={18} />
+              </button>
+
               <div
                 onClick={() => handleLike(q.questionId, hasLiked(q.likes))}
                 style={{
@@ -144,6 +131,7 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
                   gap: '0.4rem',
                   padding: '4px'
                 }}
+                title={t('likeThisQuestion', language)}
               >
                 <ThumbsUp
                   size={20}

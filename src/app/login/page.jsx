@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { getLanguage, toggleLanguage } from '../language';
 import { t } from '@/app/utils/loadTranslations';
 import './login.css';
-
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [message, setMessage] = useState('');
   const [language, setLanguage] = useState(null);
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     setLanguage(getLanguage());
@@ -86,16 +87,29 @@ export default function LoginPage() {
           className="login-input"
           autoComplete="email"
         />
+        
+        <div className="relative" dir={language === 'he' ? 'rtl' : 'ltr'}>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            placeholder={t('password', language)}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="login-input pr-10"
+            autoComplete="current-password"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className={`absolute top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 ${
+              language === 'he' ? 'left-3' : 'right-3'
+            }`}
+            title={showPassword ? t('hidePassword', language) : t('showPassword', language)}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
 
-        <input
-          type="password"
-          value={password}
-          placeholder={t('password', language)}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="login-input"
-          autoComplete="current-password"
-        />
 
         <button
           type="submit"

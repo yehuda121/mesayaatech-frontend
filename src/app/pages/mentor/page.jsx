@@ -20,6 +20,7 @@ import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
 import MyQuestions from '@/app/components/interviewQestions/MyQuestions';
 import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
 import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
+import MyReservists from './components/MyReservists/MyReservists';
 import './mentor.css';
 
 export default function MentorHomePage() {
@@ -33,7 +34,7 @@ export default function MentorHomePage() {
   const [toast, setToast] = useState(null);
   const [questionToEdit, setQuestionToEdit] = useState(null);
   const [questionToAnswer, setQuestionToAnswer] = useState(null);
-
+  const [selectedReservistId, setSelectedReservistId] = useState(null);
 
   const router = useRouter();
 
@@ -136,12 +137,23 @@ export default function MentorHomePage() {
         path: '#find-reservist',
         onClick: () => handleNavigation('find-reservist')
       },
+      {
+        labelHe: t('myReservists', language),
+        labelEn: t('myReservists', language),
+        path: '#myReservists',
+        onClick: () => handleNavigation('myReservists')
+      },
     ];
   }, [language]);
 
   if (!language || !idNumber) {
     return <p style={{ padding: '2rem' }}>{t('loading', language || 'he')}</p>;
   }
+
+  const handleManageReservist = (idNumber) => {
+    setSelectedReservistId(idNumber);
+    setView('manage-reservist');
+  };
 
   return (
     <div className="mentor-container">
@@ -168,9 +180,8 @@ export default function MentorHomePage() {
           </div>
         )}
 
-
         {view === 'form' && userData && (
-          <div>
+          <div className='EditMentorForm'>
             <EditMentorForm
               userData={userData}
               onSave={(updated) => setUserData(updated)}
@@ -327,6 +338,20 @@ export default function MentorHomePage() {
             />
           </div>
         )}
+
+        {view === 'myReservists' && (
+          <MyReservists onManageReservist={handleManageReservist} />
+        )}
+
+        {view === 'manage-reservist' && selectedReservistId && (
+          <div>
+            <h2>{t('reservistManagementTitle', language)}</h2>
+            {/* כאן תוכל להוסיף קומפוננטה אמיתית לניהול מילואימניק */}
+            <p>{t('managingReservist', language)}: {selectedReservistId}</p>
+            <Button text={t('back', language)} onClick={() => setView('myReservists')} />
+          </div>
+        )}
+
 
         {view === 'find-reservist' && (
           <div className='mentor-main-view'>

@@ -6,7 +6,6 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
-import '../mentor.css';
 
 export default function EditMentorForm({ userData, onSave }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -119,14 +118,6 @@ export default function EditMentorForm({ userData, onSave }) {
 
   return (
     <div>
-      {alert && (
-        <AlertMessage
-          message={alert.message}
-          type={alert.type}
-          onClose={() => setAlert(null)}
-        />
-      )}
-
       <GenericForm
         titleKey="editUserDetails"
         fields={fields}
@@ -145,7 +136,13 @@ export default function EditMentorForm({ userData, onSave }) {
           <p><strong>{t('updatedAt', language)}:</strong> {formData.updatedAt}</p>
         </div>
       </GenericForm>
-
+      {alert && (
+        <AlertMessage
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
     </div>
   );
 }

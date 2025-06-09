@@ -9,7 +9,7 @@ import { UserCog } from 'lucide-react';
 import Button from '@/app/components/Button';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 
-export default function MyReservists() {
+export default function MyReservists({ onManageReservist }) {
   const [language, setLanguage] = useState(getLanguage());
   const [reservists, setReservists] = useState([]);
   const router = useRouter();
@@ -48,19 +48,17 @@ export default function MyReservists() {
     fetchReservists();
   }, []);
 
-  const handleManage = (idNumber) => {
-    router.push(`/mentor/manage-reservist/${idNumber}`);
-  };
-
   const renderReservistCard = (res) => (
     <div className="flex flex-col gap-2">
       <h3 className="font-bold text-lg">{res.fullName}</h3>
       <p>{t('idNumber', language)}: {res.idNumber}</p>
-
       <div className="mt-2">
         <button
           title={t('manageReservist', language)}
-          onClick={() => handleManage(res.idNumber)}
+          onClick={() => {
+            console.log('Managing reservist:', res.idNumber);
+            onManageReservist(res.idNumber)
+          }}
         ><UserCog size={25} /></button>
       </div>
     </div>

@@ -14,7 +14,6 @@ html, body {
   text-align: right;
 }
 
-/* טקסט שמאלי לפי צורך */
 .text-ltr {
   direction: ltr;
   text-align: left;
@@ -113,7 +112,7 @@ html, body {
   gap: 15px;
   transition: transform 0.3s ease-in-out;
   z-index: 2000;
-  transform: translateX(0); /* פתוח בברירת מחדל */
+  transform: translateX(0); 
 }
 
 
@@ -126,6 +125,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 8px;
+  color: #002855;
 }
 
 .lang-img {
