@@ -21,6 +21,7 @@ import MyQuestions from '@/app/components/interviewQestions/MyQuestions';
 import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
 import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
 import MyReservists from './components/MyReservists/MyReservists';
+import MentorshipProgress from './components/MyReservists/MentorshipProgress';
 import './mentor.css';
 
 export default function MentorHomePage() {
@@ -345,10 +346,7 @@ export default function MentorHomePage() {
 
         {view === 'manage-reservist' && selectedReservistId && (
           <div>
-            <h2>{t('reservistManagementTitle', language)}</h2>
-            {/* כאן תוכל להוסיף קומפוננטה אמיתית לניהול מילואימניק */}
-            <p>{t('managingReservist', language)}: {selectedReservistId}</p>
-            <Button text={t('back', language)} onClick={() => setView('myReservists')} />
+            <MentorshipProgress/>
           </div>
         )}
 

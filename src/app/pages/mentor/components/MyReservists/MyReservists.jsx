@@ -56,7 +56,7 @@ export default function MyReservists({ onManageReservist }) {
         <button
           title={t('manageReservist', language)}
           onClick={() => {
-            console.log('Managing reservist:', res.idNumber);
+            // console.log('Managing reservist:', res.idNumber);
             onManageReservist(res.idNumber)
           }}
         ><UserCog size={25} /></button>
