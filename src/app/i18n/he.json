@@ -144,7 +144,6 @@
     "fullNameInvalid": "השם המלא חייב להכיל אותיות בלבד ללא מספרים או תווים מיוחדים.",
     "idNumberInvalid": "מספר תעודת הזהות חייב להכיל בדיוק 9 ספרות.",
     "emailRequired": "יש להזין כתובת אימייל.",
-    "emailInvalid": "כתובת האימייל אינה תקינה.",
     "phoneInvalid": "מספר הטלפון שהוזן אינו תקין.",
     "mainProfessionRequired": "יש להזין תחום עיסוק.",
     "locationRequired": "יש להזין מיקום.",
@@ -316,5 +315,35 @@
     "answer": "תשובה",
     "conformArrive": "אישור הגעה",
     "longText": "הטקסט ארוך מידי",
-    "MissingNameOrID": "חסר שם או ת.ז"
+    "MissingNameOrID": "חסר שם או ת.ז",
+    "fullNameTooLong": "השם ארוך מדי (מקסימום 50 תווים)",
+    "emailTooLong": "המייל ארוך מדי (מקסימום 100 תווים)",
+    "professionTooLong": "המקצוע ארוך מדי (מקסימום 60 תווים)",
+    "experienceTooLong": "הניסיון תעסוקתי ארוך מדי (מקסימום 1000 תווים)",
+    "linkedinTooLong": "כתובת הלינקדאין ארוכה מדי (מקסימום 200 תווים)",
+    "companyRequired": "יש להזין שם חברה",
+    "companyTooLong": "שם החברה ארוך מדי (מקסימום 100 תווים)",
+    "roleRequired": "יש להזין שם תפקיד",
+    "roleTooLong": "שם התפקיד ארוך מדי (מקסימום 100 תווים)",
+    "locationTooLong": "המיקום ארוך מדי (מקסימום 60 תווים)",
+    "descriptionTooLong": "תיאור המשרה ארוך מדי (מקסימום 1000 תווים)",
+    "requirementsTooLong": "רשימת הדרישות ארוכה מדי (מקסימום 1000 תווים)",
+    "advantagesTooLong": "רשימת היתרונות ארוכה מדי (מקסימום 1000 תווים)",
+    "emailInvalid": "כתובת אימייל לא תקינה",
+    "urlInvalid": "קישור לא תקין",
+    "experienceInvalid": "שנות ניסיון חייבות להיות מספר",
+    "questionTooLong": "השאלה ארוכה מדי (מקסימום 500 תווים)",
+    "education": "חינוך",
+    "meetingDateRequired": "יש להזין תאריך לפגישה",
+    "meetingModeRequired": "יש להזין אופן קיום הפגישה",
+    "meetingModeTooLong": "אופן הפגישה לא יכול לעלות על 50 תווים",
+    "meetingTopicsTooLong": "נושא הפגישה ארוך מדי (מקסימום 300 תווים)",
+    "meetingTasksTooLong": "משימות הפגישה ארוכות מדי (מקסימום 300 תווים)",
+    "futurTasksTooLong": "משימות להמשך ארוכות מדי (מקסימום 300 תווים)",
+    "noteTooLong": "הערה ארוכה מדי (מקסימום 300 תווים)"
+
+
+
+
+
 }
