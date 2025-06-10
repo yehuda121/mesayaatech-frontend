@@ -282,7 +282,31 @@
     "myReservists": "המילואימניקים שלי",
     "myReservistsTitle": "המילואימניקים שלי",
     "noReservistsAssigned": "לא שובצו לך מילואימניקים עדיין",
-    "manageReservist": "ניהול מילואימניק"
+    "manageReservist": "ניהול מילואימניק",
+    "stage1": "שלב 1 – היכרות ראשונית",
+    "stage2": "שלב 2 – שיפור קורות חיים",
+    "stage3": "שלב 3 – הכנה לראיונות עבודה",
+    "stage4": "שלב 4 – חיפוש משרות",
+    "stage5": "שלב 5 – מציאת עבודה / סיום תהליך",
+    "fetchProgressError": "אירעה שגיאה בעת טעינת נתוני ההתקדמות",
+    "mentorshipProgressTitle": "התקדמות בתהליך הליווי",
+    "currentStage": "שלב נוכחי",
+    "advanceStage": "התקדם לשלב הבא",
+    "addMeeting": "הוסף פגישה",
+    "meetingHistory": "היסטוריית פגישות",
+    "noMeetingsYet": "אין פגישות עדיין",
+    "mode": "אופן הפגישה",
+    "save": "שמור",
+    "topics": "נושאי הפגישה",
+    "tasks": "משימות מהפגישה",
+    "confirmStageAdvance": "האם אתה בטוח שברצונך להתקדם לשלב הבא?",
+    "note": "הערות",
+    "futurTasks": "משימות להמשך",
+    "meetingDate": "תאריך הפגישה",
+    "meetingMode": "אופן הפגישה",
+    "meetingTopics": "נושאי הפגישה",
+    "meetingTasks": "משימות מהפגישה",
+    "close": "סגור"
 
 
 }

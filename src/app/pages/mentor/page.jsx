@@ -123,8 +123,8 @@ export default function MentorHomePage() {
       {
         labelHe: t('events', language),
         labelEn: t('events', language),
-        path: '#events',
-        onClick: () => handleNavigation('events')
+        path: '#all-events',
+        onClick: () => handleNavigation('all-events')
       },
       {
         labelHe: t('interviewQuesTitle', language),
@@ -161,13 +161,15 @@ export default function MentorHomePage() {
       <SideBar navItems={navItems} />
 
       <main className="mentor-main">
-
+        
         {view === 'dashboard' && (
           <>
             <h1 className="mentor-welcome">
               {t('mentorWelcomeTitle', language).replace('{{name}}', fullName)}
             </h1>
-            <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
+            <div className="mentor-main-view">
+              <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
+            </div>
           </>
         )}
 
@@ -302,7 +304,7 @@ export default function MentorHomePage() {
           />
         )}
 
-        {view === 'events' && (
+        {view === 'all-events' && (
           <div className="mentor-main-view">
             <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
           </div>
@@ -346,7 +348,7 @@ export default function MentorHomePage() {
 
         {view === 'manage-reservist' && selectedReservistId && (
           <div>
-            <MentorshipProgress/>
+            <MentorshipProgress mentorId={idNumber} reservistId={selectedReservistId} />
           </div>
         )}
 

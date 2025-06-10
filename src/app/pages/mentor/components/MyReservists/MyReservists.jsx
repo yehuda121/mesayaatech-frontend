@@ -6,7 +6,6 @@ import { t } from '@/app/utils/loadTranslations';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { UserCog } from 'lucide-react';
-import Button from '@/app/components/Button';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 
 export default function MyReservists({ onManageReservist }) {
@@ -54,9 +53,9 @@ export default function MyReservists({ onManageReservist }) {
       <p>{t('idNumber', language)}: {res.idNumber}</p>
       <div className="mt-2">
         <button
+          type="button"
           title={t('manageReservist', language)}
           onClick={() => {
-            // console.log('Managing reservist:', res.idNumber);
             onManageReservist(res.idNumber)
           }}
         ><UserCog size={25} /></button>
@@ -68,7 +67,7 @@ export default function MyReservists({ onManageReservist }) {
     <GenericCardSection
       titleKey="myReservistsTitle"
       filters={[]}
-      data={reservists}
+      data={Array.isArray(reservists) ? reservists : []}
       renderCard={renderReservistCard}
       emptyTextKey="noReservistsAssigned"
     />
