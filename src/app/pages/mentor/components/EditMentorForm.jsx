@@ -64,19 +64,27 @@ export default function EditMentorForm({ userData, onSave }) {
 
     if (!fullName) errors.push(t('fullNameRequired', language));
     else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
+    else if (fullName.length > 50) errors.push(t('fullNameTooLong', language));
 
     if (!idPattern.test(idNumber)) errors.push(t('idNumberInvalid', language));
 
     if (!email) errors.push(t('emailRequired', language));
     else if (!emailPattern.test(email)) errors.push(t('emailInvalid', language));
+    else if (email.length > 100) errors.push(t('emailTooLong', language));
 
     if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
 
     if (!profession) errors.push(t('mainProfessionRequired', language));
+    else if (profession.length > 60) errors.push(t('professionTooLong', language));
+
     if (!location) errors.push(t('locationRequired', language));
+    else if (location.length > 60) errors.push(t('locationTooLong', language));
+
     if (!experience) errors.push(t('experienceRequired', language));
+    else if (experience.length > 1000) errors.push(t('experienceTooLong', language));
 
     if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
+    else if (linkedin.length > 200) errors.push(t('linkedinTooLong', language));
 
     return errors;
   };
@@ -99,6 +107,7 @@ export default function EditMentorForm({ userData, onSave }) {
       if (res.ok) {
         setAlert({ message: t('saveSuccess', language), type: 'success' });
         setInitialData(formData);
+        localStorage.setItem('mentorFullName', formData.fullName);
         onSave(result);
       } else {
         setAlert({ message: result.error || t('saveError', language), type: 'error' });

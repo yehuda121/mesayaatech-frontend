@@ -109,14 +109,16 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
                   className="text-green-600 hover:text-green-800 flex items-center gap-1"
                 >
                   <CalendarPlus size={18} />
+                  <span>{t('conformArrive', language)}</span>
                 </button>
               )}
               <button
                 onClick={() => setSelectedEvent(event)}
                 title={t('viewEventDetails', language)}
-                className="text-blue-600 hover:text-blue-800"
+                className="text-blue-600 hover:text-blue-800 items-center flex gap-2"
               >
                 <Eye size={18} />
+                <span>{t('viewEvent', language)}</span>
               </button>
             </div>
           </>

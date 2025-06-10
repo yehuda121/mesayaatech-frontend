@@ -180,43 +180,9 @@ export default function QuestionsPage({ onAnswer }) {
               <strong>{t('createdBy', language)}:</strong>{' '}
               {q.createdBy?.split('#')[0] || t('unknownUser', language)}
             </p>
-
-            {/* <Button size="sm" onClick={(e) => { e.stopPropagation(); setSelectedQuestion(q); }}>
-              {t('viewQestion', language)}
-            </Button>
-
-            {userType !== 'reservist' && (
-              <Button
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onAnswer && onAnswer(q);
-                }}
-              >
-                {t('postAnswer', language)}
-              </Button>
-            )}
-
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                handleLike(q.questionId, hasLiked(q.likes));
-              }}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                cursor: 'pointer',
-                marginTop: '4px'
-              }}
-            >
-              <ThumbsUp
-                size={22}
-                color={hasLiked(q.likes) ? '#007bff' : '#ccc'}
-              />
-              <span>{q.likes?.length || 0}</span> */}
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                 <button
+                  className='text-green-600'
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedQuestion(q);

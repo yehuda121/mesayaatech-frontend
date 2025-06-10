@@ -17,7 +17,7 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber }) {
 
   // If fullName or ID is missing, show error message
   if (!fullName || !idNumber) {
-    return <p style={{ color: 'red' }}>Missing fullName or ID number. Please log in properly.</p>;
+    return <p style={{ color: 'red' }}>{t('MissingNameOrID', language)}</p>;
   }
 
   // List of available categories for the dropdown
@@ -51,8 +51,8 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber }) {
     if (e?.preventDefault) e.preventDefault();
 
     // Validate required fields
+    let message = '';
     if (!formData.text || !formData.category || !formData.createdBy) {
-      let message = '';
       if (!formData.text) {
         message = t('missingQuestionText', language);
       } else if (!formData.category) {
@@ -61,6 +61,9 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber }) {
         message = t('missingCreatedBy', language);
       }
       setToast({ message, type: 'error' });
+      return;
+    } else if(formData.text.length > 500){
+      setToast({ message: t('questionTooLong', language), type: 'error' });
       return;
     }
 

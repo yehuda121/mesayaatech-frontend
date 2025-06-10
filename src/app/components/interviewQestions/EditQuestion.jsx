@@ -35,6 +35,11 @@ export default function EditQuestion({ question, onClose, onSave }) {
       return;
     }
 
+    if (formData.text.length > 500) {
+      setToast({ message: t('questionTooLong', language), type: 'error' });
+      return;
+    }
+
     try {
       const res = await fetch('http://localhost:5000/api/update-question', {
         method: 'PUT',

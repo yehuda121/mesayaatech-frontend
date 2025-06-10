@@ -5,6 +5,7 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import Button from '@/app/components/Button';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
+import { Edit2, Trash2 } from 'lucide-react';
 
 export default function MyJobsList({ publisherId, onEdit }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -146,9 +147,13 @@ export default function MyJobsList({ publisherId, onEdit }) {
             {job.requirements && <p><strong>{t('requirements', language)}:</strong> {job.requirements}</p>}
             {job.advantages && <p><strong>{t('advantages', language)}:</strong> {job.advantages}</p>}
             {job.description && <p className="job-description">{job.description}</p>}
-            <div className="job-actions">
-              <Button text={t('edit', language)} onClick={() => onEdit(job)} />
-              <Button text={t('delete', language)} color='red' onClick={() => handleDelete(job.jobId)} />
+            <div className="job-actions flex gap-4 mt-3">
+              <button title={t('edit', language)} onClick={() => onEdit(job)}>
+                <Edit2 size={20}/>
+              </button>
+              <button title={t('delete', language)} onClick={() => handleDelete(job.jobId)}>
+                <Trash2 size={20}/>
+              </button>
             </div>
           </div>
         )}

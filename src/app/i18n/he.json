@@ -306,7 +306,15 @@
     "meetingMode": "אופן הפגישה",
     "meetingTopics": "נושאי הפגישה",
     "meetingTasks": "משימות מהפגישה",
-    "close": "סגור"
-
-
+    "close": "סגור",
+    "meetingNotFound": "הפגישה לא נמצאה",
+    "editMeetingTitle": "עריכת פגישה",
+    "confirmDeleteMeeting": "האם אתה בטוח שברצונך למחוק את הפגישה?",
+    "meetingDeleted": "הפגישה נמחקה",
+    "myPostedJobs": "המשרות שפרסמתי",
+    "submitJob": "פרסום משרה",
+    "answer": "תשובה",
+    "conformArrive": "אישור הגעה",
+    "longText": "הטקסט ארוך מידי",
+    "MissingNameOrID": "חסר שם או ת.ז"
 }

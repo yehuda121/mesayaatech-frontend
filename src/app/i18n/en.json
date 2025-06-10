@@ -274,7 +274,7 @@
     "noItemsFound": "No items found",
     "Contact": "Contact",
     "viewScoreDetails": "View score breakdown",
-    "viewEvent": "Event Details",
+    "viewEvent": "View event",
     "viewEventDetails": "View event details",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
@@ -306,5 +306,15 @@
     "meetingMode": "Meeting Mode",
     "meetingTopics": "Meeting Topics",
     "meetingTasks": "Meeting Tasks",
-    "close": "Close"
+    "close": "Close",
+    "meetingNotFound": "Meeting not found",
+    "editMeetingTitle": "Edit meeting",
+    "confirmDeleteMeeting": "Are you sure you want to delete the meeting?",
+    "meetingDeleted": "Meeting deleted",
+    "myPostedJobs": "My posted jobs",
+    "submitJob": "Submit job",
+    "answer": "Answer",
+    "conformArrive": "Join the meeting",
+    "longText": "the text is too long",
+    "MissingNameOrID": "Missing fullName or ID number. Please log in properly."
 }

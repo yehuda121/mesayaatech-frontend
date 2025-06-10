@@ -65,7 +65,8 @@ export default function MentorHomePage() {
             return;
           }
 
-          setFullName(decoded.name);
+          const storedName = localStorage.getItem('mentorFullName');
+          setFullName(storedName || decoded.name);
           setIdNumber(decoded['custom:idNumber'] || decoded.sub);
           setEmail(decoded.email);
         } catch (err) {
@@ -89,7 +90,7 @@ export default function MentorHomePage() {
         const data = await res.json();
         setUserData(data);
       } catch (err) {
-        console.error('Failed to load mentor form:', err);
+        console.error(t('serverError', language), err);
         if (language) setToast({ message: t('errorLoadingForm', language), type: 'error' });
       }
     };
@@ -167,8 +168,9 @@ export default function MentorHomePage() {
             <h1 className="mentor-welcome">
               {t('mentorWelcomeTitle', language).replace('{{name}}', fullName)}
             </h1>
-            <div className="mentor-main-view">
+            <div className="mentor-main-view flex gap-8 items-start">
               <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
+              <MyReservists onManageReservist={handleManageReservist} />
             </div>
           </>
         )}

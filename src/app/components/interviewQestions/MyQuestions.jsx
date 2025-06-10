@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
-import Button from '@/app/components/Button';
 import { Edit2, Trash2 } from 'lucide-react';
 
 export default function MyQuestions({ idNumber, fullName, onEdit }) {
@@ -61,26 +60,21 @@ export default function MyQuestions({ idNumber, fullName, onEdit }) {
             <p><strong>{t('category', language)}:</strong> {t(q.category, language)}</p>
             <p><strong>{t('createdAt', language)}:</strong> {new Date(q.createdAt).toLocaleDateString(language === 'he' ? 'he-IL' : 'en-US')}</p>
 
-            <div className="flex gap-2 mt-2">
-              <Button
-                icon={<Edit2 size={18} />}
-                size="sm"
+            <div className="flex gap-4 mt-2">
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   if (onEdit) onEdit(q);
                 }}
-                text={t('edit', language)}
-              />
-              <Button
-                icon={<Trash2 size={18} />}
-                size="sm"
-                color='red'
-                text={t('delete', language)}
+                title={t('edit', language)}
+              ><Edit2 size={18} /></button>
+              <button
+                title={t('delete', language)}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDelete(q.questionId);
                 }}
-              />
+              ><Trash2 size={18} /></button>
             </div>
           </div>
         )}

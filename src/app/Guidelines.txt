@@ -19,3 +19,86 @@
 
 4. **אחידות בעיצוב ובהתנהגות:**
    אין לפתח קומפוננטות מקבילות חדשות עם התנהגות דומה. כל שיפור/שינוי נדרש יבוצע בקומפוננטה הגנרית עצמה, למניעת כפילויות.
+
+
+
+"fullNameTooLong": "השם ארוך מדי (מקסימום 50 תווים)",
+"emailTooLong": "המייל ארוך מדי (מקסימום 100 תווים)",
+"professionTooLong": "המקצוע ארוך מדי (מקסימום 60 תווים)",
+"locationTooLong": "המיקום ארוך מדי (מקסימום 60 תווים)",
+"experienceTooLong": "הניסיון תעסוקתי ארוך מדי (מקסימום 1000 תווים)",
+"linkedinTooLong": "כתובת הלינקדאין ארוכה מדי (מקסימום 200 תווים)"
+"companyRequired": "יש להזין שם חברה",
+"companyTooLong": "שם החברה ארוך מדי (מקסימום 100 תווים)",
+"roleRequired": "יש להזין שם תפקיד",
+"roleTooLong": "שם התפקיד ארוך מדי (מקסימום 100 תווים)",
+"locationTooLong": "המיקום ארוך מדי (מקסימום 60 תווים)",
+"descriptionTooLong": "תיאור המשרה ארוך מדי (מקסימום 1000 תווים)",
+"requirementsTooLong": "רשימת הדרישות ארוכה מדי (מקסימום 1000 תווים)",
+"advantagesTooLong": "רשימת היתרונות ארוכה מדי (מקסימום 1000 תווים)",
+"emailInvalid": "כתובת אימייל לא תקינה",
+"urlInvalid": "קישור לא תקין",
+"experienceInvalid": "שנות ניסיון חייבות להיות מספר"
+"companyRequired": "יש להזין שם חברה",
+"companyTooLong": "שם החברה ארוך מדי (מקסימום 100 תווים)",
+"roleRequired": "יש להזין שם תפקיד",
+"roleTooLong": "שם התפקיד ארוך מדי (מקסימום 100 תווים)",
+"locationTooLong": "המיקום ארוך מדי (מקסימום 60 תווים)",
+"descriptionTooLong": "תיאור המשרה ארוך מדי (מקסימום 1000 תווים)",
+"requirementsTooLong": "רשימת הדרישות ארוכה מדי (מקסימום 1000 תווים)",
+"advantagesTooLong": "רשימת היתרונות ארוכה מדי (מקסימום 1000 תווים)",
+"emailInvalid": "כתובת אימייל לא תקינה",
+"urlInvalid": "קישור לא תקין",
+"experienceInvalid": "שנות ניסיון חייבות להיות מספר"
+"questionTooLong": "השאלה ארוכה מדי (מקסימום 500 תווים)",
+education
+"meetingDateRequired": "יש להזין תאריך לפגישה",
+"meetingModeRequired": "יש להזין אופן קיום הפגישה",
+"meetingModeTooLong": "אופן הפגישה לא יכול לעלות על 50 תווים",
+"meetingTopicsTooLong": "נושא הפגישה ארוך מדי (מקסימום 300 תווים)",
+"meetingTasksTooLong": "משימות הפגישה ארוכות מדי (מקסימום 300 תווים)",
+"futurTasksTooLong": "משימות להמשך ארוכות מדי (מקסימום 300 תווים)",
+"noteTooLong": "הערה ארוכה מדי (מקסימום 300 תווים)"
+
+
+
+
+
+
+"questionTooLong": "The question is too long (max 500 characters)",
+"fullNameTooLong": "Full name is too long (maximum 50 characters)",
+"emailTooLong": "Email is too long (maximum 100 characters)",
+"professionTooLong": "Profession is too long (maximum 60 characters)",
+"locationTooLong": "Location is too long (maximum 60 characters)",
+"experienceTooLong": "Experience is too long (maximum 1000 characters)",
+"linkedinTooLong": "LinkedIn URL is too long (maximum 200 characters)"
+"companyRequired": "Company name is required",
+"companyTooLong": "Company name is too long (max 100 characters)",
+"roleRequired": "Role name is required",
+"roleTooLong": "Role name is too long (max 100 characters)",
+"locationTooLong": "Location is too long (max 60 characters)",
+"descriptionTooLong": "Description is too long (max 1000 characters)",
+"requirementsTooLong": "Requirements are too long (max 1000 characters)",
+"advantagesTooLong": "Advantages list is too long (max 1000 characters)",
+"emailInvalid": "Invalid email address",
+"urlInvalid": "Invalid URL format",
+"experienceInvalid": "Experience must be a number"
+"companyRequired": "Company name is required",
+"companyTooLong": "Company name is too long (max 100 characters)",
+"roleRequired": "Role is required",
+"roleTooLong": "Role is too long (max 100 characters)",
+"locationTooLong": "Location is too long (max 60 characters)",
+"descriptionTooLong": "Description is too long (max 1000 characters)",
+"requirementsTooLong": "Requirements are too long (max 1000 characters)",
+"advantagesTooLong": "Advantages are too long (max 1000 characters)",
+"emailInvalid": "Invalid email address",
+"urlInvalid": "Invalid URL format",
+"experienceInvalid": "Experience must be a number"
+education
+"meetingDateRequired": "Meeting date is required",
+"meetingModeRequired": "Meeting mode is required",
+"meetingModeTooLong": "Meeting mode must be 50 characters or less",
+"meetingTopicsTooLong": "Meeting topics are too long (max 300 characters)",
+"meetingTasksTooLong": "Meeting tasks are too long (max 300 characters)",
+"futurTasksTooLong": "Future tasks are too long (max 300 characters)",
+"noteTooLong": "Note is too long (max 300 characters)"
