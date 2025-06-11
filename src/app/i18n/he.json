@@ -33,7 +33,6 @@
     "delete": "מחק",
     "confirmDeleteUser": "האם אתה בטוח שברצונך למחוק את המשתמש?",
     "assignedReservists": "מילואימניקים משויכים",
-    "noReservistsAssigned": "אין מילואימניקים משויכים",
     "notInterestedInMentor": "אני לא מעוניין במנטור",
     "noMentorAssigned": "אין מנטור משויך",
     "mentorDataUnavailable": "פרטי המנטור אינם זמינים",
@@ -348,8 +347,16 @@
     "confirmNotInterestedTitle": "אישור אי רצון במנטור",
     "confirmNotInterestedText": "האם אתה בטוח שאינך מעוניין במנטור?",
     "mentorRemovedSuccess": "המנטור והנתונים נמחקו בהצלחה",
-    "mentorRemoveFailed": "מחיקת המנטור נכשלה"
-
+    "mentorRemoveFailed": "מחיקת המנטור נכשלה",
+    "allMentorships": "כל תהליכי הליווי",
+    "viewProgress": "צפה בתהליך",
+    "fetchMentorshipsError": "שגיאה בעת טעינת רשימת הליוויים",
+    "noMentorshipsFound": "אין תהליכים להצגה כעת",
+    "viewMentorships": "צפייה בתהליכי ליווי",
+    "searchByName": "חיפוש לפי שם",
+    "allStages": "כל השלבים",
+    "viewProcess": "צפייה בתהליך",
+    "progressStage": "שלב בתהליך"
 
 
 

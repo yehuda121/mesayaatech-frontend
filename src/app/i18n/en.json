@@ -348,8 +348,16 @@
     "confirmNotInterestedTitle": "Confirm Not Interested in Mentor",
     "confirmNotInterestedText": "Are you sure you do not wish to have a mentor?",
     "mentorRemovedSuccess": "Mentor and related data successfully removed",
-    "mentorRemoveFailed": "Failed to remove mentor"
-
+    "mentorRemoveFailed": "Failed to remove mentor",
+    "allMentorships": "All Mentorship Processes",
+    "viewProgress": "View Progress",
+    "fetchMentorshipsError": "Error fetching mentorship list",
+    "noMentorshipsFound": "No mentorships available",
+    "viewMentorships": "View Mentorships",
+    "searchByName": "Search by name",
+    "allStages": "All stages",
+    "progressStage": "Progress stage",
+    "viewProcess": "View Process"
 
 
 }

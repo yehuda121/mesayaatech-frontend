@@ -37,7 +37,7 @@ export default function EditReservistFormAdmin({ user, mentorsMap, onClose, onSa
 
   const fields = [
     { key: 'fullName' },
-    { key: 'idNumber' },
+    { key: 'idNumber', readonly: true  },
     { key: 'email' },
     { key: 'phone' },
     { key: 'armyRole' },

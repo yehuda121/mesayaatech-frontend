@@ -155,6 +155,25 @@
   color: #444;
 }
 
+.filter-input {
+  width: 48%;
+  min-width: 200px;
+  padding: 10px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
 .filter-with-icon {
   position: relative;
   flex: 1 1 260px;

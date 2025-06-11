@@ -23,7 +23,8 @@ export default function GenericCardSection({
 
   const filtersWrapperClass = `card-section-filters ${
     filters.length === 1 ? 'single-filter' :
-    filters.length === 2 ? 'double-filter' : ''
+    filters.length === 2 ? 'double-filter' : 
+    filters.length === 3 ? 'triple-filter' : ''
   }`;
 
   return (

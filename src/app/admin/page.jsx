@@ -19,6 +19,7 @@ import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
 import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
 import ViewQuestion from '@/app/components/interviewQestions/ViewQuestion';
 import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
+import ViewMentorships from './components/mentorship/viewMentorships';
 import Button from '../components/Button';
 
 
@@ -135,6 +136,12 @@ export default function AdminPage() {
       path: '#interviewQues',
       onClick: () => handleNavigation('interviewQues')
     },
+    {
+      labelHe: t('viewMentorships', 'he'),
+      labelEn: t('viewMentorships', 'en'),
+      path: '#ViewMentorships',
+      onClick: () => handleNavigation('ViewMentorships')
+    },
   ];
 
   return (
@@ -194,6 +201,7 @@ export default function AdminPage() {
           )}
 
           {view === 'users' && <UsersTable />}
+          {view === 'ViewMentorships' && <ViewMentorships />}
 
           {view === 'interviewQues' && (
             <>

@@ -199,7 +199,10 @@ export default function UsersTable({ defaultStatusFilter = null }) {
 
           <select
             value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setFilterStatus(value === 'status' ? 'all' : value);
+            }}
           >
             <option value="status">{t('status', language)}</option>
             <option value="pending">{t('pending', language)}</option>

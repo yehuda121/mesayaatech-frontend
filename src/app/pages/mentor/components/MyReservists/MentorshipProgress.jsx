@@ -34,7 +34,7 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
         body: JSON.stringify({ mentorId, reservistId })
       });
 
-      const res = await fetch(`http://localhost:5000/api/getAllProcess?mentorId=${mentorId}&reservistId=${reservistId}`);
+      const res = await fetch(`http://localhost:5000/api/getMentorshipProgress?mentorId=${mentorId}&reservistId=${reservistId}`);
       const data = await res.json();
       if (res.ok) setProgressData(data);
       else throw new Error(data.error);

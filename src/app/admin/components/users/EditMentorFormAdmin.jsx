@@ -39,7 +39,7 @@ export default function EditMentorFormAdmin({ user, onClose, onSave, onDelete, r
 
   const fields = [
     { key: 'fullName' },
-    { key: 'idNumber' },
+    { key: 'idNumber' , readonly: true },
     { key: 'email' },
     { key: 'phone' },
     { key: 'profession' },

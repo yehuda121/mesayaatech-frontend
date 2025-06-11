@@ -20,6 +20,9 @@
 4. **אחידות בעיצוב ובהתנהגות:**
    אין לפתח קומפוננטות מקבילות חדשות עם התנהגות דומה. כל שיפור/שינוי נדרש יבוצע בקומפוננטה הגנרית עצמה, למניעת כפילויות.
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
+const res = await fetch(`${API_BASE}/api/get-progress?mentorId=...&reservistId=...`);
 
 
 
