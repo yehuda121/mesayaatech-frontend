@@ -55,13 +55,15 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
             body: JSON.stringify({ mentorId, reservistId })
           });
           if (res.ok) {
-            fetchProgress();
+            await fetchProgress();
             setToast({ message: t('stageAdvanced', language), type: 'success' });
           } else {
             throw new Error();
           }
         } catch {
           setToast({ message: t('stageAdvanceFailed', language), type: 'error' });
+        } finally {
+          setConfirmDialog(null);
         }
       },
       onCancel: () => setConfirmDialog(null)
@@ -134,7 +136,13 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
             </p>
             
             <div className='flex gap-3 mt-3 mb-3 justify-end'>
-                <Button text={t('advanceStage', language)} onClick={handleStageAdvance} />
+              <div className={progressData?.progressStage >= 5 ? 'opacity-50 cursor-not-allowed' : ''}>
+                <Button 
+                  text={t('advanceStage', language)} 
+                  onClick={handleStageAdvance} 
+                  disabled={progressData?.progressStage >= 5} 
+                />
+              </div>
                 <Button text={t('addMeeting', language)} onClick={() => setShowModal(true)} />
             </div>
 
