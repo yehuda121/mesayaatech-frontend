@@ -340,7 +340,16 @@
     "meetingTopicsTooLong": "נושא הפגישה ארוך מדי (מקסימום 300 תווים)",
     "meetingTasksTooLong": "משימות הפגישה ארוכות מדי (מקסימום 300 תווים)",
     "futurTasksTooLong": "משימות להמשך ארוכות מדי (מקסימום 300 תווים)",
-    "noteTooLong": "הערה ארוכה מדי (מקסימום 300 תווים)"
+    "noteTooLong": "הערה ארוכה מדי (מקסימום 300 תווים)",
+    "mentorringProscess": "תהליך הליווי",
+    "confirmRemoveMentorWithDataText": "יש לך מנטור פעיל עם נתוני ליווי. האם אתה בטוח שברצונך להסיר את המנטור ולמחוק את כל הנתונים הקיימים?",
+    "confirmInterestedTitle": "אישור רצון במנטור",
+    "confirmInterestedText": "האם אתה בטוח שברצונך להתחיל תהליך עם מנטור?",
+    "confirmNotInterestedTitle": "אישור אי רצון במנטור",
+    "confirmNotInterestedText": "האם אתה בטוח שאינך מעוניין במנטור?",
+    "mentorRemovedSuccess": "המנטור והנתונים נמחקו בהצלחה",
+    "mentorRemoveFailed": "מחיקת המנטור נכשלה"
+
 
 
 

@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { t } from '@/app/utils/loadTranslations';
 import InterviewQues  from '@/app/components/interviewQestions/QuestionsList';
+import MentorringProscess from '../components/mentorringProscess';
 import '../reservist.css';
 
 export default function ReservistHomePage() {
@@ -22,6 +23,8 @@ export default function ReservistHomePage() {
   const [userData, setUserData] = useState(null);
   const [view, setView] = useState('dashboard');
   const [selectedJob, setSelectedJob] = useState(null);
+  const [mentorId, setMentorID] = useState(null);
+  const [mentorName, setMentorName] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -77,6 +80,21 @@ export default function ReservistHomePage() {
         const data = await res.json();
         setUserData(data);
         setFullName(data.fullName);
+        setMentorID(data.mentorId || null)
+        if (data.mentorId) {
+          const mentorIdNumber = data.mentorId.split('#')[1]; // extract ID number
+          if (mentorIdNumber) {
+            try {
+              const mentorRes = await fetch(
+                `http://localhost:5000/api/get-user-form?userType=mentor&idNumber=${mentorIdNumber}`
+              );
+              const mentorData = await mentorRes.json();
+              setMentorName(mentorData.fullName || '');
+            } catch (err) {
+              console.error('Failed to load mentor name:', err);
+            }
+          }
+        }
       } catch (err) {
         console.error('Failed to load user form:', err);
       }
@@ -92,8 +110,16 @@ export default function ReservistHomePage() {
       path: '#dashboard', 
       onClick: () => setView('dashboard') 
     },
-    { labelHe: t('navPersonalDetails', 'he'), labelEn: t('navPersonalDetails', 'en'), path: '#form', onClick: () => setView('form') },
-    { labelHe: t('events', 'he'), labelEn: t('events', 'en'), path: '#events-section', onClick: () => setView('events') },
+    { labelHe: t('navPersonalDetails', 'he'), 
+      labelEn: t('navPersonalDetails', 'en'), 
+      path: '#form', 
+      onClick: () => setView('form') 
+    },
+    { labelHe: t('events', 'he'), 
+      labelEn: t('events', 'en'), 
+      path: '#events-section', 
+      onClick: () => setView('events') 
+    },
     { 
       labelHe: t('jobs', 'he'), 
       labelEn: t('jobs', 'en'), 
@@ -106,11 +132,17 @@ export default function ReservistHomePage() {
       path: '#interviewQues',
       onClick: () => setView('interviewQues') 
     },
-    { labelHe: t('navMeetings', 'he'), labelEn: t('navMeetings', 'en'), path: '/reserve/meetings' },
-    { labelHe: t('navFeedback', 'he'), labelEn: t('navFeedback', 'en'), path: '/reserve/feedback' }
+    { 
+      labelHe: t('mentorringProscess', 'he'), 
+      labelEn: t('mentorringProscess', 'en'), 
+      path: '#mentorringProscess',
+      onClick: () => setView('mentorringProscess') 
+    },
+
   ];
 
   if (!language) return null;
+
   return (
     <div className="reservist-container">
       <SideBar navItems={navItems} />
@@ -145,6 +177,8 @@ export default function ReservistHomePage() {
           <div className='EditreservistForm'>
             <EditReservistForm
               userData={userData}
+              mentorId={mentorId}
+              mentorName={mentorName}
               onSave={(updated) => {
                 setUserData(updated);
                 setFullName(updated.fullName);
@@ -183,6 +217,10 @@ export default function ReservistHomePage() {
           </div>
         )}
         {view === 'interviewQues' && <InterviewQues />}
+        
+        {view === 'mentorringProscess' &&
+          <MentorringProscess mentorId={mentorId} reservistId={idNumber}/>
+        }
       </main>
     </div>
   );

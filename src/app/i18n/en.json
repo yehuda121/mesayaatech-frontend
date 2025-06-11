@@ -340,7 +340,16 @@
     "meetingTopicsTooLong": "Meeting topics are too long (max 300 characters)",
     "meetingTasksTooLong": "Meeting tasks are too long (max 300 characters)",
     "futurTasksTooLong": "Future tasks are too long (max 300 characters)",
-    "noteTooLong": "Note is too long (max 300 characters)"
+    "noteTooLong": "Note is too long (max 300 characters)",
+    "mentorringProscess": "Mentoring Process",
+    "confirmRemoveMentorWithDataText": "You currently have an assigned mentor with progress data. Are you sure you want to remove the mentor and delete all related data?",
+    "confirmInterestedTitle": "Confirm Interest in Mentor",
+    "confirmInterestedText": "Are you sure you want to start a process with a mentor?",
+    "confirmNotInterestedTitle": "Confirm Not Interested in Mentor",
+    "confirmNotInterestedText": "Are you sure you do not wish to have a mentor?",
+    "mentorRemovedSuccess": "Mentor and related data successfully removed",
+    "mentorRemoveFailed": "Failed to remove mentor"
 
-    
+
+
 }

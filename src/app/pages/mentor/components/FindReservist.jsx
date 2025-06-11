@@ -29,7 +29,9 @@ export default function FindReservist({ mentorId, onBack }) {
       try {
         const res = await fetch(`http://localhost:5000/api/match-reservists-to-mentor?mentorId=${mentorId}`);
         const data = await res.json();
-        setReservists(data);
+        // Filter out reservists who are not interested in a mentor
+        const filteredData = data.filter(r => !r.notInterestedInMentor);
+        setReservists(filteredData);
       } catch (err) {
         console.error('Error loading matches:', err);
         setToast({ message: t('errorLoadingReservists', language), type: 'error' });

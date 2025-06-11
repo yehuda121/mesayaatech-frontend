@@ -154,7 +154,12 @@ export default function GenericForm({
           {primaryLabel && (
             <Button
               text={t(primaryLabel, language)}
-              onClick={onPrimary}
+              type="button"
+              onClick={async () => {
+              const success = await onPrimary();
+              if (success === false) return; // stop everything if validation failed
+              // here you can add further logic if needed
+            }}
               disabled={disabledPrimary}
             />
           )}
