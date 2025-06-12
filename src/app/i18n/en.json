@@ -111,7 +111,7 @@
     "textInputPlaceholder": "Paste the full job description here...",
     "uploadImageLabel": "Or upload an image of the job ad",
     "autoFillButton": "Auto-fill",
-    "clearFilters": "Clear filters",
+    "clearFilter": "Clear filters",
     "noCompany": "No Company",
     "description": "Description",
     "viewJob": "View job",
@@ -357,7 +357,17 @@
     "searchByName": "Search by name",
     "allStages": "All stages",
     "progressStage": "Progress stage",
-    "viewProcess": "View Process"
-
+    "viewProcess": "View Process",
+    "advancedSearch": "Advanced Search",
+    "clearFilters": "Clear All Filters",
+    "applyFilters": "Apply Filters",
+    "searchByText": "Free Text Search",
+    "filterByCategory": "Category",
+    "filterByExperience": "Minimum Experience",
+    "filterByFromDate": "Publication Date (From)",
+    "filterByToDate": "Publication Date (To)",
+    "any": "Any",
+    "field": "Field",
+    "noRole": "No role"
 
 }

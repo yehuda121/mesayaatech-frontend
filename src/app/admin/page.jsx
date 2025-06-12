@@ -37,6 +37,7 @@ export default function AdminPage() {
   const router = useRouter();
   const [fullName, setFullName] = useState('');
   const [idNumber, setIdNumber] = useState('');
+  const [email, setEmail] =useState('');
   const [questionToView, setQuestionToView] = useState(null);
 
   useEffect(() => {
@@ -58,6 +59,7 @@ export default function AdminPage() {
 
         setFullName(decoded.name || '');
         setIdNumber(decoded['custom:idNumber'] || decoded.sub || '');
+        setEmail(decoded['custom:email'] || decoded.email || '');
 
         if (role !== expectedRole) {
           router.push(roleToPath[role] || '/login');
@@ -192,7 +194,9 @@ export default function AdminPage() {
 
           {view === 'add-job' && (
             <AddJob
+              publisherId={`${email}#${idNumber}`}
               onClose={() => setView('')}
+              publisherType="admin"
               onSave={(newJob) => {
                 setJobs(prev => [...prev, newJob]);
                 setView('view-jobs');

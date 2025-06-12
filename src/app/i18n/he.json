@@ -110,7 +110,7 @@
     "textInputPlaceholder": "הדבק כאן את טקסט המשרה המלא...",
     "uploadImageLabel": "או העלה תמונה של מודעת דרושים",
     "autoFillButton": "מלא אוטומטית",
-    "clearFilters": "נקה חיפוש",
+    "clearFilter": "נקה חיפוש",
     "noCompany": "לא צוינה חברה",
     "description": "תיאור",
     "viewJob": "צפיה במשרה",
@@ -356,10 +356,18 @@
     "searchByName": "חיפוש לפי שם",
     "allStages": "כל השלבים",
     "viewProcess": "צפייה בתהליך",
-    "progressStage": "שלב בתהליך"
-
-
-
+    "progressStage": "שלב בתהליך",
+    "advancedSearch": "סינון מתקדם",
+    "clearFilters": "איפוס כל הסינונים",
+    "applyFilters": "החל סינונים",
+    "searchByText": "חיפוש חופשי",
+    "filterByCategory": "תחום",
+    "filterByExperience": "ניסיון מינימלי",
+    "filterByFromDate": "תאריך פרסום (מ-)",
+    "filterByToDate": "תאריך פרסום (עד)",
+    "any": "ללא הגבלה",
+    "field": "תחום",
+    "noRole": "לא צויין תפקיד"
 
 
 }

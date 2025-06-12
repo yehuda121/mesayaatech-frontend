@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
@@ -12,26 +12,35 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
   const [questions, setQuestions] = useState([]);
   const [idNumber, setIdNumber] = useState('');
   const [fullName, setFullName] = useState('');
+  const [searchText, setSearchText] = useState('');
+  const [filteredCategory, setFilteredCategory] = useState('');
+
+  const categories = [
+    { value: "", labelHe: "הכול", labelEn: "All" },
+    { value: "tech", labelHe: "הייטק", labelEn: "Tech" },
+    { value: "management", labelHe: "ניהול", labelEn: "Management" },
+    { value: "logistics", labelHe: "לוגיסטיקה", labelEn: "Logistics" },
+    { value: "education", labelHe: "חינוך", labelEn: "Education" },
+    { value: "marketing", labelHe: "שיווק", labelEn: "Marketing" },
+    { value: "other", labelHe: "אחר", labelEn: "Other" }
+  ];
 
   useEffect(() => {
     setLanguage(getLanguage());
-
     const token = localStorage.getItem('idToken');
     if (token) {
       const decoded = jwtDecode(token);
       setFullName(decoded.name || '');
       setIdNumber(decoded['custom:idNumber'] || decoded.sub || '');
     }
-
     fetchQuestions();
   }, []);
-  
+
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLangChange);
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
-
 
   const fetchQuestions = async () => {
     try {
@@ -43,18 +52,16 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
     }
   };
 
-    const handleDelete = async (questionId) => {
+  const handleDelete = async (questionId) => {
     if (!confirm(t('confirmDeleteQuestion', language))) return;
-
     try {
       const res = await fetch('http://localhost:5000/api/delete-question', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ questionId, idNumber, fullName })
       });
-
       if (res.ok) {
-        setMyQuestions(prev => prev.filter(q => q.questionId !== questionId));
+        setQuestions(prev => prev.filter(q => q.questionId !== questionId));
       } else {
         alert(t('deleteFailed', language));
       }
@@ -68,8 +75,6 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
 
   const handleLike = async (questionId, alreadyLiked) => {
     try {
-      console.log('Submitting like:', { questionId, idNumber, fullName });
-
       const res = await fetch('http://localhost:5000/api/toggle-question-like', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -79,13 +84,13 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
       if (!res.ok) return;
 
       setQuestions(prev =>
-        prev.map((q) =>
+        prev.map(q =>
           q.questionId !== questionId
             ? q
             : {
                 ...q,
                 likes: alreadyLiked
-                  ? q.likes.filter((like) => like.idNumber !== idNumber)
+                  ? q.likes.filter(like => like.idNumber !== idNumber)
                   : [...(q.likes || []), { idNumber, fullName, likedAt: new Date().toISOString() }]
               }
         )
@@ -95,12 +100,43 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
     }
   };
 
+  const filteredQuestions = useMemo(() => {
+    return questions.filter(q => {
+      const textMatch = q.text.toLowerCase().includes(searchText.toLowerCase());
+      const categoryMatch = !filteredCategory || q.category === filteredCategory;
+      return textMatch && categoryMatch;
+    });
+  }, [questions, searchText, filteredCategory]);
+
+  const filters = [
+    <input
+      key="search"
+      type="text"
+      value={searchText}
+      onChange={(e) => setSearchText(e.target.value)}
+      placeholder={t('searchByText', language)}
+      className="filter-input"
+    />,
+    <select
+      key="stage"
+      value={filteredCategory}
+      onChange={(e) => setFilteredCategory(e.target.value)}
+      className="filter-input"
+    >
+      {categories.map(cat => (
+        <option key={cat.value} value={cat.value}>
+          {language === 'he' ? cat.labelHe : cat.labelEn}
+        </option>
+      ))}
+    </select>
+  ];
+
   return (
     <div dir={language === 'he' ? 'rtl' : 'ltr'}>
       <GenericCardSection
         titleKey="interviewQuesTitle"
-        data={questions}
-        filters={[]}
+        data={filteredQuestions}
+        filters={filters}
         renderCard={(q) => (
           <div className="question-card">
             <p><strong>{t('question', language)}:</strong> {q.text}</p>
@@ -118,25 +154,16 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
               <button title={t('answerQuestion', language)} onClick={() => onAnswer && onAnswer(q.questionId)}>
                 <MessageCircle size={18} />
               </button>
-              <button title={t('deleteQuestion', language)} onClick={() => handleDelete(q.questionId, q.createdBy)}>
+              <button title={t('deleteQuestion', language)} onClick={() => handleDelete(q.questionId)}>
                 <Trash2 size={18} />
               </button>
 
               <div
                 onClick={() => handleLike(q.questionId, hasLiked(q.likes))}
-                style={{
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  padding: '4px'
-                }}
+                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '4px' }}
                 title={t('likeThisQuestion', language)}
               >
-                <ThumbsUp
-                  size={20}
-                  color={hasLiked(q.likes) ? '#007bff' : '#ccc'}
-                />
+                <ThumbsUp size={20} color={hasLiked(q.likes) ? '#007bff' : '#ccc'} />
                 <span>{q.likes?.length || 0}</span>
               </div>
             </div>
