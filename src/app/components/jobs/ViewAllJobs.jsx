@@ -1,145 +1,18 @@
-// 'use client';
-
-// import { useEffect, useState } from 'react';
-// import { getLanguage } from '@/app/language';
-// import { t } from '@/app/utils/loadTranslations';
-// import ViewJob from './viewJob';
-// import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
-// import ToastMessage from '@/app/components/Notifications/ToastMessage';
-// import './jobs.css';
-// import Button from '../Button';
-// import { FileSearch } from 'lucide-react';
-
-// export default function ViewAllJobs() {
-//   const [language, setLanguage] = useState(getLanguage());
-//   const [jobs, setJobs] = useState([]);
-//   const [filteredJobs, setFilteredJobs] = useState([]);
-//   const [filters, setFilters] = useState({ location: '', company: '' });
-//   const [selectedJob, setSelectedJob] = useState(null);
-//   const [toast, setToast] = useState(null);
-
-//   useEffect(() => {
-//     setLanguage(getLanguage());
-//     fetchJobs();
-//     const handleLangChange = () => setLanguage(getLanguage());
-//     window.addEventListener('languageChanged', handleLangChange);
-//     return () => window.removeEventListener('languageChanged', handleLangChange);
-//   }, []);
-
-//   const fetchJobs = async () => {
-//     try {
-//       const res = await fetch('http://localhost:5000/api/import-jobs');
-//       if (!res.ok) throw new Error('Failed to fetch jobs');
-//       const data = await res.json();
-//       setJobs(data);
-//       setFilteredJobs(data);
-//     } catch (error) {
-//       console.error('Failed to fetch jobs:', error);
-//       setToast({ message: t('serverError', language), type: 'error' });
-//     }
-//   };
-
-//   const handleFilterChange = (e) => {
-//     const { name, value } = e.target;
-//     const newFilters = { ...filters, [name]: value };
-//     setFilters(newFilters);
-//     const filtered = jobs.filter((job) => {
-//       const locationMatch = !newFilters.location || job?.location?.includes(newFilters.location);
-//       const companyMatch = !newFilters.company || job?.company?.includes(newFilters.company);
-//       return locationMatch && companyMatch;
-//     });
-//     setFilteredJobs(filtered);
-//   };
-
-//   return (
-//     <>
-//       <GenericCardSection
-//         titleKey="jobList"
-//         filters={[
-//           <div className="filter-with-icon" key="location">
-//             <span className="filter-icon">📍</span>
-//             <input
-//               type="text"
-//               name="location"
-//               placeholder={t('filterByLocation', language)}
-//               value={filters.location}
-//               onChange={handleFilterChange}
-//             />
-//           </div>,
-        
-//           <div className="filter-with-icon" key="company">
-//             <span className="filter-icon">🏢</span>
-//             <input
-//               type="text"
-//               name="company"
-//               placeholder={t('filterByCompany', language)}
-//               value={filters.company}
-//               onChange={handleFilterChange}
-//             />
-//           </div>,
-        
-//           <Button key="clear"  onClick={() => {
-//             setFilters({ location: '', company: '' });
-//             setFilteredJobs(jobs);
-//           }}>{t('clearFilters', language)}
-//           </Button>
-//         ]}
-        
-//         data={filteredJobs}
-//         renderCard={(job) => (
-//           <div className="job-card-content">
-//             <h3 className="font-bold text-lg">{job?.company || t('noCompany', language)}</h3>
-//             {job?.location && <p>{t('location', language)}: {job.location}</p>}
-//             {job?.description && <p>{t('description', language)}: {job.description.slice(0, 100)}...</p>}
-
-//             <div className="mt-2 flex items-center gap-2">
-//               <button
-//                 onClick={() => setSelectedJob(job)}
-//                 title={t('viewJob', language)}
-//                 className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
-//               >
-//                 <FileSearch size={18} />
-//                 <span>{t('viewJob', language)}</span>
-//               </button>
-//             </div>
-//           </div>
-//         )}
-//         emptyTextKey="noJobsFound"
-//       />
-
-//       {selectedJob && (
-//         <ViewJob
-//           job={selectedJob}
-//           onClose={() => setSelectedJob(null)}
-//         />
-//       )}
-
-//       {toast && (
-//         <ToastMessage
-//           message={toast.message}
-//           type={toast.type}
-//           onClose={() => setToast(null)}
-//         />
-//       )}
-//     </>
-//   );
-// }
-
-
-
-
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
+import Fuse from 'fuse.js';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ViewJob from './viewJob';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
+import EditJob from './EditJob';
 import './jobs.css';
-import './filters.css'
+import './filters.css';
 import Button from '../Button';
-import { FileSearch, X } from 'lucide-react';
+import { FileSearch, Edit2, Trash2, X } from 'lucide-react';
+import { translatedJobFields } from '@/app/components/jobs/jobFields';
 
 export default function ViewAllJobs() {
   const [language, setLanguage] = useState(getLanguage());
@@ -148,7 +21,7 @@ export default function ViewAllJobs() {
     searchText: '',
     location: '',
     company: '',
-    category: '',
+    field: '',
     experience: '',
     fromDate: '',
     toDate: ''
@@ -156,19 +29,26 @@ export default function ViewAllJobs() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [toast, setToast] = useState(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [userType, setUserType] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [editingJob, setEditingJob] = useState(null);
 
+  // Build categories options from translatedJobFields
   const categories = [
     { value: '', labelHe: 'הכל', labelEn: 'All' },
-    { value: 'tech', labelHe: 'הייטק', labelEn: 'Tech' },
-    { value: 'finance', labelHe: 'פיננסים', labelEn: 'Finance' },
-    { value: 'logistics', labelHe: 'לוגיסטיקה', labelEn: 'Logistics' },
-    { value: 'marketing', labelHe: 'שיווק', labelEn: 'Marketing' },
-    { value: 'education', labelHe: 'חינוך', labelEn: 'Education' },
-    { value: 'other', labelHe: 'אחר', labelEn: 'Other' }
+    ...Object.entries(translatedJobFields).map(([value, labelObj]) => ({
+      value,
+      labelHe: labelObj.he,
+      labelEn: labelObj.en
+    }))
   ];
 
   useEffect(() => {
     setLanguage(getLanguage());
+    const rawUserType = localStorage.getItem('userType');
+    setUserType(rawUserType);
+    const id = localStorage.getItem('userId');
+    setUserId(id);
     fetchJobs();
     const handleLangChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLangChange);
@@ -187,44 +67,87 @@ export default function ViewAllJobs() {
     }
   };
 
-  const filteredJobs = useMemo(() => {
-    return jobs
-      .filter((job) => {
-        const text = filters.searchText.toLowerCase();
-        const searchMatch = !text || (
-          (job?.role || '').toLowerCase().includes(text) ||
-          (job?.description || '').toLowerCase().includes(text) ||
-          (job?.requirements || '').toLowerCase().includes(text) ||
-          (job?.location || '').toLowerCase().includes(text) ||
-          (job?.company || '').toLowerCase().includes(text) ||
-          (job?.advantages || '').toLowerCase().includes(text)
-        );
-
-        const locationMatch = !filters.location || (job?.location || '').toLowerCase().includes(filters.location.toLowerCase());
-        const companyMatch = !filters.company || (job?.company || '').toLowerCase().includes(filters.company.toLowerCase());
-        const categoryMatch = !filters.category || (job?.field || '') === filters.category;
-
-        let experienceMatch = true;
-        if (filters.experience !== '') {
-          const jobExp = job?.minExperience;
-          const selectedExp = parseInt(filters.experience);
-          if (jobExp !== undefined && jobExp !== null) {
-            experienceMatch = jobExp <= selectedExp;
-          }
-        }
-
-        const fromDateMatch = !filters.fromDate || new Date(job?.createdAt) >= new Date(filters.fromDate);
-        const toDateMatch = !filters.toDate || new Date(job?.createdAt) <= new Date(filters.toDate);
-
-        return searchMatch && locationMatch && companyMatch && categoryMatch && experienceMatch && fromDateMatch && toDateMatch;
-      })
-      .sort((a, b) => {
-        const aExp = (a?.minExperience !== undefined && a?.minExperience !== null) ? a.minExperience : Infinity;
-        const bExp = (b?.minExperience !== undefined && b?.minExperience !== null) ? b.minExperience : Infinity;
-        return aExp - bExp;
+  // Delete job API call
+  const handleDeleteJob = async (jobId) => {
+    if (!confirm(t('confirmDeleteJob', language))) return;
+    try {
+      const res = await fetch('http://localhost:5000/api/delete-job', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId, userId, userType })
       });
-    }, [jobs, filters]);
+      if (res.ok) {
+        setJobs(prev => prev.filter(j => j.jobId !== jobId));
+      } else {
+        alert(t('deleteFailed', language));
+      }
+    } catch (err) {
+      console.error('Delete failed:', err);
+      alert(t('serverError', language));
+    }
+  };
 
+  // Main filtering logic using Fuse.js and other filters
+  const filteredJobs = useMemo(() => {
+    let filtered = [...jobs];
+
+    if (filters.searchText) {
+      const fuse = new Fuse(filtered, {
+        keys: ['role', 'description', 'requirements', 'location', 'company', 'advantages'],
+        threshold: 0.3,
+        ignoreLocation: true
+      });
+      const result = fuse.search(filters.searchText);
+      filtered = result.map(r => r.item);
+    }
+
+    if (filters.location) {
+      const fuseLoc = new Fuse(filtered, {
+        keys: ['location'],
+        threshold: 0.3,
+        ignoreLocation: true
+      });
+      const resultLoc = fuseLoc.search(filters.location);
+      filtered = resultLoc.map(r => r.item);
+    }
+
+    if (filters.company) {
+      const fuseComp = new Fuse(filtered, {
+        keys: ['company'],
+        threshold: 0.3,
+        ignoreLocation: true
+      });
+      const resultComp = fuseComp.search(filters.company);
+      filtered = resultComp.map(r => r.item);
+    }
+
+    if (filters.field) {
+      filtered = filtered.filter(job => (job?.field || '') === filters.field);
+    }
+
+    if (filters.experience !== '') {
+      const selectedExp = parseInt(filters.experience);
+      filtered = filtered.filter(job => {
+        const jobExp = job?.minExperience;
+        return (jobExp !== undefined && jobExp !== null) ? jobExp <= selectedExp : true;
+      });
+    }
+
+    if (filters.fromDate) {
+      filtered = filtered.filter(job => new Date(job?.createdAt) >= new Date(filters.fromDate));
+    }
+    if (filters.toDate) {
+      filtered = filtered.filter(job => new Date(job?.createdAt) <= new Date(filters.toDate));
+    }
+
+    filtered.sort((a, b) => {
+      const aExp = (a?.minExperience !== undefined && a?.minExperience !== null) ? a.minExperience : Infinity;
+      const bExp = (b?.minExperience !== undefined && b?.minExperience !== null) ? b.minExperience : Infinity;
+      return aExp - bExp;
+    });
+
+    return filtered;
+  }, [jobs, filters]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -240,7 +163,7 @@ export default function ViewAllJobs() {
       searchText: '',
       location: '',
       company: '',
-      category: '',
+      field: '',
       experience: '',
       fromDate: '',
       toDate: ''
@@ -289,6 +212,17 @@ export default function ViewAllJobs() {
                 <FileSearch size={18} />
                 <span>{t('viewJob', language)}</span>
               </button>
+
+              {userType === 'admin' && (
+                <div className="mt-3 flex gap-4">
+                  <button title={t('edit', language)} onClick={(e) => { e.stopPropagation(); setEditingJob(job); }}>
+                    <Edit2 size={20} />
+                  </button>
+                  <button title={t('delete', language)} onClick={(e) => { e.stopPropagation(); handleDeleteJob(job.jobId); }}>
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -299,16 +233,27 @@ export default function ViewAllJobs() {
         <ViewJob job={selectedJob} onClose={() => setSelectedJob(null)} />
       )}
 
+      {editingJob && (
+        <EditJob
+          job={editingJob}
+          onClose={() => setEditingJob(null)}
+          onSave={(updatedJob) => {
+            setJobs(prev => prev.map(j => j.jobId === updatedJob.jobId ? updatedJob : j));
+            setEditingJob(null);
+          }}
+        />
+      )}
+
       {toast && (
         <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
 
       {showAdvanced && (
-        <div className="filters-modal-overlay" dir={language === 'he'? 'rtl' : 'ltr'}>
+        <div className="filters-modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
           <div className="filters-modal-box">
             <h3 className='font-bold text-xl text-center'>{t('advancedSearch', language)}</h3>
 
-            {['location', 'company', 'category', 'experience', 'fromDate', 'toDate'].map((field) => (
+            {['location', 'company', 'field', 'experience', 'fromDate', 'toDate'].map((field) => (
               <div key={field} className="filters-modal-field">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <label>{t(`filterBy${field.charAt(0).toUpperCase() + field.slice(1)}`, language)}</label>
@@ -319,7 +264,7 @@ export default function ViewAllJobs() {
                   )}
                 </div>
 
-                {field === 'category' ? (
+                {field === 'field' ? (
                   <select name={field} value={filters[field]} onChange={handleFilterChange}>
                     {categories.map((cat) => (
                       <option key={cat.value} value={cat.value}>
@@ -350,7 +295,6 @@ export default function ViewAllJobs() {
           </div>
         </div>
       )}
-
     </>
   );
 }

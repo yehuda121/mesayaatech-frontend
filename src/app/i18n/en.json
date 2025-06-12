@@ -86,8 +86,8 @@
     "missingQuestionText": "Question text is required",
     "missingCategory": "Category must be selected",
     "missingCreatedBy": "User identity is missing",
-    "missingFields": "",
-    "questionUpdated": "",
+    "missingFields": "Missing fields",
+    "questionUpdated": "The question as been updated successfully",
     "missingAnswerText": "Missing answer",
     "answerPosted": "Answer posted",
     "sortByNewest": "Newest First",
@@ -97,7 +97,7 @@
     "postAnswer": "Post an answer",
     "likes": "Likes",
     "answers": "Answers",
-    "jobUpdatedSuccess": "",
+    "jobUpdated": "The job as been updated successfully",
     "saveFailed": "Failed to save job",
     "userNotRecognized": "User not recognized",
     "jobAddedSuccessfully": "Job posted successfully!",
@@ -368,6 +368,9 @@
     "filterByToDate": "Publication Date (To)",
     "any": "Any",
     "field": "Field",
-    "noRole": "No role"
+    "noRole": "No role",
+    "fieldRequired": "Field required",
+    "filterByField": "Filter by field"
 
+    
 }

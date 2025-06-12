@@ -85,8 +85,8 @@
     "missingQuestionText": "שדה השאלה הוא חובה",
     "missingCategory": "יש לבחור קטגוריה",
     "missingCreatedBy": "שגיאה במזהה המשתמש",
-    "missingFields": "",
-    "questionUpdated": "",
+    "missingFields": "חסרים שדות",
+    "questionUpdated": "השאלה עודכנה",
     "missingAnswerText": "נא למלא תשובה",
     "answerPosted": "תשובתך התקבלה",
     "sortByNewest": "החדשות ביותר",
@@ -96,7 +96,7 @@
     "postAnswer": "פרסם תשובה",
     "likes": "לייקים",
     "answers": "תשובות",
-    "jobUpdatedSuccess": "",
+    "jobUpdatedSuccess": "המשרה עודכנה בהצלחה",
     "saveFailed": "שמירת המשרה נכשלה",
     "userNotRecognized": "משתמש לא מזוהה",
     "jobAddedSuccessfully": "המשרה נוספה בהצלחה!",
@@ -367,7 +367,9 @@
     "filterByToDate": "תאריך פרסום (עד)",
     "any": "ללא הגבלה",
     "field": "תחום",
-    "noRole": "לא צויין תפקיד"
+    "noRole": "לא צויין תפקיד",
+    "fieldRequired": "נדרש לבחור תחום",
+    "filterByField": "סינון לפי תחום"
 
 
 }
