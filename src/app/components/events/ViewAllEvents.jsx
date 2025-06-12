@@ -1,4 +1,3 @@
-// components/Events.jsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -33,20 +32,30 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
       const data = await res.json();
       const futureEvents = data.filter(event => new Date(event.date) >= new Date());
       setEvents(futureEvents);
+
+      // כאן נעדכן את מיפוי המשתתפים לפי המשתמש הנוכחי
+      const joinedMap = {};
+      for (const event of futureEvents) {
+        if (event.participants && Array.isArray(event.participants)) {
+          const isJoined = event.participants.some(p => p.idNumber === idNumber);
+          joinedMap[event.eventId] = isJoined;
+        }
+      }
+      setJoinedEvents(joinedMap);
     } catch (err) {
       console.error('Failed to load events:', err);
       setToast({ message: t('serverError', language), type: 'error' });
     }
   };
 
-  const handleJoin = async (eventId) => {
+  const handleToggleJoin = async (eventId) => {
     if (!idNumber || !fullName || !email) {
       setToast({ message: t('missingUserDetails', language), type: 'error' });
       return;
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/join-to-event', {
+      const res = await fetch('http://localhost:5000/api/toggle-join-event', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ eventId, idNumber, fullName, email })
@@ -54,8 +63,8 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
 
       const data = await res.json();
       if (res.ok) {
-        setJoinedEvents((prev) => ({ ...prev, [eventId]: true }));
-        setToast({ message: t('successJoin', language), type: 'success' });
+        setJoinedEvents((prev) => ({ ...prev, [eventId]: data.joined }));
+        setToast({ message: t(data.joined ? 'successJoin' : 'successUnjoin', language), type: 'success' });
       } else {
         setToast({ message: data.error || t('joinError', language), type: 'error' });
       }
@@ -98,12 +107,22 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
             <div className="event-location">{event.location}</div>
             <div className="mt-2 flex items-center gap-3">
               {joinedEvents[event.eventId] ? (
-                <span className="event-join-status">{t('joined', language)}</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleJoin(event.eventId);
+                  }}
+                  title={t('cancelJoin', language)}
+                  className="text-red-600 hover:text-red-800 flex items-center gap-1"
+                >
+                  <CalendarPlus size={18} />
+                  <span>{t('cancelJoin', language)}</span>
+                </button>
               ) : (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleJoin(event.eventId);
+                    handleToggleJoin(event.eventId);
                   }}
                   title={t('join', language)}
                   className="text-green-600 hover:text-green-800 flex items-center gap-1"
@@ -140,4 +159,4 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
       )}
     </>
   );
-} 
+}
