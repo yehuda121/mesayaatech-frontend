@@ -7,7 +7,6 @@ import UsersTable from './components/users/usersTable';
 import CreateEvent from './components/events/CreateEvent';
 import ViewEvents from './components/events/ViewEvents';
 import EditEvents from './components/events/EditEvents';
-// import ViewJobs from './components/jobs/viewJobs';
 import ViewJobs from '../components/jobs/ViewAllJobs';
 import EditJob from '@/app/components/jobs/EditJob';
 import AddJob from '../components/jobs/PostNewJob';
@@ -22,7 +21,6 @@ import ViewQuestion from '@/app/components/interviewQestions/ViewQuestion';
 import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
 import ViewMentorships from './components/mentorship/viewMentorships';
 import Button from '../components/Button';
-
 
 export default function AdminPage() {
   const [language, setLanguage] = useState(getLanguage());
@@ -145,7 +143,17 @@ export default function AdminPage() {
       path: '#ViewMentorships',
       onClick: () => handleNavigation('ViewMentorships')
     },
+    {
+      labelHe: t('Reports', 'he'),
+      labelEn: t('Reports', 'en'),
+      path: '#Reports',
+      onClick: () => moovToReport()
+    },
   ];
+
+  const moovToReport = () => {
+    router.push('../pages/reports');
+  }
 
   return (
     <div>
@@ -206,7 +214,10 @@ export default function AdminPage() {
           )}
 
           {view === 'users' && <UsersTable />}
+
           {view === 'ViewMentorships' && <ViewMentorships />}
+          
+          {/* {view === 'Reports' && router.push('@/app/pages/reports/ReportsDashboard')} */}
 
           {view === 'interviewQues' && (
             <>

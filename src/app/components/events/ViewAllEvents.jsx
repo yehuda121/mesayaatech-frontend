@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Button from '@/app/components/Button';
 import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ViewEvent from './viewEvent';

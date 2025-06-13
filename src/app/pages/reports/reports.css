@@ -1,0 +1,33 @@
+.reports-container {
+  display: flex;
+  background-color: white;
+}
+
+.reports-main {
+  padding: 2.5rem;
+  text-align: right;
+  margin-right: 250px;
+  padding: 2rem;
+  width: calc(100% - 250px);
+  margin-top: 70px;
+}
+
+@media (max-width: 768px) {
+  .reports-main {
+    margin-right: 0;
+    width: 100%;
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .reports-main {
+    margin-right: 250px; 
+  }
+}
+
+.reports-title{
+  font-weight: bold;
+  text-align: center;
+  font-size: x-large;
+}

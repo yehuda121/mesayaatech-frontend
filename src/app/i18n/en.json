@@ -370,7 +370,25 @@
     "field": "Field",
     "noRole": "No role",
     "fieldRequired": "Field required",
-    "filterByField": "Filter by field"
+    "filterByField": "Filter by field",
+    "availability": "Availability",
+    "Reports": "Reports",
+    "navUserSummary": "Users Summary",
+    "reportsDashboardTitle": "Reports Dashboard",
+    "loadingReports": "Loading reports...",
+    "failedToLoadData": "Failed to load data.",
+    "usersSummaryTitle": "Users Summary",
+    "back": "Back",
+    "reservists": "Reservists",
+    "mentors": "Mentors",
+    "ambassadors": "Ambassadors",
+    "navJobsPerMonth": "Jobs Per Month",
+    "jobsPerMonthTitle": "Jobs Distribution Per Month",
+    "navEventsPerMonth": "Events Per Month",
+    "eventsPerMonthTitle": "Events Distribution Per Month",
+    "navMentorshipProgress": "Mentorship Progress",
+    "mentorshipProgressReportTitle": "Mentorship Progress Stages",
+    "amount": "Amount"
 
-    
+
 }

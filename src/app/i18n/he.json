@@ -369,7 +369,24 @@
     "field": "תחום",
     "noRole": "לא צויין תפקיד",
     "fieldRequired": "נדרש לבחור תחום",
-    "filterByField": "סינון לפי תחום"
-
+    "filterByField": "סינון לפי תחום",
+    "availability": "זמינות",
+    "Reports": "דוחות",
+    "navUserSummary": "סיכום משתמשים",
+    "reportsDashboardTitle": "דשבורד דוחות",
+    "loadingReports": "טוען דוחות...",
+    "failedToLoadData": "נכשל בטעינת הנתונים.",
+    "usersSummaryTitle": "סיכום משתמשים",
+    "back": "חזרה",
+    "reservists": "מילואימניקים",
+    "mentors": "מנטורים",
+    "ambassadors": "שגרירים",
+    "navJobsPerMonth": "משרות לפי חודש",
+    "jobsPerMonthTitle": "פילוח משרות לפי חודשים",
+    "navEventsPerMonth": "אירועים לפי חודש",
+    "eventsPerMonthTitle": "פילוח אירועים לפי חודשים",
+    "navMentorshipProgress": "סטטוס ליווי",
+    "mentorshipProgressReportTitle": "פילוח סטטוס שלבי הליווי",
+    "amount": "כמות"
 
 }
