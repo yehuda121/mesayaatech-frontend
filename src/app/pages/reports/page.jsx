@@ -16,6 +16,11 @@ import useEventsPerMonth from '@/app/components/reports/api/useEventsPerMonth';
 import EventsPerMonthChart from '@/app/components/reports/charts/EventsPerMonthChart';
 import useMentorshipProgress from '@/app/components/reports/api/useMentorshipProgress';
 import MentorshipProgressChart from '@/app/components/reports/charts/MentorshipProgressChart';
+import useTopJobPublishers from '@/app/components/reports/api/useTopJobPublishers';
+import TopJobPublishersChart from '@/app/components/reports/charts/TopJobPublishersChart';
+import useMeetingsSummary from '@/app/components/reports/api/useMeetingsSummary';
+import useLocationsSummary from '@/app/components/reports/api/useLocationsSummary';
+import LocationsSummaryChart from '@/app/components/reports/charts/LocationsSummaryChart';
 
 export default function ReportsDashboard() {
     const [view, setView] = useState('');
@@ -26,6 +31,9 @@ export default function ReportsDashboard() {
     const { jobsData, jobsError, jobsLoading } = useJobsPerMonth();
     const { eventsData, eventsError, eventsLoading } = useEventsPerMonth();    
     const { mentorshipData, mentorshipError, mentorshipLoading } = useMentorshipProgress();
+    const { publishersData, publishersError, publishersLoading } = useTopJobPublishers();
+    const { meetingsSummaryData, meetingsSummaryError, meetingsSummaryLoading } = useMeetingsSummary();
+    const { locationsData, locationsError, locationsLoading } = useLocationsSummary();
 
     useEffect(() => {
         const currentLang = getLanguage();
@@ -40,8 +48,6 @@ export default function ReportsDashboard() {
 
     const handleNavigation = (newView) => {
         setView(newView);
-        console.log("jobsData: ", jobsData);
-        console.log("usersData: ", usersData);
     }
 
     const navItems = [
@@ -74,6 +80,18 @@ export default function ReportsDashboard() {
             labelEn: t('navMentorshipProgress', 'en'),
             path: '#mentorshipProgress',
             onClick: () => handleNavigation('mentorshipProgress')
+        },
+        {
+            labelHe: t('navTopJobPublishers', 'he'),
+            labelEn: t('navTopJobPublishers', 'en'),
+            path: '#topJobPublishers',
+            onClick: () => handleNavigation('topJobPublishers')
+        },
+        {
+            labelHe: t('navLocationsSummary', 'he'),
+            labelEn: t('navLocationsSummary', 'en'),
+            path: '#locationsSummary',
+            onClick: () => handleNavigation('locationsSummary')
         }
 
 
@@ -135,13 +153,36 @@ export default function ReportsDashboard() {
                         {mentorshipData && (
                         <div style={{ marginTop: '20px' }}>
                             <h2 className='reports-title'>{t('mentorshipProgressReportTitle', language)}</h2>
-                            <MentorshipProgressChart data={mentorshipData} />
+                            <MentorshipProgressChart data={mentorshipData} meetingsSummary={meetingsSummaryData} />
                         </div>
                         )}
                     </>
                 )}
 
-
+                {view === 'topJobPublishers' && (
+                    <>
+                        {publishersLoading && <p>{t('loadingReports', language)}</p>}
+                        {publishersError && <p>{t('failedToLoadData', language)}</p>}
+                        {publishersData && (
+                        <div style={{ marginTop: '20px' }}>
+                            <h2 className='reports-title'>{t('topJobPublishersTitle', language)}</h2>
+                            <TopJobPublishersChart data={publishersData} />
+                        </div>
+                        )}
+                    </>
+                )}
+                {view === 'locationsSummary' && (
+                    <>
+                        {locationsLoading && <p>{t('loadingReports', language)}</p>}
+                        {locationsError && <p>{t('failedToLoadData', language)}</p>}
+                        {locationsData && (
+                        <div style={{ marginTop: '20px' }}>
+                            <h2 className='reports-title'>{t('locationsSummaryTitle', language)}</h2>
+                            <LocationsSummaryChart data={locationsData} />
+                        </div>
+                        )}
+                    </>
+                )}
             </main>
         </div>
     );

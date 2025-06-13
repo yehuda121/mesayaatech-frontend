@@ -388,7 +388,11 @@
     "eventsPerMonthTitle": "Events Distribution Per Month",
     "navMentorshipProgress": "Mentorship Progress",
     "mentorshipProgressReportTitle": "Mentorship Progress Stages",
-    "amount": "Amount"
+    "amount": "Amount",
+    "navLocationsSummary": "Locations Summary",
+    "locationsSummaryTitle": "Reservists Distribution by Location",
+    "navTopJobPublishers": "Top Job Publishers",
+    "topJobPublishersTitle": "Top Job Publishers Distribution"
 
 
 }

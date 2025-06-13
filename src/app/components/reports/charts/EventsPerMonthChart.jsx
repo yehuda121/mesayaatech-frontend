@@ -21,9 +21,11 @@ export default function EventsPerMonthChart({ data }) {
     count
   }));
 
+  const marginDirection = language === 'he' ? 'marginRight' : 'marginLeft';
+
   return (
-    <div style={{ width: '100%', height: 300 }}>
-      <ResponsiveContainer>
+    <div style={{ width: '100%', height: 350 }}>
+      <ResponsiveContainer height={300}>
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="month" />
@@ -32,6 +34,21 @@ export default function EventsPerMonthChart({ data }) {
           <Bar dataKey="count" fill="#ffa500" />
         </BarChart>
       </ResponsiveContainer>
+
+      <div 
+        style={{ [marginDirection]: '10%' , marginTop: '15px', fontSize: '1rem', textAlign: 'start' }}
+        dir={language === 'he' ? 'rtl' : 'ltr'}>
+        <p>- {language === 'he' 
+          ? 'הגרף מציג את כמות האירועים שפורסמו בכל חודש.'
+          : 'The chart shows the number of events published each month.'}
+        </p>
+        <p>- {language === 'he' 
+          ? 'הציר האנכי מייצג את החודש'
+          : 'The X-axis represents the month.'}
+        </p>- {language === 'he' 
+          ? ' והציר האופקי את מספר האירועים באותו חודש.'
+          : 'and the Y-axis represents the number of events in that month.'}
+      </div>
     </div>
   );
 }

@@ -385,8 +385,11 @@
     "jobsPerMonthTitle": "פילוח משרות לפי חודשים",
     "navEventsPerMonth": "אירועים לפי חודש",
     "eventsPerMonthTitle": "פילוח אירועים לפי חודשים",
-    "navMentorshipProgress": "סטטוס ליווי",
+    "navMentorshipProgress": "מנטורינג",
     "mentorshipProgressReportTitle": "פילוח סטטוס שלבי הליווי",
-    "amount": "כמות"
-
+    "amount": "כמות",
+    "navTopJobPublishers": "מפרסמי משרות מובילים",
+    "topJobPublishersTitle": "פילוח מפרסמי משרות לפי כמות",
+    "navLocationsSummary": "פילוח לפי מיקום",
+    "locationsSummaryTitle": "פילוח מילואימניקים לפי מיקום"
 }

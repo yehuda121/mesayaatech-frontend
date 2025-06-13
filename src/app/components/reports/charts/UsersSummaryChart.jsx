@@ -65,7 +65,7 @@ export default function UsersSummaryChart({ data }) {
               cy="50%"
               outerRadius={120}
               fill="#8884d8"
-              label
+              // label
             >
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index]} />

@@ -22,8 +22,8 @@ export default function JobsPerMonthChart({ data }) {
   }));
 
   return (
-    <div style={{ width: '100%', height: 300 }}>
-      <ResponsiveContainer>
+    <div style={{ width: '100%', height: 350 }}>
+      <ResponsiveContainer height={300}>
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="month" />
@@ -32,8 +32,25 @@ export default function JobsPerMonthChart({ data }) {
           <Bar dataKey="count" fill="#82ca9d" />
         </BarChart>
       </ResponsiveContainer>
+
+      <div 
+        style={{ [language === 'he' ? 'marginRight' : 'marginLeft']: '10%' , marginTop: '15px', fontSize: '1rem', textAlign: 'start' }}
+        dir={language === 'he' ? 'rtl' : 'ltr'}
+      >
+        <p>- {language === 'he' 
+          ? 'הגרף מציג את כמות המשרות שפורסמו בכל חודש.'
+          : 'The chart shows the number of jobs published each month.'}
+        </p>
+        <p>- {language === 'he' 
+          ? 'הציר האופקי מייצג את החודש'
+          : 'The horizontal axis represents the month.'}
+        </p>
+        <p>- {language === 'he' 
+          ? 'והציר האנכי מייצג את כמות המשרות בכל חודש.'
+          : 'The vertical axis represents the number of jobs in each month.'}
+        </p>
+      </div>
+
     </div>
   );
 }
-
-

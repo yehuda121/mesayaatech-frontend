@@ -1,0 +1,134 @@
+// 'use client'
+
+// import React, { useEffect, useState } from 'react';
+// import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+// import { getLanguage } from '@/app/language';
+// import { t } from '@/app/utils/loadTranslations';
+
+// export default function TopJobPublishersChart({ data }) {
+//   const [language, setLanguage] = useState(getLanguage());
+
+//   useEffect(() => {
+//     const handleLangChange = () => {
+//       setLanguage(getLanguage());
+//     };
+//     window.addEventListener('languageChanged', handleLangChange);
+//     return () => window.removeEventListener('languageChanged', handleLangChange);
+//   }, []);
+
+//   const chartData = data.map(item => ({
+//     publisher: item.publisherId,
+//     count: item.count
+//   }));
+
+//   return (
+//     <div style={{ width: '100%', height: 350 }}>
+//       <ResponsiveContainer height={300}>
+//         <BarChart data={chartData} layout="vertical">
+//           <CartesianGrid strokeDasharray="3 3" />
+//           <XAxis type="number" />
+//           <YAxis type="category" dataKey="publisher" />
+//           <Tooltip />
+//           <Bar dataKey="count" fill="#ff6666" />
+//         </BarChart>
+//       </ResponsiveContainer>
+
+//       <div 
+//         style={{ [language === 'he' ? 'marginRight' : 'marginLeft']: '10%', marginTop: '15px', fontSize: '1rem', textAlign: 'start' }}
+//         dir={language === 'he' ? 'rtl' : 'ltr'}
+//       >
+//         <p>- {language === 'he' 
+//           ? 'הגרף מציג את כמות המשרות שפורסמו לפי מזהה המפרסם.'
+//           : 'The chart shows the number of jobs published per publisher ID.'}
+//         </p>
+//         <p>- {language === 'he' 
+//           ? 'הציר האופקי מייצג את כמות המשרות.'
+//           : 'The horizontal axis represents the number of jobs.'}
+//         </p>
+//         <p>- {language === 'he' 
+//           ? 'הציר האנכי מייצג את מזהי המפרסמים.'
+//           : 'The vertical axis represents the publisher IDs.'}
+//         </p>
+//       </div>
+//     </div>
+//   );
+// }
+'use client'
+
+import React, { useEffect, useState } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { getLanguage } from '@/app/language';
+import { t } from '@/app/utils/loadTranslations';
+
+export default function TopJobPublishersChart({ data }) {
+  const [language, setLanguage] = useState(getLanguage());
+  const [processedData, setProcessedData] = useState([]);
+
+  useEffect(() => {
+    const handleLangChange = () => {
+      setLanguage(getLanguage());
+    };
+    window.addEventListener('languageChanged', handleLangChange);
+    return () => window.removeEventListener('languageChanged', handleLangChange);
+  }, []);
+
+  useEffect(() => {
+    async function processData() {
+      const result = await Promise.all(data.map(async (item) => {
+        const publisherParts = item.publisherId.split('#');
+        const email = publisherParts[0];
+        const idNumber = publisherParts[1];
+
+        if (email === 'mesayaatech@gmail.com') {
+          return { publisher: language === 'he' ? 'מנהל' : 'Admin', count: item.count };
+        } else {
+          try {
+            const res = await fetch(`http://localhost:5000/api/get-user-form?userType=mentor&idNumber=${idNumber}`);
+            const userData = await res.json();
+            return { publisher: userData.fullName || email, count: item.count };
+          } catch (err) {
+            console.error('Failed to load user data for publisher', email, err);
+            return { publisher: email, count: item.count };
+          }
+        }
+      }));
+      setProcessedData(result);
+    }
+
+    if (data?.length > 0) {
+      processData();
+    }
+  }, [data, language]);
+
+  return (
+    <div style={{ width: '100%', height: 350 }}>
+      <ResponsiveContainer height={300}>
+        <BarChart data={processedData}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="publisher" />
+          <YAxis />
+          <Tooltip />
+          <Bar dataKey="count" fill="#ff6666" />
+        </BarChart>
+      </ResponsiveContainer>
+
+      <div 
+        style={{ [language === 'he' ? 'marginRight' : 'marginLeft']: '10%', marginTop: '15px', fontSize: '1rem', textAlign: 'start' }}
+        dir={language === 'he' ? 'rtl' : 'ltr'}
+      >
+        <p>- {language === 'he' 
+          ? 'הגרף מציג את כמות המשרות שפורסמו לפי שם המפרסם.'
+          : 'The chart shows the number of jobs published per publisher name.'}
+        </p>
+        <p>- {language === 'he' 
+          ? 'הציר האופקי מייצג את שם המפרסם.'
+          : 'The horizontal axis represents the publisher name.'}
+        </p>
+        <p>- {language === 'he' 
+          ? 'הציר האנכי מייצג את כמות המשרות.'
+          : 'The vertical axis represents the number of jobs.'}
+        </p>
+      </div>
+    </div>
+  );
+}
