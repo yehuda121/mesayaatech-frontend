@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { getLanguage } from '../../../language';
 import { t } from '@/app/utils/loadTranslations';
-import EditReservistForm from './EditReservistFormAdmin';
-import EditMentorForm from './EditMentorFormAdmin';
-import EditAmbassadorForm from './EditAmbassadorFormAdmin';
+import EditReservistForm from '@/app/pages/reservist/components/EditReservistForm';
+import EditMentorForm from '@/app/pages/mentor/components/EditMentorForm';
+import EditAmbassadorForm from '@/app/pages/ambassador/EditAmbassadorForm';
 
 export default function UsersTable({ defaultStatusFilter = null }) {
   const [users, setUsers] = useState([]);
@@ -189,7 +189,10 @@ export default function UsersTable({ defaultStatusFilter = null }) {
 
           <select
             value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
+            onChange={(e) =>{
+              const value = e.target.value;
+              setFilterType(value === 'type' ? 'all' : value);
+            }}
           >
             <option value="type">{t('userType', language)}</option>
             <option value="reservist">{t('reservist', language)}</option>
@@ -258,30 +261,42 @@ export default function UsersTable({ defaultStatusFilter = null }) {
         </table>
 
         {selectedForm && selectedForm.userType === 'reservist' && (
-          <EditReservistForm
-            user={selectedForm}
-            onClose={() => setSelectedForm(null)}
-            onSave={handleSaveUser}
-            onDelete={handleDeleteUser}
-          />
+          <div className='editForm-modal-overlay'>
+            <div className='editForm-modal-content'>
+              <EditReservistForm
+                userData={selectedForm}
+                onClose={() => setSelectedForm(null)}
+                onSave={handleSaveUser}
+                onDelete={handleDeleteUser}
+              />
+            </div>
+          </div>
         )}
 
         {selectedForm && selectedForm.userType === 'mentor' && (
-          <EditMentorForm
-            user={selectedForm}
-            onClose={() => setSelectedForm(null)}
-            onSave={handleSaveUser}
-            onDelete={handleDeleteUser}
-          />
+          <div className='editForm-modal-overlay'>
+            <div className='editForm-modal-content'>
+              <EditMentorForm
+                userData={selectedForm}
+                onClose={() => setSelectedForm(null)}
+                onSave={handleSaveUser}
+                onDelete={handleDeleteUser}
+              />
+            </div>
+          </div>
         )}
 
         {selectedForm && selectedForm.userType === 'ambassador' && (
-          <EditAmbassadorForm
-            user={selectedForm}
-            onClose={() => setSelectedForm(null)}
-            onSave={handleSaveUser}
-            onDelete={handleDeleteUser}
-          />
+          <div className='editForm-modal-overlay'>
+            <div className='editForm-modal-content'>
+              <EditAmbassadorForm
+                userData={selectedForm}
+                onClose={() => setSelectedForm(null)}
+                onSave={handleSaveUser}
+                onDelete={handleDeleteUser}
+              />
+            </div>
+          </div>
         )}
         
       </div>

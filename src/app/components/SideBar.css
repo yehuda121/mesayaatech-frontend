@@ -1,4 +1,4 @@
-/* Reset כללי */
+/* Reset*/
 body, h1, h2, h3, p, a, button {
   margin: 0;
   padding: 0;
@@ -116,7 +116,7 @@ html, body {
 }
 
 
-.lang-button {
+.SB-lang-button {
   background: none;
   border: none;
   cursor: pointer;
@@ -128,21 +128,17 @@ html, body {
   color: #002855;
 }
 
-.lang-img {
+.SB-lang-img {
   width: 22px;
   height: 22px;
 }
 
-.lang-text {
+.SB-lang-text {
   font-size: 16px;
   color: #002855;
   font-weight: bold;
 }
 
-
-
-
-/* מדיה קווארי למסכים קטנים בלבד */
 @media (max-width: 768px) {
   .menu-icons {
     display: block;

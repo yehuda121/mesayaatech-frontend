@@ -1,3 +1,127 @@
+// 'use client';
+
+// import { useEffect, useState, useMemo } from 'react';
+// import { getLanguage } from '@/app/language';
+// import { t } from '@/app/utils/loadTranslations';
+// import Button from '@/app/components/Button';
+// import ViewProgress from './ViewProgress';
+// import ToastMessage from '@/app/components/Notifications/ToastMessage';
+// import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
+
+// export default function MentorshipsView() {
+//   const [language, setLanguage] = useState(getLanguage());
+//   const [mentorships, setMentorships] = useState([]);
+//   const [selectedPair, setSelectedPair] = useState(null);
+//   const [toast, setToast] = useState(null);
+//   const [search, setSearch] = useState('');
+//   const [stageFilter, setStageFilter] = useState('');
+
+//   // Load language changes
+//   useEffect(() => {
+//     const handleLangChange = () => setLanguage(getLanguage());
+//     window.addEventListener('languageChanged', handleLangChange);
+//     fetchMentorships();
+//     return () => window.removeEventListener('languageChanged', handleLangChange);
+//   }, []);
+
+//   // Fetch data from backend
+//   const fetchMentorships = async () => {
+//     try {
+//       const res = await fetch('http://localhost:5000/api/getAllProgress');
+//       const data = await res.json();
+//       if (res.ok) {
+//         setMentorships(data);
+//       } else {
+//         throw new Error(data.error);
+//       }
+//     } catch (err) {
+//       console.error(err);
+//       setToast({ message: t('fetchMentorshipsError', language), type: 'error' });
+//     }
+//   };
+
+//   // Progress stages
+//   const progressStages = [
+//     t('stage1', language),
+//     t('stage2', language),
+//     t('stage3', language),
+//     t('stage4', language),
+//     t('stage5', language)
+//   ];
+
+//   // Filter data based on search and stage
+//   const filteredData = useMemo(() => {
+//     return mentorships.filter(item => {
+//       const mentorName = item.mentorName || '';
+//       const reservistName = item.reservistName || '';
+
+//       const nameMatch =
+//         mentorName.toLowerCase().includes(search.toLowerCase()) ||
+//         reservistName.toLowerCase().includes(search.toLowerCase());
+
+//       const stageMatch = stageFilter ? (item.progressStage === parseInt(stageFilter)) : true;
+//       return nameMatch && stageMatch;
+//     });
+//   }, [mentorships, search, stageFilter]);
+
+//   // Filter controls
+//   const filters = [
+//     <input
+//       key="search"
+//       type="text"
+//       placeholder={t('searchByName', language)}
+//       value={search}
+//       onChange={e => setSearch(e.target.value)}
+//       className="filter-input"
+//     />,
+//     <select
+//       key="stage"
+//       value={stageFilter}
+//       onChange={e => setStageFilter(e.target.value)}
+//       className="filter-input"
+//     >
+//       <option value="">{t('allStages', language)}</option>
+//       {progressStages.map((stage, idx) => (
+//         <option key={idx + 1} value={idx + 1}>{stage}</option>
+//       ))}
+//     </select>
+//   ];
+
+//   return (
+//     <div style={{ maxWidth: '1000px', margin: 'auto', padding: '30px' }}>
+//       <GenericCardSection
+//         titleKey="allMentorships"
+//         filters={filters}
+//         data={filteredData}
+//         emptyTextKey="noMentorshipsFound"
+//         renderCard={(pair) => (
+//           <div>
+//             <p><strong>{t('mentor', language)}:</strong> {pair.mentorName}</p>
+//             <p><strong>{t('reservist', language)}:</strong> {pair.reservistName}</p>
+//             <p><strong>{t('progressStage', language)}:</strong> {pair.progressStage ? progressStages[pair.progressStage - 1] : t('unknownStage', language)}</p>
+
+//             <div style={{ marginTop: '10px' }}>
+//                 <Button text={t('viewProcess', language)} onClick={() => setSelectedPair(pair)} />
+//             </div>
+//           </div>
+//         )}
+//       />
+
+//       {selectedPair && (
+//         <div style={{
+//           position: 'fixed',
+//           top: '50%',
+//           left: '50%',
+//           transform: 'translate(-50%, -50%)',
+//         }}>
+//             <ViewProgress progressData={selectedPair} onclose={() => setSelectedPair(null)} />
+//         </div>
+//       )}
+
+//       {toast && <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+//     </div>
+//   );
+// }
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
@@ -9,19 +133,13 @@ import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 
 export default function MentorshipsView() {
-  // Language state
   const [language, setLanguage] = useState(getLanguage());
-
-  // Data state
   const [mentorships, setMentorships] = useState([]);
   const [selectedPair, setSelectedPair] = useState(null);
   const [toast, setToast] = useState(null);
-
-  // Filters state
   const [search, setSearch] = useState('');
   const [stageFilter, setStageFilter] = useState('');
 
-  // Load language changes
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLangChange);
@@ -29,13 +147,48 @@ export default function MentorshipsView() {
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
-  // Fetch data from backend
   const fetchMentorships = async () => {
     try {
       const res = await fetch('http://localhost:5000/api/getAllProgress');
       const data = await res.json();
       if (res.ok) {
-        setMentorships(data);
+        const enriched = await Promise.all(
+          data.map(async (item) => {
+            const mentorId = item.mentorId;
+            const reservistId = item.reservistId;
+
+            let mentorName = '';
+            let reservistName = '';
+
+            try {
+              const mentorRes = await fetch(`http://localhost:5000/api/get-user-form?userType=mentor&idNumber=${mentorId}`);
+              if (mentorRes.ok) {
+                const mentorData = await mentorRes.json();
+                mentorName = mentorData.fullName || '';
+              }
+            } catch (err) {
+              console.error('Failed to fetch mentor name:', err);
+            }
+
+            try {
+              const reservistRes = await fetch(`http://localhost:5000/api/get-user-form?userType=reservist&idNumber=${reservistId}`);
+              if (reservistRes.ok) {
+                const reservistData = await reservistRes.json();
+                reservistName = reservistData.fullName || '';
+              }
+            } catch (err) {
+              console.error('Failed to fetch reservist name:', err);
+            }
+
+            return {
+              ...item,
+              mentorName,
+              reservistName,
+            };
+          })
+        );
+
+        setMentorships(enriched);
       } else {
         throw new Error(data.error);
       }
@@ -45,7 +198,6 @@ export default function MentorshipsView() {
     }
   };
 
-  // Progress stages
   const progressStages = [
     t('stage1', language),
     t('stage2', language),
@@ -54,7 +206,6 @@ export default function MentorshipsView() {
     t('stage5', language)
   ];
 
-  // Filter data based on search and stage
   const filteredData = useMemo(() => {
     return mentorships.filter(item => {
       const mentorName = item.mentorName || '';
@@ -69,7 +220,6 @@ export default function MentorshipsView() {
     });
   }, [mentorships, search, stageFilter]);
 
-  // Filter controls
   const filters = [
     <input
       key="search"

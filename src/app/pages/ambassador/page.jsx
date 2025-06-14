@@ -6,13 +6,11 @@ import { getLanguage } from '@/app/language';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { t } from '@/app/utils/loadTranslations';
-import EditMentorForm from './components/EditMentorForm';
 import PostNewJob from '@/app/components/jobs/PostNewJob';
-import MyJobsList from '../../components/jobs/MyJobsList';
-import EditMentorJob from '@/app/components/jobs/EditJob';
+import MyJobsList from '@/app/components/jobs/MyJobsList';
+import EditAmbassadorJob from '@/app/components/jobs/EditJob';
 import EventsPage from '@/app/components/events/ViewAllEvents';
 import InterviewPrep from '@/app/components/interviewQestions/QuestionsList';
-import FindReservist from './components/FindReservist';
 import ViewAllJobs from '@/app/components/jobs/ViewAllJobs';
 import Button from '@/app/components/Button';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
@@ -20,15 +18,14 @@ import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
 import MyQuestions from '@/app/components/interviewQestions/MyQuestions';
 import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
 import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
-import MyReservists from './components/MyReservists/MyReservists';
-import MentorshipProgress from './components/MyReservists/MentorshipProgress';
-import './mentor.css';
+import EditAmbassadorForm from './EditAmbassadorForm';
+import './ambassador.css';
 
-export default function MentorHomePage() {
+export default function AmbassadorHomePage() {
   const [language, setLanguage] = useState(null);
   const [fullName, setFullName] = useState('');
   const [idNumber, setIdNumber] = useState(null);
-  const [view, setView] = useState('dashboard');
+  const [view, setView] = useState('allJobs');
   const [userData, setUserData] = useState(null);
   const [email, setEmail] = useState('');
   const [selectedJobForEdit, setSelectedJobForEdit] = useState(null);
@@ -36,7 +33,6 @@ export default function MentorHomePage() {
   const [questionToEdit, setQuestionToEdit] = useState(null);
   const [questionToAnswer, setQuestionToAnswer] = useState(null);
   const [selectedReservistId, setSelectedReservistId] = useState(null);
-
   const router = useRouter();
 
   useEffect(() => {
@@ -52,12 +48,12 @@ export default function MentorHomePage() {
         try {
           const decoded = jwtDecode(token);
           const role = decoded['custom:role'];
-          const expectedRole = 'mentor';
+          const expectedRole = 'ambassador';
           const roleToPath = {
-            reservist: '/pages/reservist/home',
-            mentor: '/pages/mentor',
-            ambassador: '/pages/ambassador/home',
-            admin: '/admin'
+            reservist: '../reservist/home',
+            mentor: '../mentor',
+            ambassador: './',
+            admin: '../../admin'
           };
 
           if (role !== expectedRole) {
@@ -65,7 +61,7 @@ export default function MentorHomePage() {
             return;
           }
 
-          const storedName = localStorage.getItem('mentorFullName');
+          const storedName = localStorage.getItem('ambassadorFullName');
           setFullName(storedName || decoded.name);
           setIdNumber(decoded['custom:idNumber'] || decoded.sub);
           setEmail(decoded.email);
@@ -86,7 +82,7 @@ export default function MentorHomePage() {
 
     const fetchUserForm = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/get-user-form?userType=mentor&idNumber=${idNumber}`);
+        const res = await fetch(`http://localhost:5000/api/get-user-form?userType=ambassador&idNumber=${idNumber}`);
         const data = await res.json();
         setUserData(data);
       } catch (err) {
@@ -103,17 +99,12 @@ export default function MentorHomePage() {
   const navItems = useMemo(() => {
     if (!language) return [];
     return [
-      {
-        labelHe: t('navDashboard', language),
-        labelEn: t('navDashboard', language),
-        path: '#dashboard',
-        onClick: () => handleNavigation('dashboard')
-      },
+
       {
         labelHe: t('navPersonalDetails', language),
         labelEn: t('navPersonalDetails', language),
-        path: '#form',
-        onClick: () => handleNavigation('form')
+        path: '#editForm',
+        onClick: () => handleNavigation('editForm')
       },
       {
         labelHe: t('jobs', language),
@@ -133,18 +124,6 @@ export default function MentorHomePage() {
         path: '#interview-prep',
         onClick: () => handleNavigation('interview-ques')
       },
-      {
-        labelHe: t('findReservist', language),
-        labelEn: t('findReservist', language),
-        path: '#find-reservist',
-        onClick: () => handleNavigation('find-reservist')
-      },
-      {
-        labelHe: t('myReservists', language),
-        labelEn: t('myReservists', language),
-        path: '#myReservists',
-        onClick: () => handleNavigation('myReservists')
-      },
     ];
   }, [language]);
 
@@ -152,32 +131,15 @@ export default function MentorHomePage() {
     return <p style={{ padding: '2rem' }}>{t('loading', language || 'he')}</p>;
   }
 
-  const handleManageReservist = (idNumber) => {
-    setSelectedReservistId(idNumber);
-    setView('manage-reservist');
-  };
-
   return (
-    <div className="mentor-container">
+    <div className="ambassador-container">
       <SideBar navItems={navItems} />
 
-      <main className="mentor-main">
-        
-        {view === 'dashboard' && (
-          <>
-            <h1 className="mentor-welcome">
-              {t('mentorWelcomeTitle', language).replace('{{name}}', fullName)}
-            </h1>
-            <div className="mentor-main-view flex gap-8 items-start">
-              <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
-              <MyReservists onManageReservist={handleManageReservist} />
-            </div>
-          </>
-        )}
+      <main className="ambassador-main">
 
         {view === 'allJobs' && (
           <div>
-            <div className="mentor-button-group">
+            <div className="ambassador-button-group">
               <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
               <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
             </div>
@@ -185,42 +147,44 @@ export default function MentorHomePage() {
           </div>
         )}
 
-        {view === 'form' && userData && (
-          <div className='EditMentorForm'>
-            <EditMentorForm
+        {view === 'editForm' && userData && (
+          <div>
+            <EditAmbassadorForm
               userData={userData}
               onSave={(updated) => setUserData(updated)}
-              onBack={() => setView('dashboard')}
-              onClose={() => setView('dashboard')}
+              onBack={() => setView('allJobs')}
+              onClose={() => setView('allJobs')}
             />
           </div>
         )}
 
         {view === 'post-job' && (
           <div>
-            <div className="mentor-button-group">
+            <div className="ambassador-button-group">
               <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
               <Button text={t('jobs', language)} onClick={() => handleNavigation('allJobs')} />
             </div>
             <PostNewJob
               publisherId={`${email}#${idNumber}`}
-              publisherType="mentor"
+              publisherType="ambassador"
               onSave={() => {
                 setToast({ message: t('jobPostedSuccess', language), type: 'success' });
                 setView('dashboard');
               }}
+              onClose={() => setView('myJobsList')}
             />
           </div>
         )}
         
         {view === 'myJobsList' && (
           <div>
-            <div className="mentor-button-group">
+            <div className="ambassador-button-group">
                 <Button text={t('jobs', language)} onClick={() => handleNavigation('allJobs')} />
                 <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
               </div>
             <MyJobsList
               publisherId={`${email}#${idNumber}`}
+              userType="ambassador"
               onEdit={(job) => {
                 setSelectedJobForEdit(job);
                 setView('edit-job');
@@ -231,7 +195,7 @@ export default function MentorHomePage() {
 
         {view === 'my-questions' && (
           <div>
-            <div className="mentor-button-group">
+            <div className="ambassador-button-group">
               <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
             </div>
@@ -252,7 +216,7 @@ export default function MentorHomePage() {
 
         {view === 'edit-question' && questionToEdit && (
           <div>
-            <div className="mentor-button-group">
+            <div className="ambassador-button-group">
               <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
               <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
@@ -273,7 +237,7 @@ export default function MentorHomePage() {
 
         {view === 'post-answer' && questionToAnswer && (
           <div>
-            <div className="mentor-button-group">
+            <div className="ambassador-button-group">
               <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
               <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
@@ -284,7 +248,7 @@ export default function MentorHomePage() {
               idNumber={idNumber}
               onSuccess={() => {
                 setToast({ message: t('answerPosted', language), type: 'success' });
-                setView('dashboard');
+                setView('allJobs');
               }}
               onClose={() => setView('interview-ques')}
             />
@@ -292,7 +256,7 @@ export default function MentorHomePage() {
         )}
 
         {view === 'edit-job' && selectedJobForEdit && (
-          <EditMentorJob
+          <EditAmbassadorJob
             job={selectedJobForEdit}
             onClose={() => {
               setSelectedJobForEdit(null);
@@ -307,14 +271,14 @@ export default function MentorHomePage() {
         )}
 
         {view === 'all-events' && (
-          <div className="mentor-main-view">
+          <div className="ambassador-main-view">
             <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
           </div>
         )}
 
         {view === 'interview-ques' && 
           <div>
-            <div className='mentor-button-group'>
+            <div className='ambassador-button-group'>
               <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
             </div>
@@ -329,7 +293,7 @@ export default function MentorHomePage() {
 
         {view === 'AddNewQues' && (
           <div>
-            <div className='mentor-button-group'>
+            <div className='ambassador-button-group'>
               <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
               <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
             </div>
@@ -344,22 +308,6 @@ export default function MentorHomePage() {
           </div>
         )}
 
-        {view === 'myReservists' && (
-          <MyReservists onManageReservist={handleManageReservist} />
-        )}
-
-        {view === 'manage-reservist' && selectedReservistId && (
-          <div>
-            <MentorshipProgress mentorId={idNumber} reservistId={selectedReservistId} />
-          </div>
-        )}
-
-
-        {view === 'find-reservist' && (
-          <div className='mentor-main-view'>
-            <FindReservist mentorId={idNumber} onBack={() => setView('dashboard')} />
-          </div>
-        )}
 
         {toast && (
           <ToastMessage

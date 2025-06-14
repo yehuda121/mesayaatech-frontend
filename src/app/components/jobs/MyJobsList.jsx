@@ -7,7 +7,7 @@ import Button from '@/app/components/Button';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { Edit2, Trash2 } from 'lucide-react';
 
-export default function MyJobsList({ publisherId, onEdit }) {
+export default function MyJobsList({ publisherId, userType = "mentor", onEdit }) {
   const [language, setLanguage] = useState(getLanguage());
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
@@ -26,7 +26,7 @@ export default function MyJobsList({ publisherId, onEdit }) {
       try {
         const encodedPublisherId = encodeURIComponent(publisherId);
         const res = await fetch(
-          `http://localhost:5000/api/jobs-by-publisherID/by-publisher?publisherId=${encodedPublisherId}&idType=mentor`
+          `http://localhost:5000/api/jobs-by-publisherID/by-publisher?publisherId=${encodedPublisherId}&idType=${userType}`
         );
         const data = await res.json();
 

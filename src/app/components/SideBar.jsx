@@ -101,12 +101,12 @@ export default function SideBar({ navItems }) {
             </svg>
             
           </button> */}
-          <button className="lang-button" onClick={() => {
+          <button className="SB-lang-button" onClick={() => {
             handleToggleLanguage();
             setTimeout(() => setMenuOpen(false), 100);
           }}>
-            <span className="lang-text">{language === "he" ? "English" : "עברית"}</span>
-            <img src="/icons/globe-icon.png" alt="globe" className="lang-img" />
+            <span className="SB-lang-text">{language === "he" ? "English" : "עברית"}</span>
+            <img src="/icons/globe-icon.png" alt="globe" className="SB-lang-img" />
           </button>
 
 

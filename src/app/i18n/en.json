@@ -392,7 +392,11 @@
     "navLocationsSummary": "Locations Summary",
     "locationsSummaryTitle": "Reservists Distribution by Location",
     "navTopJobPublishers": "Top Job Publishers",
-    "topJobPublishersTitle": "Top Job Publishers Distribution"
+    "topJobPublishersTitle": "Top Job Publishers Distribution",
+    "jobFields": "Job fields",
+    "noJobsPosted": "You did not posted any jobs yet",
+    "cancelJoin": "Cancel join",
+    "marketing": "Marketing"
 
 
 }

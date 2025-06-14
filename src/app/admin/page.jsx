@@ -217,8 +217,6 @@ export default function AdminPage() {
 
           {view === 'ViewMentorships' && <ViewMentorships />}
           
-          {/* {view === 'Reports' && router.push('@/app/pages/reports/ReportsDashboard')} */}
-
           {view === 'interviewQues' && (
             <>
               <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
@@ -231,6 +229,7 @@ export default function AdminPage() {
               />
             </>
           )}
+
           {view === 'AddNewQues' && (
             <>
               <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
@@ -239,13 +238,11 @@ export default function AdminPage() {
               <AddNewQues
                 fullName={fullName}
                 idNumber={idNumber}
-                onSuccess={() => {
-                  setToast({ message: t('questionAdded', language), type: 'success' });
-                  setView('interviewQues');
-                }}
+                onSuccess={() => setView('interviewQues')}
               />
             </>
           )}
+          
           {answerQuestionId && (
             <div
               className="modal-overlay"

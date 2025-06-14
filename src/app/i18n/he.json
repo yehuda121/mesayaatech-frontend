@@ -391,5 +391,9 @@
     "navTopJobPublishers": "מפרסמי משרות מובילים",
     "topJobPublishersTitle": "פילוח מפרסמי משרות לפי כמות",
     "navLocationsSummary": "פילוח לפי מיקום",
-    "locationsSummaryTitle": "פילוח מילואימניקים לפי מיקום"
+    "locationsSummaryTitle": "פילוח מילואימניקים לפי מיקום",
+    "jobFields": "תחום",
+    "noJobsPosted": "לא פירסמת משרות עדיין",
+    "cancelJoin": "ביטול הגעה",
+    "marketing": "שיווק"
 }
