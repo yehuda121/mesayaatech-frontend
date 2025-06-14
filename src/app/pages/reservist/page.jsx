@@ -46,10 +46,10 @@ export default function ReservistHomePage() {
         const role = decoded['custom:role'];
         const expectedRole = 'reservist';
         const roleToPath = {
-          reservist: '/pages/reservist/home',
+          admin: '/admin',
           mentor: '/pages/mentor',
-          ambassador: '/pages/ambassador/home',
-          admin: '/admin'
+          reservist: '/pages/reservist',
+          ambassador: '/pages/ambassador'
         };
 
         if (role !== expectedRole) {

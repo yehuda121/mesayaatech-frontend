@@ -8,6 +8,7 @@ import CreateEvent from './components/events/CreateEvent';
 import ViewEvents from './components/events/ViewEvents';
 import EditEvents from './components/events/EditEvents';
 import ViewJobs from '../components/jobs/ViewAllJobs';
+import PostNewJob from '../components/jobs/PostNewJob';
 import EditJob from '@/app/components/jobs/EditJob';
 import AddJob from '../components/jobs/PostNewJob';
 import { jwtDecode } from 'jwt-decode';
@@ -52,8 +53,8 @@ export default function AdminPage() {
         const roleToPath = {
           admin: '/admin',
           mentor: '/pages/mentor',
-          reservist: '/pages/reservist/home',
-          ambassador: '/pages/ambassador/home'
+          reservist: '/pages/reservist',
+          ambassador: '/pages/ambassador'
         };
 
         setFullName(decoded.name || '');
@@ -117,7 +118,7 @@ export default function AdminPage() {
       labelHe: t('users', 'he'),
       labelEn: t('users', 'en'),
       path: '#view-users',
-      onClick: () => handleNavigation('users')
+      onClick: () => handleNavigation('view-users')
     },
     {
       labelHe: t('events', 'he'),
@@ -134,14 +135,14 @@ export default function AdminPage() {
     {
       labelHe: t('interviewQues', 'he'),
       labelEn: t('interviewQues', 'en'),
-      path: '#interviewQues',
-      onClick: () => handleNavigation('interviewQues')
+      path: '#interview-ques',
+      onClick: () => handleNavigation('interview-ques')
     },
     {
       labelHe: t('viewMentorships', 'he'),
       labelEn: t('viewMentorships', 'en'),
-      path: '#ViewMentorships',
-      onClick: () => handleNavigation('ViewMentorships')
+      path: '#view-mentorships',
+      onClick: () => handleNavigation('view-mentorships')
     },
     {
       labelHe: t('Reports', 'he'),
@@ -193,31 +194,38 @@ export default function AdminPage() {
           )}
 
           {view === 'view-jobs' && (
-            <ViewJobs
-              jobs={jobs}
-              setJobs={setJobs}
-              onEdit={(job) => setSelectedJob(job)}
-              handleNavigation={handleNavigation}
-            />
+            <>
+              <div className='mb-4'>
+                <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
+              </div>
+              <ViewJobs
+                jobs={jobs}
+                setJobs={setJobs}
+                onEdit={(job) => setSelectedJob(job)}
+                handleNavigation={handleNavigation}
+              />
+            </>
           )}
 
-          {view === 'add-job' && (
-            <AddJob
-              publisherId={`${email}#${idNumber}`}
-              onClose={() => setView('')}
-              publisherType="admin"
-              onSave={(newJob) => {
-                setJobs(prev => [...prev, newJob]);
-                setView('view-jobs');
-              }}
-            />
+          {view === 'post-job' && (
+            <>
+              <AddJob
+                publisherId={`${email}#${idNumber}`}
+                onClose={() => setView('')}
+                publisherType="admin"
+                onSave={(newJob) => {
+                  setJobs(prev => [...prev, newJob]);
+                  setView('view-jobs');
+                }}
+              />
+            </>
           )}
 
-          {view === 'users' && <UsersTable />}
+          {view === 'view-users' && <UsersTable />}
 
-          {view === 'ViewMentorships' && <ViewMentorships />}
+          {view === 'view-mentorships' && <ViewMentorships />}
           
-          {view === 'interviewQues' && (
+          {view === 'interview-ques' && (
             <>
               <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
                 <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
@@ -233,12 +241,12 @@ export default function AdminPage() {
           {view === 'AddNewQues' && (
             <>
               <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
-                <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interviewQues')} />
+                <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
               </div>
               <AddNewQues
                 fullName={fullName}
                 idNumber={idNumber}
-                onSuccess={() => setView('interviewQues')}
+                onSuccess={() => setView('interview-ques')}
               />
             </>
           )}

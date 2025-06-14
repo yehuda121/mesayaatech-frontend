@@ -50,10 +50,10 @@ export default function AmbassadorHomePage() {
           const role = decoded['custom:role'];
           const expectedRole = 'ambassador';
           const roleToPath = {
-            reservist: '../reservist/home',
-            mentor: '../mentor',
-            ambassador: './',
-            admin: '../../admin'
+            admin: '/admin',
+            mentor: '/pages/mentor',
+            reservist: '/pages/reservist',
+            ambassador: '/pages/ambassador'
           };
 
           if (role !== expectedRole) {

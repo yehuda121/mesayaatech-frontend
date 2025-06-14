@@ -55,6 +55,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.participants-title {
+  font-weight: bold;
+}
 
 /* === UsersTable.jsx === */
 .table-style {

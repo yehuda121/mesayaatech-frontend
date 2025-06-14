@@ -6,6 +6,8 @@ import { t } from '@/app/utils/loadTranslations';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { ThumbsUp, Edit2, MessageCircle, Eye, Trash2 } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
+import AlertMessage from '@/app/components/notifications/AlertMessage';
+import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 
 export default function AdminQuestions({ onEdit, onAnswer, onView }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -14,9 +16,11 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
   const [fullName, setFullName] = useState('');
   const [searchText, setSearchText] = useState('');
   const [filteredCategory, setFilteredCategory] = useState('');
+  const [alert, setAlert] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState(null);
 
   const categories = [
-    { value: "", labelHe: "הכול", labelEn: "All" },
+    { value: "", labelHe: "הכל", labelEn: "All" },
     { value: "tech", labelHe: "הייטק", labelEn: "Tech" },
     { value: "management", labelHe: "ניהול", labelEn: "Management" },
     { value: "logistics", labelHe: "לוגיסטיקה", labelEn: "Logistics" },
@@ -49,11 +53,20 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
       setQuestions(data);
     } catch (err) {
       console.error('Error fetching questions:', err);
+      setAlert({ message: t('serverError', language), type: 'error' });
     }
   };
 
-  const handleDelete = async (questionId) => {
-    if (!confirm(t('confirmDeleteQuestion', language))) return;
+  const handleDelete = (questionId) => {
+    setConfirmDialog({
+      title: t('confirmDeleteQuestionTitle', language),
+      message: t('confirmDeleteQuestionText', language),
+      onConfirm: () => confirmDelete(questionId),
+      onCancel: () => setConfirmDialog(null),
+    });
+  };
+
+  const confirmDelete = async (questionId) => {
     try {
       const res = await fetch('http://localhost:5000/api/delete-question', {
         method: 'POST',
@@ -62,12 +75,15 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
       });
       if (res.ok) {
         setQuestions(prev => prev.filter(q => q.questionId !== questionId));
+        setAlert({ message: t('deleteSuccess', language), type: 'success' });
       } else {
-        alert(t('deleteFailed', language));
+        setAlert({ message: t('deleteFailed', language), type: 'error' });
       }
     } catch (err) {
       console.error('Error deleting question:', err);
-      alert(t('serverError', language));
+      setAlert({ message: t('serverError', language), type: 'error' });
+    } finally {
+      setConfirmDialog(null);
     }
   };
 
@@ -171,6 +187,23 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
         )}
         emptyTextKey="noQuestionsFound"
       />
+
+      {alert && (
+        <AlertMessage
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
+
+      {confirmDialog && (
+        <ConfirmDialog
+          title={confirmDialog.title}
+          message={confirmDialog.message}
+          onConfirm={confirmDialog.onConfirm}
+          onCancel={confirmDialog.onCancel}
+        />
+      )}
     </div>
   );
 }

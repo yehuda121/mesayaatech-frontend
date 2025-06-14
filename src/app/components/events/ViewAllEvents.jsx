@@ -32,7 +32,6 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
       const futureEvents = data.filter(event => new Date(event.date) >= new Date());
       setEvents(futureEvents);
 
-      // כאן נעדכן את מיפוי המשתתפים לפי המשתמש הנוכחי
       const joinedMap = {};
       for (const event of futureEvents) {
         if (event.participants && Array.isArray(event.participants)) {

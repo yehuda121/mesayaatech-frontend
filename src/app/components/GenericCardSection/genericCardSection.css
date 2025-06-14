@@ -1,4 +1,4 @@
-/* === Container & Title === */
+/* Container & Title */
 .card-section-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -16,7 +16,7 @@
   text-align: center;
 }
 
-/* === Filters Row === */
+/*  Filters Row  */
 .card-section-filters {
   display: flex;
   flex-wrap: wrap;
@@ -35,7 +35,7 @@
   min-width: 120px;
 }
 
-/* === Filter Base === */
+/* Filter Base */
 .card-filter {
   padding: 0.5rem;
   border: 2px solid #ddd;
@@ -47,10 +47,10 @@
 
 .card-filter:focus {
   outline: none;
-  border-color: #3b82f6; /* blue */
+  border-color: #3b82f6; 
 }
 
-/* === Layout logic === */
+/*  Layout logic  */
 .card-section-filters.single-filter .card-filter {
   flex: 1 1 50%;
   max-width: 600px;
@@ -68,24 +68,17 @@
   color: white;
 }
 
-/* .card-filter.date-filter {
-  flex: 0 0 140px;
-  max-width: 140px;
-} */
 .card-filter.date-filter {
   flex: 0 0 160px;
 }
-/* .card-filter.flexible {
-  flex: 1 1 calc(100% - 160px);
-  min-width: 200px;
-} */
+
 .card-filter.flexible {
   flex: 1 1 0%;
   min-width: 200px;
   max-width: 100%;
 }
 
-/* === Responsive fallback === */
+/* Responsive fallback */
 @media (max-width: 640px) {
   .card-section-filters {
     flex-direction: column;
@@ -106,7 +99,7 @@
   }
 }
 
-/* === Grid & Cards === */
+/* Grid & Cards */
 .card-section-empty {
   text-align: center;
   font-size: 1rem;

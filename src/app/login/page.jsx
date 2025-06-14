@@ -50,7 +50,7 @@ export default function LoginPage() {
 
         if (role === 'admin') router.push('./admin');
         else if (role === 'mentor') router.push('/pages/mentor');
-        else if (role === 'reservist') router.push('/pages/reservist/home');
+        else if (role === 'reservist') router.push('/pages/reservist');
         else if (role === 'ambassador') router.push('/pages/ambassador');
         else router.push('/');
 
