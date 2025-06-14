@@ -396,7 +396,20 @@
     "jobFields": "Job fields",
     "noJobsPosted": "You did not posted any jobs yet",
     "cancelJoin": "Cancel join",
-    "marketing": "Marketing"
+    "marketing": "Marketing",
+    "eventIdMissing": "Event ID is missing",
+    "noParticipants": "No participants yet",
+    "eventTitleRequired": "Event title is required",
+    "eventTitleTooLong": "Event title is too long (max 100 characters)",
+    "eventDescriptionRequired": "Event description is required",
+    "eventDescriptionTooLong": "Event description is too long (max 1000 characters)",
+    "eventDateRequired": "Event date is required",
+    "eventLocationTooLong": "Location is too long (max 200 characters)",
+    "eventNotesTooLong": "Notes are too long (max 1000 characters)",
+    "confirmDeleteQuestionTitle": "Confirm Question Deletion",
+    "confirmDeleteQuestionText": "Are you sure you want to delete this question?",
+    "deleteSuccess": "Question deleted successfully",
+    "noAnswersYet": "No answers yet"
 
 
 }

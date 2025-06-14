@@ -89,7 +89,7 @@ export default function EditEvents({ event, onClose, onSave }) {
   ];
 
   return (
-    <div className="modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div className="generic-modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
       <GenericForm
         titleKey="editEventTitle"
         fields={fields}

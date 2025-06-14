@@ -19,10 +19,20 @@ export default function GenericForm({
   onDelete,
   disabledPrimary,
   children,
-  onCloseIcon
+  onCloseIcon,
+  isModal = false
 }) {
   const [language, setLanguage] = useState(getLanguage());
 
+  useEffect(() => {
+    if (isModal) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModal]);
+  
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLangChange);

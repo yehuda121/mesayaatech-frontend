@@ -157,26 +157,85 @@ input[type="file"] {
   width: 100%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
+
+
 /* ------------------------------------ */
+/* ============================== */
+/* עיצוב טופס כללי בכל המצבים */
+/* ============================== */
 
-
+/* עוטף את כל הטופס כאשר זה עמוד מלא */
 .generic-form-wrapper {
-  /* min-height: 100vh; */
-  /* display: flex; */
-  /* justify-content: center; */
-  /* align-items: flex-start; */
-  padding: 320px 20px 80px 20px; 
-  background: url('/logo.png') no-repeat center center;
+  padding-top: 10%;
+  padding-right: 10%;
+  padding-bottom: 3%;
   background-size: 40%;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-blend-mode: luminosity;
-  background-color: #f5f5f5;
   overflow-y: auto;
   z-index: 9999;
 }
 
+/* רספונסיביות למסכים צרים */
+@media (max-width: 768px) {
+  .generic-form-wrapper {
+    padding-top: 20%;
+    padding-right: 0;
+    padding-bottom: 3%;
+  }
+}
+
+/* עטיפה למצב של חלון צף (מודאל) */
+.generic-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(30, 30, 40, 0.8);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 250px 30px 30px 30px; 
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+/* for app\components\jobs\EditJob.jsx marging-top is higher*/
+.generic-modal-overlay-for-edit-job {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(30, 30, 40, 0.8);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 400px 30px 30px 30px; 
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+/* for app\components\interviewQestions\ViewQuestion.jsx marging-top is higher*/
+.generic-modal-overlay-view-question {
+  position: 750px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(30, 30, 40, 0.8);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10% 30px 30px 30px; 
+  overflow-y: auto;
+  background-color: white;
+  max-height: 100%;
+}
+
+/* קונטיינר הטופס עצמו (בין אם רגיל או מודאל) */
 .generic-form-container {
   max-width: 768px;
   background-color: #ffffff;
@@ -186,6 +245,7 @@ input[type="file"] {
   width: 100%;
 }
 
+/* גריד של השדות */
 .generic-form-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -198,6 +258,7 @@ input[type="file"] {
   }
 }
 
+/* כותרת הטופס */
 .generic-form-title {
   grid-column: span 2;
   font-size: 1.75rem;
@@ -207,6 +268,7 @@ input[type="file"] {
   color: #333;
 }
 
+/* עיצוב השדות והלייבלים */
 .generic-form-label {
   display: flex;
   flex-direction: column;
@@ -218,8 +280,7 @@ input[type="file"] {
   color: #444;
 }
 
-.generic-form-input,
-textarea {
+.generic-form-input, textarea {
   width: 100%;
   padding: 0.6rem 0.8rem;
   border: 1px solid #ccc;
@@ -228,8 +289,7 @@ textarea {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.generic-form-input:focus,
-textarea:focus {
+.generic-form-input:focus, textarea:focus {
   border-color: #4a90e2;
   outline: none;
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
@@ -240,6 +300,7 @@ textarea {
   resize: vertical;
 }
 
+/* ערכים לקריאה בלבד */
 .readonly-value {
   padding: 0.5rem;
   background-color: #f3f3f3;
@@ -248,6 +309,7 @@ textarea {
   border: 1px solid #ddd;
 }
 
+/* אזור הכפתורים */
 .generic-form-buttons {
   grid-column: span 2;
   display: flex;
@@ -256,6 +318,7 @@ textarea {
   margin-top: 1.5rem;
 }
 
+/* שורת צ'קבוקס */
 .generic-form-checkbox-row {
   display: flex;
   align-items: center;
@@ -267,15 +330,18 @@ textarea {
   margin-left: 0.25rem;
 }
 
+/* אינפוט לקבצים */
 input[type="file"] {
   margin-top: 0.4rem;
 }
 
+/* אזור נוסף מתחת לשדות */
 .generic-form-extra {
   grid-column: span 2;
   margin-top: 1.25rem;
 }
 
+/* כפתור מחיקה */
 .delete-button {
   background-color: #e53935 !important;
   color: white;
@@ -289,6 +355,7 @@ input[type="file"] {
   background-color: #b71c1c !important;
 }
 
+/* כפתור סגירה */
 .modal-close {
   position: absolute;
   top: 15px;

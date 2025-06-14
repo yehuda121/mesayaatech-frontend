@@ -33,22 +33,9 @@
   }
 }
 
-/* overlay windows (such as edit event) */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 /* === ViewEvents.jsx === */
-.event-title {
+/* .event-title {
   font-weight: bold;
   font-size: 1.125rem;
   white-space: nowrap;
@@ -57,7 +44,7 @@
 }
 .participants-title {
   font-weight: bold;
-}
+} */
 
 /* === UsersTable.jsx === */
 .table-style {

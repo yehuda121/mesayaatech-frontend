@@ -261,7 +261,7 @@ export default function EditJob({ job, onClose, onSave }) {
     }];
 
   return (
-    <div className="modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div className="generic-modal-overlay-for-edit-job" dir={language === 'he' ? 'rtl' : 'ltr'}>
       <GenericForm
         titleKey="editJobTitle"
         fields={fields}

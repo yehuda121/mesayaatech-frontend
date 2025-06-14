@@ -315,16 +315,18 @@ export default function AdminPage() {
       )}
 
       {selectedJob && (
-        <EditJob
-          job={selectedJob}
-          onClose={() => setSelectedJob(null)}
-          onSave={(updatedJob) => {
-            setJobs(prev =>
-              prev.map(j => j.jobId === updatedJob.jobId ? updatedJob : j)
-            );
-            setSelectedJob(null);
-          }}
-        />
+        // <div className='modal-overlay'>
+          <EditJob
+            job={selectedJob}
+            onClose={() => setSelectedJob(null)}
+            onSave={(updatedJob) => {
+              setJobs(prev =>
+                prev.map(j => j.jobId === updatedJob.jobId ? updatedJob : j)
+              );
+              setSelectedJob(null);
+            }}
+          />
+        // </div>
       )}
     </div>
   );

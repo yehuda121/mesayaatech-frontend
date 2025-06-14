@@ -395,5 +395,18 @@
     "jobFields": "תחום",
     "noJobsPosted": "לא פירסמת משרות עדיין",
     "cancelJoin": "ביטול הגעה",
-    "marketing": "שיווק"
+    "marketing": "שיווק",
+    "eventIdMissing": "חסר מזהה לאירוע",
+    "noParticipants": "אין משתתפים עדיין",
+    "eventTitleRequired": "יש להזין כותרת לאירוע",
+    "eventTitleTooLong": "הכותרת ארוכה מדי (מקסימום 100 תווים)",
+    "eventDescriptionRequired": "יש להזין תיאור לאירוע",
+    "eventDescriptionTooLong": "התיאור ארוך מדי (מקסימום 1000 תווים)",
+    "eventDateRequired": "יש לבחור תאריך לאירוע",
+    "eventLocationTooLong": "המיקום ארוך מדי (מקסימום 200 תווים)",
+    "eventNotesTooLong": "הערות ארוכות מדי (מקסימום 1000 תווים)",
+    "confirmDeleteQuestionTitle": "אישור מחיקת שאלה",
+    "confirmDeleteQuestionText": "האם אתה בטוח שברצונך למחוק את השאלה?",
+    "deleteSuccess": "השאלה נמחקה בהצלחה",
+    "noAnswersYet": "אין עדיין תשובות"
 }
