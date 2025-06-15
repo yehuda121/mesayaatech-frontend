@@ -108,7 +108,7 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber }) {
   ];
 
   return (
-    <>
+    <div className='GF-generic-form-wrapper-add-new-question'>
       <GenericForm
         titleKey="addNewQuestion"
         fields={fields}
@@ -125,6 +125,6 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber }) {
           onClose={() => setToast(null)}
         />
       )}
-    </>
+    </div>
   );
 }

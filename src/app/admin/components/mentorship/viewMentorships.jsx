@@ -8,6 +8,8 @@ import ViewProgress from './ViewProgress';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
+import { Eye } from 'lucide-react';
+
 
 export default function MentorshipsView() {
   const [language, setLanguage] = useState(getLanguage());
@@ -133,20 +135,17 @@ export default function MentorshipsView() {
             <p><strong>{t('reservist', language)}:</strong> {pair.reservistName}</p>
             <p><strong>{t('progressStage', language)}:</strong> {pair.progressStage ? progressStages[pair.progressStage - 1] : t('unknownStage', language)}</p>
 
-            <div style={{ marginTop: '10px' }}>
-                <Button text={t('viewProcess', language)} onClick={() => setSelectedPair(pair)} />
+            <div style={{ marginTop: '10px' }}> 
+              <button title={t('viewProcess', language)} onClick={() => setSelectedPair(pair)}>
+                <Eye size={22} />
+              </button>
             </div>
           </div>
         )}
       />
 
       {selectedPair && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}>
+        <div>
             <ViewProgress progressData={selectedPair} onclose={() => setSelectedPair(null)} />
         </div>
       )}

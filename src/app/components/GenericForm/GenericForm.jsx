@@ -32,7 +32,7 @@ export default function GenericForm({
       document.body.style.overflow = '';
     };
   }, [isModal]);
-  
+
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
     window.addEventListener('languageChanged', handleLangChange);
@@ -43,150 +43,15 @@ export default function GenericForm({
     onChange({ ...data, [key]: value });
   };
 
-  // return (
-  //   <div dir={language === 'he' ? 'rtl' : 'ltr'} className="generic-form-container text-start relative">
-  //     {onCloseIcon && (
-  //       <button className="modal-close" onClick={onCloseIcon} aria-label="Close">✖</button>
-  //     )}
-
-  //     <form className="generic-form-grid">
-  //       <h2 className="generic-form-title">{t(titleKey, language)}</h2>
-
-  //       {fields.map((field) => {
-  //         const { key, type, readonly, labelOverride, transform } = field;
-  //         const label = t(labelOverride || key, language);
-  //         const rawValue = data[key];
-  //         const value = type === 'checkbox'
-  //           ? transform?.toValue
-  //             ? transform.toValue(rawValue)
-  //             : !!rawValue
-  //           : rawValue || '';
-
-  //         if (type === 'checkbox') {
-  //           return (
-  //             <label key={key} className="generic-form-checkbox-row">
-  //               <input
-  //                 type="checkbox"
-  //                 checked={value}
-  //                 onChange={(e) =>
-  //                   handleFieldChange(
-  //                     key,
-  //                     transform?.fromEvent
-  //                       ? transform.fromEvent(e.target.checked)
-  //                       : e.target.checked
-  //                   )
-  //                 }
-  //               />
-  //               <span className="checkbox-label-text">{label}</span>
-  //             </label>
-  //           );
-  //         }
-
-  //         if (type === 'file') {
-  //           return (
-  //             <label key={key} className="generic-form-label">
-  //               <span className="generic-form-label-text">{label}</span>
-  //               <input
-  //                 type="file"
-  //                 onChange={(e) =>
-  //                   handleFieldChange(key, e.target.files?.[0] || null)
-  //                 }
-  //               />
-  //             </label>
-  //           );
-  //         } else if (type === 'select') {
-  //           return (
-  //             <label key={key} className="generic-form-label">
-  //               <span className="generic-form-label-text">{label}</span>
-  //               <select
-  //                 className="generic-form-input"
-  //                 value={value}
-  //                 onChange={(e) => handleFieldChange(key, e.target.value)}
-  //               >
-  //                 {(field.options || []).map((opt) => (
-  //                   <option key={opt.value} value={opt.value}>
-  //                     {opt.label}
-  //                   </option>
-  //                 ))}
-  //               </select>
-  //             </label>
-  //           );
-  //         }
-
-  //         return (
-  //           <label key={key} className="generic-form-label">
-  //             <span className="generic-form-label-text">{label}</span>
-  //             {readonly ? (
-  //               <div className="readonly-value">{value || '-'}</div>
-  //             ) : type === 'textarea' ? (
-  //               <textarea
-  //                 className="generic-form-input"
-  //                 value={value}
-  //                 onChange={(e) => handleFieldChange(key, e.target.value)}
-  //               />
-  //             ) : type === 'date' || type === 'time' ? (
-  //               <input
-  //                 type={type}
-  //                 className="generic-form-input"
-  //                 value={value}
-  //                 onChange={(e) => handleFieldChange(key, e.target.value)}
-  //               />
-  //             ) : (
-  //               <input
-  //                 type="text"
-  //                 className="generic-form-input"
-  //                 value={value}
-  //                 onChange={(e) => handleFieldChange(key, e.target.value)}
-  //               />
-  //             )}
-  //           </label>
-  //         );
-  //       })}
-
-  //       {children && <div className="generic-form-extra">{children}</div>}
-
-  //       <div className="generic-form-buttons">
-  //         {deleteLabel && (
-  //           <Button
-  //             text={t(deleteLabel, language)}
-  //             onClick={onDelete}
-  //             type="button"
-  //             className="delete-button"
-  //           />
-  //         )}
-  //         {secondaryLabel && (
-  //           <Button
-  //             text={t(secondaryLabel, language)}
-  //             onClick={onSecondary}
-  //             type="button"
-  //           />
-  //         )}
-  //         {primaryLabel && (
-  //           <Button
-  //             text={t(primaryLabel, language)}
-  //             type="button"
-  //             onClick={async () => {
-  //             const success = await onPrimary();
-  //             if (success === false) return; // stop everything if validation failed
-  //             // here you can add further logic if needed
-  //           }}
-  //             disabled={disabledPrimary}
-  //           />
-  //         )}
-  //       </div>
-  //       <div className="mt-7"></div>
-  //     </form>
-  //   </div>
-  // );
   return (
-    <div className="generic-form-wrapper">
-      <div dir={language === 'he' ? 'rtl' : 'ltr'} className="generic-form-container text-start relative">
+    <div className="GF-generic-form-wrapper">
+      <div dir={language === 'he' ? 'rtl' : 'ltr'} className="GF-generic-form-container text-start relative">
         {onCloseIcon && (
-          <button className="modal-close" onClick={onCloseIcon} aria-label="Close">✖</button>
+          <button className="GF-modal-close" onClick={onCloseIcon} aria-label="Close">✖</button>
         )}
 
-        <form className="generic-form-grid">
-          <h2 className="generic-form-title">{t(titleKey, language)}</h2>
+        <form className="GF-generic-form-grid">
+          <h2 className="GF-generic-form-title">{t(titleKey, language)}</h2>
 
           {fields.map((field) => {
             const { key, type, readonly, labelOverride, transform } = field;
@@ -200,7 +65,7 @@ export default function GenericForm({
 
             if (type === 'checkbox') {
               return (
-                <label key={key} className="generic-form-checkbox-row">
+                <label key={key} className="GF-generic-form-checkbox-row">
                   <input
                     type="checkbox"
                     checked={value}
@@ -213,15 +78,15 @@ export default function GenericForm({
                       )
                     }
                   />
-                  <span className="checkbox-label-text">{label}</span>
+                  <span className="GF-checkbox-label-text">{label}</span>
                 </label>
               );
             }
 
             if (type === 'file') {
               return (
-                <label key={key} className="generic-form-label">
-                  <span className="generic-form-label-text">{label}</span>
+                <label key={key} className="GF-generic-form-label">
+                  <span className="GF-generic-form-label-text">{label}</span>
                   <input
                     type="file"
                     onChange={(e) =>
@@ -232,10 +97,10 @@ export default function GenericForm({
               );
             } else if (type === 'select') {
               return (
-                <label key={key} className="generic-form-label">
-                  <span className="generic-form-label-text">{label}</span>
+                <label key={key} className="GF-generic-form-label">
+                  <span className="GF-generic-form-label-text">{label}</span>
                   <select
-                    className="generic-form-input"
+                    className="GF-generic-form-input"
                     value={value}
                     onChange={(e) => handleFieldChange(key, e.target.value)}
                   >
@@ -250,27 +115,27 @@ export default function GenericForm({
             }
 
             return (
-              <label key={key} className="generic-form-label">
-                <span className="generic-form-label-text">{label}</span>
+              <label key={key} className="GF-generic-form-label">
+                <span className="GF-generic-form-label-text">{label}</span>
                 {readonly ? (
-                  <div className="readonly-value">{value || '-'}</div>
+                  <div className="GF-readonly-value">{value || '-'}</div>
                 ) : type === 'textarea' ? (
                   <textarea
-                    className="generic-form-input"
+                    className="GF-generic-form-input"
                     value={value}
                     onChange={(e) => handleFieldChange(key, e.target.value)}
                   />
                 ) : type === 'date' || type === 'time' ? (
                   <input
                     type={type}
-                    className="generic-form-input"
+                    className="GF-generic-form-input"
                     value={value}
                     onChange={(e) => handleFieldChange(key, e.target.value)}
                   />
                 ) : (
                   <input
                     type="text"
-                    className="generic-form-input"
+                    className="GF-generic-form-input"
                     value={value}
                     onChange={(e) => handleFieldChange(key, e.target.value)}
                   />
@@ -279,15 +144,15 @@ export default function GenericForm({
             );
           })}
 
-          {children && <div className="generic-form-extra">{children}</div>}
+          {children && <div className="GF-generic-form-extra">{children}</div>}
 
-          <div className="generic-form-buttons">
+          <div className="GF-generic-form-buttons">
             {deleteLabel && (
               <Button
                 text={t(deleteLabel, language)}
                 onClick={onDelete}
                 type="button"
-                className="delete-button"
+                className="GF-delete-button"
               />
             )}
             {secondaryLabel && (
