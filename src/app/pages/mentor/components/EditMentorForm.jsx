@@ -8,7 +8,7 @@ import AlertMessage from '@/app/components/notifications/AlertMessage';
 import Button from '@/app/components/Button';
 import '../../../register/registrationForm.css';
 
-export default function EditMentorForm({ userData, onSave, onClose }) {
+export default function EditMentorForm({ userData, onSave, onClose, onDelete, role }) {
   const router = useRouter();
   const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState(userData || {});
@@ -121,6 +121,12 @@ export default function EditMentorForm({ userData, onSave, onClose }) {
 
   const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
 
+  const handleDeleteClick = () => {
+    if (confirm(t('confirmDeleteUser', language))) {
+      onDelete(userData);
+    }
+  };
+
   return (
     <div className="register-page">
       <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
@@ -191,6 +197,9 @@ export default function EditMentorForm({ userData, onSave, onClose }) {
           <div className="register-buttons-group">
             <Button text={t('saveChanges', language)} type="submit" disabled={!isModified || saving} />
             <Button text={t('cancel', language)} type="button" onClick={handleCancel} />
+            {role === 'admin' && (
+              <Button color='red' text={t('deleteUser', language)} type="button" onClick={handleDeleteClick} />
+            )}
           </div>
         </form>
 

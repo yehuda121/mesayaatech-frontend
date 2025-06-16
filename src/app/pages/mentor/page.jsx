@@ -157,6 +157,10 @@ export default function MentorHomePage() {
     setView('manage-reservist');
   };
 
+  if (!language || !idNumber) {
+    return <p style={{ padding: '2rem' }}>{t('loading', language || 'he')}</p>;
+  }
+
   return (
     <div className="mentor-container">
       <SideBar navItems={navItems} />

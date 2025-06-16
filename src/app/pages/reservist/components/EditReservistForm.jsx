@@ -8,7 +8,7 @@ import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 import Button from '@/app/components/Button';
 import '../../../register/registrationForm.css';
 
-export default function EditReservistForm({ userData, mentorId, mentorName, onSave, onClose }) {
+export default function EditReservistForm({ userData, mentorId, mentorName, onSave, onClose, onDelete, role }) {
   const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState(userData || {});
   const [initialData, setInitialData] = useState(userData || {});
@@ -174,6 +174,12 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
 
   const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
 
+  const handleDeleteClick = () => {
+    if (confirm(t('confirmDeleteUser', language))) {
+      onDelete(userData);
+    }
+  };
+
   return (
     <div className="register-page">
       <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
@@ -241,6 +247,9 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
           <div className="register-buttons-group">
             <Button text={t('saveChanges', language)} type="submit" disabled={!isModified || saving} />
             <Button text={t('cancel', language)} type="button" onClick={handleCancel} />
+            {role === 'admin' && (
+              <Button color='red' text={t('deleteUser', language)} type="button" onClick={handleDeleteClick} />
+            )}
           </div>
         </form>
 

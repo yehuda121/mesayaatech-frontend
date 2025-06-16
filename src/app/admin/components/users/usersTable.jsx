@@ -268,6 +268,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
                 onClose={() => setSelectedForm(null)}
                 onSave={handleSaveUser}
                 onDelete={handleDeleteUser}
+                role={'admin'}
               />
             </div>
           </div>
@@ -281,6 +282,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
                 onClose={() => setSelectedForm(null)}
                 onSave={handleSaveUser}
                 onDelete={handleDeleteUser}
+                role={'admin'}
               />
             </div>
           </div>
@@ -294,6 +296,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
                 onClose={() => setSelectedForm(null)}
                 onSave={handleSaveUser}
                 onDelete={handleDeleteUser}
+                role={'admin'}
               />
             </div>
           </div>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import SideBar from '@/app/components/SideBar';
 import Events from '@/app/components/events/ViewAllEvents';
-import EditReservistForm from '../components/EditReservistForm';
+import EditReservistForm from './components/EditReservistForm';
 import ViewJobs from '@/app/components/jobs/ViewAllJobs';
 import JobDetailsModal from '@/app/components/jobs/viewJob';
 import { getLanguage } from '@/app/language';
@@ -11,8 +11,8 @@ import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { t } from '@/app/utils/loadTranslations';
 import InterviewQues  from '@/app/components/interviewQestions/QuestionsList';
-import MentorringProscess from '../components/mentorringProscess';
-import '../reservist.css';
+import MentorringProscess from './components/mentorringProscess';
+import './reservist.css';
 
 export default function ReservistHomePage() {
   const [language, setLanguage] = useState(null);

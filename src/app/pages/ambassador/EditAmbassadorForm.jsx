@@ -9,7 +9,7 @@ import Button from '@/app/components/Button';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import '../../register/registrationForm.css';
 
-export default function EditAmbassadorForm({ userData, onSave , onClose }) {
+export default function EditAmbassadorForm({ userData, onSave , onClose, onDelete, role }) {
   const router = useRouter();
   const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState(userData || {});
@@ -119,6 +119,13 @@ export default function EditAmbassadorForm({ userData, onSave , onClose }) {
      if (onClose) onClose();
   };
 
+  const handleDeleteClick = () => {
+    if (confirm(t('confirmDeleteUser', language))) {
+      onDelete(userData);
+    }
+  };
+
+
   const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
 
   return (
@@ -192,6 +199,9 @@ export default function EditAmbassadorForm({ userData, onSave , onClose }) {
           <div className="register-buttons-group">
             <Button text={t('saveChanges', language)} type="submit" disabled={!isModified || saving} />
             <Button text={t('cancel', language)} type="button" onClick={handleCancel} />
+            {role === 'admin' && (
+              <Button color='red' text={t('deleteUser', language)} type="button" onClick={handleDeleteClick} />
+            )}
           </div>
         </form>
 

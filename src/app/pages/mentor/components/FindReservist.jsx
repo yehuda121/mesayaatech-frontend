@@ -42,6 +42,8 @@ export default function FindReservist({ mentorId, onBack }) {
   }, [language]);
 
   const handleAssign = async (reservistId) => {
+    console.log("mentorId: ", mentorId);
+    console.log("reservistId: ", reservistId);
     try {
       const res = await fetch('http://localhost:5000/api/assign-mentor', {
         method: 'POST',
