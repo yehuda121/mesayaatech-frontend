@@ -46,6 +46,11 @@ export default function ReserveRegisterForm() {
     return () => window.removeEventListener('languageChanged', handleLanguageChange);
   }, []);
 
+  const showAlert = (msg, type) => {
+    setAlert({ message: msg, type });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
@@ -63,7 +68,7 @@ export default function ReserveRegisterForm() {
   const validateForm = () => {
     const errors = [];
     const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
-    const phonePattern = /^\d{9,10}$/;
+    const phonePattern = /^(05\d{8}|05\d{1}-\d{7})$/;
     const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
 
     const fullName = formData.fullName.trim();
@@ -102,10 +107,9 @@ export default function ReserveRegisterForm() {
 
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
-      setAlert({ message: validationErrors[0], type: 'error' });
+      showAlert(validationErrors[0], 'error');
       return;
     }
-
     try {
       const existingRes = await fetch(`http://localhost:5000/api/imports-user-registration-form?userType=reservist`);
       const existingUsers = await existingRes.json();
@@ -114,13 +118,14 @@ export default function ReserveRegisterForm() {
       const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
 
       if (emailExists) {
-        setAlert({ message: t('emailAlreadyExists', language), type: 'error' });
+        showAlert(t('emailAlreadyExists', language), 'error');
         return;
       }
       if (idExists) {
-        setAlert({ message: t('idNumberAlreadyExists', language), type: 'error' });
+        showAlert(t('idNumberAlreadyExists', language), 'error');
         return;
       }
+
 
       const res = await fetch('http://localhost:5000/api/upload-registration-form', {
         method: 'POST',
@@ -149,10 +154,10 @@ export default function ReserveRegisterForm() {
       } else {
         const errorText = await res.text();
         console.error('Server error:', errorText);
-        setAlert({ message: `${t('reservistError', language)}: ${errorText}`, type: 'error' });
+        showAlert(`${t('reservistError', language)}: ${errorText}`, 'error');
       }
     } catch {
-      setAlert({ message: t('reservistError', language), type: 'error' });
+      showAlert(t('reservistError', language), 'error');
     }
   };
 
@@ -260,9 +265,9 @@ export default function ReserveRegisterForm() {
             className="h-24"
           />
         </label>
-
-
-        <Button text={t('submit', language)} type="submit" />
+        <div className='flex justify-center'>
+          <Button text={t('submit', language)} type="submit" />
+        </div>
       </form>
 
       {alert && (

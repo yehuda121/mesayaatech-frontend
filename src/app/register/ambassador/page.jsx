@@ -62,7 +62,7 @@ export default function AmbassadorRegisterForm() {
   const validateForm = () => {
     const errors = [];
     const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
-    const phonePattern = /^\d{9,10}$/;
+    const phonePattern = /^(05\d{8}|05\d{1}-\d{7})$/;
     const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
 
     const fullName = formData.fullName.trim();
@@ -97,7 +97,7 @@ export default function AmbassadorRegisterForm() {
 
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
-      setAlert({ message: validationErrors[0], type: 'error' });
+      showAlert(validationErrors[0], 'error');
       return;
     }
 
@@ -109,11 +109,11 @@ export default function AmbassadorRegisterForm() {
       const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
 
       if (emailExists) {
-        setAlert({ message: t('emailAlreadyExists', language), type: 'error' });
+        showAlert(t('emailAlreadyExists', language), 'error');
         return;
       }
       if (idExists) {
-        setAlert({ message: t('idNumberAlreadyExists', language), type: 'error' });
+        showAlert(t('idNumberAlreadyExists', language), 'error');
         return;
       }
 
@@ -142,11 +142,16 @@ export default function AmbassadorRegisterForm() {
         });
       } else {
         const errorText = await res.text();
-        setAlert({ message: `${t('ambassadorError', language)}: ${errorText}`, type: 'error' });
+        showAlert(`${t('ambassadorError', language)}: ${errorText}`, 'error');
       }
     } catch {
-      setAlert({ message: t('ambassadorError', language), type: 'error' });
+      showAlert(`${t('ambassadorError', language)}: ${errorText}`, 'error');
     }
+  };
+
+  const showAlert = (msg, type) => {
+    setAlert({ message: msg, type });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (!language) return null;
@@ -252,8 +257,9 @@ export default function AmbassadorRegisterForm() {
         <label>{t('notes', language)}:
           <textarea name="notes" value={formData.notes} onChange={handleChange} className="h-24" />
         </label>
-
-        <Button text={t('submit', language)} type="submit" />
+        <div className='flex justify-center'>
+          <Button text={t('submit', language)} type="submit" />
+        </div>
       </form>
 
       {alert && (

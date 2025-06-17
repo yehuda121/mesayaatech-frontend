@@ -54,7 +54,7 @@ export default function MentorRegisterForm() {
   const validateForm = () => {
     const errors = [];
     const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
-    const phonePattern = /^\d{9,10}$/;
+    const phonePattern = /^(05\d{8}|05\d{1}-\d{7})$/;
     const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
 
     const fullName = formData.fullName.trim();
@@ -93,7 +93,7 @@ export default function MentorRegisterForm() {
 
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
-      setAlert({ message: validationErrors[0], type: 'error' });
+      showAlert(validationErrors[0], 'error');
       return;
     }
 
@@ -105,7 +105,7 @@ export default function MentorRegisterForm() {
       const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
 
       if (emailExists) {
-        setAlert({ message: t('emailAlreadyExists', language), type: 'error' });
+        showAlert(t('emailAlreadyExists', language), 'error');
         return;
       }
       if (idExists) {
@@ -140,10 +140,10 @@ export default function MentorRegisterForm() {
         });
       } else {
         const errorText = await res.text();
-        setAlert({ message: `${t('mentorError', language)}: ${errorText}`, type: 'error' });
+        showAlert(`${t('mentorError', language)}: ${errorText}`, 'error');
       }
     } catch {
-      setAlert({ message: t('mentorError', language), type: 'error' });
+      showAlert(`${t('mentorError', language)}: ${errorText}`, 'error');
     }
   };
 
@@ -156,6 +156,11 @@ export default function MentorRegisterForm() {
     "בניית מסלול קריירה": { he: " בניית מסלול קריירה", en: " Career Path Planning" },
     "שיפור מיומנויות רכות": { he: " שיפור מיומנויות רכות", en: " Soft Skills Improvement" },
     "אחר": { he: " אחר", en: " Other" }
+  };
+
+  const showAlert = (msg, type) => {
+    setAlert({ message: msg, type });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -269,9 +274,10 @@ export default function MentorRegisterForm() {
             className="h-24"
           />
         </label>
+        <div className='flex justify-center'>
+          <Button text={t('submit', language)} type="submit" />
+        </div>
 
-
-        <Button text={t('submit', language)} type="submit" />
       </form>
 
       {alert && (

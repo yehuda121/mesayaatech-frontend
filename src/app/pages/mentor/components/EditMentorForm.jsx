@@ -38,7 +38,7 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
   const validateForm = () => {
     const errors = [];
     const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
-    const phonePattern = /^\d{9,10}$/;
+    const phonePattern = /^(05\d{8}|05\d{1}-\d{7})$/;
     const idPattern = /^\d{9}$/;
     const urlPattern = /^https?:\/\/[\w\.-]+\.\w+/;
 
