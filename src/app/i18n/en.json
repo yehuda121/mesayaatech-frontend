@@ -409,7 +409,46 @@
     "confirmDeleteQuestionTitle": "Confirm Question Deletion",
     "confirmDeleteQuestionText": "Are you sure you want to delete this question?",
     "deleteSuccess": "Question deleted successfully",
-    "noAnswersYet": "No answers yet"
+    "noAnswersYet": "No answers yet",
+    "Jerusalem": "Jerusalem",
+    "jerusalem": "Jerusalem",
+    "Hermon": "Hermon",
+    "hermon": "Hermon",
+    "Carmel": "Carmel",
+    "carmel": "Carmel",
+    "Tabor": "Tabor",
+    "tabor": "Tabor",
+    "Gilboa": "Gilboa",
+    "gilboa": "Gilboa",
+    "Arbel": "Arbel",
+    "arbel": "Arbel",
+    "Meron": "Meron",
+    "meron": "Meron",
+    "Eilat": "Eilat",
+    "eilat": "Eilat",
+    "Ramon": "Ramon",
+    "ramon": "Ramon",
+    "Amos": "Amos",
+    "amos": "Amos",
+    "Atzmon": "Atzmon",
+    "atzmon": "Atzmon",
+    "selectLocation": "Select location",
+    "forgotPassword": "Forgot Password",
+    "forgotPasswordTitle": "Reset Password",
+    "sendVerificationCode": "Send Verification Code",
+    "verificationCodeSent": "Verification code sent to email",
+    "forgotPasswordError": "Error sending verification code",
+    "sending": "Sending...",
+    "resetPasswordTitle": "Reset Password",
+    "verificationCode": "Verification Code",
+    "newPassword": "New Password",
+    "resetPasswordButton": "Reset Password",
+    "passwordResetSuccess": "Password reset successfully! You can now login.",
+    "resetPasswordError": "Error resetting password",
+    "generatePassword": "Generate random password"
+
+
+
 
 
 }

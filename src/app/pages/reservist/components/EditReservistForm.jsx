@@ -7,6 +7,7 @@ import AlertMessage from '@/app/components/notifications/AlertMessage';
 import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 import Button from '@/app/components/Button';
 import '../../../register/registrationForm.css';
+import { locations } from '@/app/components/Locations';
 
 export default function EditReservistForm({ userData, mentorId, mentorName, onSave, onClose, onDelete, role }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -216,7 +217,22 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
           </label>
 
           <label>{t('location', language)}*:
-            <input name="location" value={formData.location || ''} onChange={handleChange} />
+            <select name="location" value={formData.location} onChange={handleChange}>
+              <option value="">{t('selectLocation', language)}</option>
+              {locations.map((region, regionIndex) => (
+                <optgroup 
+                  key={regionIndex} 
+                  className='font-bold'
+                  label={language === 'he' ? region.region.he : region.region.en}
+                >
+                  {region.locations.map((loc, locIndex) => (
+                    <option key={locIndex} value={language === 'he' ? loc.he : loc.en}>
+                      {language === 'he' ? loc.he : loc.en}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
           </label>
 
           <label>{t('fields', language)}:

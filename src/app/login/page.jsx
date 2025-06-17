@@ -118,6 +118,16 @@ export default function LoginPage() {
           {t('loginButton', language)}
         </button>
 
+        <div className="text-center mt-3">
+          <button 
+            type="button" 
+            className="text-sm underline text-blue-600 hover:text-blue-800"
+            onClick={() => router.push('/login/forgot-password')}
+          >
+            {t('forgotPassword', language)}
+          </button>
+        </div>
+
         </form>
         {message && <p className="text-center text-red-500">{message}</p>}
       </div>

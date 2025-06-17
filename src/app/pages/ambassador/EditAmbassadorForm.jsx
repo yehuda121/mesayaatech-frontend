@@ -8,6 +8,7 @@ import AlertMessage from '@/app/components/notifications/AlertMessage';
 import Button from '@/app/components/Button';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import '../../register/registrationForm.css';
+import { locations } from '@/app/components/Locations';
 
 export default function EditAmbassadorForm({ userData, onSave , onClose, onDelete, role }) {
   const router = useRouter();
@@ -168,7 +169,22 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
           </label>
 
           <label>{t('location', language)}*:
-            <input name="location" value={formData.location || ''} onChange={handleChange} />
+            <select name="location" value={formData.location} onChange={handleChange}>
+              <option value="">{t('selectLocation', language)}</option>
+              {locations.map((region, regionIndex) => (
+                <optgroup 
+                  key={regionIndex} 
+                  className='font-bold'
+                  label={language === 'he' ? region.region.he : region.region.en}
+                >
+                  {region.locations.map((loc, locIndex) => (
+                    <option key={locIndex} value={language === 'he' ? loc.he : loc.en}>
+                      {language === 'he' ? loc.he : loc.en}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
           </label>
 
           <label>{t('canShareJobs', language)}*:

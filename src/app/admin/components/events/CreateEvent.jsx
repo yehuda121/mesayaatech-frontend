@@ -5,6 +5,7 @@ import { getLanguage } from '../../../language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
+import '../../admin.css'
 
 export default function CreateEventForm() {
   const [language, setLanguage] = useState(getLanguage());
@@ -100,7 +101,7 @@ export default function CreateEventForm() {
   ];
 
   return (
-    <div dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div className='admin-create-event' dir={language === 'he' ? 'rtl' : 'ltr'}>
       <GenericForm
         titleKey="createEventTitle"
         fields={fields}

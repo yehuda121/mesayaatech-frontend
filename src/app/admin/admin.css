@@ -225,3 +225,13 @@
   width: 100%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
+
+/* create event */
+.admin-create-event {
+  margin-right: 7%;
+}
+@media (max-width: 768px) {
+  .admin-create-event {
+    margin-right: 0;
+  }
+}

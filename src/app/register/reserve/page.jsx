@@ -6,6 +6,7 @@ import Button from '../../components/Button';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage'; 
 import '../registrationForm.css';
+import { locations } from '@/app/components/Locations';
 
 export default function ReserveRegisterForm() {
   const router = useRouter();
@@ -199,8 +200,26 @@ export default function ReserveRegisterForm() {
           <input name="armyRole" value={formData.armyRole} onChange={handleChange} />
         </label>
 
-        <label>{t('location', language)}*:
+        {/* <label>{t('location', language)}*:
           <input name="location" value={formData.location} onChange={handleChange} />
+        </label> */}
+        <label>{t('location', language)}*:
+          <select name="location" value={formData.location} onChange={handleChange}>
+            <option value="">{t('selectLocation', language)}</option>
+            {locations.map((region, regionIndex) => (
+              <optgroup 
+                key={regionIndex} 
+                className='font-bold'
+                label={language === 'he' ? region.region.he : region.region.en}
+              >
+                {region.locations.map((loc, locIndex) => (
+                  <option key={locIndex} value={language === 'he' ? loc.he : loc.en}>
+                    {language === 'he' ? loc.he : loc.en}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
         </label>
 
         <fieldset>
