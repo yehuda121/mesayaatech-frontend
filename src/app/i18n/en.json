@@ -33,7 +33,6 @@
     "delete": "Delete",
     "confirmDeleteUser": "Are you sure you want to delete this user?",
     "assignedReservists": "Assigned Reservists",
-    "noReservistsAssigned": "No reservists assigned",
     "notInterestedInMentor": "Not interested in a mentor right now",
     "noMentorAssigned": "No mentor assigned",
     "mentorDataUnavailable": "Mentor data is unavailable",
@@ -291,7 +290,7 @@
     "mentorshipProgressTitle": "Mentorship Progress",
     "currentStage": "Current Stage",
     "advanceStage": "Advance to Next Stage",
-    "addMeeting": "Add Meeting",
+    "addMeeting": "Add a meeting record",
     "meetingHistory": "Meeting History",
     "noMeetingsYet": "No meetings yet",
     "mode": "Meeting Mode",
@@ -445,7 +444,11 @@
     "resetPasswordButton": "Reset Password",
     "passwordResetSuccess": "Password reset successfully! You can now login.",
     "resetPasswordError": "Error resetting password",
-    "generatePassword": "Generate random password"
+    "generatePassword": "Generate random password",
+    "notesIsTooLong": "Notes is too long (max 500 notes)",
+    "abotMeIsTooLong": "About me is too long (max 1000 notes)",
+    "mentorName": "Mentor name",
+    "reservistName": "Reservist name"
 
 
 

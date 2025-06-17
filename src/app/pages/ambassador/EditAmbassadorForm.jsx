@@ -9,6 +9,7 @@ import Button from '@/app/components/Button';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import '../../register/registrationForm.css';
 import { locations } from '@/app/components/Locations';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function EditAmbassadorForm({ userData, onSave , onClose, onDelete, role }) {
   const router = useRouter();
@@ -58,6 +59,10 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
     const location = formData.location?.trim() || '';
     const canShareJobs = formData.canShareJobs?.trim() || '';
     const linkedin = formData.linkedin?.trim() || '';
+    const currentCompany = sanitizeText(formData.currentCompany || '', 200);
+    const position = sanitizeText(formData.position || '', 200);
+    const notes = sanitizeText(formData.notes || '', 500);
+    const aboutMe = sanitizeText(formData.aboutMe || '', 1000);
 
     if (!fullName) errors.push(t('fullNameRequired', language));
     else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
@@ -65,7 +70,7 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
 
     if (!idPattern.test(idNumber)) errors.push(t('idNumberInvalid', language));
 
-    if (phone && (phone.length !== 11  || phone.length !== 10) && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
+    if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
 
     if (!location) errors.push(t('locationRequired', language));
     else if (location.length > 60) errors.push(t('locationTooLong', language));
@@ -74,6 +79,11 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
 
     if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
     else if (linkedin.length > 200) errors.push(t('linkedinTooLong', language));
+
+    if (currentCompany === 'tooLong') errors.push(t('currentCompanyIsTooLong', language));
+    if (position === 'tooLong') errors.push(t('positionIsTooLong', language));
+    if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
+    if (aboutMe === 'tooLong') errors.push(t('aboutMeIsTooLong', language));
 
     return errors;
   };

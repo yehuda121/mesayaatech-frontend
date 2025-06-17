@@ -8,6 +8,7 @@ import AlertMessage from '@/app/components/notifications/AlertMessage';
 import Button from '@/app/components/Button';
 import '../../../register/registrationForm.css';
 import { locations } from '@/app/components/Locations';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function EditMentorForm({ userData, onSave, onClose, onDelete, role }) {
   const router = useRouter();
@@ -46,10 +47,15 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
     const email = formData.email?.trim() || '';
     const phone = formData.phone?.trim() || '';
     const idNumber = formData.idNumber?.trim() || '';
-    const profession = formData.profession?.trim() || '';
+    const profession = sanitizeText(formData.profession || '', 60);
+    const armyRole = sanitizeText(formData.armyRole || '', 200);
     const location = formData.location?.trim() || '';
-    const experience = formData.experience?.trim() || '';
+    const specialties = sanitizeText(formData.specialties || '', 500);
+    const experience = sanitizeText(formData.experience || '', 1000);
+    const pastMentoring = sanitizeText(formData.pastMentoring || '', 1000);
     const linkedin = formData.linkedin?.trim() || '';
+    const aboutMeIntroMentor = sanitizeText(formData.aboutMeIntroMentor || '', 1000);
+    const notes = sanitizeText(formData.notes || '', 500);
 
     if (!fullName) errors.push(t('fullNameRequired', language));
     else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
@@ -64,19 +70,26 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
     if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
 
     if (!profession) errors.push(t('mainProfessionRequired', language));
-    else if (profession.length > 60) errors.push(t('professionTooLong', language));
+    else if (profession === 'tooLong') errors.push(t('professionTooLong', language));
 
     if (!location) errors.push(t('locationRequired', language));
     else if (location.length > 60) errors.push(t('locationTooLong', language));
 
     if (!experience) errors.push(t('experienceRequired', language));
-    else if (experience.length > 1000) errors.push(t('experienceTooLong', language));
+    else if (experience === 'tooLong') errors.push(t('experienceTooLong', language));
 
     if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
     else if (linkedin.length > 200) errors.push(t('linkedinTooLong', language));
 
+    if (armyRole === 'tooLong') errors.push(t('armyRoleTooLong', language));
+    if (specialties === 'tooLong') errors.push(t('specialtiesTooLong', language));
+    if (pastMentoring === 'tooLong') errors.push(t('pastMentoringTooLong', language));
+    if (aboutMeIntroMentor === 'tooLong') errors.push(t('aboutMeTooLong', language));
+    if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
+
     return errors;
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

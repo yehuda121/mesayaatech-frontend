@@ -10,6 +10,7 @@ import AddNewMeeting from './AddNewMeeting';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { Edit2, Trash2 } from 'lucide-react';
 import EditMeeting from './EditMeeting';
+import '../../mentor.css';
 
 export default function MentorshipProgress({ reservistId, mentorId }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -115,6 +116,11 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
 
       {progressData && (
         <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+            dir={language === 'he' ? 'rtl' : 'ltr'}>
+            <h1 className='font-bold'>{t('reservistName', language)}:</h1>
+            <h1>{progressData.reservistName}</h1>
+          </div>
           <p className="mt-4 text-lg">
             <span
               className={`px-3 py-1 rounded-full font-semibold inline-block ${
@@ -142,7 +148,8 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
                 disabled={progressData?.progressStage >= 5} 
               />
             </div>
-              <Button text={t('addMeeting', language)} onClick={() => setShowModal(true)} />
+            
+            <Button text={t('addMeeting', language)} onClick={() => setShowModal(true)} />
           </div>
 
           <GenericCardSection
@@ -172,46 +179,37 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
           />
           </div>
         )}
-
-        {showModal && (
-          <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          }}>
-          <AddNewMeeting
-            mentorId={mentorId}
-            reservistId={reservistId}
-            onAdd={() => {
-            fetchProgress();
-            setShowModal(false);
-            }}
-            onClose={() => setShowModal(false)}
-          />
-          </div>
-        )}
-
-        {editingMeetingIndex !== null && progressData?.meetings?.[editingMeetingIndex] && (
-          <div style={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}>
-            <EditMeeting
-              meeting={progressData.meetings[editingMeetingIndex]}
-              index={editingMeetingIndex}
+        <div className="mentor-editMeeting-add-new-meeting-container">
+          {showModal && (
+            <div className='mentor-add-new-meeting'>
+            <AddNewMeeting
               mentorId={mentorId}
               reservistId={reservistId}
-              onSave={() => {
+              onAdd={() => {
                 fetchProgress();
-                setEditingMeetingIndex(null);
+                setShowModal(false);
               }}
-              onClose={() => setEditingMeetingIndex(null)}
+              onClose={() => setShowModal(false)}
             />
-          </div>
-        )}
+            </div>
+          )}
+
+          {editingMeetingIndex !== null && progressData?.meetings?.[editingMeetingIndex] && (
+            <div className='mentor-add-new-meeting'>
+              <EditMeeting
+                meeting={progressData.meetings[editingMeetingIndex]}
+                index={editingMeetingIndex}
+                mentorId={mentorId}
+                reservistId={reservistId}
+                onSave={() => {
+                  fetchProgress();
+                  setEditingMeetingIndex(null);
+                }}
+                onClose={() => setEditingMeetingIndex(null)}
+              />
+            </div>
+          )}
+        </div>
 
         {toast && <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
         {confirmDialog && <ConfirmDialog {...confirmDialog} />}

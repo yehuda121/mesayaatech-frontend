@@ -7,6 +7,7 @@ import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage'; 
 import '../registrationForm.css';
 import { locations } from '@/app/components/Locations';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function ReserveRegisterForm() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function ReserveRegisterForm() {
     experience: '',
     linkedin: '',
     notes: '',
+    aboutMe: '',
   });
 
   const translatedFields = {
@@ -77,8 +79,10 @@ export default function ReserveRegisterForm() {
     const phone = formData.phone.trim();
     const armyRole = formData.armyRole.trim();
     const location = formData.location.trim();
-    const experience = formData.experience.trim();
+    const experience = sanitizeText(formData.experience, 1000);
     const linkedin = formData.linkedin.trim();
+    const notes = sanitizeText(formData.notes, 500);
+    const aboutMe = sanitizeText(formData.aboutMe, 1000);
 
     if (!fullName) errors.push(t('fullNameRequired', language));
     else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
@@ -96,11 +100,17 @@ export default function ReserveRegisterForm() {
     if (!location) errors.push(t('locationRequired', language));
 
     if (!experience) errors.push(t('experienceRequired', language));
+    else if (experience === 'tooLong') errors.push(t('experienceIsTooLong', language));
 
     if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
 
+    if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
+
+    if (aboutMe === 'tooLong') errors.push(t('aboutMeIsTooLong', language));
+
     return errors;
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -205,9 +215,6 @@ export default function ReserveRegisterForm() {
           <input name="armyRole" value={formData.armyRole} onChange={handleChange} />
         </label>
 
-        {/* <label>{t('location', language)}*:
-          <input name="location" value={formData.location} onChange={handleChange} />
-        </label> */}
         <label>{t('location', language)}*:
           <select name="location" value={formData.location} onChange={handleChange}>
             <option value="">{t('selectLocation', language)}</option>
@@ -252,7 +259,11 @@ export default function ReserveRegisterForm() {
         </label>
 
         <label>{t('reservistNotes', language)}:
-          <textarea name="notes" value={formData.notes} onChange={handleChange} className="h-24" />
+          <textarea name="notes" 
+            value={formData.notes} 
+            onChange={handleChange} 
+            className="h-24" 
+          />
         </label>
 
         <label>

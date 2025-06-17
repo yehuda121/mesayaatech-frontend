@@ -290,7 +290,7 @@
     "mentorshipProgressTitle": "התקדמות בתהליך הליווי",
     "currentStage": "שלב נוכחי",
     "advanceStage": "התקדם לשלב הבא",
-    "addMeeting": "הוסף פגישה",
+    "addMeeting": "הוסף תיעוד לפגישה",
     "meetingHistory": "היסטוריית פגישות",
     "noMeetingsYet": "אין פגישות עדיין",
     "mode": "אופן הפגישה",
@@ -444,7 +444,11 @@
     "resetPasswordButton": "אפס סיסמה",
     "passwordResetSuccess": "הסיסמה אופסה בהצלחה! ניתן להתחבר מחדש",
     "resetPasswordError": "שגיאה באיפוס הסיסמה",
-    "generatePassword": "צור סיסמה אקראית"
+    "generatePassword": "צור סיסמה אקראית",
+    "notesIsTooLong": "הערה ארוכה מידי (מקסימום 500 תווים)",
+    "abotMeIsTooLong": "ספר על עצמך ארוך מידי (מקסימום 1000 תווים)",
+    "mentorName": "שם המנטור",
+    "reservistName": "שם המילואימניק"
 
 
 

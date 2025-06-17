@@ -7,6 +7,7 @@ import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage'; 
 import '../registrationForm.css';
 import { locations } from '@/app/components/Locations';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function MentorRegisterForm() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function MentorRegisterForm() {
     availability: '',
     linkedin: '',
     notes: '',
+    aboutMe: '',
   });
 
   useEffect(() => {
@@ -63,8 +65,12 @@ export default function MentorRegisterForm() {
     const phone = formData.phone.trim();
     const profession = formData.profession.trim();
     const location = formData.location.trim();
-    const experience = formData.experience.trim();
+    const experience = sanitizeText(formData.experience, 1000);
+    const pastMentoring = sanitizeText(formData.pastMentoring, 1000);
+    const availability = sanitizeText(formData.availability, 200);
     const linkedin = formData.linkedin.trim();
+    const notes = sanitizeText(formData.notes, 500);
+    const aboutMe = sanitizeText(formData.aboutMe, 1000);
 
     if (!fullName) errors.push(t('fullNameRequired', language));
     else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
@@ -82,8 +88,17 @@ export default function MentorRegisterForm() {
     if (!location) errors.push(t('locationRequired', language));
 
     if (!experience) errors.push(t('experienceRequired', language));
+    else if (experience === 'tooLong') errors.push(t('experienceIsTooLong', language));
+
+    if (pastMentoring === 'tooLong') errors.push(t('pastMentoringIsTooLong', language));
+
+    if (availability === 'tooLong') errors.push(t('availabilityIsTooLong', language));
 
     if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
+
+    if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
+
+    if (aboutMe === 'tooLong') errors.push(t('aboutMeIsTooLong', language));
 
     return errors;
   };

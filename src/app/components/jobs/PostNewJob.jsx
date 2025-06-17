@@ -7,8 +7,8 @@ import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import Button from '@/app/components/Button';
-import { JobFields } from '@/app/components/jobs/jobFields';
 import './jobs.css';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function PostNewJob({ publisherId, publisherType, onSave, onClose }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -156,22 +156,42 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
     const errors = [];
     const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
     const urlPattern = /^https?:\/\/[\w\.-]+\.\w+/;
-    const { field, company, role, location, minExperience, description, requirements, advantages, submitEmail, submitLink, companyWebsite, jobViewLink } = jobData;
 
-    if (!field?.trim()) errors.push(t('fieldRequired', language));
-    if (!company?.trim()) errors.push(t('companyRequired', language));
-    else if (company.trim().length > 100) errors.push(t('companyTooLong', language));
-    if (!role?.trim()) errors.push(t('roleRequired', language));
-    else if (role.trim().length > 100) errors.push(t('roleTooLong', language));
-    if (location?.trim().length > 60) errors.push(t('locationTooLong', language));
+    const field = jobData.field?.trim() || '';
+    const company = sanitizeText(jobData.company || '', 100);
+    const location = sanitizeText(jobData.location || '', 60);
+    const role = sanitizeText(jobData.role || '', 100);
+    const minExperience = jobData.minExperience;
+    const description = sanitizeText(jobData.description || '', 1000);
+    const requirements = sanitizeText(jobData.requirements || '', 1000);
+    const advantages = sanitizeText(jobData.advantages || '', 1000);
+    const submitEmail = jobData.submitEmail?.trim() || '';
+    const submitLink = jobData.submitLink?.trim() || '';
+    const companyWebsite = jobData.companyWebsite?.trim() || '';
+    const jobViewLink = jobData.jobViewLink?.trim() || '';
+
+    if (!field) errors.push(t('fieldRequired', language));
+
+    if (!company) errors.push(t('companyRequired', language));
+    else if (company === 'tooLong') errors.push(t('companyTooLong', language));
+
+    if (!role) errors.push(t('roleRequired', language));
+    else if (role === 'tooLong') errors.push(t('roleTooLong', language));
+
+    if (location && location === 'tooLong') errors.push(t('locationTooLong', language));
+
     if (minExperience && isNaN(minExperience)) errors.push(t('experienceInvalid', language));
-    if (description?.trim().length > 1000) errors.push(t('descriptionTooLong', language));
-    if (requirements?.trim().length > 1000) errors.push(t('requirementsTooLong', language));
-    if (advantages?.trim().length > 1000) errors.push(t('advantagesTooLong', language));
-    if (submitEmail?.trim() && !emailPattern.test(submitEmail.trim())) errors.push(t('emailInvalid', language));
-    if (submitLink?.trim() && !urlPattern.test(submitLink.trim())) errors.push(t('urlInvalid', language));
-    if (companyWebsite?.trim() && !urlPattern.test(companyWebsite.trim())) errors.push(t('urlInvalid', language));
-    if (jobViewLink?.trim() && !urlPattern.test(jobViewLink.trim())) errors.push(t('urlInvalid', language));
+
+    if (description === 'tooLong') errors.push(t('descriptionTooLong', language));
+    if (requirements === 'tooLong') errors.push(t('requirementsTooLong', language));
+    if (advantages === 'tooLong') errors.push(t('advantagesTooLong', language));
+
+    if (submitEmail && !emailPattern.test(submitEmail)) errors.push(t('emailInvalid', language));
+
+    if (submitLink && !urlPattern.test(submitLink)) errors.push(t('urlInvalid', language));
+    if (companyWebsite && !urlPattern.test(companyWebsite)) errors.push(t('urlInvalid', language));
+    if (jobViewLink && !urlPattern.test(jobViewLink)) errors.push(t('urlInvalid', language));
+
     return errors;
   };
 
@@ -202,6 +222,7 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
       if (response.ok) {
         const result = await response.json();
         setToast({ message: t('jobAddedSuccessfully', language), type: 'success' });
+        resetForm();
         onSave(result);
         onClose();
       } else {

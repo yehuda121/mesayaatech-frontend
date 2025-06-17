@@ -8,6 +8,7 @@ import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 import Button from '@/app/components/Button';
 import '../../../register/registrationForm.css';
 import { locations } from '@/app/components/Locations';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function EditReservistForm({ userData, mentorId, mentorName, onSave, onClose, onDelete, role }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -34,11 +35,17 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
     const { name, value, type, checked } = e.target;
 
     if (type === 'checkbox') {
-      const newValue = checked;
-      if (name === 'notInterestedInMentor') {
-        handleNotInterestedChange(newValue);
+      if (name === 'fields') {
+        setFormData(prev => ({
+          ...prev,
+          fields: checked
+            ? [...(prev.fields || []), value]
+            : (prev.fields || []).filter(f => f !== value),
+        }));
+      } else if (name === 'notInterestedInMentor') {
+        handleNotInterestedChange(checked);
       } else {
-        setFormData(prev => ({ ...prev, [name]: newValue }));
+        setFormData(prev => ({ ...prev, [name]: checked }));
       }
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
@@ -83,10 +90,13 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
     const email = formData.email?.trim() || '';
     const phone = formData.phone?.trim() || '';
     const idNumber = formData.idNumber?.trim() || '';
-    const armyRole = formData.armyRole?.trim() || '';
+    const armyRole = sanitizeText(formData.armyRole || '', 60);
     const location = formData.location?.trim() || '';
-    const experience = formData.experience?.trim() || '';
+    const fields = formData.fields || [];
+    const experience = sanitizeText(formData.experience || '', 1000);
     const linkedin = formData.linkedin?.trim() || '';
+    const aboutMeIntro = sanitizeText(formData.aboutMeIntro || '', 1000);
+    const notes = sanitizeText(formData.notes || '', 500);
 
     if (!fullName) errors.push(t('fullNameRequired', language));
     else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
@@ -100,17 +110,19 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
     if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
 
     if (!armyRole) errors.push(t('armyRoleRequired', language));
-    else if (/[^\w\sא-ת]/.test(armyRole)) errors.push(t('armyRoleInvalid', language));
-    else if (armyRole.length > 60) errors.push(t('professionTooLong', language));
+    else if (armyRole === 'tooLong') errors.push(t('professionTooLong', language));
 
     if (!location) errors.push(t('locationRequired', language));
     else if (location.length > 60) errors.push(t('locationTooLong', language));
 
     if (!experience) errors.push(t('experienceRequired', language));
-    else if (experience.length > 1000) errors.push(t('experienceTooLong', language));
+    else if (experience === 'tooLong') errors.push(t('experienceTooLong', language));
 
     if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
     else if (linkedin.length > 200) errors.push(t('linkedinTooLong', language));
+
+    if (aboutMeIntro === 'tooLong') errors.push(t('aboutMeTooLong', language));
+    if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
 
     return errors;
   };
@@ -235,9 +247,22 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
             </select>
           </label>
 
-          <label>{t('fields', language)}:
-            <input name="fields" value={formData.fields || ''} onChange={handleChange} />
-          </label>
+          <fieldset>
+            <legend>{t('fields', language)}</legend>
+            {['הייטק', 'ניהול', 'לוגיסטיקה', 'חינוך', 'שיווק', 'אחר'].map((field) => (
+              <label key={field} className="register-checkbox-label" style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}>
+                <input
+                  type="checkbox"
+                  name="fields"
+                  value={field}
+                  checked={(formData.fields || []).includes(field)}
+                  onChange={handleChange}
+                />
+                {field}
+              </label>
+            ))}
+          </fieldset>
+
 
           <label>{t('experience', language)}*:
             <textarea name="experience" value={formData.experience || ''} onChange={handleChange} />

@@ -7,6 +7,7 @@ import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage'; 
 import '../registrationForm.css';
 import { locations } from '@/app/components/Locations';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function AmbassadorRegisterForm() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function AmbassadorRegisterForm() {
     jobFields: [],
     linkedin: '',
     notes: '',
+    aboutMe: '',
   });
 
   const translatedJobFields = {
@@ -69,9 +71,13 @@ export default function AmbassadorRegisterForm() {
     const idNumber = formData.idNumber.replace(/\s/g, '');
     const email = formData.email.trim();
     const phone = formData.phone.trim();
+    const currentCompany = sanitizeText(formData.currentCompany, 200);
+    const position = sanitizeText(formData.position, 200);
     const location = formData.location.trim();
     const canShare = formData.canShareJobs.trim();
     const linkedin = formData.linkedin.trim();
+    const notes = sanitizeText(formData.notes, 500);
+    const aboutMe = sanitizeText(formData.aboutMe, 1000);
 
     if (!fullName) errors.push(t('fullNameRequired', language));
     else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
@@ -88,6 +94,14 @@ export default function AmbassadorRegisterForm() {
     if (!canShare) errors.push(t('canShareRequired', language));
 
     if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
+
+    if (currentCompany === 'tooLong') errors.push(t('currentCompanyIsTooLong', language));
+
+    if (position === 'tooLong') errors.push(t('positionIsTooLong', language));
+
+    if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
+
+    if (aboutMe === 'tooLong') errors.push(t('aboutMeIsTooLong', language));
 
     return errors;
   };

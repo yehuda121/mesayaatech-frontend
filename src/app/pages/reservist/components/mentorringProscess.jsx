@@ -74,6 +74,11 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
 
       {mentorId && progressData && (
         <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+            dir={language === 'he' ? 'rtl' : 'ltr'}>
+            <h1 className='font-bold'>{t('mentorName', language)}:</h1>
+            <h1>{progressData.mentorName}</h1>
+          </div>
           <p className="mt-4 mb-4 text-lg">
             <span
               className={`px-3 py-1 rounded-full font-semibold inline-block ${

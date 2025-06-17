@@ -212,6 +212,7 @@ export default function MentorHomePage() {
                 setToast({ message: t('jobPostedSuccess', language), type: 'success' });
                 setView('dashboard');
               }}
+              onClose={() => handleNavigation('post-job')}
             />
           </div>
         )}
