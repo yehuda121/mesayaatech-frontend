@@ -107,14 +107,12 @@ export default function FindReservist({ mentorId, onBack }) {
           <FileSearch size={18} />
         </button>
       </div>
-
-
     </div>
   );
 
   return (
     <div className="find-reservist-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <h2 className="text-xl font-bold mb-4">{t('findReservist', language)}</h2>
+      <h2 className="text-xl font-bold mb-4 mt-5 text-center">{t('findReservist', language)}</h2>
 
       <GenericCardSection
         titleKey="recommendedReservists"

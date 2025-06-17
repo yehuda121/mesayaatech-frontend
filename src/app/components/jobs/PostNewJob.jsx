@@ -236,16 +236,36 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
       <div className="auto-fill-box">
         <h2 className="auto-fill-title">{t('autoFillTitle', language)}</h2>
         <p className="auto-fill-description">{t('autoFillExplanation', language)}</p>
-        <textarea className="auto-fill-textarea" value={jobData.jobTextInput} onChange={(e) => setJobData((prev) => ({ ...prev, jobTextInput: e.target.value }))} placeholder={t('textInputPlaceholder', language)} />
+        <textarea 
+          className="auto-fill-textarea" 
+          value={jobData.jobTextInput} 
+          onChange={(e) => setJobData((prev) => ({ ...prev, jobTextInput: e.target.value }))} 
+          placeholder={t('textInputPlaceholder', language)} 
+        />
         <div className="upload-section">
-          <label>{t('uploadImageLabel', language)}</label>
-          <input type="file" accept="image/*" ref={fileInputRef} onChange={(e) => { const file = e.target.files[0]; setJobData((prev) => ({ ...prev, attachment: file })); }} />
+          <label className='ml-4 font-bold'>{t('uploadImageLabel', language)}</label>
+          <input 
+            type="file" 
+            accept="image/*" 
+            ref={fileInputRef} 
+            onChange={(e) => { const file = e.target.files[0]; 
+            setJobData((prev) => ({ ...prev, attachment: file })); }} 
+          />
         </div>
         <Button text={t('autoFillButton', language)} onClick={handleAutoFill} />
       </div>
 
-      <div className="add-job-box mt-4">
-        <GenericForm titleKey="postNewJob" fields={fields} data={jobData} onChange={handleFormChange} onPrimary={handleSubmit} onSecondary={onClose} primaryLabel={loading ? '' : 'submitJob'} secondaryLabel="cancel" disabledPrimary={loading} />
+      <div className="add-job-box">
+        <GenericForm 
+          titleKey="postNewJob" 
+          fields={fields} 
+          data={jobData} 
+          onChange={handleFormChange} 
+          onPrimary={handleSubmit} 
+          onSecondary={onClose} 
+          primaryLabel={loading ? '' : 'submitJob'} 
+          secondaryLabel="cancel" disabledPrimary={loading} 
+        />
       </div>
 
       {toast && <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />}

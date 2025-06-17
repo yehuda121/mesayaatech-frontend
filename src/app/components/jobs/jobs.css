@@ -110,12 +110,12 @@
 .auto-fill-box {
   background: #f9f9f9;
   padding: 20px;
-  margin-bottom: 24px;
   border-radius: 12px;
   border: 1px solid #ddd;
   width: 80%;
   margin: 0 auto 24px auto;
   text-align: center;
+  margin-bottom: 0;
 }
 
 .auto-fill-title {
@@ -141,4 +141,10 @@
 
 .upload-section {
   margin-bottom: 16px;
+}
+
+.add-job-box {
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 20px;
 }

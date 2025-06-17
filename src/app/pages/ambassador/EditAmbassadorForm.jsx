@@ -147,8 +147,12 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
             <input name="fullName" value={formData.fullName || ''} onChange={handleChange} />
           </label>
 
+          <label>{t('email', language)}*:
+            <input name="idNumber" value={formData.email || ''} readOnly />
+          </label>
+
           <label>{t('idNumber', language)}*:
-            <input name="idNumber" value={formData.idNumber || ''} readOnly />
+            <input name="email" value={formData.idNumber || ''} readOnly />
           </label>
 
           <label>{t('phone', language)}:

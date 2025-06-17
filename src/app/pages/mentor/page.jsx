@@ -166,7 +166,6 @@ export default function MentorHomePage() {
       <SideBar navItems={navItems} />
 
       <main className="mentor-main">
-        
         {view === 'dashboard' && (
           <>
             <h1 className="mentor-welcome">
@@ -349,7 +348,9 @@ export default function MentorHomePage() {
         )}
 
         {view === 'myReservists' && (
-          <MyReservists onManageReservist={handleManageReservist} />
+          <div className='mt-10'>
+            <MyReservists onManageReservist={handleManageReservist} />
+          </div>
         )}
 
         {view === 'manage-reservist' && selectedReservistId && (
