@@ -450,8 +450,12 @@
     "mentorName": "Mentor name",
     "reservistName": "Reservist name",
     "all": "All",
-    "likedQuestions": "Liked Questions"
-
+    "likedQuestions": "Liked Questions",
+    "eventsParticipants": "Participants per Event",
+    "eventsParticipantsTitle": "Number of Participants per Event",
+    "participantsChartDescription1": "The chart shows the number of participants per event.",
+    "participantsChartDescription2": "The X-axis shows the event title and date,",
+    "participantsChartDescription3": "and the Y-axis shows the number of participants."
 
 
 

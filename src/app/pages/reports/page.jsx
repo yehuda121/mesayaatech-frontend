@@ -21,6 +21,9 @@ import TopJobPublishersChart from '@/app/components/reports/charts/TopJobPublish
 import useMeetingsSummary from '@/app/components/reports/api/useMeetingsSummary';
 import useLocationsSummary from '@/app/components/reports/api/useLocationsSummary';
 import LocationsSummaryChart from '@/app/components/reports/charts/LocationsSummaryChart';
+import useEventsParticipantsCount from '@/app/components/reports/api/useEventsParticipantsCount';
+import EventsParticipantsCountChart from '@/app/components/reports/charts/EventsParticipantsCountChart';
+
 
 export default function ReportsDashboard() {
     const [view, setView] = useState('');
@@ -34,6 +37,7 @@ export default function ReportsDashboard() {
     const { publishersData, publishersError, publishersLoading } = useTopJobPublishers();
     const { meetingsSummaryData, meetingsSummaryError, meetingsSummaryLoading } = useMeetingsSummary();
     const { locationsData, locationsError, locationsLoading } = useLocationsSummary();
+    const { participantsData  } = useEventsParticipantsCount();
 
     useEffect(() => {
         const currentLang = getLanguage();
@@ -92,6 +96,12 @@ export default function ReportsDashboard() {
             labelEn: t('navLocationsSummary', 'en'),
             path: '#locationsSummary',
             onClick: () => handleNavigation('locationsSummary')
+        },
+        {
+            labelHe: t('eventsParticipants', 'he'),
+            labelEn: t('eventsParticipants', 'en'),
+            path: '#eventsParticipants',
+            onClick: () => handleNavigation('eventsParticipants')
         }
 
 
@@ -183,6 +193,15 @@ export default function ReportsDashboard() {
                         )}
                     </>
                 )}
+                {view === 'eventsParticipants' && (
+                    <>
+                        <div style={{ marginTop: '50px' }}>
+                            <h2 className='reports-title'>{t('eventsParticipantsTitle', language)}</h2>
+                            <EventsParticipantsCountChart data={participantsData } />
+                        </div>
+                    </>
+                )}
+
             </main>
         </div>
     );
