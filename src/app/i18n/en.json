@@ -448,7 +448,9 @@
     "notesIsTooLong": "Notes is too long (max 500 notes)",
     "abotMeIsTooLong": "About me is too long (max 1000 notes)",
     "mentorName": "Mentor name",
-    "reservistName": "Reservist name"
+    "reservistName": "Reservist name",
+    "all": "All",
+    "likedQuestions": "Liked Questions"
 
 
 

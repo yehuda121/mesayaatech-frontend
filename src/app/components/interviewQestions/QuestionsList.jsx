@@ -8,7 +8,6 @@ import Button from '@/app/components/Button';
 import { ThumbsUp, FileSearch, MessageCircleMore } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 
-
 export default function QuestionsPage({ onAnswer }) {
   const [language, setLanguage] = useState(getLanguage());
   const [questions, setQuestions] = useState([]);
@@ -18,6 +17,8 @@ export default function QuestionsPage({ onAnswer }) {
   const [userId, setUserId] = useState(null);
   const [userType, setUserType] = useState(null);
   const [idNumber, setIdNumber] = useState(null);
+  const [filterLikedOnly, setFilterLikedOnly] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   const categories = [
     { value: "", labelHe: "הכול", labelEn: "All" },
@@ -104,13 +105,18 @@ export default function QuestionsPage({ onAnswer }) {
 
 
   const filteredAndSorted = questions
-    .filter(q => !filteredCategory || q.category === filteredCategory)
+    .filter(q =>
+      q.text.toLowerCase().includes(searchText.toLowerCase()) &&
+      (!filteredCategory || q.category === filteredCategory) &&
+      (!filterLikedOnly || hasLiked(q.likes))
+    )
     .sort((a, b) => {
       if (sortMode === 'popular') {
         return (b.likes?.length || 0) - (a.likes?.length || 0);
       }
-      return new Date(b.createdAt) - new Date(a.createdAt); 
+      return new Date(b.createdAt) - new Date(a.createdAt);
     });
+
 
   const filters = [
     <div
@@ -124,19 +130,19 @@ export default function QuestionsPage({ onAnswer }) {
         justifyContent: 'space-between'
       }}
     >
+      <input
+        key="search"
+        type="text"
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        placeholder={t('searchByText', language)}
+        className="filter-input"
+      />
       <select
         key="category"
         value={filteredCategory}
         onChange={(e) => setFilteredCategory(e.target.value)}
-        style={{
-          flex: 1,
-          padding: '0.5rem 0.75rem',
-          border: '1px solid #ccc',
-          borderRadius: '6px',
-          fontSize: '1rem',
-          backgroundColor: '#fff',
-          minWidth: '0'
-        }}
+        className="filter-input"
       >
         {categories.map(cat => (
           <option key={cat.value} value={cat.value}>
@@ -144,27 +150,22 @@ export default function QuestionsPage({ onAnswer }) {
           </option>
         ))}
       </select>
-
       <select
         key="sort"
         value={sortMode}
         onChange={(e) => setSortMode(e.target.value)}
-        style={{
-          flex: 1,
-          padding: '0.5rem 0.75rem',
-          border: '1px solid #ccc',
-          borderRadius: '6px',
-          fontSize: '1rem',
-          backgroundColor: '#fff',
-          minWidth: '0'
-        }}
+        className="filter-input"
       >
         <option value="newest">{t('sortByNewest', language)}</option>
         <option value="popular">{t('sortByPopularity', language)}</option>
       </select>
+      <Button
+        onClick={() => setFilterLikedOnly(!filterLikedOnly)}
+      >
+        {filterLikedOnly ? t('cancel', language) : t('likedQuestions', language)}
+      </Button>
     </div>
   ];
-
 
   return (
     <div className='text-start' dir={language === 'he' ? 'rtl' : 'ltr'}>

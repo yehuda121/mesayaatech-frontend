@@ -8,6 +8,7 @@ import { ThumbsUp, Edit2, MessageCircle, Eye, Trash2 } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
+import Button from '@/app/components/Button';
 
 export default function AdminQuestions({ onEdit, onAnswer, onView }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -18,9 +19,11 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
   const [filteredCategory, setFilteredCategory] = useState('');
   const [alert, setAlert] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState(null);
+  const [sortMode, setSortMode] = useState('newest');
+  const [filterLikedOnly, setFilterLikedOnly] = useState(false);
 
   const categories = [
-    { value: "", labelHe: "הכל", labelEn: "All" },
+    { value: "", labelHe: "תחום", labelEn: "field" },
     { value: "tech", labelHe: "הייטק", labelEn: "Tech" },
     { value: "management", labelHe: "ניהול", labelEn: "Management" },
     { value: "logistics", labelHe: "לוגיסטיקה", labelEn: "Logistics" },
@@ -100,51 +103,78 @@ export default function AdminQuestions({ onEdit, onAnswer, onView }) {
       if (!res.ok) return;
 
       setQuestions(prev =>
-        prev.map(q =>
-          q.questionId !== questionId
-            ? q
-            : {
-                ...q,
-                likes: alreadyLiked
-                  ? q.likes.filter(like => like.idNumber !== idNumber)
-                  : [...(q.likes || []), { idNumber, fullName, likedAt: new Date().toISOString() }]
-              }
-        )
-      );
+        prev.map(q => q.questionId !== questionId ? q : {...q, likes: alreadyLiked
+          ? q.likes.filter(like => like.idNumber !== idNumber)
+          : [...(q.likes || []), { idNumber, fullName, likedAt: new Date().toISOString() }]
+        }));
     } catch (err) {
       console.error('Like failed:', err);
     }
   };
 
   const filteredQuestions = useMemo(() => {
-    return questions.filter(q => {
-      const textMatch = q.text.toLowerCase().includes(searchText.toLowerCase());
-      const categoryMatch = !filteredCategory || q.category === filteredCategory;
-      return textMatch && categoryMatch;
-    });
-  }, [questions, searchText, filteredCategory]);
+    return questions
+      .filter(q => {
+        const textMatch = q.text.toLowerCase().includes(searchText.toLowerCase());
+        const categoryMatch = !filteredCategory || q.category === filteredCategory;
+        const likedMatch = !filterLikedOnly || hasLiked(q.likes);
+        return textMatch && categoryMatch && likedMatch;
+      })
+      .sort((a, b) => {
+        if (sortMode === 'popular') {
+          return (b.likes?.length || 0) - (a.likes?.length || 0);
+        }
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+  }, [questions, searchText, filteredCategory, filterLikedOnly, sortMode]);
 
   const filters = [
-    <input
-      key="search"
-      type="text"
-      value={searchText}
-      onChange={(e) => setSearchText(e.target.value)}
-      placeholder={t('searchByText', language)}
-      className="filter-input"
-    />,
-    <select
-      key="stage"
-      value={filteredCategory}
-      onChange={(e) => setFilteredCategory(e.target.value)}
-      className="filter-input"
+    <div
+      key="filter-wrap"
+      style={{
+        display: 'flex',
+        width: '100%',
+        gap: '1rem',
+        marginBottom: '1.5rem',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}
     >
-      {categories.map(cat => (
-        <option key={cat.value} value={cat.value}>
-          {language === 'he' ? cat.labelHe : cat.labelEn}
-        </option>
-      ))}
-    </select>
+      <input
+        key="search"
+        type="text"
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        placeholder={t('searchByText', language)}
+        className="filter-input"
+      />
+      <select
+        key="category"
+        value={filteredCategory}
+        onChange={(e) => setFilteredCategory(e.target.value)}
+        className="filter-input"
+      >
+        {categories.map(cat => (
+          <option key={cat.value} value={cat.value}>
+            {language === 'he' ? cat.labelHe : cat.labelEn}
+          </option>
+        ))}
+      </select>
+      <select
+        key="sort"
+        value={sortMode}
+        onChange={(e) => setSortMode(e.target.value)}
+        className="filter-input"
+      >
+        <option value="newest">{t('sortByNewest', language)}</option>
+        <option value="popular">{t('sortByPopularity', language)}</option>
+      </select>
+      <Button
+        onClick={() => setFilterLikedOnly(!filterLikedOnly)}
+      >
+       {filterLikedOnly ? t('cancel', language) : t('likedQuestions', language)}
+      </Button>
+    </div>
   ];
 
   return (
