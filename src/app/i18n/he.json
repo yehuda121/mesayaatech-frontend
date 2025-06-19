@@ -455,7 +455,11 @@
     "eventsParticipantsTitle": "מספר משתתפים לפי אירוע",
     "participantsChartDescription1": "הגרף מציג את מספר המשתתפים בכל אירוע.",
     "participantsChartDescription2": "הציר האופקי מציג את האירועים לפי כותרת ותאריך,",
-    "participantsChartDescription3": "והציר האנכי את מספר המשתתפים באירוע."
+    "participantsChartDescription3": "והציר האנכי את מספר המשתתפים באירוע.",
+    "mentorWelcomeSubtitle": "אנא מלאי את פרטייך כדי שנוכל להתאים לך מילואימניקים מתאימים לליווי.",
+    "mentorWelcome": "ברוכים הבאים למערכת המנטורינג ✨"
+
+
 
 
 }

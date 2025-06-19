@@ -1,22 +1,32 @@
-/* ===== Register Page Layout (Top Section, Buttons, Structure) ===== */
+register-pa/* ===== Register Page Layout (Top Section, Buttons, Structure) ===== */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .register-page {
   position: relative;
   background: url('/logo-bg.png') no-repeat center center fixed;
-  background-size: 100vw;
+  background-size: 110vw 280vh;
   background-color: rgba(255, 255, 255, 0.8);
   min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   background-blend-mode: lighten;
+  overflow-x: hidden;
 }
 
-.register-page::before {
+
+
+/* .register-page::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.2);
   z-index: 0;
-}
+} */
 
 .register-layout,
 .register-form-container {
@@ -93,26 +103,48 @@
 /* ===== Shared Form Container (All Roles) ===== */
 .register-form-container {
   max-width: 800px;
-  width: 95%;       
+  width: 95%;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.35); 
-  backdrop-filter: blur(2px);
-  border-radius: 0.5rem;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff; /* צבע אחיד ולבן */
+  border: 1px solid #e2e8f0; /* גבול עדין */
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); /* צל רך בלבד */
+  backdrop-filter: none; /* לבטל את הטשטוש */
   position: relative;
   z-index: 1;
-  transition: background-color 0.3s ease;
+}
+
+.top-buttons-wrapper {
+  direction: ltr;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 /* ===== Shared Form Utilities ===== */
 /* Top buttons – always aligned to the right */
 .register-form-top-buttons {
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  direction: ltr;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
 }
+.register-form-top-buttons button {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #004080;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.register-form-top-buttons button:hover {
+  text-decoration: underline;
+}
+
 
 /* Directional layout */
 .register-form-direction-rtl {
@@ -265,3 +297,105 @@
 .lang-text {
   color: white !important;
 }
+
+/* === MENTOR PAGE HEADER & INTRO === */
+.mentor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background-color: white;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.mentor-logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+.mentor-header-buttons button {
+  background-color: transparent;
+  color: #004080;
+  border: 1px solid #004080;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-inline-start: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.mentor-header-buttons button:hover {
+  background-color: #004080;
+  color: white;
+}
+
+.mentor-intro-section {
+  text-align: center;
+  padding: 3rem 1rem 1.5rem;
+  color: #002855;
+}
+
+.mentor-intro-section h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+  color: #00122e;
+  text-shadow: none;
+  letter-spacing: -0.3px;
+  text-align: center;
+  line-height: 1.4;
+  font-family: 'Segoe UI', 'Open Sans', sans-serif;
+}
+
+.mentor-intro-section h1::after {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 3px;
+  background: #004080;
+  margin: 1rem auto 0;
+  border-radius: 2px;
+  opacity: 1;
+}
+
+
+.mentor-intro-section p {
+  font-size: 1.2rem;
+  color: #004080;
+  line-height: 1.7;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+
+.register-form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+  margin: 0 auto;
+  max-width: 1000px;
+  width: 100%;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.GF-form-title-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem; 
+  margin-bottom: 0.1rem;
+}
+
+.GF-generic-form-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #00122e;
+  text-align: center;
+}
+

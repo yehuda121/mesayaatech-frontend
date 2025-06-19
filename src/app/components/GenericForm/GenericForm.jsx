@@ -5,6 +5,7 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import Button from '@/app/components/Button';
 import './GenericForm.css';
+import { FaEnvelope, FaPhone, FaUser, FaIdCard, FaLinkedin } from 'react-icons/fa';
 
 export default function GenericForm({
   titleKey,
@@ -45,13 +46,13 @@ export default function GenericForm({
 
   return (
     <div className="GF-generic-form-wrapper">
+
       <div dir={language === 'he' ? 'rtl' : 'ltr'} className="GF-generic-form-container text-start relative">
         {onCloseIcon && (
           <button className="GF-modal-close" onClick={onCloseIcon} aria-label="Close">✖</button>
         )}
 
         <form className="GF-generic-form-grid">
-          <h2 className="GF-generic-form-title">{t(titleKey, language)}</h2>
 
           {fields.map((field) => {
             const { key, type, readonly, labelOverride, transform } = field;
@@ -125,20 +126,20 @@ export default function GenericForm({
                     value={value}
                     onChange={(e) => handleFieldChange(key, e.target.value)}
                   />
-                ) : type === 'date' || type === 'time' ? (
-                  <input
-                    type={type}
-                    className="GF-generic-form-input"
-                    value={value}
-                    onChange={(e) => handleFieldChange(key, e.target.value)}
-                  />
                 ) : (
-                  <input
-                    type="text"
-                    className="GF-generic-form-input"
-                    value={value}
-                    onChange={(e) => handleFieldChange(key, e.target.value)}
-                  />
+                  <div className="GF-input-with-icon">
+                    {key === 'email' && <FaEnvelope className="GF-input-icon" />}
+                    {key === 'phone' && <FaPhone className="GF-input-icon" />}
+                    {key === 'fullName' && <FaUser className="GF-input-icon" />}
+                    {key === 'idNumber' && <FaIdCard className="GF-input-icon" />}
+                    {key === 'linkedin' && <FaLinkedin className="GF-input-icon" />}
+                    <input
+                      type={type}
+                      className={`GF-generic-form-input ${['email', 'phone', 'fullName', 'idNumber', 'linkedin'].includes(key) ? 'GF-input-icon-padding' : ''}`}
+                      value={value}
+                      onChange={(e) => handleFieldChange(key, e.target.value)}
+                    />
+                  </div>
                 )}
               </label>
             );
@@ -171,6 +172,7 @@ export default function GenericForm({
                   if (success === false) return;
                 }}
                 disabled={disabledPrimary}
+                className="GF-primary-button"
               />
             )}
           </div>
@@ -179,5 +181,4 @@ export default function GenericForm({
       </div>
     </div>
   );
-
 }
