@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import { getLanguage } from '@/app/language';
 import './reports.css';
 import { useRouter } from 'next/navigation';
-
 import useUsersSummary from '@/app/components/reports/api/useUsersSummary';
 import UsersSummaryChart from '@/app/components/reports/charts/UsersSummaryChart';
 import useJobsPerMonth from '@/app/components/reports/api/useJobsPerMonth';

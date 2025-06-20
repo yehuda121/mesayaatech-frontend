@@ -12,6 +12,7 @@ import { jwtDecode } from 'jwt-decode';
 import { t } from '@/app/utils/loadTranslations';
 import InterviewQues  from '@/app/components/interviewQestions/QuestionsList';
 import MentorringProscess from './components/mentorringProscess';
+import InterviewPracticePanel from "@/app/components/interviewWithAi/InterviewPracticePanel";
 import './reservist.css';
 
 export default function ReservistHomePage() {
@@ -133,6 +134,12 @@ export default function ReservistHomePage() {
       onClick: () => setView('interviewQues') 
     },
     { 
+      labelHe: t('interviewWithAi', 'he'), 
+      labelEn: t('interviewWithAi', 'en'), 
+      path: '#InterviewPracticePanel',
+      onClick: () => setView('InterviewPracticePanel') 
+    },
+    { 
       labelHe: t('mentorringProscess', 'he'), 
       labelEn: t('mentorringProscess', 'en'), 
       path: '#mentorringProscess',
@@ -190,6 +197,10 @@ export default function ReservistHomePage() {
 
         {view === 'events' && idNumber && fullName && email && (
           <Events idNumber={idNumber} fullName={fullName} email={email} />
+        )}
+
+        {view === 'InterviewPracticePanel' && idNumber && fullName && email && (
+          <InterviewPracticePanel userId={idNumber} email={email} language={language} role='reserve' />
         )}
 
         {view === 'jobs' && (

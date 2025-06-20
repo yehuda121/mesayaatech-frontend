@@ -457,7 +457,32 @@
     "participantsChartDescription2": "The X-axis shows the event title and date,",
     "participantsChartDescription3": "and the Y-axis shows the number of participants.",
     "mentorWelcomeSubtitle": "Please fill in your details so we can match you with reservists for mentorship.",
-    "mentorWelcome": "Welcome to the Mentoring Platform"
+    "mentorWelcome": "Welcome to the Mentoring Platform",
+    "interviewAskQuestion": "Ask me a question",
+    "interviewSelectCategory": "Select category",
+    "interviewSelectDifficulty": "Select difficulty",
+    "interviewDifficulty_easy": "Easy",
+    "interviewDifficulty_medium": "Medium",
+    "interviewDifficulty_hard": "Hard",
+    "interviewMyQuestions": "My questions",
+    "interviewQuestionLabel": "Question",
+    "interviewYourAnswerPlaceholder": "Write your answer here...",
+    "interviewEvaluate": "Evaluate answer",
+    "interviewSubmitToBank": "Submit to question bank",
+    "interviewScore": "Score",
+    "interviewPositiveFeedback": "What was good",
+    "interviewNegativeFeedback": "What was missing",
+    "interviewIdealAnswer": "Ideal answer",
+    "interviewProgressGraph": "Score progress",
+    "interviewAverageScore": "Average",
+    "interviewRemainingQuestions": "Questions remaining today",
+    "interviewNoHistory": "No previous questions found",
+    "interviewMissingFields": "Please select category and difficulty",
+    "interviewMissingAnswer": "Answer is required before evaluation",
+    "interviewQuestionError": "An error occurred while fetching the question",
+    "interviewEvaluationError": "An error occurred while evaluating the answer",
+    "interviewSubmittedToBank": "Question successfully submitted to bank",
+    "interviewWithAi": "Interview with AI"
 
 
 
