@@ -5,7 +5,7 @@ import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ViewQuestion from './ViewQuestion'; 
 import Button from '@/app/components/Button';
-import { ThumbsUp, FileSearch, MessageCircleMore } from 'lucide-react';
+import { ThumbsUp, FileSearch, MessageCircleMore,  Book, BookOpen } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 
 export default function QuestionsPage({ onAnswer }) {
@@ -19,9 +19,10 @@ export default function QuestionsPage({ onAnswer }) {
   const [idNumber, setIdNumber] = useState(null);
   const [filterLikedOnly, setFilterLikedOnly] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [filterReadOnly, setFilterReadOnly] = useState(false);
 
   const categories = [
-    { value: "", labelHe: "הכול", labelEn: "All" },
+    { value: "", labelHe: "הכל", labelEn: "All" },
     { value: "tech", labelHe: "הייטק", labelEn: "Tech" },
     { value: "management", labelHe: "ניהול", labelEn: "Management" },
     { value: "logistics", labelHe: "לוגיסטיקה", labelEn: "Logistics" },
@@ -29,6 +30,36 @@ export default function QuestionsPage({ onAnswer }) {
     { value: "marketing", labelHe: "שיווק", labelEn: "Marketing" },
     { value: "other", labelHe: "אחר", labelEn: "Other" }
   ];
+
+  const hasRead = (readBy = []) => {
+    return readBy.some(read => read.idNumber === idNumber);
+  };
+  const handleReadToggle = async (questionId, alreadyRead) => {
+    try {
+      const fullName = localStorage.getItem('fullName');
+      const res = await fetch('http://localhost:5000/api/toggle-question-read', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ questionId, idNumber, fullName })
+      });
+
+      if (!res.ok) return;
+
+      setQuestions(prev =>
+        prev.map(q => {
+          if (q.questionId !== questionId) return q;
+          const prevRead = q.readBy || [];
+          const updatedRead = alreadyRead
+            ? prevRead.filter(read => read.idNumber !== idNumber)
+            : [...prevRead, { idNumber, fullName, readAt: new Date().toISOString() }];
+
+          return { ...q, readBy: updatedRead };
+        })
+      );
+    } catch (err) {
+      console.error('Read toggle failed:', err);
+    }
+  };
 
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
@@ -108,7 +139,8 @@ export default function QuestionsPage({ onAnswer }) {
     .filter(q =>
       q.text.toLowerCase().includes(searchText.toLowerCase()) &&
       (!filteredCategory || q.category === filteredCategory) &&
-      (!filterLikedOnly || hasLiked(q.likes))
+      (!filterLikedOnly || hasLiked(q.likes)) &&
+      (!filterReadOnly || !hasRead(q.readBy))
     )
     .sort((a, b) => {
       if (sortMode === 'popular') {
@@ -164,6 +196,12 @@ export default function QuestionsPage({ onAnswer }) {
       >
         {filterLikedOnly ? t('cancel', language) : t('likedQuestions', language)}
       </Button>
+      <Button
+        onClick={() => setFilterReadOnly(!filterReadOnly)}
+      >
+        {filterReadOnly ? t('cancel', language) : t('readQuestions', language)}
+      </Button>
+
     </div>
   ];
 
@@ -218,6 +256,20 @@ export default function QuestionsPage({ onAnswer }) {
                     color={hasLiked(q.likes) ? '#007bff' : '#ccc'}
                   />
                   <span>{q.likes?.length || 0}</span>
+                </div>
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleReadToggle(q.questionId, hasRead(q.readBy));
+                  }}
+                  title={hasRead(q.readBy) ? t('markAsUnread', language) : t('markAsRead', language)}
+                  style={{ cursor: 'pointer', fontSize: '20px' }}
+                >
+                  {hasRead(q.readBy) ? (
+                    <BookOpen size={22} color="#4CAF50" />
+                  ) : (
+                    <Book size={22} color="#bbb" />
+                  )}
                 </div>
             </div>
           </div>

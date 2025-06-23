@@ -465,7 +465,6 @@
     "interviewDifficulty_medium": "בינוני",
     "interviewDifficulty_hard": "קשה",
     "interviewMyQuestions": "השאלות שלי",
-    "interviewQuestionLabel": "שאלה",
     "interviewYourAnswerPlaceholder": "כתוב כאן את התשובה שלך...",
     "interviewEvaluate": "בדוק תשובה",
     "interviewSubmitToBank": "הוסף למאגר השאלות",
@@ -482,7 +481,22 @@
     "interviewQuestionError": "אירעה שגיאה בעת שליפת השאלה",
     "interviewEvaluationError": "אירעה שגיאה בעת הערכת התשובה",
     "interviewSubmittedToBank": "השאלה נשלחה למאגר בהצלחה",
-    "interviewWithAi": "AI ראיון עם"
+    "interviewWithAi": "AI ראיון עם",
+    "interviewPreviousQuestions": "שאלות קודמות",
+    "yourQuestion": "התשובה שלך",
+    "idealAnswer": "תשובה אידיאלית",
+    "readQuestions": "שאלות שלא קראתי",
+    "markAsRead": "סמן כנקרא",
+    "markAsUnread": "סמן כלא נקרא",
+    "changePasswordTitle": "שינוי סיסמה",
+    "currentPassword": "סיסמה נוכחית",
+    "changePassword": "שנה סיסמה",
+    "userSettings": "הגדרות משתמש",
+    "passwordChangeSuccess": "הסיסמה עודכנה בהצלחה",
+    "passwordChangeError": "אירעה שגיאה בעת עדכון הסיסמה",
+    "editPersonalDetails": "ערוך פרטים אישיים"
+
+
 
 
 

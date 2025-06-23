@@ -172,7 +172,7 @@ export default function GenericForm({
                   if (success === false) return;
                 }}
                 disabled={disabledPrimary}
-                className="GF-primary-button"
+                // className="GF-primary-button"
               />
             )}
           </div>

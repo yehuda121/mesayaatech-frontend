@@ -464,8 +464,6 @@
     "interviewDifficulty_easy": "Easy",
     "interviewDifficulty_medium": "Medium",
     "interviewDifficulty_hard": "Hard",
-    "interviewMyQuestions": "My questions",
-    "interviewQuestionLabel": "Question",
     "interviewYourAnswerPlaceholder": "Write your answer here...",
     "interviewEvaluate": "Evaluate answer",
     "interviewSubmitToBank": "Submit to question bank",
@@ -482,8 +480,20 @@
     "interviewQuestionError": "An error occurred while fetching the question",
     "interviewEvaluationError": "An error occurred while evaluating the answer",
     "interviewSubmittedToBank": "Question successfully submitted to bank",
-    "interviewWithAi": "Interview with AI"
-
+    "interviewWithAi": "Interview with AI",
+    "interviewPreviousQuestions": "Previous Questions",
+    "yourQuestion": "Your Answer",
+    "idealAnswer": "Ideal Answer",
+    "readQuestions": "Unread Questions",
+    "markAsRead": "Mark as Read",
+    "markAsUnread": "Mark as Unread",
+    "changePasswordTitle": "Change Password",
+    "currentPassword": "Current Password",
+    "userSettings": "User Settings",
+    "changePassword": "Change Password",
+    "passwordChangeSuccess": "Password updated successfully",
+    "passwordChangeError": "Error updating password",
+    "editPersonalDetails": "Edit Personal Details"
 
 
 

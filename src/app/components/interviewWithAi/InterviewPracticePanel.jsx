@@ -17,6 +17,9 @@ export default function InterviewPracticePanel({ userId, email, language, role }
   const [history, setHistory] = useState([]);
   const [remaining, setRemaining] = useState(10);
   const [alert, setAlert] = useState(null);
+  const [isLoadingQuestion, setIsLoadingQuestion] = useState(false);
+  const [isLoadingEvaluation, setIsLoadingEvaluation] = useState(false);
+  const [isLoadingBankSubmit, setIsLoadingBankSubmit] = useState(false);
 
   const difficulties = ["easy", "medium", "hard"];
 
@@ -27,6 +30,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
       const data = await res.json();
       if (res.ok) {
         setHistory(data.history || []);
+        // console.log("data: ", data);
         setRemaining(10 - (data.todayCount || 0));
       }
     }
@@ -38,21 +42,26 @@ export default function InterviewPracticePanel({ userId, email, language, role }
       setAlert({ type: "warning", message: t("interviewMissingFields", language) });
       return;
     }
-    const res = await fetch("http://localhost:5000/api/interview/getQuestion", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, email, category, difficulty, language }),
-    });
-    const data = await res.json();
-    if (res.ok) {
-      cleanText(data.question);
-      setQuestion(data.question);
-      setUserAnswer("");
-      setEvaluation(null);
-      setRemaining(prev => prev - 1);
-    } else {
-      setAlert({ type: "error", message: data.error || t("interviewQuestionError", language) });
+    setIsLoadingQuestion(true);
+    try {
+      const res = await fetch("http://localhost:5000/api/interview/getQuestion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, email, category, difficulty, language }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setQuestion(data.question);
+        setUserAnswer("");
+        setEvaluation(null);
+        setRemaining(prev => prev - 1);
+      } else {
+        setAlert({ type: "error", message: data.error || t("interviewQuestionError", language) });
+      }
+    } catch {
+      setAlert({ type: "error", message: t("interviewQuestionError", language) });
     }
+    setIsLoadingQuestion(false);
   };
 
   const cleanText = (text) => {
@@ -64,33 +73,45 @@ export default function InterviewPracticePanel({ userId, email, language, role }
       setAlert({ type: "warning", message: t("interviewMissingAnswer", language) });
       return;
     }
-    const res = await fetch("http://localhost:5000/api/interview/evaluateAnswer", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, question, userAnswer, language }),
-    });
-    const data = await res.json();
-    if (res.ok) {
-      setEvaluation(data);
-    } else {
-      setAlert({ type: "error", message: data.error || t("interviewEvaluationError", language) });
+    setIsLoadingEvaluation(true);
+    try {
+      const res = await fetch("http://localhost:5000/api/interview/evaluateAnswer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, question, userAnswer, language, category, difficulty }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setEvaluation(data);
+      } else {
+        setAlert({ type: "error", message: data.error || t("interviewEvaluationError", language) });
+      }
+    } catch {
+      setAlert({ type: "error", message: t("interviewEvaluationError", language) });
     }
+    setIsLoadingEvaluation(false);
   };
 
   const handleSubmitToBank = async () => {
-    await fetch("http://localhost:5000/api/submit-question-to-bank", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question, category, difficulty, language }),
-    });
-    setAlert({ type: "success", message: t("interviewSubmittedToBank", language) });
+    setIsLoadingBankSubmit(true);
+    try {
+      await fetch("http://localhost:5000/api/submit-question-to-bank", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question, category, difficulty, language }),
+      });
+      setAlert({ type: "success", message: t("interviewSubmittedToBank", language) });
+    } catch {
+      setAlert({ type: "error", message: t("interviewBankError", language) });
+    }
+    setIsLoadingBankSubmit(false);
   };
 
   const avgScore =
     history.length > 0 ? Math.round((history.reduce((sum, q) => sum + (q.score || 0), 0) / history.length) * 100) / 100 : null;
 
   return (
-    <div className="p-4">
+    <div className="p-4 flex flex-col " dir={language === 'he' ? 'rtl' : 'ltr'}>
       {alert && <AlertMessage {...alert} onClose={() => setAlert(null)} />}
 
       <div className="mb-4 flex gap-2 flex-wrap">
@@ -114,35 +135,59 @@ export default function InterviewPracticePanel({ userId, email, language, role }
             <option key={level} value={level}>{t(`interviewDifficulty_${level}`, language)}</option>
           ))}
         </select>
+        
+        <Button onClick={() => {
+          setView("question");
+          setQuestion(null);
+          setEvaluation(null);
+          handleRequestQuestion();
+        }} disabled={isLoadingQuestion}>
+          {isLoadingQuestion ? t("loading", language) : t("interviewAskQuestion", language)}
+        </Button>
 
-        <Button onClick={handleRequestQuestion}>{t("interviewAskQuestion", language)}</Button>
-        <Button variant="outline" onClick={() => setView("history")}>{t("interviewMyQuestions", language)}</Button>
+        <Button variant="outline" onClick={() => {
+          setView("history");
+          setQuestion(null);
+          setEvaluation(null);
+        }}>
+          {t("myQuestions", language)}
+        </Button>
+
+        <p className="mt-2">({t("interviewRemainingQuestions", language)}: {remaining} / 10)</p>
+
       </div>
 
-      {question && (
-        <div className="mb-4 alin-start" dir={language === 'he' ? 'rtl' : 'tlr'}>
-          <p className="font-bold mb-2">{t("interviewQuestionLabel", language)}:</p>
+      {view === "question" && question && (
+        <div className="mb-4 flex flex-col items-start" dir={language === 'he' ? 'rtl' : 'tlr'}>
+          <p className="font-bold mb-2">{t("question", language)}:</p>
           <p className="bg-gray-100 p-3 rounded mb-2">{cleanText(question)}</p>
 
           <textarea
             rows={4}
             value={userAnswer}
-            onChange={e => setUserAnswer(e.target.value)}
+            onChange={ e => {
+              // console.log("onChange value:", e.target.value);
+              setUserAnswer(e.target.value)
+            }}
             className="w-full border p-2 rounded"
             placeholder={t("interviewYourAnswerPlaceholder", language)}
           />
 
-          <div className="flex gap-2 mt-2">
-            <Button onClick={handleEvaluate}>{t("interviewEvaluate", language)}</Button>
-            {role !== "reservist" && (
-              <Button variant="secondary" onClick={handleSubmitToBank}>{t("interviewSubmitToBank", language)}</Button>
-            )}
+          <div className="flex gap-2 mt-2">            
+            <Button onClick={handleEvaluate} disabled={isLoadingEvaluation || evaluation}>
+              {isLoadingEvaluation ? t("loading", language) : t("interviewEvaluate", language)}
+            </Button>
+            {/* {role !== "reservist" && (
+              <Button variant="secondary" onClick={handleSubmitToBank} disabled={isLoadingBankSubmit}>
+                {isLoadingBankSubmit ? t("loading", language) : t("interviewSubmitToBank", language)}
+              </Button>
+            )} */}
           </div>
         </div>
       )}
 
-      {evaluation && (
-        <div className="border rounded p-3 mb-4">
+      {view === "question" && evaluation && (
+        <div className="border rounded p-3 mb-4 flex flex-col items-start">
           <p><strong>{t("interviewScore", language)}:</strong> {evaluation.score} / 10</p>
           <p><strong>{t("interviewPositiveFeedback", language)}:</strong> {cleanText(evaluation.feedback?.positive)}</p>
           <p><strong>{t("interviewNegativeFeedback", language)}:</strong> {cleanText(evaluation.feedback?.negative)}</p>
@@ -152,26 +197,46 @@ export default function InterviewPracticePanel({ userId, email, language, role }
 
       {view === "history" && (
         <div>
-          <h2 className="text-lg font-semibold mb-2">{t("interviewProgressGraph", language)}</h2>
+          <h2 className="text-lg font-semibold mb-2 flex flex-col items-center">{t("interviewProgressGraph", language)}</h2>
           {history.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={history.map((item, i) => ({ name: i + 1, score: item.score }))}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis domain={[0, 10]} />
-                <Tooltip />
-                <Line type="monotone" dataKey="score" stroke="#8884d8" />
-              </LineChart>
-            </ResponsiveContainer>
+            <div dir="ltr">
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={history.map((item, i) => ({ name: i + 1, score: item.score }))}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis domain={[0, 10]} />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="score" stroke="#8884d8" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           ) : (
             <p>{t("interviewNoHistory", language)}</p>
           )}
 
           {avgScore !== null && (
-            <p className="mt-2">{t("interviewAverageScore", language)}: {avgScore}</p>
+            <p className="mt-2 flex flex-col items-start">{t("interviewAverageScore", language)}: {avgScore}</p>
           )}
 
-          <p className="mt-2">{t("interviewRemainingQuestions", language)}: {remaining} / 10</p>
+          <p className="mt-2 flex flex-col items-start">{t("interviewRemainingQuestions", language)}: {remaining} / 10</p>
+
+          <h3 className="text-md font-bold mt-4 flex flex-col items-center">{t("interviewPreviousQuestions", language)}</h3>
+
+          <ul className="list-disc ml-5 mt-2 flex flex-col items-start">
+            {history.map((item, index) => {
+              const question = item.question?.S || item.question;
+              const userAnswer = item.userAnswer?.S || item.userAnswer;
+              const idealAnswer = item.idealAnswer?.S || item.idealAnswer;
+              return (
+                <li key={index} className="mb-3">
+                  <div><strong>{t("question", language)}:</strong> {question}</div>
+                  <div><strong>{t("yourQuestion", language)}:</strong> {userAnswer}</div>
+                  <div><strong>{t("idealAnswer", language)}:</strong> {idealAnswer}</div>
+                </li>
+              );
+            })}
+          </ul>
+
         </div>
       )}
     </div>

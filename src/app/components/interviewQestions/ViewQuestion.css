@@ -13,6 +13,13 @@
   overflow-y: auto;
   min-height: 300px;
   min-width: 300px;
+  margin-right: 250px;
+}
+
+@media (max-width: 768px) {
+  .VQ-overlay {
+    margin-right: 0;
+  }
 }
 
 /* Container */

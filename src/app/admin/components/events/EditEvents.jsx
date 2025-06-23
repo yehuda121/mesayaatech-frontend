@@ -5,7 +5,6 @@ import { getLanguage } from '../../../language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
-import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 
 export default function EditEvents({ event, onClose, onSave }) {
   const [language, setLanguage] = useState(getLanguage());
@@ -96,21 +95,31 @@ export default function EditEvents({ event, onClose, onSave }) {
         data={formData}
         onChange={setFormData}
         onPrimary={handleSave}
-        onSecondary={onClose}
         onCloseIcon={onClose}
         primaryLabel={loading ? '' : 'saveChanges'}
-        secondaryLabel="cancel"
       >
         {(formData.participants?.length > 0) ? (
           <div className="event-participants">
-            <h3 className="participants-title">{t('eventParticipants', language)}</h3>
-            <ul dir={language === 'he' ? 'rtl' : 'ltr'}>
-              {formData.participants.map((p, index) => (
-                <li key={index}>
-                  {p.fullName} - {p.email} - {p.idNumber}
-                </li>
-              ))}
-            </ul>
+            <h3 className='font-bold text-center mb-3'>
+              {t('eventParticipants', language)} ({formData.participants.length})
+            </h3>
+            <div
+              style={{
+                maxHeight: '300px',
+                overflowY: 'auto',
+                border: '1px solid #ddd',
+                borderRadius: '4px',
+                padding: '0.5rem'
+              }}
+            >
+              <ul dir={language === 'he' ? 'rtl' : 'ltr'} style={{ margin: 0, paddingInlineStart: '1rem' }}>
+                {formData.participants.map((p, index) => (
+                  <li key={index}>
+                    {p.fullName} - {p.email} - {p.idNumber}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         ) : (
           <p>{t('noParticipants', language)}</p>

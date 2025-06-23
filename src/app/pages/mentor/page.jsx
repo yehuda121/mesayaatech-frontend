@@ -23,6 +23,7 @@ import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
 import MyReservists from './components/MyReservists/MyReservists';
 import MentorshipProgress from './components/MyReservists/MentorshipProgress';
 import './mentor.css';
+import ChangePassword from '@/app/login/ChangePassword';
 
 export default function MentorHomePage() {
   const [language, setLanguage] = useState(null);
@@ -144,6 +145,12 @@ export default function MentorHomePage() {
         labelEn: t('myReservists', language),
         path: '#myReservists',
         onClick: () => handleNavigation('myReservists')
+      },
+      {
+        labelHe: t('changePassword', 'he'),
+        labelEn: t('changePassword', 'en'),
+        path: '#changePassword',
+        onClick: () => handleNavigation('change-password')
       },
     ];
   }, [language]);
@@ -366,6 +373,8 @@ export default function MentorHomePage() {
             <FindReservist mentorId={idNumber} onBack={() => setView('dashboard')} />
           </div>
         )}
+        
+        {view === 'change-password' && (<ChangePassword/>)}
 
         {toast && (
           <ToastMessage

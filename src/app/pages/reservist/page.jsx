@@ -14,6 +14,8 @@ import InterviewQues  from '@/app/components/interviewQestions/QuestionsList';
 import MentorringProscess from './components/mentorringProscess';
 import InterviewPracticePanel from "@/app/components/interviewWithAi/InterviewPracticePanel";
 import './reservist.css';
+import Button from '@/app/components/Button';
+import ChangePassword from '@/app/login/ChangePassword';
 
 export default function ReservistHomePage() {
   const [language, setLanguage] = useState(null);
@@ -83,7 +85,7 @@ export default function ReservistHomePage() {
         setFullName(data.fullName);
         setMentorID(data.mentorId || null)
         if (data.mentorId) {
-          const mentorIdNumber = data.mentorId.split('#')[1]; // extract ID number
+          const mentorIdNumber = data.mentorId.split('#')[1]; 
           if (mentorIdNumber) {
             try {
               const mentorRes = await fetch(
@@ -111,11 +113,17 @@ export default function ReservistHomePage() {
       path: '#dashboard', 
       onClick: () => setView('dashboard') 
     },
-    { labelHe: t('navPersonalDetails', 'he'), 
-      labelEn: t('navPersonalDetails', 'en'), 
-      path: '#form', 
-      onClick: () => setView('form') 
+    {
+      labelHe: t('userSettings', 'he'),
+      labelEn: t('userSettings', 'en'),
+      path: '#userSettings',
+      onClick: () => setView('userSettings')
     },
+    // { labelHe: t('navPersonalDetails', 'he'), 
+    //   labelEn: t('navPersonalDetails', 'en'), 
+    //   path: '#form', 
+    //   onClick: () => setView('form') 
+    // },
     { labelHe: t('events', 'he'), 
       labelEn: t('events', 'en'), 
       path: '#events-section', 
@@ -162,7 +170,9 @@ export default function ReservistHomePage() {
         {view === 'dashboard' && (
           <>
             <h2 className="reservist-section-title text-center mb-6" dir={language === 'he' ? 'rtl' : 'ltr'}></h2>
-            <div className="reservist-columns">
+            {/* <div className="reservist-dashboard-wrapper"> */}
+
+            {/* <div className="reservist-columns">
               <div>
                 <ViewJobs
                   limit={4}
@@ -171,14 +181,37 @@ export default function ReservistHomePage() {
                     setView('view-job');
                   }}
                 />
-              </div>
+              </div> */}
 
               <div>
                 <Events limit={4} idNumber={idNumber} fullName={fullName} email={email} />
               </div>
-            </div>
+            {/* </div> */}
+            {/* </div> */}
           </>
         )}
+        {view === 'userSettings' && (
+          <div>
+            <div>
+              <div>
+                <Button text={t('changePassword', language)} onClick={() => setView('change-password')} />
+              </div>
+            </div>
+            <h2 className='font-bold text-center'>{t('editPersonalDetails', language)}</h2>
+            <EditReservistForm
+              userData={userData}
+              mentorId={mentorId}
+              mentorName={mentorName}
+              onSave={(updated) => {
+                setUserData(updated);
+                setFullName(updated.fullName);
+              }}
+              onBack={() => setView('dashboard')}
+            />
+          </div>
+        )}
+
+        {view === 'change-password' && (<ChangePassword/>)}
 
         {view === 'form' && userData && Object.keys(userData).length > 0 && (
           <div className='EditreservistForm'>
@@ -200,7 +233,7 @@ export default function ReservistHomePage() {
         )}
 
         {view === 'InterviewPracticePanel' && idNumber && fullName && email && (
-          <InterviewPracticePanel userId={idNumber} email={email} language={language} role='reserve' />
+          <InterviewPracticePanel userId={idNumber} email={email} language={language} role='reservist' />
         )}
 
         {view === 'jobs' && (

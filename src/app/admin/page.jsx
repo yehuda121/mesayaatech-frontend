@@ -21,7 +21,9 @@ import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
 import ViewQuestion from '@/app/components/interviewQestions/ViewQuestion';
 import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
 import ViewMentorships from './components/mentorship/viewMentorships';
+import ChangePassword from '@/app/login/ChangePassword';
 import Button from '../components/Button';
+import InterviewPracticePanel from "@/app/components/interviewWithAi/InterviewPracticePanel";
 
 export default function AdminPage() {
   const [language, setLanguage] = useState(getLanguage());
@@ -144,11 +146,23 @@ export default function AdminPage() {
       path: '#view-mentorships',
       onClick: () => handleNavigation('view-mentorships')
     },
+    { 
+      labelHe: t('interviewWithAi', 'he'), 
+      labelEn: t('interviewWithAi', 'en'), 
+      path: '#InterviewPracticePanel',
+      onClick: () => setView('InterviewPracticePanel') 
+    },
     {
       labelHe: t('Reports', 'he'),
       labelEn: t('Reports', 'en'),
       path: '#Reports',
       onClick: () => moovToReport()
+    },
+    {
+      labelHe: t('changePassword', 'he'),
+      labelEn: t('changePassword', 'en'),
+      path: '#changePassword',
+      onClick: () => handleNavigation('change-password')
     },
   ];
 
@@ -224,6 +238,10 @@ export default function AdminPage() {
           {view === 'view-users' && <UsersTable />}
 
           {view === 'view-mentorships' && <ViewMentorships />}
+
+          {view === 'InterviewPracticePanel' && idNumber && fullName && email && (
+            <InterviewPracticePanel userId={idNumber} email={email} language={language} role='reservist' />
+          )}
           
           {view === 'interview-ques' && (
             <>
@@ -250,6 +268,8 @@ export default function AdminPage() {
               />
             </>
           )}
+          
+          {view === 'change-password' && (<ChangePassword/>)}
           
           {answerQuestionId && (
             <div
@@ -315,18 +335,16 @@ export default function AdminPage() {
       )}
 
       {selectedJob && (
-        // <div className='modal-overlay'>
-          <EditJob
-            job={selectedJob}
-            onClose={() => setSelectedJob(null)}
-            onSave={(updatedJob) => {
-              setJobs(prev =>
-                prev.map(j => j.jobId === updatedJob.jobId ? updatedJob : j)
-              );
-              setSelectedJob(null);
-            }}
-          />
-        // </div>
+        <EditJob
+          job={selectedJob}
+          onClose={() => setSelectedJob(null)}
+          onSave={(updatedJob) => {
+            setJobs(prev =>
+              prev.map(j => j.jobId === updatedJob.jobId ? updatedJob : j)
+            );
+            setSelectedJob(null);
+          }}
+        />
       )}
     </div>
   );

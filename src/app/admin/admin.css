@@ -10,6 +10,19 @@
   padding: 2rem;
   width: calc(100% - 250px);
   margin-top: 70px;
+  /* background-image: url('/logo-noBackground.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-position-y: bottom; */
+}
+
+.logo-background {
+  /* background-image: url('/logo-noBackground.png'); 
+  background-repeat: no-repeat;
+  background-position: center center;      */
+  background-size: contain;               /* או cover / 100px 100px וכו' */
+  opacity: 0.1;                            /* שקיפות – 0 לגמרי שקוף, 1 מלא */
+  background-blend-mode: normal;          /* אפשר multiply / overlay וכו' */
 }
 
 @media (min-width: 769px) {
@@ -228,7 +241,8 @@
 
 /* create event */
 .admin-create-event {
-  margin-right: 7%;
+  /* margin-right: 7%; */
+  padding: 25px;
 }
 @media (max-width: 768px) {
   .admin-create-event {

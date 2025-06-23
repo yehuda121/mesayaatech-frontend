@@ -20,6 +20,7 @@ import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
 import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
 import EditAmbassadorForm from './EditAmbassadorForm';
 import './ambassador.css';
+import ChangePassword from '@/app/login/ChangePassword';
 
 export default function AmbassadorHomePage() {
   const [language, setLanguage] = useState(null);
@@ -124,6 +125,12 @@ export default function AmbassadorHomePage() {
         path: '#interview-prep',
         onClick: () => handleNavigation('interview-ques')
       },
+      {
+        labelHe: t('changePassword', 'he'),
+        labelEn: t('changePassword', 'en'),
+        path: '#changePassword',
+        onClick: () => handleNavigation('change-password')
+      },
     ];
   }, [language]);
 
@@ -192,6 +199,8 @@ export default function AmbassadorHomePage() {
             />
           </div>
         )}
+        
+        {view === 'change-password' && (<ChangePassword/>)}
 
         {view === 'my-questions' && (
           <div>

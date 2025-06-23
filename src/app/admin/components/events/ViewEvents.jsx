@@ -30,7 +30,7 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
       const data = await res.json();
       setEvents(data);
     } catch (err) {
-      console.error('שגיאה בעת קבלת האירועים:', err);
+      console.error('Error fetching events:', err);
     }
   };
 
@@ -47,7 +47,7 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
         setEvents(prev => prev.filter(e => e.eventId !== event.eventId));
       }
     } catch (err) {
-      console.error('שגיאה בעת מחיקת האירוע:', err);
+      console.error('Error deleteing event:', err);
     }
   };
 
@@ -116,13 +116,6 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
               <button title={t('deleteEvent', language)} onClick={(e) => { e.stopPropagation(); handleDelete(event); }}>
                 <Trash2 size={18} />
               </button>
-
-              {/* <Button size="sm" onClick={(e) => { e.stopPropagation(); setEditingEvent(event); }}>
-                {t('edit', language)}
-              </Button>
-              <Button size="sm" color="red" onClick={(e) => { e.stopPropagation(); handleDelete(event); }}>
-                {t('delete', language)}
-              </Button> */}
             </div>
           </>
 
@@ -130,7 +123,6 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
         onCardClick={() => {}}
         emptyTextKey="noEventsFound"
       />
-
       {editingEvent && (
         <EditEvents
           event={editingEvent}

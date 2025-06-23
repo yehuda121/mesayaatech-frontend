@@ -104,3 +104,32 @@ const res = await fetch(`${API_BASE}/api/get-progress?mentorId=...&reservistId=.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+{
+    "history": [
+        {
+            "score": 5
+        },
+        {
+            "score": 5
+        },
+        {
+            "score": 5
+        },
+        {
+            "score": 2
+        }
+    ],
+    "todayCount": 5
+}

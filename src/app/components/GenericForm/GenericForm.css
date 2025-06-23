@@ -269,7 +269,7 @@ input[type="file"] {
   color: #e53e3e;
 }
 
-.GF-primary-button {
+/* .GF-primary-button {
   background-color: #004080;
   color: white;
   padding: 0.75rem 2rem;
@@ -283,7 +283,7 @@ input[type="file"] {
 
 .GF-primary-button:hover {
   background-color: #0060b0;
-}
+} */
 
 .GF-input-with-icon {
   position: relative;

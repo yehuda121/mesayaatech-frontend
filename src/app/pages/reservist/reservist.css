@@ -24,10 +24,11 @@
 }
 
 /* === Grid layout for job and event columns === */
-.reservist-columns {
+/* .reservist-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
+
 }
 
 @media (max-width: 768px) {
@@ -38,4 +39,26 @@
 
 .EditreservistForm{
   margin-top: -70;
+} */
+ .reservist-dashboard-wrapper {
+  margin-inline-end: 270px; /* תומך גם ב־rtl/ltr */
+  transition: margin 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+  .reservist-dashboard-wrapper {
+    margin-inline-end: 0; /* כשאין בר צד */
+  }
+}
+
+.reservist-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .reservist-columns {
+    grid-template-columns: 1fr;
+  }
 }

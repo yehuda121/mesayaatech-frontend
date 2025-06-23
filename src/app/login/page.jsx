@@ -43,17 +43,20 @@ export default function LoginPage() {
         const decoded = jwtDecode(data.idToken);
         const role = decoded['custom:role'];
 
+        // Store tokens and user info in localStorage
         localStorage.setItem('userId', decoded.sub);
         localStorage.setItem('userType', role);
         localStorage.setItem('idToken', data.idToken);
+        localStorage.setItem('accessToken', data.accessToken); // Required for change password
+        localStorage.setItem('refreshToken', data.refreshToken); // Optional
         localStorage.setItem('fullName', decoded.name);
 
+        // Redirect based on role
         if (role === 'admin') router.push('./admin');
         else if (role === 'mentor') router.push('/pages/mentor');
         else if (role === 'reservist') router.push('/pages/reservist');
         else if (role === 'ambassador') router.push('/pages/ambassador');
         else router.push('/');
-
 
         setMessage(t('loginSuccess', language));
       } else {
@@ -78,57 +81,53 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4" autoComplete="on">
-        <input
-          type="email"
-          value={email}
-          placeholder={t('email', language)}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="login-input"
-          autoComplete="email"
-        />
-        
-        <div className="relative" dir={language === 'he' ? 'rtl' : 'ltr'}>
           <input
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            placeholder={t('password', language)}
-            onChange={(e) => setPassword(e.target.value)}
+            type="email"
+            value={email}
+            placeholder={t('email', language)}
+            onChange={(e) => setEmail(e.target.value)}
             required
-            className="login-input pr-10"
-            autoComplete="current-password"
+            className="login-input"
+            autoComplete="email"
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className={`absolute top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 ${
-              language === 'he' ? 'left-3' : 'right-3'
-            }`}
-            title={showPassword ? t('hidePassword', language) : t('showPassword', language)}
-          >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+
+          <div className="relative" dir={language === 'he' ? 'rtl' : 'ltr'}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              placeholder={t('password', language)}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="login-input pr-10"
+              autoComplete="current-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className={`absolute top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 ${
+                language === 'he' ? 'left-3' : 'right-3'
+              }`}
+              title={showPassword ? t('hidePassword', language) : t('showPassword', language)}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          <button type="submit" className="login-button">
+            {t('loginButton', language)}
           </button>
-        </div>
 
-
-        <button
-          type="submit"
-          className="login-button"
-        >
-          {t('loginButton', language)}
-        </button>
-
-        <div className="text-center mt-3">
-          <button 
-            type="button" 
-            className="text-sm underline text-blue-600 hover:text-blue-800"
-            onClick={() => router.push('/login/forgot-password')}
-          >
-            {t('forgotPassword', language)}
-          </button>
-        </div>
-
+          <div className="text-center mt-3">
+            <button 
+              type="button" 
+              className="text-sm underline text-blue-600 hover:text-blue-800"
+              onClick={() => router.push('/login/forgot-password')}
+            >
+              {t('forgotPassword', language)}
+            </button>
+          </div>
         </form>
+
         {message && <p className="text-center text-red-500">{message}</p>}
       </div>
     </div>
