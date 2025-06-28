@@ -3,24 +3,23 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
-import { getLanguage, toggleLanguage } from '../language';
+import { getLanguage, toggleLanguage } from '../utils/language/language';
 import { t } from '@/app/utils/loadTranslations';
 import './login.css';
 import { Eye, EyeOff } from 'lucide-react';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [language, setLanguage] = useState(null);
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const language = useLanguage();
 
   useEffect(() => {
-    setLanguage(getLanguage());
-    const handleLanguageChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLanguageChange);
-    return () => window.removeEventListener('languageChanged', handleLanguageChange);
+    localStorage.clear();
+    sessionStorage.clear();
   }, []);
 
   const handleLogin = async (e) => {
@@ -43,19 +42,21 @@ export default function LoginPage() {
         const decoded = jwtDecode(data.idToken);
         const role = decoded['custom:role'];
 
-        // Store tokens and user info in localStorage
-        localStorage.setItem('userId', decoded.sub);
-        localStorage.setItem('userType', role);
-        localStorage.setItem('idToken', data.idToken);
-        localStorage.setItem('accessToken', data.accessToken); // Required for change password
-        localStorage.setItem('refreshToken', data.refreshToken); // Optional
-        localStorage.setItem('fullName', decoded.name);
+        // Store tokens and user info in sessionStorage
+        sessionStorage.setItem('userId', decoded.sub);
+        sessionStorage.setItem('userType', role);
+        sessionStorage.setItem('idToken', data.idToken);
+        sessionStorage.setItem('accessToken', data.accessToken); // Required for change password
+        sessionStorage.setItem('refreshToken', data.refreshToken); // Optional
+        sessionStorage.setItem('fullName', decoded.name);
+        sessionStorage.setItem('idNumber', decoded['custom:idNumber'] || decoded.sub);
+        sessionStorage.setItem('email', decoded.email);
 
         // Redirect based on role
-        if (role === 'admin') router.push('./admin');
-        else if (role === 'mentor') router.push('/pages/mentor');
-        else if (role === 'reservist') router.push('/pages/reservist');
-        else if (role === 'ambassador') router.push('/pages/ambassador');
+        if (role === 'admin') router.replace('./admin');
+        else if (role === 'mentor') router.replace('/pages/mentor');
+        else if (role === 'reservist') router.replace('/pages/reservist');
+        else if (role === 'ambassador') router.replace('/pages/ambassador');
         else router.push('/');
 
         setMessage(t('loginSuccess', language));

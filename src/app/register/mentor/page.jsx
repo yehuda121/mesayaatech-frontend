@@ -309,7 +309,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage, toggleLanguage } from '@/app/language';
+import { getLanguage, toggleLanguage } from '@/app/utils/language/language';
 import { useRouter } from 'next/navigation';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import '@/app/components/GenericForm/GenericForm.css';

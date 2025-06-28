@@ -1,18 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import './ViewProgress.css';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function ViewProgress({ progressData, onClose }) {
-  const [language, setLanguage] = useState(getLanguage());
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   const progressStages = [
     t('stage1', language),

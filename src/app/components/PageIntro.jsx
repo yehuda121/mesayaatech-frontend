@@ -1,18 +1,12 @@
 'use client';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function PageIntro({ titleKey, subtitleKey }) {
-  const [language, setLanguage] = useState(getLanguage());
   const router = useRouter();
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   return (
     <>

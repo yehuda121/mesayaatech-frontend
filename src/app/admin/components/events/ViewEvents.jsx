@@ -2,24 +2,23 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import Button from '@/app/components/Button';
 import EditEvents from './EditEvents';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { Edit2, Trash2 } from 'lucide-react';
+import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function ViewEvents({ events, setEvents, handleNavigation }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [filter, setFilter] = useState({ title: '', date: '' });
   const [showPast, setShowPast] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
+  const [jobToDelete, setJobToDelete] = useState(null);
+  const language = useLanguage();
 
   useEffect(() => {
     fetchEvents();
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
   }, [showPast]);
 
   const fetchEvents = async () => {
@@ -35,8 +34,6 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
   };
 
   const handleDelete = async (event) => {
-    const confirmed = confirm(t('confirmDeleteEvent', language));
-    if (!confirmed) return;
     try {
       const res = await fetch(`http://localhost:5000/api/delete-event`, {
         method: 'POST',
@@ -45,6 +42,7 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
       });
       if (res.ok) {
         setEvents(prev => prev.filter(e => e.eventId !== event.eventId));
+        setJobToDelete(null);
       }
     } catch (err) {
       console.error('Error deleteing event:', err);
@@ -113,7 +111,7 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
               <button title={t('editevent', language)} onClick={(e) => { e.stopPropagation(); setEditingEvent(event); }}>
                 <Edit2 size={18}/>
               </button>
-              <button title={t('deleteEvent', language)} onClick={(e) => { e.stopPropagation(); handleDelete(event); }}>
+              <button title={t('deleteEvent', language)} onClick={(e) => { e.stopPropagation(); setJobToDelete(event); }}>
                 <Trash2 size={18} />
               </button>
             </div>
@@ -123,6 +121,16 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
         onCardClick={() => {}}
         emptyTextKey="noEventsFound"
       />
+
+      {jobToDelete && (
+        <ConfirmDialog
+          title={t('confirmDelete', language)}
+          message={t('confirmDeleteEvent', language)}
+          onConfirm={() => handleDelete(jobToDelete)}
+          onCancel={() => setJobToDelete(null)}
+        />
+      )}
+
       {editingEvent && (
         <EditEvents
           event={editingEvent}

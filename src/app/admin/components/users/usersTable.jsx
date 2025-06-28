@@ -1,25 +1,22 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '../../../language';
 import { t } from '@/app/utils/loadTranslations';
 import EditReservistForm from '@/app/pages/reservist/components/EditReservistForm';
 import EditMentorForm from '@/app/pages/mentor/components/EditMentorForm';
 import EditAmbassadorForm from '@/app/pages/ambassador/EditAmbassadorForm';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function UsersTable({ defaultStatusFilter = null }) {
   const [users, setUsers] = useState([]);
   const [selectedForm, setSelectedForm] = useState(null);
-  const [language, setLanguage] = useState(getLanguage());
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+  const language = useLanguage();
 
   useEffect(() => {
     fetchUsers();
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
   const fetchUsers = async () => {

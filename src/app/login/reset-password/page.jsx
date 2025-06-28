@@ -3,28 +3,20 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff, RefreshCcw } from 'lucide-react';
-import { getLanguage, toggleLanguage } from '../../language';
 import { t } from '@/app/utils/loadTranslations';
 import '../login.css';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function ResetPassword() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
-
-  const [language, setLanguage] = useState(null);
   const [verificationCode, setVerificationCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLanguage(getLanguage());
-    const handleLanguageChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLanguageChange);
-    return () => window.removeEventListener('languageChanged', handleLanguageChange);
-  }, []);
+  const language = useLanguage();
 
   const generateRandomPassword = () => {
     const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';

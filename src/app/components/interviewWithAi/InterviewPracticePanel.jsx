@@ -20,22 +20,21 @@ export default function InterviewPracticePanel({ userId, email, language, role }
   const [isLoadingQuestion, setIsLoadingQuestion] = useState(false);
   const [isLoadingEvaluation, setIsLoadingEvaluation] = useState(false);
   const [isLoadingBankSubmit, setIsLoadingBankSubmit] = useState(false);
-
   const difficulties = ["easy", "medium", "hard"];
 
   useEffect(() => {
-    // Load user's previous questions and scores
-    async function fetchHistory() {
-      const res = await fetch("http://localhost:5000/api/interview/fetch-questions-history?userId=" + userId);
-      const data = await res.json();
-      if (res.ok) {
-        setHistory(data.history || []);
-        // console.log("data: ", data);
-        setRemaining(10 - (data.todayCount || 0));
-      }
-    }
     fetchHistory();
   }, [userId]);
+
+  // Load user's previous questions and scores
+  const fetchHistory = async () => {
+    const res = await fetch("http://localhost:5000/api/interview/fetch-questions-history?userId=" + userId);
+    const data = await res.json();
+    if (res.ok) {
+      setHistory(data.history || []);
+      setRemaining(10 - (data.todayCount || 0));
+    }
+  };
 
   const handleRequestQuestion = async () => {
     if (!category || !difficulty) {
@@ -83,6 +82,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
       const data = await res.json();
       if (res.ok) {
         setEvaluation(data);
+        await fetchHistory();
       } else {
         setAlert({ type: "error", message: data.error || t("interviewEvaluationError", language) });
       }
@@ -161,7 +161,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
         <div className="mb-4 flex flex-col items-start" dir={language === 'he' ? 'rtl' : 'tlr'}>
           <p className="font-bold mb-2">{t("question", language)}:</p>
           <p className="bg-gray-100 p-3 rounded mb-2">{cleanText(question)}</p>
-
+          
           <textarea
             rows={4}
             value={userAnswer}
@@ -187,7 +187,9 @@ export default function InterviewPracticePanel({ userId, email, language, role }
       )}
 
       {view === "question" && evaluation && (
-        <div className="border rounded p-3 mb-4 flex flex-col items-start">
+        <div className={`border rounded p-3 mb-4 flex flex-col items-start ${
+          language === "he" ? "text-right" : "text-left"}`}
+        >
           <p><strong>{t("interviewScore", language)}:</strong> {evaluation.score} / 10</p>
           <p><strong>{t("interviewPositiveFeedback", language)}:</strong> {cleanText(evaluation.feedback?.positive)}</p>
           <p><strong>{t("interviewNegativeFeedback", language)}:</strong> {cleanText(evaluation.feedback?.negative)}</p>

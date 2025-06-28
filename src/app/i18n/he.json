@@ -171,7 +171,7 @@
     "jobsLoadError": "שגיאה בטעינת המשרות",
     "jobsServerError": "אירעה שגיאה בעת שליפת המשרות מהשרת",
     "publisherIdMissing": "לא ניתן לטעון משרות – חסר מזהה מפרסם",
-    "confirmDelete": "האם אתה בטוח שברצונך למחוק את המשרה?",
+    "confirmDelete": "אישור מחיקה",
     "jobDeleted": "המשרה נמחקה בהצלחה",
     "filterByDate": "סינון לפי תאריך",
     "role": "תפקיד",
@@ -257,7 +257,6 @@
     "viewEvents": "צפייה באירועים",
     "noEventsFound": "לא נמצאו אירועים",
     "editEventTitle": "עריכת אירוע",
-    "logistics": "לוגיסטיקה",
     "tech": "טכנולוגיה",
     "questionDetails": "פרטי השאלה",
     "addNewQuestion": "הוסף שאלה חדשה",
@@ -332,7 +331,6 @@
     "urlInvalid": "קישור לא תקין",
     "experienceInvalid": "שנות ניסיון חייבות להיות מספר",
     "questionTooLong": "השאלה ארוכה מדי (מקסימום 500 תווים)",
-    "education": "חינוך",
     "meetingDateRequired": "יש להזין תאריך לפגישה",
     "meetingModeRequired": "יש להזין אופן קיום הפגישה",
     "meetingModeTooLong": "אופן הפגישה לא יכול לעלות על 50 תווים",
@@ -395,7 +393,6 @@
     "jobFields": "תחום",
     "noJobsPosted": "לא פירסמת משרות עדיין",
     "cancelJoin": "ביטול הגעה",
-    "marketing": "שיווק",
     "eventIdMissing": "חסר מזהה לאירוע",
     "noParticipants": "אין משתתפים עדיין",
     "eventTitleRequired": "יש להזין כותרת לאירוע",
@@ -494,11 +491,36 @@
     "userSettings": "הגדרות משתמש",
     "passwordChangeSuccess": "הסיסמה עודכנה בהצלחה",
     "passwordChangeError": "אירעה שגיאה בעת עדכון הסיסמה",
-    "editPersonalDetails": "ערוך פרטים אישיים"
+    "editPersonalDetails": "ערוך פרטים אישיים",
 
 
 
 
-
+    "editPersonalInfoTitle": "עריכת פרטים אישיים",
+    "editRegistrationFormTitle": "עריכת טופס הרשמה",
+    "securitySettingsTitle": "אבטחה והתראות",
+    "receiveJobEmails": "אני מעוניין לקבל מיילים על משרות חדשות",
+    "jobFieldsToReceive": "בחר תחומים לקבלת מיילים על משרות",
+    "receiveEventEmails": "אני מעוניין לקבל מיילים על אירועים חדשים",
+    "updateEmailPrefs": "עדכן הגדרות דיוור",
+    "eventSubscribed": "נרשמת לקבלת מיילים על אירועים",
+    "eventUnsubscribed": "הוסרת מרשימת הדיוור לאירועים",
+    "jobSubscribed": "נרשמת לקבלת מיילים על משרות",
+    "jobUnsubscribed": "הוסרת מרשימת הדיוור למשרות",
+    "jobAlertMustSelectFields": "יש לבחור לפחות תחום אחד כדי להירשם לקבלת מיילים על משרות",
+    "hiTech": "הייטק",
+    "finance": "פיננסים",
+    "logistics": "לוגיסטיקה",
+    "marketing": "שיווק",
+    "education": "חינוך",
+    "other": "אחר",
+    "הייטק": "הייטק",
+    "פיננסים": "פיננסים",
+    "לוגיסטיקה": "לוגיסטיקה",
+    "שיווק": "שיווק",
+    "חינוך": "חינוך",
+    "אחר": "אחר",
+    "management": "ניהול",
+    "deleteQuestionMessage": "האם אתה בטוח שברצונך למחוק את השאלה?"
 
 }

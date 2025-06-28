@@ -1,32 +1,31 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '../language';
 import SideBar from '@/app/components/SideBar';
 import UsersTable from './components/users/usersTable';
 import CreateEvent from './components/events/CreateEvent';
 import ViewEvents from './components/events/ViewEvents';
 import EditEvents from './components/events/EditEvents';
 import ViewJobs from '../components/jobs/ViewAllJobs';
-import PostNewJob from '../components/jobs/PostNewJob';
 import EditJob from '@/app/components/jobs/EditJob';
 import AddJob from '../components/jobs/PostNewJob';
-import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import './admin.css';
-import AdminQuestions from './components/interviewQestions/AdminQuestions';
-import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
-import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
-import ViewQuestion from '@/app/components/interviewQestions/ViewQuestion';
+import InterviewQestions from '@/app/components/interviewQestions/QuestionsList';
 import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
 import ViewMentorships from './components/mentorship/viewMentorships';
 import ChangePassword from '@/app/login/ChangePassword';
 import Button from '../components/Button';
 import InterviewPracticePanel from "@/app/components/interviewWithAi/InterviewPracticePanel";
+import { useRoleGuard } from "@/app/utils/isExpectedRoll/useRoleGuard";
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function AdminPage() {
-  const [language, setLanguage] = useState(getLanguage());
+  const [fullName, setFullName] = useState('');
+  const [idNumber, setIdNumber] = useState(null);
+  const [email, setEmail] = useState('');
+  const [userType, setUserType] = useState('');
   const [view, setView] = useState('');
   const [eventToEdit, setEventToEdit] = useState(null);
   const [events, setEvents] = useState([]);
@@ -34,56 +33,21 @@ export default function AdminPage() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [pendingUsers, setPendingUsers] = useState([]);
   const [loadingPending, setLoadingPending] = useState(true);
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const [answerQuestionId, setAnswerQuestionId] = useState(null);
   const router = useRouter();
-  const [fullName, setFullName] = useState('');
-  const [idNumber, setIdNumber] = useState('');
-  const [email, setEmail] =useState('');
-  const [questionToView, setQuestionToView] = useState(null);
+  const language = useLanguage();
+  useRoleGuard("admin");
 
   useEffect(() => {
-    // Check JWT token and handle user authentication
-    const token = localStorage.getItem('idToken');
-    const handleLangChange = () => setLanguage(getLanguage());
+    const storedFullName = sessionStorage.getItem('fullName');
+    const storedIdNumber = sessionStorage.getItem('idNumber');
+    const storedEmail = sessionStorage.getItem('email');
+    const storedUserType = sessionStorage.getItem('userType');
 
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        const role = decoded['custom:role'];
-        const expectedRole = 'admin';
-        const roleToPath = {
-          admin: '/admin',
-          mentor: '/pages/mentor',
-          reservist: '/pages/reservist',
-          ambassador: '/pages/ambassador'
-        };
-
-        setFullName(decoded.name || '');
-        setIdNumber(decoded['custom:idNumber'] || decoded.sub || '');
-        setEmail(decoded['custom:email'] || decoded.email || '');
-
-        if (role !== expectedRole) {
-          router.push(roleToPath[role] || '/login');
-          return;
-        }
-      } catch (err) {
-        console.error('Token decode failed:', err);
-        router.push('/login');
-      }
-    } else {
-      router.push('/login');
-    }
-
-    // Listen to language change events
-    window.addEventListener('languageChanged', handleLangChange);
-
-    // Cleanup the event listener on unmount
-    return () => {
-      window.removeEventListener('languageChanged', handleLangChange);
-    };
-  }, [router]);
-
+    if (storedFullName) setFullName(storedFullName);
+    if (storedIdNumber) setIdNumber(storedIdNumber);
+    if (storedEmail) setEmail(storedEmail);
+    if (storedUserType) setUserType(storedUserType);
+  }, []);
 
   useEffect(() => {
     const fetchPendingUsers = async () => {
@@ -109,9 +73,6 @@ export default function AdminPage() {
 
   const handleNavigation = (newView) => {
     setEventToEdit(null);
-    setSelectedJob(null);
-    setSelectedQuestion(null);
-    setAnswerQuestionId(null);
     setView(newView);
   };
 
@@ -248,7 +209,7 @@ export default function AdminPage() {
               <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
                 <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               </div>
-              <AdminQuestions
+              <InterviewQestions
                 onEdit={(q) => setSelectedQuestion(q)}
                 onAnswer={(qid) => setAnswerQuestionId(qid)}
                 onView={(q) => setQuestionToView(q)}
@@ -270,54 +231,7 @@ export default function AdminPage() {
           )}
           
           {view === 'change-password' && (<ChangePassword/>)}
-          
-          {answerQuestionId && (
-            <div
-              className="modal-overlay"
-              onClick={(e) => {
-                if (e.target.classList.contains('modal-overlay')) {
-                  setAnswerQuestionId(null); 
-                }
-              }}
-            >
-              <div
-                className="relative max-w-xl w-full mx-auto"
-                onClick={(e) => e.stopPropagation()} 
-              >
-                <PostAnswer
-                  questionId={answerQuestionId}
-                  fullName={fullName}
-                  idNumber={idNumber}
-                  onSuccess={() => setAnswerQuestionId(null)}  
-                  onClose={() => setAnswerQuestionId(null)} 
-                />
-              </div>
-            </div>
-          )}
-
-          {questionToView && (
-            <div className="modal-overlay">
-              <div className="modal-content">
-                <ViewQuestion
-                  question={questionToView}
-                  onClose={() => setQuestionToView(null)}
-                />
-              </div>
-            </div>
-          )}
-
-          {selectedQuestion && (
-            <div className="modal-overlay">
-              <EditQuestion
-                question={selectedQuestion}
-                onClose={() => setSelectedQuestion(null)}
-                onSave={() => {
-                  setSelectedQuestion(null);
-                }}
-              />
-            </div>
-          )}
-
+     
         </main>
       </div>
 

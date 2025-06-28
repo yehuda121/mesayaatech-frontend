@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { getLanguage, toggleLanguage } from '../../language';
+import { getLanguage, toggleLanguage } from '../../utils/language/language';
 import { useRouter } from 'next/navigation';
 import Button from '../../components/Button';
 import { t } from '@/app/utils/loadTranslations';
@@ -31,14 +31,14 @@ export default function AmbassadorRegisterForm() {
     aboutMe: '',
   });
 
-  const translatedJobFields = {
-    "הייטק": { he: " הייטק", en: " Hi-Tech" },
-    "פיננסים": { he: " פיננסים", en: " Finance" },
-    "לוגיסטיקה": { he: " לוגיסטיקה", en: " Logistics" },
-    "שיווק": { he: " שיווק", en: " Marketing" },
-    "חינוך": { he: " חינוך", en: " Education" },
-    "אחר": { he: " אחר", en: " Other" }
-  };
+  const translatedJobFields = [
+    { value: '', labelHe: 'הכל', labelEn: 'All' },
+    ...Object.entries(translatedJobFields).map(([value, labelObj]) => ({
+      value,
+      labelHe: labelObj.he,
+      labelEn: labelObj.en
+    }))
+  ];
 
   useEffect(() => {
     setLanguage(getLanguage());

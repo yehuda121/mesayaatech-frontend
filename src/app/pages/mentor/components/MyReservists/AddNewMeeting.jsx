@@ -1,13 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function AddNewMeeting({ mentorId, reservistId, onAdd,onClose }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState({
     date: '',
     mode: '',
@@ -15,12 +14,7 @@ export default function AddNewMeeting({ mentorId, reservistId, onAdd,onClose }) 
     tasks: ''
   });
   const [toast, setToast] = useState(null);
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   const fields = [
     { key: 'date', labelKey: 'meetingDate', type: 'date', required: true },

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getLanguage, toggleLanguage } from "../../language";
+import { getLanguage, toggleLanguage } from "../../utils/language/language";
 import { t } from "@/app/utils/loadTranslations";
 import "./LandingPage.css";
 

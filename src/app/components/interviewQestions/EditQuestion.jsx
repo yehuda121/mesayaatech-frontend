@@ -1,32 +1,27 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
+import { useLanguage } from "@/app/utils/language/useLanguage";
+import { translatedJobFields } from "@/app/components/jobs/jobFields";
 
 export default function EditQuestion({ question, onClose, onSave }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState({
     text: question.text || '',
     category: question.category || '',
   });
   const [toast, setToast] = useState(null);
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   const categories = [
-    { value: "tech", labelHe: "הייטק", labelEn: "Tech" },
-    { value: "management", labelHe: "ניהול", labelEn: "Management" },
-    { value: "logistics", labelHe: "לוגיסטיקה", labelEn: "Logistics" },
-    { value: "education", labelHe: "חינוך", labelEn: "Education" },
-    { value: "marketing", labelHe: "שיווק", labelEn: "Marketing" },
-    { value: "other", labelHe: "אחר", labelEn: "Other" }
+    { value: "", labelHe: "הכל", labelEn: "All" },
+    ...Object.entries(translatedJobFields).map(([value, labels]) => ({
+      value,
+      labelHe: labels.he,
+      labelEn: labels.en,
+    }))
   ];
 
   const handleSubmit = async () => {
@@ -81,27 +76,42 @@ export default function EditQuestion({ question, onClose, onSave }) {
     }
   ];
 
-  return (
-    <>
-      <GenericForm
-        titleKey="editQuestion"
-        fields={fields}
-        data={formData}
-        onChange={setFormData}
-        onPrimary={handleSubmit}
-        onSecondary={onClose}
-        onCloseIcon={onClose}
-        primaryLabel="save"
-        secondaryLabel="cancel"
-      />
+  const handleOverlayClick = (e) => {
+    if (e.target.classList.contains('modal-overlay')) {
+      onClose();
+    }
+  };
 
-      {toast && (
-        <ToastMessage
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
+  return (
+    <div
+      className="modal-overlay fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
+      onClick={handleOverlayClick}
+      dir={language === 'he' ? 'rtl' : 'ltr'}
+    >
+      <div
+        className="relative max-w-xl w-full mx-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <GenericForm
+          titleKey="editQuestion"
+          fields={fields}
+          data={formData}
+          onChange={setFormData}
+          onPrimary={handleSubmit}
+          onSecondary={onClose}
+          onCloseIcon={onClose}
+          primaryLabel="save"
+          secondaryLabel="cancel"
         />
-      )}
-    </>
+
+        {toast && (
+          <ToastMessage
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
+      </div>
+    </div>
   );
 }

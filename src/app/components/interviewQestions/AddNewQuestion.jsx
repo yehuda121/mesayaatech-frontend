@@ -1,19 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
+import {translatedJobFields } from '@/app/components/jobs/jobFields';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function AddNewQuestion({ onSuccess, fullName, idNumber }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState({
     text: '',
     category: '',
     createdBy: '', // Only fullName
   });
   const [toast, setToast] = useState(null);
+  const language = useLanguage();
 
   // If fullName or ID is missing, show error message
   if (!fullName || !idNumber) {
@@ -22,28 +23,22 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber }) {
 
   // List of available categories for the dropdown
   const categories = [
-    { value: "choose a categorie", labelHe: "בחר קטגוריה", labelEn: "choose a categorie" },
-    { value: "tech", labelHe: "הייטק", labelEn: "Tech" },
-    { value: "management", labelHe: "ניהול", labelEn: "Management" },
-    { value: "logistics", labelHe: "לוגיסטיקה", labelEn: "Logistics" },
-    { value: "education", labelHe: "חינוך", labelEn: "Education" },
-    { value: "marketing", labelHe: "שיווק", labelEn: "Marketing" },
-    { value: "other", labelHe: "אחר", labelEn: "Other" }
+    { value: "", labelHe: "הכל", labelEn: "All" },
+    ...Object.entries(translatedJobFields).map(([value, labels]) => ({
+      value,
+      labelHe: labels.he,
+      labelEn: labels.en,
+    }))
   ];
 
   // On mount: set language and createdBy as fullName
   useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-
     if (fullName) {
       setFormData((prev) => ({
         ...prev,
         createdBy: fullName.trim(), // Save only full name
       }));
     }
-
-    return () => window.removeEventListener('languageChanged', handleLangChange);
   }, [fullName, idNumber]);
 
   // Handle form submission

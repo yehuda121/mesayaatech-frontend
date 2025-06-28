@@ -2,27 +2,21 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import Button from '@/app/components/Button';
 import '../../../register/registrationForm.css';
 import { locations } from '@/app/components/Locations';
 import sanitizeText from '@/app/utils/sanitizeText';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function EditMentorForm({ userData, onSave, onClose, onDelete, role }) {
   const router = useRouter();
-  const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState(userData || {});
   const [initialData, setInitialData] = useState(userData || {});
   const [alert, setAlert] = useState(null);
   const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   useEffect(() => {
     if (userData) {
@@ -42,7 +36,6 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
     const phonePattern = /^(05\d{8}|05\d{1}-\d{7})$/;
     const idPattern = /^\d{9}$/;
     const urlPattern = /^https?:\/\/[\w\.-]+\.\w+/;
-
     const fullName = formData.fullName?.trim() || '';
     const email = formData.email?.trim() || '';
     const phone = formData.phone?.trim() || '';
@@ -112,7 +105,7 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
       if (res.ok) {
         setAlert({ message: t('saveSuccess', language), type: 'success' });
         setInitialData(formData);
-        localStorage.setItem('mentorFullName', formData.fullName);
+        sessionStorage.setItem('mentorFullName', formData.fullName);
         onSave(result);
       } else {
         setAlert({ message: result.error || t('saveError', language), type: 'error' });

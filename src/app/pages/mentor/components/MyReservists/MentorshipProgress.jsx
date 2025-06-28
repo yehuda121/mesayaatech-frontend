@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import Button from '@/app/components/Button';
 import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
@@ -11,21 +10,15 @@ import GenericCardSection from '@/app/components/GenericCardSection/GenericCardS
 import { Edit2, Trash2 } from 'lucide-react';
 import EditMeeting from './EditMeeting';
 import '../../mentor.css';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function MentorshipProgress({ reservistId, mentorId }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [progressData, setProgressData] = useState(null);
   const [toast, setToast] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editingMeetingIndex, setEditingMeetingIndex] = useState(null);
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    fetchProgress();
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   const fetchProgress = async () => {
     try {

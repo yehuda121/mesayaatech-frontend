@@ -1,19 +1,23 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { Edit2, Trash2 } from 'lucide-react';
+import { useLanguage } from '@/app/utils/language/useLanguage';
+import EditQuestion from './EditQuestion';
+import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 
-export default function MyQuestions({ idNumber, fullName, onEdit }) {
-  const [language, setLanguage] = useState(getLanguage());
+export default function MyQuestions({ idNumber, fullName, onEdit  }) {
   const [myQuestions, setMyQuestions] = useState([]);
+  const [questionToEdit, setQuestionToEdit] = useState(null);
+  const language = useLanguage();
+  const [confirmData, setConfirmData] = useState(null);
 
   useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    fetchMyQuestions();
-    return () => window.removeEventListener('languageChanged', handleLangChange);
+    const loadQuestions = async () => {
+      await fetchMyQuestions();
+    };
+    loadQuestions();
   }, []);
 
   const fetchMyQuestions = async () => {
@@ -28,8 +32,6 @@ export default function MyQuestions({ idNumber, fullName, onEdit }) {
   };
 
   const handleDelete = async (questionId) => {
-    if (!confirm(t('confirmDeleteQuestion', language))) return;
-
     try {
       const res = await fetch('http://localhost:5000/api/delete-question', {
         method: 'POST',
@@ -64,15 +66,18 @@ export default function MyQuestions({ idNumber, fullName, onEdit }) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (onEdit) onEdit(q);
+                  setQuestionToEdit(q);
                 }}
                 title={t('edit', language)}
-              ><Edit2 size={18} /></button>
+              >
+                <Edit2 size={18} />
+              </button>
+
               <button
                 title={t('delete', language)}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleDelete(q.questionId);
+                  setConfirmData({ questionId: q.questionId });
                 }}
               ><Trash2 size={18} /></button>
             </div>
@@ -80,6 +85,28 @@ export default function MyQuestions({ idNumber, fullName, onEdit }) {
         )}
         emptyTextKey="noQuestionsFound"
       />
+      {questionToEdit && (
+        <EditQuestion
+          question={questionToEdit}
+          onClose={() => setQuestionToEdit(null)}
+          onSave={() => {
+            setQuestionToEdit(null);
+            fetchMyQuestions(); 
+          }}
+        />
+      )}
+      {confirmData && (
+        <ConfirmDialog
+          title={t('confirmDelete', language)}
+          message={t('confirmDeleteQuestion', language)}
+          onConfirm={() => {
+            handleDelete(confirmData.questionId);
+            setConfirmData(null);
+          }}
+          onCancel={() => setConfirmData(null)}
+        />
+      )}
+
     </div>
   );
 }

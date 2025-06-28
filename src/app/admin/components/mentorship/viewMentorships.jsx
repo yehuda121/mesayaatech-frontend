@@ -1,28 +1,25 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ViewProgress from './ViewProgress';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { Eye } from 'lucide-react';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function MentorshipsView() {
-  const [language, setLanguage] = useState(getLanguage());
   const [mentorships, setMentorships] = useState([]);
   const [selectedPair, setSelectedPair] = useState(null);
   const [toast, setToast] = useState(null);
   const [alert, setAlert] = useState(null);
   const [search, setSearch] = useState('');
   const [stageFilter, setStageFilter] = useState('');
+  const language = useLanguage();
 
   useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
     fetchMentorships();
-    return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
   const fetchMentorships = async () => {

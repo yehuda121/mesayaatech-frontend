@@ -2,19 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import './approval.css';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function WaitingApprovalPage() {
-  const [language, setLanguage] = useState(getLanguage());
   const router = useRouter();
-
-  useEffect(() => {
-    const handleLanguageChange = () => setLanguage(getLanguage());
-    window.addEventListener("languageChanged", handleLanguageChange);
-    return () => window.removeEventListener("languageChanged", handleLanguageChange);
-  }, []);
+  const language = useLanguage();
 
   return (
     <div className="approval-container">

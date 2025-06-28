@@ -10,29 +10,20 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function EventsParticipantsCountChart({ data }) {
-  const [language, setLanguage] = useState(getLanguage());
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
-
-    // if (!data || !Array.isArray(data)) {
-    //     return <p>{t('loadingReports', language)}</p>;
-    // }
-    if (!data) {
+  const language = useLanguage();
+  
+  if (!data) {
     console.log('📭 No data received yet');
     return <p>no data</p>;
-    }
-    if (!Array.isArray(data)) {
+  }
+  if (!Array.isArray(data)) {
     console.log('❗Data is not array:', data);
     return <p>!Array.isArray(data)</p>;
-    }
+  }
 
 
   const chartData = data.map(event => ({

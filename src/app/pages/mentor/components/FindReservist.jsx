@@ -1,17 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
 import ReservistDetailsModal from './ReservistDetails';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
-import Button from '@/app/components/Button';
 import { UserPlus , FileSearch , EyeOff, Eye, Trash2 } from 'lucide-react';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function FindReservist({ mentorId, onBack }) {
-  const [language, setLanguage] = useState(getLanguage());
+  const language = useLanguage();
   const [reservists, setReservists] = useState([]);
   const [toast, setToast] = useState(null);
   const [confirmData, setConfirmData] = useState(null);
@@ -19,18 +18,15 @@ export default function FindReservist({ mentorId, onBack }) {
   const [expandedScore, setExpandedScore] = useState(null);
 
   useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
-
-  useEffect(() => {
     const fetchReservists = async () => {
       try {
         const res = await fetch(`http://localhost:5000/api/match-reservists-to-mentor?mentorId=${mentorId}`);
         const data = await res.json();
         // Filter out reservists who are not interested in a mentor
-        const filteredData = data.filter(r => !r.notInterestedInMentor);
+        const filteredData = data.filter(r => 
+          !r.notInterestedInMentor &&
+          r.status === 'approved'
+        );
         setReservists(filteredData);
       } catch (err) {
         console.error('Error loading matches:', err);
