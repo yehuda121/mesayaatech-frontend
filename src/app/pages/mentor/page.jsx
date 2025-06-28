@@ -155,7 +155,7 @@ export default function MentorHomePage() {
           <div>
             <div className="mentor-button-group">
               <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
-              <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
+              {/* <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} /> */}
             </div>
             <ViewAllJobs />
           </div>
@@ -172,7 +172,7 @@ export default function MentorHomePage() {
           </div>
         )}
 
-        {view === 'post-job' && (
+        {/* {view === 'post-job' && (
           <div>
             <div className="mentor-button-group">
               <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
@@ -188,7 +188,7 @@ export default function MentorHomePage() {
               onClose={() => handleNavigation('post-job')}
             />
           </div>
-        )}
+        )} */}
         
         {view === 'myJobsList' && (
           <div>

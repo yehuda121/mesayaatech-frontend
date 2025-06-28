@@ -8,15 +8,12 @@ import ViewEvents from './components/events/ViewEvents';
 import EditEvents from './components/events/EditEvents';
 import ViewJobs from '../components/jobs/ViewAllJobs';
 import EditJob from '@/app/components/jobs/EditJob';
-import AddJob from '../components/jobs/PostNewJob';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import './admin.css';
 import InterviewQestions from '@/app/components/interviewQestions/QuestionsList';
-import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
 import ViewMentorships from './components/mentorship/viewMentorships';
 import ChangePassword from '@/app/login/ChangePassword';
-import Button from '../components/Button';
 import InterviewPracticePanel from "@/app/components/interviewWithAi/InterviewPracticePanel";
 import { useRoleGuard } from "@/app/utils/isExpectedRoll/useRoleGuard";
 import { useLanguage } from "@/app/utils/language/useLanguage";
@@ -170,28 +167,11 @@ export default function AdminPage() {
 
           {view === 'view-jobs' && (
             <>
-              <div className='mb-4'>
-                <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
-              </div>
               <ViewJobs
                 jobs={jobs}
                 setJobs={setJobs}
                 onEdit={(job) => setSelectedJob(job)}
                 handleNavigation={handleNavigation}
-              />
-            </>
-          )}
-
-          {view === 'post-job' && (
-            <>
-              <AddJob
-                publisherId={`${email}#${idNumber}`}
-                onClose={() => setView('')}
-                publisherType="admin"
-                onSave={(newJob) => {
-                  setJobs(prev => [...prev, newJob]);
-                  setView('view-jobs');
-                }}
               />
             </>
           )}
@@ -206,26 +186,10 @@ export default function AdminPage() {
           
           {view === 'interview-ques' && (
             <>
-              <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
-                <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
-              </div>
               <InterviewQestions
                 onEdit={(q) => setSelectedQuestion(q)}
                 onAnswer={(qid) => setAnswerQuestionId(qid)}
                 onView={(q) => setQuestionToView(q)}
-              />
-            </>
-          )}
-
-          {view === 'AddNewQues' && (
-            <>
-              <div className="flex gap-2 mt-3 mb-3 justify-start" dir="rtl">
-                <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
-              </div>
-              <AddNewQues
-                fullName={fullName}
-                idNumber={idNumber}
-                onSuccess={() => setView('interview-ques')}
               />
             </>
           )}

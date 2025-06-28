@@ -8,7 +8,7 @@ import AlertMessage from '@/app/components/notifications/AlertMessage';
 import { t } from '@/app/utils/loadTranslations';
 
 export default function InterviewPracticePanel({ userId, email, language, role }) {
-  const [view, setView] = useState("main");
+  const [view, setView] = useState("history");
   const [question, setQuestion] = useState(null);
   const [category, setCategory] = useState("");
   const [difficulty, setDifficulty] = useState("");
@@ -92,20 +92,20 @@ export default function InterviewPracticePanel({ userId, email, language, role }
     setIsLoadingEvaluation(false);
   };
 
-  const handleSubmitToBank = async () => {
-    setIsLoadingBankSubmit(true);
-    try {
-      await fetch("http://localhost:5000/api/submit-question-to-bank", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, category, difficulty, language }),
-      });
-      setAlert({ type: "success", message: t("interviewSubmittedToBank", language) });
-    } catch {
-      setAlert({ type: "error", message: t("interviewBankError", language) });
-    }
-    setIsLoadingBankSubmit(false);
-  };
+  // const handleSubmitToBank = async () => {
+  //   setIsLoadingBankSubmit(true);
+  //   try {
+  //     await fetch("http://localhost:5000/api/submit-question-to-bank", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ question, category, difficulty, language }),
+  //     });
+  //     setAlert({ type: "success", message: t("interviewSubmittedToBank", language) });
+  //   } catch {
+  //     setAlert({ type: "error", message: t("interviewBankError", language) });
+  //   }
+  //   setIsLoadingBankSubmit(false);
+  // };
 
   const avgScore =
     history.length > 0 ? Math.round((history.reduce((sum, q) => sum + (q.score || 0), 0) / history.length) * 100) / 100 : null;

@@ -10,10 +10,11 @@ import EditJob from './EditJob';
 import './jobs.css';
 import './filters.css';
 import Button from '../Button';
-import { FileSearch, Edit2, Trash2, X } from 'lucide-react';
+import { FileSearch, Edit2, Trash2, X, PlusCircle } from 'lucide-react';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import ConfirmDialog from '../notifications/ConfirmDialog';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import DraggableAddJobButton from '../DraggableButton/DraggableButton';
 
 export default function ViewAllJobs() {
   const [jobs, setJobs] = useState([]);
@@ -34,6 +35,7 @@ export default function ViewAllJobs() {
   const [editingJob, setEditingJob] = useState(null);
   const [jobToDelete, setJobToDelete] = useState(null);
   const language = useLanguage();
+  const [addNewJobMode, setAddNewJobMode] = useState(false);
 
   const categories = [
     { value: '', labelHe: 'הכל', labelEn: 'All' },
@@ -226,6 +228,13 @@ export default function ViewAllJobs() {
         emptyTextKey="noJobsFound"
       />
 
+      {userType !== 'reservist' && (
+        <DraggableAddJobButton
+          title={t('postNewJob', language)}
+          onClick={() => setAddNewJobMode(true)}
+        />
+      )}
+
       {jobToDelete && (
         <ConfirmDialog 
           title={t('confirmDelete', language)}
@@ -252,6 +261,17 @@ export default function ViewAllJobs() {
 
       {toast && (
         <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+      )}
+
+      {addNewJobMode && (
+        <EditJob
+          job={{}} 
+          onClose={() => setAddNewJobMode(false)}
+          onSave={(newJob) => {
+            setJobs(prev => [...prev, newJob]);
+            setAddNewJobMode(false);
+          }}
+        />
       )}
 
       {showAdvanced && (

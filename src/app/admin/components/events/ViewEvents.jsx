@@ -9,6 +9,7 @@ import GenericCardSection from '@/app/components/GenericCardSection/GenericCardS
 import { Edit2, Trash2 } from 'lucide-react';
 import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import DraggableButton from '@/app/components/DraggableButton/DraggableButton';
 
 export default function ViewEvents({ events, setEvents, handleNavigation }) {
   const [filter, setFilter] = useState({ title: '', date: '' });

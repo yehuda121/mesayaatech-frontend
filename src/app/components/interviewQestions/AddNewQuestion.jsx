@@ -6,8 +6,9 @@ import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import {translatedJobFields } from '@/app/components/jobs/jobFields';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import './ViewQuestion.css';
 
-export default function AddNewQuestion({ onSuccess, fullName, idNumber }) {
+export default function AddNewQuestion({ onSuccess, fullName, idNumber, onClose }) {
   const [formData, setFormData] = useState({
     text: '',
     category: '',
@@ -103,23 +104,27 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber }) {
   ];
 
   return (
-    <div className='GF-generic-form-wrapper-add-new-question'>
-      <GenericForm
-        titleKey="addNewQuestion"
-        fields={fields}
-        data={formData}
-        onChange={setFormData}
-        onPrimary={handleSubmit}
-        primaryLabel="submit"
-      />
+    <div className="add-question-modal-overlay">
+        <button className="close-button" onClick={onSuccess}>×</button>
 
-      {toast && (
-        <ToastMessage
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
+        <GenericForm
+          titleKey="addNewQuestion"
+          fields={fields}
+          data={formData}
+          onChange={setFormData}
+          onPrimary={handleSubmit}
+          primaryLabel="submit"
+          onCloseIcon={onClose}
         />
-      )}
+
+        {toast && (
+          <ToastMessage
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
     </div>
+
   );
 }

@@ -11,6 +11,8 @@ import { translatedJobFields } from "@/app/components/jobs/jobFields";
 import PostAnswer from './PostAnswer';
 import ConfirmDialog from '../notifications/ConfirmDialog';
 import EditQuestion from './EditQuestion';
+import DraggableButton from '@/app/components/DraggableButton/DraggableButton';
+import AddQuestion from './AddNewQuestion';
 
 export default function QuestionsPage({ onAnswer }) {
   const [questions, setQuestions] = useState([]);
@@ -28,7 +30,7 @@ export default function QuestionsPage({ onAnswer }) {
   const [confirmDialog, setConfirmDialog] = useState(null);
   const [alert, setAlert] = useState(null);
   const [questionToEdit, setQuestionToEdit] = useState(null); 
-
+  const [showAddQuestion, setShowAddQuestion] = useState(false);
 
   const categories = [
     { value: "", labelHe: "הכל", labelEn: "All" },
@@ -325,6 +327,25 @@ export default function QuestionsPage({ onAnswer }) {
           </div>
         )}
       />
+
+      {userType !== 'reservist' && (
+        <DraggableButton
+          title={t('addNewQuestion', language)}
+          onClick={() => setShowAddQuestion(true)}
+        />
+      )}
+
+      {showAddQuestion && (
+        <AddQuestion
+          onClose={() => setShowAddQuestion(false)}
+          onSuccess={() => {
+            setShowAddQuestion(false);
+            fetchQuestions();
+          }}
+          fullName={fullName}
+          idNumber={idNumber}
+        />
+      )}
 
       {confirmDialog && (
         <ConfirmDialog

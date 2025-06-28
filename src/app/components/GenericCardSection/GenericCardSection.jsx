@@ -11,7 +11,8 @@ export default function GenericCardSection({
   data,
   renderCard,
   onCardClick,
-  emptyTextKey = 'noItemsFound'
+  emptyTextKey = 'noItemsFound',
+  getItemKey
 }) {
   const language = useLanguage();
 
@@ -33,7 +34,7 @@ export default function GenericCardSection({
         <p className="card-section-empty">{t(emptyTextKey, language)}</p>
       ) : (
         <div className="card-section-grid">
-          {data.map((item, i) => (
+          {/* {data.map((item, i) => (
             <div
               key={i}
               className="card-section-item"
@@ -41,7 +42,19 @@ export default function GenericCardSection({
             >
               {renderCard(item)}
             </div>
-          ))}
+          ))} */}
+          {data.map((item, i) => {
+            const key = getItemKey ? getItemKey(item, i) : i;
+            return (
+              <div
+                key={key}
+                className="card-section-item"
+                onClick={onCardClick ? () => onCardClick(item) : undefined}
+              >
+                {renderCard(item)}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
