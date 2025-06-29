@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage, toggleLanguage } from '../../language';
+import { getLanguage, toggleLanguage } from '../../utils/language/language';
 import { useRouter } from 'next/navigation';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import MultiStepForm from '@/app/components/MultiStepForm/MultiStepForm';
@@ -12,8 +12,37 @@ import '../registrationForm.css';
 
 export default function AmbassadorRegisterForm() {
   const router = useRouter();
+
   const [language, setLanguage] = useState(getLanguage());
   const [alert, setAlert] = useState(null);
+
+
+  const [formData, setFormData] = useState({
+    userType: 'ambassador',
+    status: 'pending',
+    fullName: '',
+    idNumber: '',
+    email: '',
+    phone: '',
+    currentCompany: '',
+    position: '',
+    location: '',
+    canShareJobs: '',
+    jobFields: [],
+    linkedin: '',
+    notes: '',
+    aboutMe: '',
+  });
+
+  const translatedJobFields = [
+    { value: '', labelHe: 'הכל', labelEn: 'All' },
+    ...Object.entries(translatedJobFields).map(([value, labelObj]) => ({
+      value,
+      labelHe: labelObj.he,
+      labelEn: labelObj.en
+    }))
+  ];
+
 
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());

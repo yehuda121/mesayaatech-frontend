@@ -1,25 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
-import Button from '@/app/components/Button';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { Edit2, Trash2 } from 'lucide-react';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function MyJobsList({ publisherId, userType = "mentor", onEdit }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [filters, setFilters] = useState({ company: '', location: '', date: '' });
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -67,8 +60,8 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
   const handleDelete = async (jobId) => {
     if (!confirm(t('confirmDelete', language))) return;
 
-    const userId = localStorage.getItem('userId');
-    const userType = localStorage.getItem('userType');
+    const userId = sessionStorage.getItem('userId');
+    const userType = sessionStorage.getItem('userType');
 
     try {
       const res = await fetch('http://localhost:5000/api/delete-job', {

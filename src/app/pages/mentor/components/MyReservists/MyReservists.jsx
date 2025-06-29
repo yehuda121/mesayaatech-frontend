@@ -1,26 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { UserCog } from 'lucide-react';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function MyReservists({ onManageReservist }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [reservists, setReservists] = useState([]);
   const router = useRouter();
+  const language = useLanguage();
 
   useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem('idToken');
+    const token = sessionStorage.getItem('idToken');
     if (!token) return;
 
     let mentorId = null;
@@ -35,6 +29,7 @@ export default function MyReservists({ onManageReservist }) {
     if (!mentorId) return;
 
     const fetchReservists = async () => {
+      console.log("mentorId: ", mentorId);
       try {
         const res = await fetch(`http://localhost:5000/api/get-my-reservists?mentorId=${mentorId}`);
         const data = await res.json();

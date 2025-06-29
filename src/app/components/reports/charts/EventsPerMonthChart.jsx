@@ -2,19 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function EventsPerMonthChart({ data }) {
-  const [language, setLanguage] = useState(getLanguage());
-
-  useEffect(() => {
-    const handleLangChange = () => {
-      setLanguage(getLanguage());
-    };
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   const chartData = Object.entries(data).map(([month, count]) => ({
     month,

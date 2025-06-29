@@ -3,10 +3,9 @@
 import { useState, useEffect } from 'react';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import { t } from '@/app/utils/loadTranslations';
-import { getLanguage } from '@/app/language';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function EditMeeting({ meeting, index, mentorId, reservistId, onSave, onClose }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState({
     date: meeting.date || '',
     mode: meeting.mode || '',
@@ -16,12 +15,7 @@ export default function EditMeeting({ meeting, index, mentorId, reservistId, onS
     note: meeting.note || ''
   });
   const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   const handleSave = async () => {
     setIsSaving(true);

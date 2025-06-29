@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage, toggleLanguage } from '../../language';
+import { getLanguage, toggleLanguage } from '../../utils/language/language';
 import { useRouter } from 'next/navigation';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import PageIntro from '@/app/components/PageIntro';

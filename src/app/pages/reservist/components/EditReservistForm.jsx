@@ -1,34 +1,62 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 import Button from '@/app/components/Button';
-import '../../../register/registrationForm.css';
+import './personalDetails.css';
 import { locations } from '@/app/components/Locations';
 import sanitizeText from '@/app/utils/sanitizeText';
+import AccordionSection from '@/app/components/AccordionSection';
+import { translatedJobFields } from '@/app/components/jobs/jobFields';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
-export default function EditReservistForm({ userData, mentorId, mentorName, onSave, onClose, onDelete, role }) {
-  const [language, setLanguage] = useState(getLanguage());
+export default function EditReservistForm({ userData, mentorId, mentorName, onSave, onClose, onDelete, role, onChangePasswordClick  }) {
   const [formData, setFormData] = useState(userData || {});
   const [initialData, setInitialData] = useState(userData || {});
   const [saving, setSaving] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState(null);
+  const jobFieldsArray = Object.keys(translatedJobFields);
+  const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
+  const language = useLanguage();
 
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const [initialEmailJobPrefs, setInitialEmailJobPrefs] = useState({
+    jobEmailAlerts: false,
+    jobInterestFields: []
+  });
 
-  useEffect(() => {
-    if (userData) {
-      setFormData(userData);
-      setInitialData(userData);
-    }
+  const [NewEmailJobPrefs, setNewEmailJobPrefs] = useState({
+    jobEmailAlerts: false,
+    jobInterestFields: []
+  });
+
+ useEffect(() => {
+    const initFormData = async () => {
+      if (!userData?.idNumber) return;
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/jobAlerts/get-subscribers?idNumber=${userData.idNumber}`);
+        const result = await res.json();
+
+        let jobEmailAlerts = false;
+        let jobInterestFields = [];
+
+        if (Array.isArray(result) && result.length > 0) {
+          const subscriber = result[0];
+          jobEmailAlerts = true;
+          jobInterestFields = Array.isArray(subscriber.fieldsOfInterest) ? subscriber.fieldsOfInterest : [];
+        }
+
+        setInitialEmailJobPrefs({ jobEmailAlerts, jobInterestFields });
+        setNewEmailJobPrefs({ jobEmailAlerts, jobInterestFields });
+      } catch (err) {
+        console.error("Failed to fetch job email preferences:", err);
+      }
+    };
+
+    initFormData();
   }, [userData]);
 
   const handleChange = (e) => {
@@ -38,9 +66,7 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
       if (name === 'fields') {
         setFormData(prev => ({
           ...prev,
-          fields: checked
-            ? [...(prev.fields || []), value]
-            : (prev.fields || []).filter(f => f !== value),
+          fields: checked ? [...(prev.fields || []), value] : (prev.fields || []).filter(f => f !== value)
         }));
       } else if (name === 'notInterestedInMentor') {
         handleNotInterestedChange(checked);
@@ -66,7 +92,6 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
         });
         return;
       }
-
       setConfirmDialog({
         title: newValue ? t('confirmNotInterestedTitle', language) : t('confirmInterestedTitle', language),
         message: newValue ? t('confirmNotInterestedText', language) : t('confirmInterestedText', language),
@@ -145,20 +170,18 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ reservistId: userData.idNumber, mentorId: mentorId })
         });
-
         if (!resDelete.ok) {
           const result = await resDelete.json();
           setAlertMessage({ message: result.error || t('mentorRemoveFailed', language), type: 'error' });
           return;
         }
-
         formData.mentorId = null;
       }
 
       const res = await fetch('http://localhost:5000/api/update-user-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       });
 
       const result = await res.json();
@@ -185,7 +208,53 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
     if (onClose) onClose();
   };
 
-  const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
+
+  // Handles subscribing or unsubscribing the user to job alert emails
+  const handleEmailJobPreferencesUpdate = async () => {
+    try {
+      const unchanged = initialEmailJobPrefs.jobEmailAlerts === NewEmailJobPrefs.jobEmailAlerts &&
+        JSON.stringify(initialEmailJobPrefs.jobInterestFields) === JSON.stringify(NewEmailJobPrefs.jobInterestFields);
+
+      if (unchanged) return;
+
+      if (!NewEmailJobPrefs.jobEmailAlerts) {
+        await fetch('http://localhost:5000/api/jobAlerts/delete-subscriber', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idNumber: userData.idNumber })
+        });
+        setInitialEmailJobPrefs({ jobEmailAlerts: false, jobInterestFields: [] });
+        setNewEmailJobPrefs({ jobEmailAlerts: false, jobInterestFields: [] });
+        setAlertMessage({ message: t('jobUnsubscribed', language), type: 'success' });
+        return;
+      }
+
+      if (NewEmailJobPrefs.jobInterestFields.length === 0) {
+        setAlertMessage({ message: t('jobAlertMustSelectFields', language), type: 'error' });
+        return;
+      }
+
+      const res = await fetch('http://localhost:5000/api/jobAlerts/add-subscriber', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          idNumber: userData.idNumber,
+          email: userData.email,
+          fullName: userData.fullName,
+          fieldsOfInterest: NewEmailJobPrefs.jobInterestFields
+        })
+      });
+
+      if (res.ok) {
+        setInitialEmailJobPrefs({ ...NewEmailJobPrefs });
+        setAlertMessage({ message: t('jobSubscribed', language), type: 'success' });
+      }
+    } catch (err) {
+      console.error('Email preference update error:', err);
+      setAlertMessage({ message: t('saveError', language), type: 'error' });
+    }
+  };
+
 
   const handleDeleteClick = () => {
     if (confirm(t('confirmDeleteUser', language))) {
@@ -195,97 +264,157 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
 
   return (
     <div className="register-page">
-      <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
-        <div className="register-form-top-buttons">
-          <button
-            onClick={() => setLanguage(language === 'he' ? 'en' : 'he')}
-            className="text-sm underline hover:text-blue-600"
-          >
-            {t('switchLang', language)}
-          </button>
-        </div>
-
+      <div className='register-form-container' dir={language === 'he' ? 'rtl' : 'ltr'}>
         <h1 className="text-3xl font-bold text-center">{t('editUserDetails', language)}</h1>
-
         <form onSubmit={handleSubmit}>
-          <label>{t('fullName', language)}*:
-            <input name="fullName" value={formData.fullName || ''} onChange={handleChange} />
-          </label>
+          {/* Section 1: Personal Info */}
+          <AccordionSection titleKey={t('editPersonalInfoTitle', language)} initiallyOpen={true}>
+            <label>{t('fullName', language)}*:
+              <input name="fullName" value={formData.fullName || ''} onChange={handleChange} />
+            </label>
+            <label className='text-red'>{t('idNumber', language)}*:
+              <input name="idNumber" value={formData.idNumber || ''} readOnly style={{ color: 'red' }}/>
+            </label>
+            <label>{t('email', language)}*:
+              <input name="email" value={formData.email || ''} readOnly style={{ color: 'red' }}/>
+            </label>
+            <label>{t('phone', language)}:
+              <input name="phone" value={formData.phone || ''} onChange={handleChange} />
+            </label>
+          </AccordionSection>
 
-          <label>{t('idNumber', language)}*:
-            <input name="idNumber" value={formData.idNumber || ''} readOnly />
-          </label>
+          {/* Section 2: Registration Form */}
+          <AccordionSection titleKey={t('editRegistrationFormTitle', language)}>
+            <label>{t('armyRole', language)}*:
+              <input name="armyRole" value={formData.armyRole || ''} onChange={handleChange} />
+            </label>
 
-          <label>{t('email', language)}*:
-            <input name="email" value={formData.email || ''} readOnly />
-          </label>
+            <label>{t('location', language)}*:
+              <select name="location" value={formData.location} onChange={handleChange}>
+                <option value="">{t('selectLocation', language)}</option>
+                {locations.map((region, regionIndex) => (
+                  <optgroup
+                    key={regionIndex}
+                    className='font-bold'
+                    label={language === 'he' ? region.region.he : region.region.en}
+                  >
+                    {region.locations.map((loc, locIndex) => (
+                      <option key={locIndex} value={language === 'he' ? loc.he : loc.en}>
+                        {language === 'he' ? loc.he : loc.en}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </label>
 
-          <label>{t('phone', language)}:
-            <input name="phone" value={formData.phone || ''} onChange={handleChange} />
-          </label>
-
-          <label>{t('armyRole', language)}*:
-            <input name="armyRole" value={formData.armyRole || ''} onChange={handleChange} />
-          </label>
-
-          <label>{t('location', language)}*:
-            <select name="location" value={formData.location} onChange={handleChange}>
-              <option value="">{t('selectLocation', language)}</option>
-              {locations.map((region, regionIndex) => (
-                <optgroup 
-                  key={regionIndex} 
-                  className='font-bold'
-                  label={language === 'he' ? region.region.he : region.region.en}
-                >
-                  {region.locations.map((loc, locIndex) => (
-                    <option key={locIndex} value={language === 'he' ? loc.he : loc.en}>
-                      {language === 'he' ? loc.he : loc.en}
-                    </option>
-                  ))}
-                </optgroup>
+            <fieldset>
+              <legend>{t('fields', language)}</legend>
+              {jobFieldsArray.map((field) => (
+                <label key={field} className="register-checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="fields"
+                    value={field}
+                    checked={(formData.fields || []).includes(field)}
+                    onChange={handleChange}
+                  />
+                  {' '}{translatedJobFields[field][language]}
+                </label>
               ))}
-            </select>
-          </label>
+            </fieldset>
 
-          <fieldset>
-            <legend>{t('fields', language)}</legend>
-            {['הייטק', 'ניהול', 'לוגיסטיקה', 'חינוך', 'שיווק', 'אחר'].map((field) => (
-              <label key={field} className="register-checkbox-label" style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}>
-                <input
-                  type="checkbox"
-                  name="fields"
-                  value={field}
-                  checked={(formData.fields || []).includes(field)}
-                  onChange={handleChange}
-                />
-                {field}
-              </label>
-            ))}
-          </fieldset>
+            <label>{t('experience', language)}*:
+              <textarea name="experience" value={formData.experience || ''} onChange={handleChange} />
+            </label>
+            <label>{t('linkedin', language)}:
+              <input name="linkedin" value={formData.linkedin || ''} onChange={handleChange} />
+            </label>
+            <label>{t('aboutMeIntro', language)}:
+              <textarea name="aboutMeIntro" value={formData.aboutMeIntro || ''} onChange={handleChange} />
+            </label>
+            <label>{t('notes', language)}:
+              <textarea name="notes" value={formData.notes || ''} onChange={handleChange} />
+            </label>
+          </AccordionSection>
 
+          {/* Section 3: Security and Notifications */}
+          <AccordionSection titleKey={t('securitySettingsTitle', language)}>
+            <button type="button" onClick={onChangePasswordClick} className="mb-4 text-blue-600 underline">
+              {t('changePassword', language)}
+            </button>
 
-          <label>{t('experience', language)}*:
-            <textarea name="experience" value={formData.experience || ''} onChange={handleChange} />
-          </label>
+            <label className="register-checkbox-label">
+              <input
+                type="checkbox"
+                name="jobEmailAlerts"
+                checked={NewEmailJobPrefs.jobEmailAlerts}
+                onChange={(e) =>
+                  setNewEmailJobPrefs(prev => ({
+                    ...prev,
+                    jobEmailAlerts: e.target.checked
+                  }))
+                }
+              />
+              {' '}{t('receiveJobEmails', language)}
+            </label>
 
-          <label>{t('linkedin', language)}:
-            <input name="linkedin" value={formData.linkedin || ''} onChange={handleChange} />
-          </label>
+            {NewEmailJobPrefs.jobEmailAlerts && (
+              <fieldset>
+                <legend>{t('jobFieldsToReceive', language)}</legend>
+                {jobFieldsArray.map((field) => (
+                  <label key={field} className="register-checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="jobInterestFields"
+                      value={field}
+                      checked={NewEmailJobPrefs.jobInterestFields.includes(field)}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setNewEmailJobPrefs(prev => ({
+                          ...prev,
+                          jobInterestFields: checked
+                            ? [...prev.jobInterestFields, field]
+                            : prev.jobInterestFields.filter(f => f !== field)
+                        }));
+                      }}
+                    />
+                    {' '}{translatedJobFields[field][language]}
+                  </label>
+                ))}
+              </fieldset>
+            )}
 
-          <label>{t('aboutMeIntro', language)}:
-            <textarea name="aboutMeIntro" value={formData.aboutMeIntro || ''} onChange={handleChange} />
-          </label>
+            <label className="register-checkbox-label">
+              <input
+                type="checkbox"
+                name="eventEmailAlerts"
+                checked={formData.eventEmailAlerts || false}
+                onChange={handleChange}
+              />
+              {' '}{t('receiveEventEmails', language)}
+            </label>
 
-          <label>{t('notes', language)}:
-            <textarea name="notes" value={formData.notes || ''} onChange={handleChange} />
-          </label>
+            <Button
+              size='small'
+              text={t('updateEmailPrefs', language)}
+              type="button"
+              onClick={handleEmailJobPreferencesUpdate}
+            />
 
-          <label className="register-checkbox-label">
-            <input type="checkbox" name="notInterestedInMentor" checked={formData.notInterestedInMentor || false} onChange={handleChange} />
-            {t('notInterestedInMentor', language)}
-          </label>
+            <label className="register-checkbox-label">
+              <input
+                type="checkbox"
+                name="notInterestedInMentor"
+                checked={formData.notInterestedInMentor || false}
+                onChange={handleChange}
+              />
+              {' '}{t('notInterestedInMentor', language)}
+            </label>
+          </AccordionSection>
 
-          <div className="register-buttons-group">
+          {/* Save/Cancel buttons */}
+          <div className="register-buttons-group mt-6">
             <Button text={t('saveChanges', language)} type="submit" disabled={!isModified || saving} />
             <Button text={t('cancel', language)} type="button" onClick={handleCancel} />
             {role === 'admin' && (

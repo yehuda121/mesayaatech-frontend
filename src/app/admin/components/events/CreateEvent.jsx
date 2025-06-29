@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getLanguage } from '../../../language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import '../../admin.css'
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function CreateEventForm() {
-  const [language, setLanguage] = useState(getLanguage());
+  const language = useLanguage();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -20,12 +20,6 @@ export default function CreateEventForm() {
   });
   const [alert, setAlert] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
 
   const validateForm = () => {
     const errors = [];

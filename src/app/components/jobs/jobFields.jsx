@@ -1,8 +1,8 @@
 export const translatedJobFields = {
-  "הייטק": { he: "הייטק", en: "Hi-Tech" },
-  "פיננסים": { he: "פיננסים", en: "Finance" },
-  "לוגיסטיקה": { he: "לוגיסטיקה", en: "Logistics" },
-  "שיווק": { he: "שיווק", en: "Marketing" },
-  "חינוך": { he: "חינוך", en: "Education" },
-  "אחר": { he: "אחר", en: "Other" }
+  hiTech: { he: "הייטק", en: "Hi-Tech" },
+  finance: { he: "פיננסים", en: "Finance" },
+  logistics: { he: "לוגיסטיקה", en: "Logistics" },
+  marketing: { he: "שיווק", en: "Marketing" },
+  education: { he: "חינוך", en: "Education" },
+  other: { he: "אחר", en: "Other" }
 };

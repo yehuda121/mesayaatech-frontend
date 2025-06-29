@@ -6,7 +6,6 @@ import Events from '@/app/components/events/ViewAllEvents';
 import EditReservistForm from './components/EditReservistForm';
 import ViewJobs from '@/app/components/jobs/ViewAllJobs';
 import JobDetailsModal from '@/app/components/jobs/viewJob';
-import { getLanguage } from '@/app/language';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { t } from '@/app/utils/loadTranslations';
@@ -14,13 +13,14 @@ import InterviewQues  from '@/app/components/interviewQestions/QuestionsList';
 import MentorringProscess from './components/mentorringProscess';
 import InterviewPracticePanel from "@/app/components/interviewWithAi/InterviewPracticePanel";
 import './reservist.css';
-import Button from '@/app/components/Button';
 import ChangePassword from '@/app/login/ChangePassword';
+import { Brain } from 'lucide-react';
+import { useRoleGuard } from "@/app/utils/isExpectedRoll/useRoleGuard";
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function ReservistHomePage() {
-  const [language, setLanguage] = useState(null);
-  const [idNumber, setIdNumber] = useState(null);
   const [fullName, setFullName] = useState('');
+  const [idNumber, setIdNumber] = useState(null);
   const [email, setEmail] = useState('');
   const [userType, setUserType] = useState('');
   const [userData, setUserData] = useState(null);
@@ -28,49 +28,21 @@ export default function ReservistHomePage() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [mentorId, setMentorID] = useState(null);
   const [mentorName, setMentorName] = useState('');
+  const language = useLanguage();
   const router = useRouter();
+  useRoleGuard("reservist");
 
   useEffect(() => {
-    const currentLang = getLanguage();
-    if (currentLang) setLanguage(currentLang);
-    const handleLangChange = () => {
-      const updatedLang = getLanguage();
-      setLanguage(updatedLang || 'he');
-    };
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
+    const storedFullName = sessionStorage.getItem('fullName');
+    const storedIdNumber = sessionStorage.getItem('idNumber');
+    const storedEmail = sessionStorage.getItem('email');
+    const storedUserType = sessionStorage.getItem('userType');
+
+    if (storedFullName) setFullName(storedFullName);
+    if (storedIdNumber) setIdNumber(storedIdNumber);
+    if (storedEmail) setEmail(storedEmail);
+    if (storedUserType) setUserType(storedUserType);
   }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem('idToken');
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        const role = decoded['custom:role'];
-        const expectedRole = 'reservist';
-        const roleToPath = {
-          admin: '/admin',
-          mentor: '/pages/mentor',
-          reservist: '/pages/reservist',
-          ambassador: '/pages/ambassador'
-        };
-
-        if (role !== expectedRole) {
-          router.push(roleToPath[role] || '/login');
-          return;
-        }
-
-        setIdNumber(decoded['custom:idNumber'] || decoded.sub);
-        setEmail(decoded.email);
-        setUserType(role);
-      } catch (err) {
-        console.error('Failed to decode token:', err);
-        router.push('/login');
-      }
-    } else {
-      router.push('/login');
-    }
-  }, [router]);
 
   useEffect(() => {
     if (!userType || !idNumber) return;
@@ -119,11 +91,6 @@ export default function ReservistHomePage() {
       path: '#userSettings',
       onClick: () => setView('userSettings')
     },
-    // { labelHe: t('navPersonalDetails', 'he'), 
-    //   labelEn: t('navPersonalDetails', 'en'), 
-    //   path: '#form', 
-    //   onClick: () => setView('form') 
-    // },
     { labelHe: t('events', 'he'), 
       labelEn: t('events', 'en'), 
       path: '#events-section', 
@@ -145,6 +112,7 @@ export default function ReservistHomePage() {
       labelHe: t('interviewWithAi', 'he'), 
       labelEn: t('interviewWithAi', 'en'), 
       path: '#InterviewPracticePanel',
+      icon: <Brain size={18} className="inline mr-2" />,
       onClick: () => setView('InterviewPracticePanel') 
     },
     { 
@@ -170,34 +138,13 @@ export default function ReservistHomePage() {
         {view === 'dashboard' && (
           <>
             <h2 className="reservist-section-title text-center mb-6" dir={language === 'he' ? 'rtl' : 'ltr'}></h2>
-            {/* <div className="reservist-dashboard-wrapper"> */}
-
-            {/* <div className="reservist-columns">
-              <div>
-                <ViewJobs
-                  limit={4}
-                  onCardClick={(job) => {
-                    setSelectedJob(job);
-                    setView('view-job');
-                  }}
-                />
-              </div> */}
-
               <div>
                 <Events limit={4} idNumber={idNumber} fullName={fullName} email={email} />
               </div>
-            {/* </div> */}
-            {/* </div> */}
           </>
         )}
         {view === 'userSettings' && (
           <div>
-            <div>
-              <div>
-                <Button text={t('changePassword', language)} onClick={() => setView('change-password')} />
-              </div>
-            </div>
-            <h2 className='font-bold text-center'>{t('editPersonalDetails', language)}</h2>
             <EditReservistForm
               userData={userData}
               mentorId={mentorId}
@@ -207,6 +154,7 @@ export default function ReservistHomePage() {
                 setFullName(updated.fullName);
               }}
               onBack={() => setView('dashboard')}
+              onChangePasswordClick={() => setView('change-password')}
             />
           </div>
         )}

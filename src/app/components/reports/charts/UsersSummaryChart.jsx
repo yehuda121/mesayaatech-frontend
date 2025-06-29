@@ -2,19 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function UsersSummaryChart({ data }) {
-  const [language, setLanguage] = useState(getLanguage());
-
-  useEffect(() => {
-    const handleLangChange = () => {
-      setLanguage(getLanguage());
-    };
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   const chartData = [
     { name: t('reservists', language), value: data.reservists },

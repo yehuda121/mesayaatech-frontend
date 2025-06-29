@@ -1,23 +1,5 @@
 /* ToastMessage.jsx */
-/* .toast-message {
-  position: fixed;
-  bottom: 30px;
-  right: calc(30px + 250px);
-  right: 30px;
-  min-width: 250px;
-  padding: 16px 24px;
-  border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  color: white;
-  font-size: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 9999;
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
-  
-} */
+
  .toast-message {
   position: fixed;
   bottom: 30px;

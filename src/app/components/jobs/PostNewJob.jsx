@@ -2,16 +2,17 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import Button from '@/app/components/Button';
 import './jobs.css';
 import sanitizeText from '@/app/utils/sanitizeText';
+import { Brain } from 'lucide-react';
+import { useLanguage } from "@/app/utils/language/useLanguage";
+import {translatedJobFields} from './jobFields';
 
 export default function PostNewJob({ publisherId, publisherType, onSave, onClose }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [jobData, setJobData] = useState({
     field: '',
     company: '',
@@ -28,27 +29,11 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
     jobTextInput: '',
     attachment: null,
   });
-
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
   const fileInputRef = useRef();
-
+  const language = useLanguage();
   const handleFormChange = (newData) => setJobData(newData);
-
-  useEffect(() => {
-    const handleLanguageChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLanguageChange);
-    return () => window.removeEventListener('languageChanged', handleLanguageChange);
-  }, []);
-
-  const translatedJobFields = {
-    "הייטק": { he: "הייטק", en: "Hi-Tech" },
-    "פיננסים": { he: "פיננסים", en: "Finance" },
-    "לוגיסטיקה": { he: "לוגיסטיקה", en: "Logistics" },
-    "שיווק": { he: "שיווק", en: "Marketing" },
-    "חינוך": { he: "חינוך", en: "Education" },
-    "אחר": { he: "אחר", en: "Other" }
-  };
 
   const getTranslatedJobFieldOptions = (lang) => {
     const defaultOption = { value: '', label: lang === 'he' ? 'בחר תחום' : 'Select Field' };
@@ -273,7 +258,11 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
             setJobData((prev) => ({ ...prev, attachment: file })); }} 
           />
         </div>
-        <Button text={t('autoFillButton', language)} onClick={handleAutoFill} />
+        <Button 
+          text={t('autoFillButton', language)} 
+          onClick={handleAutoFill} 
+          icon={<Brain size={18} className="inline mr-2" />}
+        />
       </div>
 
       <div className="add-job-box">

@@ -49,7 +49,7 @@ export default function NewPasswordPage() {
       const data = await res.json();
       if (res.ok) {
         setMessage('Password changed successfully');
-        localStorage.setItem('idToken', data.tokens.IdToken);
+        sessionStorage.setItem('idToken', data.tokens.IdToken);
         router.push('/login');
       } else {
         setMessage(data.message || 'Failed to update password');

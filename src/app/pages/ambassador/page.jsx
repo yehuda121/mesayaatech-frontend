@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import SideBar from '@/app/components/SideBar';
-import { getLanguage } from '@/app/language';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { t } from '@/app/utils/loadTranslations';
@@ -21,62 +20,36 @@ import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
 import EditAmbassadorForm from './EditAmbassadorForm';
 import './ambassador.css';
 import ChangePassword from '@/app/login/ChangePassword';
+import { useRoleGuard } from "@/app/utils/isExpectedRoll/useRoleGuard";
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function AmbassadorHomePage() {
-  const [language, setLanguage] = useState(null);
   const [fullName, setFullName] = useState('');
   const [idNumber, setIdNumber] = useState(null);
+  const [email, setEmail] = useState('');
+  const [userType, setUserType] = useState('');
   const [view, setView] = useState('allJobs');
   const [userData, setUserData] = useState(null);
-  const [email, setEmail] = useState('');
   const [selectedJobForEdit, setSelectedJobForEdit] = useState(null);
   const [toast, setToast] = useState(null);
   const [questionToEdit, setQuestionToEdit] = useState(null);
   const [questionToAnswer, setQuestionToAnswer] = useState(null);
   const [selectedReservistId, setSelectedReservistId] = useState(null);
+  const language = useLanguage();
   const router = useRouter();
+  useRoleGuard("ambassador");
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const lang = getLanguage();
-      setLanguage(lang);
+    const storedFullName = sessionStorage.getItem('fullName');
+    const storedIdNumber = sessionStorage.getItem('idNumber');
+    const storedEmail = sessionStorage.getItem('email');
+    const storedUserType = sessionStorage.getItem('userType');
 
-      const handleLangChange = () => setLanguage(getLanguage());
-      window.addEventListener('languageChanged', handleLangChange);
-
-      const token = localStorage.getItem('idToken');
-      if (token) {
-        try {
-          const decoded = jwtDecode(token);
-          const role = decoded['custom:role'];
-          const expectedRole = 'ambassador';
-          const roleToPath = {
-            admin: '/admin',
-            mentor: '/pages/mentor',
-            reservist: '/pages/reservist',
-            ambassador: '/pages/ambassador'
-          };
-
-          if (role !== expectedRole) {
-            router.push(roleToPath[role] || '/login');
-            return;
-          }
-
-          const storedName = localStorage.getItem('ambassadorFullName');
-          setFullName(storedName || decoded.name);
-          setIdNumber(decoded['custom:idNumber'] || decoded.sub);
-          setEmail(decoded.email);
-        } catch (err) {
-          console.error('Failed to decode token:', err);
-          router.push('/login');
-        }
-      } else {
-        router.push('/login');
-      }
-
-      return () => window.removeEventListener('languageChanged', handleLangChange);
-    }
-  }, [router]);
+    if (storedFullName) setFullName(storedFullName);
+    if (storedIdNumber) setIdNumber(storedIdNumber);
+    if (storedEmail) setEmail(storedEmail);
+    if (storedUserType) setUserType(storedUserType);
+  }, []);
 
   useEffect(() => {
     if (!idNumber) return;
@@ -100,7 +73,6 @@ export default function AmbassadorHomePage() {
   const navItems = useMemo(() => {
     if (!language) return [];
     return [
-
       {
         labelHe: t('navPersonalDetails', language),
         labelEn: t('navPersonalDetails', language),
@@ -199,7 +171,7 @@ export default function AmbassadorHomePage() {
             />
           </div>
         )}
-        
+
         {view === 'change-password' && (<ChangePassword/>)}
 
         {view === 'my-questions' && (

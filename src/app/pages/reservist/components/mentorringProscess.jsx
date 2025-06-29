@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function MentorshipProgress({ reservistId, mentorId }) {
-  const [language, setLanguage] = useState(getLanguage());
+  const language = useLanguage();
   const [progressData, setProgressData] = useState(null);
   const [toast, setToast] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState(null);
@@ -20,14 +20,9 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
   };
 
   useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-
     if (mentorId && reservistId) {
       fetchProgress();
     }
-
-    return () => window.removeEventListener('languageChanged', handleLangChange);
   }, [mentorId, reservistId]);
 
   const fetchProgress = async () => {

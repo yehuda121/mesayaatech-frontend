@@ -1,27 +1,24 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ViewEvent from './viewEvent';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import './ViewAllEvents.css';
 import { Eye, CalendarPlus } from 'lucide-react';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function ViewAllEvents({ idNumber, fullName, email }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [filter, setFilter] = useState({ title: '', date: '' });
   const [events, setEvents] = useState([]);
   const [joinedEvents, setJoinedEvents] = useState({});
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [toast, setToast] = useState(null);
+  const language = useLanguage();
 
   useEffect(() => {
     fetchEvents();
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
   const fetchEvents = async () => {

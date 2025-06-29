@@ -2,23 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getLanguage, toggleLanguage } from '../../language';
 import { t } from '@/app/utils/loadTranslations';
 import '../login.css';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [language, setLanguage] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    setLanguage(getLanguage());
-    const handleLanguageChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLanguageChange);
-    return () => window.removeEventListener('languageChanged', handleLanguageChange);
-  }, []);
+  const language = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

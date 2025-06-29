@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import Fuse from 'fuse.js';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ViewJob from './viewJob';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
@@ -11,11 +10,13 @@ import EditJob from './EditJob';
 import './jobs.css';
 import './filters.css';
 import Button from '../Button';
-import { FileSearch, Edit2, Trash2, X } from 'lucide-react';
+import { FileSearch, Edit2, Trash2, X, PlusCircle } from 'lucide-react';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
+import ConfirmDialog from '../notifications/ConfirmDialog';
+import { useLanguage } from "@/app/utils/language/useLanguage";
+import DraggableAddJobButton from '../DraggableButton/DraggableButton';
 
 export default function ViewAllJobs() {
-  const [language, setLanguage] = useState(getLanguage());
   const [jobs, setJobs] = useState([]);
   const [filters, setFilters] = useState({
     searchText: '',
@@ -32,8 +33,10 @@ export default function ViewAllJobs() {
   const [userType, setUserType] = useState(null);
   const [userId, setUserId] = useState(null);
   const [editingJob, setEditingJob] = useState(null);
+  const [jobToDelete, setJobToDelete] = useState(null);
+  const language = useLanguage();
+  const [addNewJobMode, setAddNewJobMode] = useState(false);
 
-  // Build categories options from translatedJobFields
   const categories = [
     { value: '', labelHe: 'הכל', labelEn: 'All' },
     ...Object.entries(translatedJobFields).map(([value, labelObj]) => ({
@@ -44,15 +47,11 @@ export default function ViewAllJobs() {
   ];
 
   useEffect(() => {
-    setLanguage(getLanguage());
-    const rawUserType = localStorage.getItem('userType');
+    const rawUserType = sessionStorage.getItem('userType');
     setUserType(rawUserType);
-    const id = localStorage.getItem('userId');
+    const id = sessionStorage.getItem('userId');
     setUserId(id);
     fetchJobs();
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
   const fetchJobs = async () => {
@@ -69,7 +68,6 @@ export default function ViewAllJobs() {
 
   // Delete job API call
   const handleDeleteJob = async (jobId) => {
-    if (!confirm(t('confirmDeleteJob', language))) return;
     try {
       const res = await fetch('http://localhost:5000/api/delete-job', {
         method: 'POST',
@@ -78,6 +76,7 @@ export default function ViewAllJobs() {
       });
       if (res.ok) {
         setJobs(prev => prev.filter(j => j.jobId !== jobId));
+        setJobToDelete(null);
       } else {
         alert(t('deleteFailed', language));
       }
@@ -218,7 +217,7 @@ export default function ViewAllJobs() {
                   <button title={t('edit', language)} onClick={(e) => { e.stopPropagation(); setEditingJob(job); }}>
                     <Edit2 size={20} />
                   </button>
-                  <button title={t('delete', language)} onClick={(e) => { e.stopPropagation(); handleDeleteJob(job.jobId); }}>
+                  <button title={t('delete', language)} onClick={(e) => { e.stopPropagation(); setJobToDelete(job.jobId); }}>
                     <Trash2 size={20} />
                   </button>
                 </div>
@@ -228,6 +227,22 @@ export default function ViewAllJobs() {
         )}
         emptyTextKey="noJobsFound"
       />
+
+      {userType !== 'reservist' && (
+        <DraggableAddJobButton
+          title={t('postNewJob', language)}
+          onClick={() => setAddNewJobMode(true)}
+        />
+      )}
+
+      {jobToDelete && (
+        <ConfirmDialog 
+          title={t('confirmDelete', language)}
+          message={t('confirmDeleteJob', language)}
+          onConfirm={() => handleDeleteJob(jobToDelete)}
+          onCancel={() => setJobToDelete(null)}
+        />
+      )}
 
       {selectedJob && (
         <ViewJob job={selectedJob} onClose={() => setSelectedJob(null)} />
@@ -246,6 +261,17 @@ export default function ViewAllJobs() {
 
       {toast && (
         <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+      )}
+
+      {addNewJobMode && (
+        <EditJob
+          job={{}} 
+          onClose={() => setAddNewJobMode(false)}
+          onSave={(newJob) => {
+            setJobs(prev => [...prev, newJob]);
+            setAddNewJobMode(false);
+          }}
+        />
       )}
 
       {showAdvanced && (

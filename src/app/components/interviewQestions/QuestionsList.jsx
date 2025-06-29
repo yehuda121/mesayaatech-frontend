@@ -1,42 +1,70 @@
 'use client';
 import { useEffect, useState } from 'react';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import ViewQuestion from './ViewQuestion'; 
 import Button from '@/app/components/Button';
-import { ThumbsUp, FileSearch, MessageCircleMore,  Book, BookOpen } from 'lucide-react';
+import { ThumbsUp, FileSearch, MessageCircleMore,  Book, BookOpen , Edit2,Trash2 } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
+import { useLanguage } from "@/app/utils/language/useLanguage";
+import { translatedJobFields } from "@/app/components/jobs/jobFields";
+import PostAnswer from './PostAnswer';
+import ConfirmDialog from '../notifications/ConfirmDialog';
+import EditQuestion from './EditQuestion';
+import DraggableButton from '@/app/components/DraggableButton/DraggableButton';
+import AddQuestion from './AddNewQuestion';
 
 export default function QuestionsPage({ onAnswer }) {
-  const [language, setLanguage] = useState(getLanguage());
   const [questions, setQuestions] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState('');
   const [sortMode, setSortMode] = useState('newest');
   const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const [userId, setUserId] = useState(null);
   const [userType, setUserType] = useState(null);
   const [idNumber, setIdNumber] = useState(null);
   const [filterLikedOnly, setFilterLikedOnly] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [filterReadOnly, setFilterReadOnly] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [questionToAnswer, setQuestionToAnswer] = useState(null);
+  const language = useLanguage();
+  const [confirmDialog, setConfirmDialog] = useState(null);
+  const [alert, setAlert] = useState(null);
+  const [questionToEdit, setQuestionToEdit] = useState(null); 
+  const [showAddQuestion, setShowAddQuestion] = useState(false);
 
   const categories = [
     { value: "", labelHe: "הכל", labelEn: "All" },
-    { value: "tech", labelHe: "הייטק", labelEn: "Tech" },
-    { value: "management", labelHe: "ניהול", labelEn: "Management" },
-    { value: "logistics", labelHe: "לוגיסטיקה", labelEn: "Logistics" },
-    { value: "education", labelHe: "חינוך", labelEn: "Education" },
-    { value: "marketing", labelHe: "שיווק", labelEn: "Marketing" },
-    { value: "other", labelHe: "אחר", labelEn: "Other" }
+    ...Object.entries(translatedJobFields).map(([value, labels]) => ({
+      value,
+      labelHe: labels.he,
+      labelEn: labels.en,
+    }))
   ];
+
+  useEffect(() => {
+    const idToken = sessionStorage.getItem('idToken');
+    const fullName = sessionStorage.getItem('fullName');
+
+    if (idToken) {
+      try {
+        const decoded = jwtDecode(idToken);
+        setUserType(decoded['custom:role']);
+        setIdNumber(decoded['custom:idNumber'] || decoded['sub']);
+        setFullName(fullName);
+      } catch (err) {
+        console.error('Failed to decode idToken:', err);
+      }
+    }
+
+    fetchQuestions();
+  }, []);
 
   const hasRead = (readBy = []) => {
     return readBy.some(read => read.idNumber === idNumber);
   };
+
   const handleReadToggle = async (questionId, alreadyRead) => {
     try {
-      const fullName = localStorage.getItem('fullName');
       const res = await fetch('http://localhost:5000/api/toggle-question-read', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -61,33 +89,6 @@ export default function QuestionsPage({ onAnswer }) {
     }
   };
 
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-
-    const fullName = localStorage.getItem('fullName');
-    const idToken = localStorage.getItem('idToken');
-
-    const decodedType = jwtDecode(idToken);
-    setUserType(decodedType['custom:role']);
-
-    let idNumber = null;
-    if (idToken) {
-      try {
-        const decoded = jwtDecode(idToken);
-        idNumber = decoded['custom:idNumber'] || decoded['sub'];
-        setIdNumber(idNumber);
-      } catch (err) {
-        console.error('Failed to decode idToken:', err);
-      }
-    }
-
-    setUserId(localStorage.getItem("userId"));
-    fetchQuestions();
-
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
-
   const fetchQuestions = async () => {
     try {
       const res = await fetch('http://localhost:5000/api/get-questions');
@@ -104,8 +105,6 @@ export default function QuestionsPage({ onAnswer }) {
 
   const handleLike = async (questionId, alreadyLiked) => {
     try {
-      const fullName = localStorage.getItem('fullName');
-
       const res = await fetch('http://localhost:5000/api/toggle-question-like', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -134,7 +133,6 @@ export default function QuestionsPage({ onAnswer }) {
     }
   };
 
-
   const filteredAndSorted = questions
     .filter(q =>
       q.text.toLowerCase().includes(searchText.toLowerCase()) &&
@@ -149,6 +147,35 @@ export default function QuestionsPage({ onAnswer }) {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
+  const handleDelete = (questionId) => {
+    setConfirmDialog({
+      title: t('confirmDeleteQuestionTitle', language),
+      message: t('confirmDeleteQuestionText', language),
+      onConfirm: () => confirmDelete(questionId),
+      onCancel: () => setConfirmDialog(null),
+    });
+  };
+
+  const confirmDelete = async (questionId) => {
+    try {
+      const res = await fetch('http://localhost:5000/api/delete-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ questionId, idNumber, fullName })
+      });
+      if (res.ok) {
+        setQuestions(prev => prev.filter(q => q.questionId !== questionId));
+        setAlert({ message: t('deleteSuccess', language), type: 'success' });
+      } else {
+        setAlert({ message: t('deleteFailed', language), type: 'error' });
+      }
+    } catch (err) {
+      console.error('Error deleting question:', err);
+      setAlert({ message: t('serverError', language), type: 'error' });
+    } finally {
+      setConfirmDialog(null);
+    }
+  };
 
   const filters = [
     <div
@@ -201,6 +228,7 @@ export default function QuestionsPage({ onAnswer }) {
       >
         {filterReadOnly ? t('cancel', language) : t('readQuestions', language)}
       </Button>
+    
 
     </div>
   ];
@@ -216,70 +244,145 @@ export default function QuestionsPage({ onAnswer }) {
             <p><strong>{t('question', language)}:</strong> {q.text}</p>
             <p><strong>{t('createdAt', language)}:</strong> {new Date(q.createdAt).toLocaleDateString(language === 'he' ? 'he-IL' : 'en-US')}</p>
             <p>
-              <strong>{t('createdBy', language)}:</strong>{' '}
-              {q.createdBy?.split('#')[0] || t('unknownUser', language)}
+              <strong>{t('createdBy', language)}:</strong> {q.createdBy?.split('#')[0] || t('unknownUser', language)}
             </p>
-              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+              <button
+                className='text-green-600'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedQuestion(q);
+                }}
+                title={t('viewQestion', language)}
+              >
+                <FileSearch size={18} />
+              </button>
+
+              {userType !== 'reservist' && (
                 <button
-                  className='text-green-600'
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedQuestion(q);
+                    setQuestionToAnswer(q);
                   }}
-                  title={t('viewQestion', language)}
+                  title={t('postAnswer', language)}
                 >
-                  <FileSearch size={18} />
+                  <MessageCircleMore size={18} />
                 </button>
+              )}
 
-                {userType !== 'reservist' && (
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleLike(q.questionId, hasLiked(q.likes));
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer' }}
+                title={t('like', language)}
+              >
+                <ThumbsUp
+                  size={22}
+                  color={hasLiked(q.likes) ? '#007bff' : '#ccc'}
+                />
+                <span>{q.likes?.length || 0}</span>
+              </div>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleReadToggle(q.questionId, hasRead(q.readBy));
+                }}
+                title={hasRead(q.readBy) ? t('markAsUnread', language) : t('markAsRead', language)}
+                style={{ cursor: 'pointer', fontSize: '20px' }}
+              >
+                {hasRead(q.readBy) ? (
+                  <BookOpen size={22} color="#4CAF50" />
+                ) : (
+                  <Book size={22} color="#bbb" />
+                )}
+              </div>
+                            
+              {userType === 'admin' && (
+                <div className="mt-3 flex gap-4">
                   <button
+                    title={t('edit', language)}
                     onClick={(e) => {
                       e.stopPropagation();
-                      onAnswer && onAnswer(q);
+                      setQuestionToEdit(q); 
                     }}
-                    title={t('postAnswer', language)}
                   >
-                    <MessageCircleMore size={18} />
+                    <Edit2 size={20} />
                   </button>
-                )}
 
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleLike(q.questionId, hasLiked(q.likes));
-                  }}
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer' }}
-                  title={t('like', language)}
-                >
-                  <ThumbsUp
-                    size={22}
-                    color={hasLiked(q.likes) ? '#007bff' : '#ccc'}
-                  />
-                  <span>{q.likes?.length || 0}</span>
+                  <button
+                    title={t('delete', language)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(q.questionId);
+                    }}
+                  >
+                    <Trash2 size={20} />
+                  </button>
                 </div>
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleReadToggle(q.questionId, hasRead(q.readBy));
-                  }}
-                  title={hasRead(q.readBy) ? t('markAsUnread', language) : t('markAsRead', language)}
-                  style={{ cursor: 'pointer', fontSize: '20px' }}
-                >
-                  {hasRead(q.readBy) ? (
-                    <BookOpen size={22} color="#4CAF50" />
-                  ) : (
-                    <Book size={22} color="#bbb" />
-                  )}
-                </div>
+              )}
+
             </div>
           </div>
         )}
       />
 
+      {userType !== 'reservist' && (
+        <DraggableButton
+          title={t('addNewQuestion', language)}
+          onClick={() => setShowAddQuestion(true)}
+        />
+      )}
+
+      {showAddQuestion && (
+        <AddQuestion
+          onClose={() => setShowAddQuestion(false)}
+          onSuccess={() => {
+            setShowAddQuestion(false);
+            fetchQuestions();
+          }}
+          fullName={fullName}
+          idNumber={idNumber}
+        />
+      )}
+
+      {confirmDialog && (
+        <ConfirmDialog
+          title={confirmDialog.title}
+          message={confirmDialog.message}
+          onConfirm={confirmDialog.onConfirm}
+          onCancel={confirmDialog.onCancel}
+        />
+      )}
+
+      {questionToEdit && (
+        <EditQuestion
+          question={questionToEdit}
+          onClose={() => setQuestionToEdit(null)}
+          onSave={() => {
+            setQuestionToEdit(null);
+            fetchQuestions();
+          }}
+        />
+      )}
+
       {selectedQuestion && (
         <ViewQuestion
           question={selectedQuestion}
           onClose={() => setSelectedQuestion(null)}
+        />
+      )}
+
+      {questionToAnswer && (
+        <PostAnswer
+          questionId={questionToAnswer.questionId}
+          fullName={fullName}
+          idNumber={idNumber}
+          onSuccess={() => {
+            fetchQuestions();
+          }}
+          onClose={() => setQuestionToAnswer(null)}
         />
       )}
     </div>

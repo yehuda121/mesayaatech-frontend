@@ -4,7 +4,6 @@ import React from 'react';
 import SideBar from '@/app/components/SideBar';
 import { t } from '@/app/utils/loadTranslations';
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import './reports.css';
 import { useRouter } from 'next/navigation';
 import useUsersSummary from '@/app/components/reports/api/useUsersSummary';
@@ -22,13 +21,11 @@ import useLocationsSummary from '@/app/components/reports/api/useLocationsSummar
 import LocationsSummaryChart from '@/app/components/reports/charts/LocationsSummaryChart';
 import useEventsParticipantsCount from '@/app/components/reports/api/useEventsParticipantsCount';
 import EventsParticipantsCountChart from '@/app/components/reports/charts/EventsParticipantsCountChart';
-
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function ReportsDashboard() {
-    const [view, setView] = useState('');
-    const [language, setLanguage] = useState(getLanguage() || 'he');
+    const [view, setView] = useState('userSummary');
     const router = useRouter();
-
     const { usersData, usersError, usersLoading } = useUsersSummary();
     const { jobsData, jobsError, jobsLoading } = useJobsPerMonth();
     const { eventsData, eventsError, eventsLoading } = useEventsPerMonth();    
@@ -37,17 +34,7 @@ export default function ReportsDashboard() {
     const { meetingsSummaryData, meetingsSummaryError, meetingsSummaryLoading } = useMeetingsSummary();
     const { locationsData, locationsError, locationsLoading } = useLocationsSummary();
     const { participantsData  } = useEventsParticipantsCount();
-
-    useEffect(() => {
-        const currentLang = getLanguage();
-        if (currentLang) setLanguage(currentLang);
-        const handleLangChange = () => {
-            const updatedLang = getLanguage();
-            setLanguage(updatedLang || 'he');
-        };
-        window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-    }, []);
+    const language = useLanguage();
 
     const handleNavigation = (newView) => {
         setView(newView);
@@ -102,8 +89,6 @@ export default function ReportsDashboard() {
             path: '#eventsParticipants',
             onClick: () => handleNavigation('eventsParticipants')
         }
-
-
     ];
 
     const backToAdmin = () => {

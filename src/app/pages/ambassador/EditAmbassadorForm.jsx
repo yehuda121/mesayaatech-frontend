@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import Button from '@/app/components/Button';
@@ -10,20 +9,15 @@ import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import '../../register/registrationForm.css';
 import { locations } from '@/app/components/Locations';
 import sanitizeText from '@/app/utils/sanitizeText';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function EditAmbassadorForm({ userData, onSave , onClose, onDelete, role }) {
   const router = useRouter();
-  const [language, setLanguage] = useState(getLanguage());
   const [formData, setFormData] = useState(userData || {});
   const [initialData, setInitialData] = useState(userData || {});
   const [alert, setAlert] = useState(null);
   const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
+  const language = useLanguage();
 
   useEffect(() => {
     if (userData) {
@@ -109,7 +103,7 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
       if (res.ok) {
         setAlert({ message: t('saveSuccess', language), type: 'success' });
         setInitialData(formData);
-        localStorage.setItem('ambassadorFullName', formData.fullName);
+        sessionStorage.setItem('ambassadorFullName', formData.fullName);
         onSave(result);
       } else {
         setAlert({ message: result.error || t('saveError', language), type: 'error' });

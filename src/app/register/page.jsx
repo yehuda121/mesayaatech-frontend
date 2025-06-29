@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import Button from "../components/Button";
 import { t } from "@/app/utils/loadTranslations";
 import './registrationForm.css';
-import { getLanguage, toggleLanguage } from "../language";
+
+import { getLanguage, toggleLanguage } from "../utils/language/language";
+
 
 export default function RegisterPage() {
   const [language, setLanguage] = useState(getLanguage());

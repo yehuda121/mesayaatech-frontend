@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage } from '@/app/language';
 import { t } from '@/app/utils/loadTranslations';
 import Button from '@/app/components/Button';
 import './GenericForm.css';
 import { FaEnvelope, FaPhone, FaUser, FaIdCard, FaLinkedin } from 'react-icons/fa';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function GenericForm({
   titleKey,
@@ -23,7 +23,7 @@ export default function GenericForm({
   onCloseIcon,
   isModal = false
 }) {
-  const [language, setLanguage] = useState(getLanguage());
+  const language = useLanguage();
 
   useEffect(() => {
     if (isModal) {
@@ -33,12 +33,6 @@ export default function GenericForm({
       document.body.style.overflow = '';
     };
   }, [isModal]);
-
-  useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
-  }, []);
 
   const handleFieldChange = (key, value) => {
     onChange({ ...data, [key]: value });

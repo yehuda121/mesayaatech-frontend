@@ -1,0 +1,29 @@
+
+
+.DraggableButton:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+.DraggableButton {
+  position: fixed;
+  background-color: #002855;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 9999px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+}
+
+@media (max-width: 768px) {
+  .DraggableButton {
+    right: 0px;
+  }
+}

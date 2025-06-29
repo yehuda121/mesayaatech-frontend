@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLanguage, toggleLanguage } from '@/app/language';
+import { getLanguage, toggleLanguage } from '@/app/utils/language/language';
 import { useRouter } from 'next/navigation';
 import '@/app/components/GenericForm/GenericForm.css';
 import { t } from '@/app/utils/loadTranslations';
