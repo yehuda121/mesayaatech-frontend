@@ -22,11 +22,6 @@ export default function MentorRegisterForm() {
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
-  const handleLanguageToggle = () => {
-    const newLang = toggleLanguage(); // this updates currentLanguage and fires the event
-    setLanguage(newLang);             // trigger re-render with new language
-  };
-
   const handleSubmit = async (formData) => {
     const validationErrors = validateForm(formData);
     if (validationErrors.length > 0) {
@@ -120,13 +115,15 @@ export default function MentorRegisterForm() {
 
   return (
     <div className="register-page">
-      <PageIntro titleKey="mentorWelcome" subtitleKey="mentorWelcomeSubtitle" />
-
-      <div className="top-buttons-wrapper">
-        <button onClick={handleLanguageToggle} className="text-sm underline hover:text-blue-600">
-          {t('switchLang', language)}
-        </button>
-      </div>
+      <PageIntro 
+        titleKey="mentorWelcome" 
+        subtitleKey="mentorWelcomeSubtitle"
+        onClick={() => {
+          const newLang = toggleLanguage();
+          setLanguage(newLang);
+        }}
+        language={language}
+      />
 
       <MultiStepForm
         key={language}

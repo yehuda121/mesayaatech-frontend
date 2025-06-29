@@ -1,12 +1,9 @@
 'use client';
 import { t } from '@/app/utils/loadTranslations';
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLanguage } from "@/app/utils/language/useLanguage";
 
-export default function PageIntro({ titleKey, subtitleKey }) {
+export default function PageIntro({ titleKey, subtitleKey, onClick, language}) {
   const router = useRouter();
-  const language = useLanguage();
 
   return (
     <>
@@ -16,7 +13,7 @@ export default function PageIntro({ titleKey, subtitleKey }) {
           <button onClick={() => router.push('/login')}>
             {t('mentorLogin', language)}
           </button>
-          <button onClick={() => setLanguage(language === 'he' ? 'en' : 'he')}>
+          <button onClick={onClick}>
             {t('switchLang', language)}
           </button>
         </div>
@@ -24,7 +21,9 @@ export default function PageIntro({ titleKey, subtitleKey }) {
 
       <div className="mentor-intro-section">
         <h1>{t(titleKey, language)}</h1>
-        <p>{t(subtitleKey, language)}</p>
+        {subtitleKey && (
+          <p>{t(subtitleKey, language)}</p>
+        )}
       </div>
     </>
   );

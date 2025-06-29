@@ -5,20 +5,15 @@ import { useRouter } from "next/navigation";
 import Button from "../components/Button";
 import { t } from "@/app/utils/loadTranslations";
 import './registrationForm.css';
-
 import { getLanguage, toggleLanguage } from "../utils/language/language";
-
 
 export default function RegisterPage() {
   const [language, setLanguage] = useState(getLanguage());
   const router = useRouter();
-
+  
   useEffect(() => {
-    const handleLanguageChange = () => {
-      setLanguage(getLanguage());
-    };
-
     setLanguage(getLanguage());
+    const handleLanguageChange = () => setLanguage(getLanguage());
     window.addEventListener("languageChanged", handleLanguageChange);
     return () => window.removeEventListener("languageChanged", handleLanguageChange);
   }, []);
@@ -33,25 +28,20 @@ export default function RegisterPage() {
           <button onClick={() => router.push("/login")}>
             {t('login', language)}
           </button>
+
           <button onClick={() => router.push("/register")}>
             {t('signup', language)}
           </button>
-          {/* <button
-            onClick={() => {
-              const newLang = toggleLanguage();
-              setLanguage(newLang);
-            }}
-          > */}
+
           <button onClick={() => {
-             const newLang = toggleLanguage(); 
-             setLanguage(newLang);            
-      }}
-         >
-  <span className="lang-icon">🌐</span>
-  <span className="lang-text">
-    {language === 'he' ? 'English' : 'עברית'}
-  </span>
-</button>
+            const newLang = toggleLanguage();
+            setLanguage(newLang);
+          }}>
+            <span className="lang-icon">🌐</span>
+            <span className="lang-text">
+              {language === 'he' ? 'English' : 'עברית'}
+            </span>
+          </button>
 
         </div>
       </header>
@@ -71,7 +61,7 @@ export default function RegisterPage() {
                     localStorage.setItem('language', language); 
                     router.push(`/register/${type}`);
                   }}
-                                  />
+                />
               </div>
             ))}
           </div>

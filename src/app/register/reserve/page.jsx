@@ -111,23 +111,15 @@ export default function ReserveRegisterForm() {
 
   return (
     <div className="register-page">
-      <PageIntro titleKey="reservistWelcome" subtitleKey="reservistWelcomeSubtitle" />
-
-      <div className="register-form-top-buttons">
-        <button
-          onClick={() => router.push('/login')}
-          className="text-blue-700 font-medium hover:underline"
-        >
-          {t('alreadyHaveAcconut', language)}
-        </button>
-
-        <button
-          onClick={() => setLanguage(toggleLanguage())}
-          className="text-sm underline hover:text-blue-600"
-        >
-          {t('switchLang', language)}
-        </button>
-      </div>
+      <PageIntro 
+        titleKey="reservistWelcome" 
+        subtitleKey="reservistWelcomeSubtitle"
+        onClick={() => {
+          const newLang = toggleLanguage();
+          setLanguage(newLang);
+        }}
+        language={language}
+      />
 
       <MultiStepForm
         key={language}

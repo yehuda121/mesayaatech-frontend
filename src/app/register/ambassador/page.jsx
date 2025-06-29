@@ -12,37 +12,8 @@ import '../registrationForm.css';
 
 export default function AmbassadorRegisterForm() {
   const router = useRouter();
-
   const [language, setLanguage] = useState(getLanguage());
   const [alert, setAlert] = useState(null);
-
-
-  const [formData, setFormData] = useState({
-    userType: 'ambassador',
-    status: 'pending',
-    fullName: '',
-    idNumber: '',
-    email: '',
-    phone: '',
-    currentCompany: '',
-    position: '',
-    location: '',
-    canShareJobs: '',
-    jobFields: [],
-    linkedin: '',
-    notes: '',
-    aboutMe: '',
-  });
-
-  const translatedJobFields = [
-    { value: '', labelHe: 'הכל', labelEn: 'All' },
-    ...Object.entries(translatedJobFields).map(([value, labelObj]) => ({
-      value,
-      labelHe: labelObj.he,
-      labelEn: labelObj.en
-    }))
-  ];
-
 
   useEffect(() => {
     const handleLangChange = () => setLanguage(getLanguage());
@@ -133,16 +104,14 @@ export default function AmbassadorRegisterForm() {
 
   return (
     <div className="register-page">
-      <PageIntro titleKey="ambassadorRegisterTitle" />
-
-      <div className="register-form-top-buttons">
-        <button onClick={() => router.push('/login')} className="text-blue-700 font-medium hover:underline">
-          {t('alreadyHaveAcconut', language)}
-        </button>
-        <button onClick={() => setLanguage(toggleLanguage())} className="text-sm underline hover:text-blue-600">
-          {t('switchLang', language)}
-        </button>
-      </div>
+      <PageIntro 
+        titleKey="ambassadorRegisterTitle" 
+        onClick={() => {
+          const newLang = toggleLanguage();
+          setLanguage(newLang);
+        }}
+        language={language}
+      />
 
       <MultiStepForm
         key={language}
