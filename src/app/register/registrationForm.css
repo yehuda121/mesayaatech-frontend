@@ -20,14 +20,6 @@ html, body {
 
 
 
-/* .register-page::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.2);
-  z-index: 0;
-} */
-
 .register-layout,
 .register-form-container {
   position: relative;
@@ -106,11 +98,11 @@ html, body {
   width: 95%;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #ffffff; /* צבע אחיד ולבן */
-  border: 1px solid #e2e8f0; /* גבול עדין */
+  background-color: #ffffff; 
+  border: 1px solid #e2e8f0; 
   border-radius: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); /* צל רך בלבד */
-  backdrop-filter: none; /* לבטל את הטשטוש */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); 
+  backdrop-filter: none; 
   position: relative;
   z-index: 1;
 }
@@ -399,3 +391,51 @@ html, body {
   text-align: center;
 }
 
+.register-hero {
+  position: relative;
+  min-height: calc(100vh - 100px);
+  background: url('/registration_page.png') no-repeat left center;
+  background-size: contain;
+  background-color: #f9fbfd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+  gap: 2rem;
+  direction: rtl;
+}
+
+
+
+.register-overlay-content {
+  background-color: rgba(255, 255, 255, 0.94);
+  padding: 4rem 3.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  max-width: 550px;
+  width: 100%;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+
+.register-overlay-content h1 {
+  font-size: 2.9rem;
+  font-weight: bold;
+  color: #002855;
+  margin-bottom: 1.9rem;
+}
+
+.register-overlay-content p {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 3rem;
+}
+
+.register-buttons-group button {
+  font-size: 1.1rem;       
+  padding: 0.75rem 1.5rem;   
+  min-width: 100px;          
+  border-radius: 0.6rem;     
+}
+ 

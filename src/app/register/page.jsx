@@ -7,7 +7,6 @@ import { t } from "@/app/utils/loadTranslations";
 import './registrationForm.css';
 import { getLanguage, toggleLanguage } from "../language";
 
-
 export default function RegisterPage() {
   const [language, setLanguage] = useState(getLanguage());
   const router = useRouter();
@@ -22,13 +21,8 @@ export default function RegisterPage() {
     return () => window.removeEventListener("languageChanged", handleLanguageChange);
   }, []);
 
-  const navItems = [
-    { labelHe: "דף הבית", labelEn: "Home", path: "/" },
-    { labelHe: "התחברות", labelEn: "Login", path: "/login" },
-  ];
-
   return (
-    <div>
+    <div className="register-page">
       <header className="register-header">
         <div className="register-logo">
           <img src="/logo.png" alt="Logo" className="register-logo-img" />
@@ -40,38 +34,47 @@ export default function RegisterPage() {
           <button onClick={() => router.push("/register")}>
             {t('signup', language)}
           </button>
-          <button
+          {/* <button
             onClick={() => {
               const newLang = toggleLanguage();
               setLanguage(newLang);
             }}
-          >
-            <span className="lang-icon">🌐</span>
-            <span className="lang-text">{language === 'he' ? 'English' : 'עברית'}</span>
-          </button>
+          > */}
+          <button onClick={() => {
+             const newLang = toggleLanguage(); 
+             setLanguage(newLang);            
+      }}
+         >
+  <span className="lang-icon">🌐</span>
+  <span className="lang-text">
+    {language === 'he' ? 'English' : 'עברית'}
+  </span>
+</button>
+
         </div>
       </header>
 
-      <div className="register-top-section">
-        <h1>{t('registerWelcomeTitle', language)}</h1>
-        <p>{t('registerWelcomeSubtitle', language)}</p>
-      </div>
+      <main className={`register-hero ${language === 'he' ? 'rtl' : 'ltr'}`}>
+        <div className="register-overlay-content">
+          <h1>{t('registerWelcomeTitle', language)}</h1>
+          <p>{t('registerWelcomeSubtitle', language)}</p>
 
-      <main className="register-about-section">
-        <p className="register-options-title">{t('registerAs', language)}</p>
-        <div className="register-buttons-group">
-          {["reserve", "mentor", "ambassador"].map((type) => (
-            <div className="tooltip-wrapper" key={type}>
-              <Button
-                text={t(`registerAs_${type}`, language)}
-                onClick={() => router.push(`/register/${type}`)}
-              />
-            </div>
-          ))}
+          <p className="register-options-title">{t('registerAs', language)}</p>
+          <div className="register-buttons-group">
+            {["reserve", "mentor", "ambassador"].map((type) => (
+              <div className="tooltip-wrapper" key={type}>
+                <Button
+                  text={t(`registerAs_${type}`, language)}
+                  onClick={() => {
+                    localStorage.setItem('language', language); 
+                    router.push(`/register/${type}`);
+                  }}
+                                  />
+              </div>
+            ))}
+          </div>
         </div>
       </main>
     </div>
   );
-
-
 }

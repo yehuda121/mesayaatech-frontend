@@ -493,8 +493,12 @@
     "changePassword": "Change Password",
     "passwordChangeSuccess": "Password updated successfully",
     "passwordChangeError": "Error updating password",
-    "editPersonalDetails": "Edit Personal Details"
+    "editPersonalDetails": "Edit Personal Details",
 
-
+    "next": "Next",
+    "selectOption": "Select an option",
+    "fullNameIsTooLong": "Full name is too long (max 70 characters)",
+    "reservistWelcome": "Welcome to the Reservist Platform",
+    "reservistWelcomeSubtitle": "Please fill in your details so we can match you with mentors for personalized guidance."
 
 }

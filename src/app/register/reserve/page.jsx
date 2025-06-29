@@ -1,51 +1,24 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { getLanguage, toggleLanguage } from '../../language';
 import { useRouter } from 'next/navigation';
-import Button from '../../components/Button';
+import AlertMessage from '@/app/components/notifications/AlertMessage';
+import PageIntro from '@/app/components/PageIntro';
+import MultiStepForm from '@/app/components/MultiStepForm/MultiStepForm';
 import { t } from '@/app/utils/loadTranslations';
-import AlertMessage from '@/app/components/notifications/AlertMessage'; 
-import '../registrationForm.css';
-import { locations } from '@/app/components/Locations';
 import sanitizeText from '@/app/utils/sanitizeText';
+import '../registrationForm.css';
 
 export default function ReserveRegisterForm() {
   const router = useRouter();
-  const [language, setLanguage] = useState(null);
-  const [alert, setAlert] = useState(null); 
-
-  const [formData, setFormData] = useState({
-    userType: 'reservist',
-    status: 'pending',
-    // mentorId: null,
-    notInterestedInMentor: false,
-    fullName: '',
-    idNumber: '',
-    email: '',
-    phone: '',
-    armyRole: '',
-    location: '',
-    fields: [],
-    experience: '',
-    linkedin: '',
-    notes: '',
-    aboutMe: '',
-  });
-
-  const translatedFields = {
-    "הייטק": { he: " הייטק", en: " Hi-Tech" },
-    "ניהול": { he: " ניהול", en: " Management" },
-    "לוגיסטיקה": { he: " לוגיסטיקה", en: " Logistics" },
-    "חינוך": { he: " חינוך", en: " Education" },
-    "שיווק": { he: " שיווק", en: " Marketing" },
-    "אחר": { he: " אחר", en: " Other" }
-  };
+  const [language, setLanguage] = useState(getLanguage());
+  const [alert, setAlert] = useState(null);
 
   useEffect(() => {
-    setLanguage(getLanguage());
-    const handleLanguageChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLanguageChange);
-    return () => window.removeEventListener('languageChanged', handleLanguageChange);
+    const handleLangChange = () => setLanguage(getLanguage());
+    window.addEventListener('languageChanged', handleLangChange);
+    return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
   const showAlert = (msg, type) => {
@@ -53,34 +26,20 @@ export default function ReserveRegisterForm() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (type === 'checkbox') {
-      setFormData((prev) => ({
-        ...prev,
-        fields: checked
-          ? [...prev.fields, value]
-          : prev.fields.filter((field) => field !== value),
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
-  };
-
-  const validateForm = () => {
+  const validateForm = (formData) => {
     const errors = [];
     const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
     const phonePattern = /^(05\d{8}|05\d{1}-\d{7})$/;
     const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
 
-    const fullName = formData.fullName.trim();
-    const idNumber = formData.idNumber.replace(/\s/g, '');
-    const email = formData.email.trim();
-    const phone = formData.phone.trim();
-    const armyRole = formData.armyRole.trim();
-    const location = formData.location.trim();
+    const fullName = formData.fullName?.trim() || '';
+    const idNumber = formData.idNumber?.replace(/\s/g, '') || '';
+    const email = formData.email?.trim() || '';
+    const phone = formData.phone?.trim() || '';
+    const armyRole = formData.armyRole?.trim() || '';
+    const location = formData.location?.trim() || '';
     const experience = sanitizeText(formData.experience, 1000);
-    const linkedin = formData.linkedin.trim();
+    const linkedin = formData.linkedin?.trim() || '';
     const notes = sanitizeText(formData.notes, 500);
     const aboutMe = sanitizeText(formData.aboutMe, 1000);
 
@@ -105,21 +64,18 @@ export default function ReserveRegisterForm() {
     if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
 
     if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
-
     if (aboutMe === 'tooLong') errors.push(t('aboutMeIsTooLong', language));
 
     return errors;
   };
 
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const validationErrors = validateForm();
+  const handleSubmit = async (formData) => {
+    const validationErrors = validateForm(formData);
     if (validationErrors.length > 0) {
       showAlert(validationErrors[0], 'error');
       return;
     }
+
     try {
       const existingRes = await fetch(`http://localhost:5000/api/imports-user-registration-form?userType=reservist`);
       const existingUsers = await existingRes.json();
@@ -136,46 +92,27 @@ export default function ReserveRegisterForm() {
         return;
       }
 
-
       const res = await fetch('http://localhost:5000/api/upload-registration-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, userType: 'reservist', status: 'pending' }),
       });
 
       if (res.ok) {
         router.push("/pages/waitingApproval");
-        setFormData({
-          userType: 'reservist',
-          status: 'pending',
-          fullName: '',
-          idNumber: '',
-          email: '',
-          phone: '',
-          armyRole: '',
-          location: '',
-          fields: [],
-          experience: '',
-          linkedin: '',
-          notes: '',
-          aboutMe: '',
-
-        });
       } else {
         const errorText = await res.text();
-        console.error('Server error:', errorText);
         showAlert(`${t('reservistError', language)}: ${errorText}`, 'error');
       }
-    } catch {
+    } catch (err) {
       showAlert(t('reservistError', language), 'error');
     }
   };
 
-  if (!language) return null;
-
   return (
     <div className="register-page">
-    <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
+      <PageIntro titleKey="reservistWelcome" subtitleKey="reservistWelcomeSubtitle" />
+
       <div className="register-form-top-buttons">
         <button
           onClick={() => router.push('/login')}
@@ -192,94 +129,12 @@ export default function ReserveRegisterForm() {
         </button>
       </div>
 
-      <h1 className="text-3xl font-bold text-center">{t('reservistRegisterTitle', language)}</h1>
-
-      <form onSubmit={handleSubmit}>
-        <label>{t('fullName', language)}*:
-          <input name="fullName" value={formData.fullName} onChange={handleChange} />
-        </label>
-
-        <label>{t('idNumber', language)}*:
-          <input name="idNumber" value={formData.idNumber} onChange={handleChange} />
-        </label>
-
-        <label>{t('email', language)}*:
-          <input name="email" type="email" value={formData.email} onChange={handleChange} />
-        </label>
-
-        <label>{t('phone', language)}:
-          <input name="phone" type="tel" value={formData.phone} onChange={handleChange} />
-        </label>
-
-        <label>{t('armyRole', language)}*:
-          <input name="armyRole" value={formData.armyRole} onChange={handleChange} />
-        </label>
-
-        <label>{t('location', language)}*:
-          <select name="location" value={formData.location} onChange={handleChange}>
-            <option value="">{t('selectLocation', language)}</option>
-            {locations.map((region, regionIndex) => (
-              <optgroup 
-                key={regionIndex} 
-                className='font-bold'
-                label={language === 'he' ? region.region.he : region.region.en}
-              >
-                {region.locations.map((loc, locIndex) => (
-                  <option key={locIndex} value={language === 'he' ? loc.he : loc.en}>
-                    {language === 'he' ? loc.he : loc.en}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
-        </label>
-
-        <fieldset>
-          <legend>{t('professionalFieldsSelect', language)}</legend>
-          {Object.keys(translatedFields).map((field) => (
-            <label key={field}>
-              <input
-                type="checkbox"
-                name="fields"
-                value={field}
-                checked={formData.fields.includes(field)}
-                onChange={handleChange}
-              />
-              {translatedFields[field][language]}
-            </label>
-          ))}
-        </fieldset>
-
-        <label>{t('professionalExperience', language)}*:
-          <textarea name="experience" value={formData.experience} onChange={handleChange} className="h-24" />
-        </label>
-
-        <label>{t('linkedinLink', language)}:
-          <input name="linkedin" value={formData.linkedin} onChange={handleChange} />
-        </label>
-
-        <label>{t('reservistNotes', language)}:
-          <textarea name="notes" 
-            value={formData.notes} 
-            onChange={handleChange} 
-            className="h-24" 
-          />
-        </label>
-
-        <label>
-          {t('aboutMeIntro', language)}:
-          <textarea
-            name="aboutMe"
-            value={formData.aboutMe}
-            onChange={handleChange}
-            placeholder={t('aboutMePlaceholder', language)}
-            className="h-24"
-          />
-        </label>
-        <div className='flex justify-center'>
-          <Button text={t('submit', language)} type="submit" />
-        </div>
-      </form>
+      <MultiStepForm
+        key={language}
+        onSubmit={handleSubmit}
+        language={language}
+        userType="reservist"
+      />
 
       {alert && (
         <AlertMessage
@@ -289,6 +144,5 @@ export default function ReserveRegisterForm() {
         />
       )}
     </div>
-  </div>
   );
 }

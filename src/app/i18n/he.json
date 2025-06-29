@@ -315,7 +315,7 @@
     "conformArrive": "אישור הגעה",
     "longText": "הטקסט ארוך מידי",
     "MissingNameOrID": "חסר שם או ת.ז",
-    "fullNameTooLong": "השם ארוך מדי (מקסימום 50 תווים)",
+  
     "emailTooLong": "המייל ארוך מדי (מקסימום 100 תווים)",
     "professionTooLong": "המקצוע ארוך מדי (מקסימום 60 תווים)",
     "experienceTooLong": "הניסיון תעסוקתי ארוך מדי (מקסימום 1000 תווים)",
@@ -456,8 +456,6 @@
     "participantsChartDescription1": "הגרף מציג את מספר המשתתפים בכל אירוע.",
     "participantsChartDescription2": "הציר האופקי מציג את האירועים לפי כותרת ותאריך,",
     "participantsChartDescription3": "והציר האנכי את מספר המשתתפים באירוע.",
-    "mentorWelcomeSubtitle": "אנא מלאי את פרטייך כדי שנוכל להתאים לך מילואימניקים מתאימים לליווי.",
-    "mentorWelcome": "ברוכים הבאים למערכת המנטורינג ✨",
     "interviewAskQuestion": "שאל אותי שאלה",
     "interviewSelectCategory": "בחר תחום",
     "interviewSelectDifficulty": "בחר רמת קושי",
@@ -494,7 +492,16 @@
     "userSettings": "הגדרות משתמש",
     "passwordChangeSuccess": "הסיסמה עודכנה בהצלחה",
     "passwordChangeError": "אירעה שגיאה בעת עדכון הסיסמה",
-    "editPersonalDetails": "ערוך פרטים אישיים"
+    "editPersonalDetails": "ערוך פרטים אישיים",
+
+    "mentorWelcomeSubtitle": "אנא מלא את פרטייך כדי שנוכל להתאים לך מילואימניקים מתאימים לליווי.",
+    "next": "השלב הבא",
+    "selectOption": "בחר אפשרות",
+    "fullNameIsTooLong": "השם ארוך מדי (מקסימום 70 תווים)",
+    "mentorWelcome": "ברוכים הבאים למערכת המנטורינג",
+    "reservistWelcome": "ברוך הבא למערכת המילואימניקים ",
+    "reservistWelcomeSubtitle": "אנא מלא את פרטייך כדי שנוכל להתאים לך מנטור מתאים."
+
 
 
 
