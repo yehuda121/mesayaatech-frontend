@@ -238,7 +238,7 @@ export default function PostNewJob({ publisherId, publisherType, onSave, onClose
   ];
 
   return (
-    <div className="add-job-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div dir={language === 'he' ? 'rtl' : 'ltr'}>
       <div className="auto-fill-box">
         <h2 className="auto-fill-title">{t('autoFillTitle', language)}</h2>
         <p className="auto-fill-description">{t('autoFillExplanation', language)}</p>

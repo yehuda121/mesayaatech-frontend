@@ -3,9 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import SideBar from '@/app/components/SideBar';
 import { useRouter } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
 import { t } from '@/app/utils/loadTranslations';
-import PostNewJob from '@/app/components/jobs/PostNewJob';
 import MyJobsList from '@/app/components/jobs/MyJobsList';
 import EditAmbassadorJob from '@/app/components/jobs/EditJob';
 import EventsPage from '@/app/components/events/ViewAllEvents';
@@ -13,10 +11,7 @@ import InterviewPrep from '@/app/components/interviewQestions/QuestionsList';
 import ViewAllJobs from '@/app/components/jobs/ViewAllJobs';
 import Button from '@/app/components/Button';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
-import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
 import MyQuestions from '@/app/components/interviewQestions/MyQuestions';
-import EditQuestion from '@/app/components/interviewQestions/EditQuestion';
-import PostAnswer from '@/app/components/interviewQestions/PostAnswer';
 import EditAmbassadorForm from './EditAmbassadorForm';
 import './ambassador.css';
 import ChangePassword from '@/app/login/ChangePassword';
@@ -32,9 +27,6 @@ export default function AmbassadorHomePage() {
   const [userData, setUserData] = useState(null);
   const [selectedJobForEdit, setSelectedJobForEdit] = useState(null);
   const [toast, setToast] = useState(null);
-  const [questionToEdit, setQuestionToEdit] = useState(null);
-  const [questionToAnswer, setQuestionToAnswer] = useState(null);
-  const [selectedReservistId, setSelectedReservistId] = useState(null);
   const language = useLanguage();
   const router = useRouter();
   useRoleGuard("ambassador");
@@ -120,7 +112,6 @@ export default function AmbassadorHomePage() {
           <div>
             <div className="ambassador-button-group">
               <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
-              <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
             </div>
             <ViewAllJobs />
           </div>
@@ -136,31 +127,9 @@ export default function AmbassadorHomePage() {
             />
           </div>
         )}
-
-        {view === 'post-job' && (
-          <div>
-            <div className="ambassador-button-group">
-              <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
-              <Button text={t('jobs', language)} onClick={() => handleNavigation('allJobs')} />
-            </div>
-            <PostNewJob
-              publisherId={`${email}#${idNumber}`}
-              publisherType="ambassador"
-              onSave={() => {
-                setToast({ message: t('jobPostedSuccess', language), type: 'success' });
-                setView('dashboard');
-              }}
-              onClose={() => setView('myJobsList')}
-            />
-          </div>
-        )}
         
         {view === 'myJobsList' && (
-          <div>
-            <div className="ambassador-button-group">
-                <Button text={t('jobs', language)} onClick={() => handleNavigation('allJobs')} />
-                <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
-              </div>
+          <div className='ambassador-main-view'>
             <MyJobsList
               publisherId={`${email}#${idNumber}`}
               userType="ambassador"
@@ -175,11 +144,7 @@ export default function AmbassadorHomePage() {
         {view === 'change-password' && (<ChangePassword/>)}
 
         {view === 'my-questions' && (
-          <div>
-            <div className="ambassador-button-group">
-              <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
-              <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
-            </div>
+          <div className='ambassador-main-view'>
             <MyQuestions
               fullName={fullName}
               idNumber={idNumber}
@@ -191,47 +156,6 @@ export default function AmbassadorHomePage() {
                 setQuestionToAnswer(question);
                 setView('post-answer');
               }}
-            />
-          </div>
-        )}
-
-        {view === 'edit-question' && questionToEdit && (
-          <div>
-            <div className="ambassador-button-group">
-              <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
-              <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
-              <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
-            </div>
-            <EditQuestion
-              question={questionToEdit}
-              onClose={() => {
-                setQuestionToEdit(null);
-                setView('my-questions');
-              }}
-              onSave={() => {
-                setQuestionToEdit(null);
-                setView('my-questions');
-              }}
-            />
-          </div>
-        )}
-
-        {view === 'post-answer' && questionToAnswer && (
-          <div>
-            <div className="ambassador-button-group">
-              <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
-              <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
-              <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
-            </div>
-            <PostAnswer
-              questionId={questionToAnswer.questionId}
-              fullName={fullName}
-              idNumber={idNumber}
-              onSuccess={() => {
-                setToast({ message: t('answerPosted', language), type: 'success' });
-                setView('allJobs');
-              }}
-              onClose={() => setView('interview-ques')}
             />
           </div>
         )}
@@ -260,7 +184,6 @@ export default function AmbassadorHomePage() {
         {view === 'interview-ques' && 
           <div>
             <div className='ambassador-button-group'>
-              <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
             </div>
             <InterviewPrep
@@ -271,24 +194,6 @@ export default function AmbassadorHomePage() {
             />
           </div>
         }
-
-        {view === 'AddNewQues' && (
-          <div>
-            <div className='ambassador-button-group'>
-              <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
-              <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
-            </div>
-            <AddNewQues
-              fullName={fullName}
-              idNumber={idNumber}
-              onSuccess={() => {
-                setToast({ message: t('questionAdded', language), type: 'success' });
-                setView('interview-ques');
-              }}
-            />
-          </div>
-        )}
-
 
         {toast && (
           <ToastMessage

@@ -263,8 +263,8 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
   };
 
   return (
-    <div className="register-page">
-      <div className='register-form-container' dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div className='reservist-edit-form-page'>
+      <div className='reservist-form-container' dir={language === 'he' ? 'rtl' : 'ltr'}>
         <h1 className="text-3xl font-bold text-center">{t('editUserDetails', language)}</h1>
         <form onSubmit={handleSubmit}>
           {/* Section 1: Personal Info */}
@@ -340,9 +340,14 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
 
           {/* Section 3: Security and Notifications */}
           <AccordionSection titleKey={t('securitySettingsTitle', language)}>
-            <button type="button" onClick={onChangePasswordClick} className="mb-4 text-blue-600 underline">
-              {t('changePassword', language)}
-            </button>
+            { role === 'admin' && (
+              <p className='text-center'>{t('reservistFormExplenationForAdmin', language)}</p>
+            )}
+            { role !== 'admin' && (
+              <button type="button" onClick={onChangePasswordClick} className="mb-4 text-blue-600 underline">
+                {t('changePassword', language)}
+              </button>
+            )}
 
             <label className="register-checkbox-label">
               <input
@@ -395,13 +400,14 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
               {' '}{t('receiveEventEmails', language)}
             </label>
 
-            <Button
-              size='small'
-              text={t('updateEmailPrefs', language)}
-              type="button"
-              onClick={handleEmailJobPreferencesUpdate}
-            />
-
+            { role !== 'admin' && (
+              <Button
+                size='small'
+                text={t('updateEmailPrefs', language)}
+                type="button"
+                onClick={handleEmailJobPreferencesUpdate}
+              />
+            )}
             <label className="register-checkbox-label">
               <input
                 type="checkbox"

@@ -15,6 +15,7 @@ import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import ConfirmDialog from '../notifications/ConfirmDialog';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import DraggableAddJobButton from '../DraggableButton/DraggableButton';
+import AddNewJob from './PostNewJob';
 
 export default function ViewAllJobs() {
   const [jobs, setJobs] = useState([]);
@@ -263,15 +264,29 @@ export default function ViewAllJobs() {
         <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
 
-      {addNewJobMode && (
-        <EditJob
-          job={{}} 
-          onClose={() => setAddNewJobMode(false)}
+      {/* {addNewJobMode && (
+        <AddNewJob
+          publisherId={userId}
+          type={userType}
           onSave={(newJob) => {
             setJobs(prev => [...prev, newJob]);
             setAddNewJobMode(false);
           }}
+          onClose={() => setAddNewJobMode(false)}
         />
+      )} */}
+      {addNewJobMode && (
+        <div className="post-new-job-modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
+          <AddNewJob
+            publisherId={userId}
+            type={userType}
+            onSave={(newJob) => {
+              setJobs(prev => [...prev, newJob]);
+              setAddNewJobMode(false);
+            }}
+            onClose={() => setAddNewJobMode(false)}
+          />
+        </div>
       )}
 
       {showAdvanced && (

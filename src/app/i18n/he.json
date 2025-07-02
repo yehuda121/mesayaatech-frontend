@@ -498,7 +498,6 @@
     "reservistWelcome": "ברוך הבא למערכת המילואימניקים ",
     "reservistWelcomeSubtitle": "אנא מלא את פרטייך כדי שנוכל להתאים לך מנטור מתאים.",
     "undefined": "לא מוגדר",
-
     "editPersonalInfoTitle": "עריכת פרטים אישיים",
     "editRegistrationFormTitle": "עריכת טופס הרשמה",
     "securitySettingsTitle": "אבטחה והתראות",
@@ -524,6 +523,11 @@
     "חינוך": "חינוך",
     "אחר": "אחר",
     "management": "ניהול",
-    "deleteQuestionMessage": "האם אתה בטוח שברצונך למחוק את השאלה?"
+    "deleteQuestionMessage": "האם אתה בטוח שברצונך למחוק את השאלה?",
+    "personalDetails": "פרטים אישיים",
+    "professionalDetails": "פרטים מקצועיים",
+    "myMentees": "המילואימניקים שלי",
+    "unknownStage": "שלב לא ידוע",
+    "reservistFormExplenationForAdmin": "הסימון וי משקף את בחירת המילואימניק"
 
 }

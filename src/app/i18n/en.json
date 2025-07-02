@@ -523,8 +523,12 @@
     "fullNameIsTooLong": "Full name is too long (max 70 characters)",
     "reservistWelcome": "Welcome to the Reservist Platform",
     "reservistWelcomeSubtitle": "Please fill in your details so we can match you with mentors for personalized guidance.",
-    "undefined": "undefined"
-
+    "undefined": "undefined",
+    "personalDetails": "Personal Details",
+    "professionalDetails": "Professional Details",
+    "myMentees": "My Mentees",
+    "unknownStage": "Unknown Stage",
+    "reservistFormExplenationForAdmin": "The checkbox reflects the reserve's choice."
 
 
 }

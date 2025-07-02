@@ -20,6 +20,12 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
   const [editingMeetingIndex, setEditingMeetingIndex] = useState(null);
   const language = useLanguage();
 
+  useEffect(() => {
+    if (mentorId && reservistId) {
+      fetchProgress();
+    }
+  }, [mentorId, reservistId]);
+
   const fetchProgress = async () => {
     try {
       await fetch('http://localhost:5000/api/init-progress', {
@@ -94,7 +100,6 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
     });
   };
 
-
   const progressStages = [
     t('stage1', language),
     t('stage2', language),
@@ -106,7 +111,7 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
   return (
     <div>
       <h2 className='font-bold mt-3 text-center text-xl'>{t('mentorshipProgressTitle', language)}</h2>
-
+      
       {progressData && (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
@@ -149,7 +154,6 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
             titleKey="meetingHistory"
             filters={[]}
             data={(progressData.meetings || []).map((m, i) => ({ ...m, __index: i }))}
-            // data={progressData.meetings || []}
             emptyTextKey="noMeetingsYet"
             renderCard={(m) => (
             <div>
@@ -170,42 +174,43 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
             </div>
             )}
           />
+        </div>
+      )}
+
+      <div className="mentor-editMeeting-add-new-meeting-container">
+        {showModal && (
+          <div className='mentor-add-new-meeting'>
+          <AddNewMeeting
+            mentorId={mentorId}
+            reservistId={reservistId}
+            onAdd={() => {
+              fetchProgress();
+              setShowModal(false);
+            }}
+            onClose={() => setShowModal(false)}
+          />
           </div>
         )}
-        <div className="mentor-editMeeting-add-new-meeting-container">
-          {showModal && (
-            <div className='mentor-add-new-meeting'>
-            <AddNewMeeting
+
+        {editingMeetingIndex !== null && progressData?.meetings?.[editingMeetingIndex] && (
+          <div className='mentor-add-new-meeting'>
+            <EditMeeting
+              meeting={progressData.meetings[editingMeetingIndex]}
+              index={editingMeetingIndex}
               mentorId={mentorId}
               reservistId={reservistId}
-              onAdd={() => {
+              onSave={() => {
                 fetchProgress();
-                setShowModal(false);
+                setEditingMeetingIndex(null);
               }}
-              onClose={() => setShowModal(false)}
+              onClose={() => setEditingMeetingIndex(null)}
             />
-            </div>
-          )}
+          </div>
+        )}
+      </div>
 
-          {editingMeetingIndex !== null && progressData?.meetings?.[editingMeetingIndex] && (
-            <div className='mentor-add-new-meeting'>
-              <EditMeeting
-                meeting={progressData.meetings[editingMeetingIndex]}
-                index={editingMeetingIndex}
-                mentorId={mentorId}
-                reservistId={reservistId}
-                onSave={() => {
-                  fetchProgress();
-                  setEditingMeetingIndex(null);
-                }}
-                onClose={() => setEditingMeetingIndex(null)}
-              />
-            </div>
-          )}
-        </div>
-
-        {toast && <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-        {confirmDialog && <ConfirmDialog {...confirmDialog} />}
+      {toast && <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      {confirmDialog && <ConfirmDialog {...confirmDialog} />}
     </div>
   );
 }

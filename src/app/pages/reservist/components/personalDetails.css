@@ -1,4 +1,16 @@
-.register-form-container {
+.reservist-edit-form-page {
+  position: relative;
+  background-size: 110vw 280vh;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-blend-mode: lighten;
+  overflow-x: hidden;
+}
+
+
+.reservist-form-container {
   max-width: 800px;
   width: 95%;
   margin: 2rem auto;
@@ -12,22 +24,22 @@
   z-index: 1;
   text-align: start;
 }
-
+ 
 /* Label and input styles */
-.register-form-container label {
+.reservist-form-container label {
   display: block;
   margin-bottom: 1rem;
   font-weight: 500;
 }
 
 /* Input and select styles */
-.register-form-container input[type="text"],
-.register-form-container input[type="email"],
-.register-form-container input[type="tel"],
-.register-form-container input[type="password"],
-.register-form-container input:not([type]),
-.register-form-container select,
-.register-form-container textarea {
+.reservist-form-container input[type="text"],
+.reservist-form-container input[type="email"],
+.reservist-form-container input[type="tel"],
+.reservist-form-container input[type="password"],
+.reservist-form-container input:not([type]),
+.reservist-form-container select,
+.reservist-form-container textarea {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ddd;
@@ -35,24 +47,24 @@
   font-size: 1rem;
 }
 
-.register-form-container textarea {
+.reservist-form-container textarea {
   resize: vertical;
 }
 
 /* Fieldset styles */
-.register-form-container fieldset {
+.reservist-form-container fieldset {
   border: none;
   margin-bottom: 1rem;
   padding: 0;
 }
 
-.register-form-container legend {
+.reservist-form-container legend {
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
 /* Error message styling */
-.register-form-container .error-message {
+.reservist-form-container .error-message {
   color: #dc2626;
   text-align: center;
   font-weight: bold;

@@ -5,17 +5,19 @@ import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import Button from '@/app/components/Button';
-import '../../../register/registrationForm.css';
+import './mentorForm.css';
 import { locations } from '@/app/components/Locations';
 import sanitizeText from '@/app/utils/sanitizeText';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import AccordionSection from '@/app/components/AccordionSection';
 
-export default function EditMentorForm({ userData, onSave, onClose, onDelete, role }) {
+export default function EditMentorForm({ userData, onSave, onClose, onDelete, role, mentorId }) {
   const router = useRouter();
   const [formData, setFormData] = useState(userData || {});
   const [initialData, setInitialData] = useState(userData || {});
   const [alert, setAlert] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [mentees, setMentees] = useState([]);
   const language = useLanguage();
 
   useEffect(() => {
@@ -83,10 +85,8 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
     return errors;
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
       setAlert({ message: validationErrors[0], type: 'error' });
@@ -135,40 +135,29 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
   };
 
   return (
-    <div className="register-page">
-      <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
-        <div className="register-form-top-buttons">
-          <button
-            onClick={() => setLanguage(language === 'he' ? 'en' : 'he')}
-            className="text-sm underline hover:text-blue-600"
-          >
-            {t('switchLang', language)}
-          </button>
-        </div>
+    <div className="mentor-form-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
+      <h1 className="text-3xl font-bold text-center">{t('editUserDetails', language)}</h1>
 
-        <h1 className="text-3xl font-bold text-center">{t('editUserDetails', language)}</h1>
-
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+        <AccordionSection titleKey={t('personalDetails', language)} initiallyOpen={true}>
           <label>{t('fullName', language)}*:
             <input name="fullName" value={formData.fullName || ''} onChange={handleChange} />
           </label>
-
           <label>{t('idNumber', language)}*:
-            <input name="idNumber" value={formData.idNumber || ''} readOnly />
+            <input name="idNumber" value={formData.idNumber || ''} readOnly/>
           </label>
-
           <label>{t('email', language)}*:
             <input name="email" value={formData.email || ''} readOnly />
           </label>
-
           <label>{t('phone', language)}:
             <input name="phone" value={formData.phone || ''} onChange={handleChange} />
           </label>
+        </AccordionSection>
 
+        <AccordionSection titleKey={t('professionalDetails', language)}>
           <label>{t('armyRole', language)}:
             <input name="armyRole" value={formData.armyRole || ''} onChange={handleChange} />
           </label>
-
           <label>{t('profession', language)}:
             <input name="profession" value={formData.profession || ''} onChange={handleChange} />
           </label>
@@ -190,44 +179,41 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
               ))}
             </select>
           </label>
-
           <label>{t('specialties', language)}:
             <input name="specialties" value={formData.specialties || ''} onChange={handleChange} />
           </label>
+        </AccordionSection>
 
+        <AccordionSection titleKey={t('experience', language)}>
           <label>{t('experience', language)}:
             <textarea name="experience" value={formData.experience || ''} onChange={handleChange} />
           </label>
-
           <label>{t('pastMentoring', language)}:
             <textarea name="pastMentoring" value={formData.pastMentoring || ''} onChange={handleChange} />
           </label>
-
           <label>{t('linkedin', language)}:
             <input name="linkedin" value={formData.linkedin || ''} onChange={handleChange} />
           </label>
-
           <label>{t('aboutMeIntroMentor', language)}:
             <textarea name="aboutMeIntroMentor" value={formData.aboutMeIntroMentor || ''} onChange={handleChange} />
           </label>
-
           <label>{t('notes', language)}:
             <textarea name="notes" value={formData.notes || ''} onChange={handleChange} />
           </label>
+        </AccordionSection>
 
-          <div className="register-buttons-group">
-            <Button text={t('saveChanges', language)} type="submit" disabled={!isModified || saving} />
-            <Button text={t('cancel', language)} type="button" onClick={handleCancel} />
-            {role === 'admin' && (
-              <Button color='red' text={t('deleteUser', language)} type="button" onClick={handleDeleteClick} />
-            )}
-          </div>
-        </form>
+        <div className="mentor-buttons-group">
+          <Button text={t('saveChanges', language)} type="submit" disabled={!isModified || saving} />
+          <Button text={t('cancel', language)} type="button" onClick={handleCancel} />
+          {role === 'admin' && (
+            <Button color='red' text={t('deleteUser', language)} type="button" onClick={handleDeleteClick} />
+          )}
+        </div>
+      </form>
 
-        {alert && (
-          <AlertMessage message={alert.message} type={alert.type} onClose={() => setAlert(null)} />
-        )}
-      </div>
+      {alert && (
+        <AlertMessage message={alert.message} type={alert.type} onClose={() => setAlert(null)} />
+      )}
     </div>
   );
 }

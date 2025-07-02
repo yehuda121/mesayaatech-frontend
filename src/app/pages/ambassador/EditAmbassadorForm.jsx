@@ -6,10 +6,11 @@ import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import Button from '@/app/components/Button';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
-import '../../register/registrationForm.css';
+import './ambassador.css';
 import { locations } from '@/app/components/Locations';
 import sanitizeText from '@/app/utils/sanitizeText';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import AccordionSection from '@/app/components/AccordionSection';
 
 export default function EditAmbassadorForm({ userData, onSave , onClose, onDelete, role }) {
   const router = useRouter();
@@ -130,97 +131,92 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
     }
   };
 
-
   const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
 
   return (
-    <div className="register-page">
-      <div className={`register-form-container ${language === 'he' ? 'register-form-direction-rtl' : 'register-form-direction-ltr'}`}>
-        <div className="register-form-top-buttons">
-          <button
-            onClick={() => setLanguage(language === 'he' ? 'en' : 'he')}
-            className="text-sm underline hover:text-blue-600"
-          >
-            {t('switchLang', language)}
-          </button>
-        </div>
+    <div className="ambassador-edit-form-page">
+      <div className="ambassador-form-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
 
         <h1 className="text-3xl font-bold text-center">{t('editUserDetails', language)}</h1>
 
         <form onSubmit={handleSubmit}>
-          <label>{t('fullName', language)}*:
-            <input name="fullName" value={formData.fullName || ''} onChange={handleChange} />
-          </label>
+          <AccordionSection titleKey={t('personalDetails', language)} initiallyOpen={true}>
+            <label>{t('fullName', language)}*:
+              <input name="fullName" value={formData.fullName || ''} onChange={handleChange} />
+            </label>
 
-          <label>{t('email', language)}*:
-            <input name="idNumber" value={formData.email || ''} readOnly />
-          </label>
+            <label>{t('email', language)}*:
+              <input name="idNumber" value={formData.email || ''} readOnly />
+            </label>
 
-          <label>{t('idNumber', language)}*:
-            <input name="email" value={formData.idNumber || ''} readOnly />
-          </label>
+            <label>{t('idNumber', language)}*:
+              <input name="email" value={formData.idNumber || ''} readOnly />
+            </label>
 
-          <label>{t('phone', language)}:
-            <input name="phone" value={formData.phone || ''} onChange={handleChange} />
-          </label>
+            <label>{t('phone', language)}:
+              <input name="phone" value={formData.phone || ''} onChange={handleChange} />
+            </label>
+          </AccordionSection>
 
-          <label>{t('currentCompany', language)}:
-            <input name="currentCompany" value={formData.currentCompany || ''} onChange={handleChange} />
-          </label>
+          <AccordionSection titleKey={t('professionalDetails', language)}>
+            <label>{t('currentCompany', language)}:
+              <input name="currentCompany" value={formData.currentCompany || ''} onChange={handleChange} />
+            </label>
 
-          <label>{t('position', language)}:
-            <input name="position" value={formData.position || ''} onChange={handleChange} />
-          </label>
+            <label>{t('position', language)}:
+              <input name="position" value={formData.position || ''} onChange={handleChange} />
+            </label>
 
-          <label>{t('location', language)}*:
-            <select name="location" value={formData.location} onChange={handleChange}>
-              <option value="">{t('selectLocation', language)}</option>
-              {locations.map((region, regionIndex) => (
-                <optgroup 
-                  key={regionIndex} 
-                  className='font-bold'
-                  label={language === 'he' ? region.region.he : region.region.en}
-                >
-                  {region.locations.map((loc, locIndex) => (
-                    <option key={locIndex} value={language === 'he' ? loc.he : loc.en}>
-                      {language === 'he' ? loc.he : loc.en}
-                    </option>
-                  ))}
-                </optgroup>
+            <label>{t('location', language)}*:
+              <select name="location" value={formData.location} onChange={handleChange}>
+                <option value="">{t('selectLocation', language)}</option>
+                {locations.map((region, regionIndex) => (
+                  <optgroup 
+                    key={regionIndex} 
+                    className='font-bold'
+                    label={language === 'he' ? region.region.he : region.region.en}
+                  >
+                    {region.locations.map((loc, locIndex) => (
+                      <option key={locIndex} value={language === 'he' ? loc.he : loc.en}>
+                        {language === 'he' ? loc.he : loc.en}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </label>
+
+            <label>{t('canShareJobs', language)}*:
+              <select name="canShareJobs" value={formData.canShareJobs || ''} onChange={handleChange}>
+                <option value="">{language === 'he' ? 'בחר' : 'Select'}</option>
+                <option value="כן">{language === 'he' ? 'כן' : 'Yes'}</option>
+                <option value="אולי">{language === 'he' ? 'אולי' : 'Maybe'}</option>
+                <option value="לא">{language === 'he' ? 'לא' : 'No'}</option>
+              </select>
+            </label>
+
+            <fieldset>
+              <legend>{t('ambassadorJobFieldsTitle', language)}</legend>
+              {Object.keys(translatedJobFields).map((field) => (
+                <label key={field} className="register-checkbox-label" style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}>
+                  <input
+                    type="checkbox"
+                    name="jobFields"
+                    value={field}
+                    checked={(formData.jobFields || []).includes(field)}
+                    onChange={handleChange}
+                  />
+                  {translatedJobFields[field][language]}
+                </label>
               ))}
-            </select>
-          </label>
+            </fieldset>
 
-          <label>{t('canShareJobs', language)}*:
-            <select name="canShareJobs" value={formData.canShareJobs || ''} onChange={handleChange}>
-              <option value="">{language === 'he' ? 'בחר' : 'Select'}</option>
-              <option value="כן">{language === 'he' ? 'כן' : 'Yes'}</option>
-              <option value="אולי">{language === 'he' ? 'אולי' : 'Maybe'}</option>
-              <option value="לא">{language === 'he' ? 'לא' : 'No'}</option>
-            </select>
-          </label>
+            <label>{t('linkedin', language)}:
+              <input name="linkedin" value={formData.linkedin || ''} onChange={handleChange} />
+            </label>
+          </AccordionSection>
 
-          <fieldset>
-            <legend>{t('ambassadorJobFieldsTitle', language)}</legend>
-            {Object.keys(translatedJobFields).map((field) => (
-              <label key={field} className="register-checkbox-label" style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}>
-                <input
-                  type="checkbox"
-                  name="jobFields"
-                  value={field}
-                  checked={(formData.jobFields || []).includes(field)}
-                  onChange={handleChange}
-                />
-                {translatedJobFields[field][language]}
-              </label>
-            ))}
-          </fieldset>
-
-          <label>{t('linkedin', language)}:
-            <input name="linkedin" value={formData.linkedin || ''} onChange={handleChange} />
-          </label>
-
-          <div className="register-buttons-group">
+          <div className="ambassador-buttons-group">
             <Button text={t('saveChanges', language)} type="submit" disabled={!isModified || saving} />
             <Button text={t('cancel', language)} type="button" onClick={handleCancel} />
             {role === 'admin' && (

@@ -12,6 +12,10 @@
   margin-top: 60px;
 }
 
+.ambassador-main-view {
+  margin-top: 2%;
+}
+
 @media (min-width: 769px) {
   .ambassador-main {
     margin-right: 220px; 
@@ -33,15 +37,7 @@
   }
 }
 
-
 /* ---home page --- */
-/* .mentor-welcome {
-  font-size: 1.75rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 2rem;
-} */
-
 .ambassador-button-group {
   margin-top: 24px;
   margin-right: 30px;
@@ -50,10 +46,6 @@
   margin-bottom: 24px;
   direction: rtl;
 }
-
-
-
-
 
 /* editAmbassadorForm.css */
 .edit-form-container {
@@ -109,4 +101,86 @@ legend {
   gap: 1rem;
   margin-top: 1.5rem;
   justify-content: center;
+}
+
+
+
+
+.ambassador-edit-form-page {
+  position: relative;
+  background-size: 110vw 280vh;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-blend-mode: lighten;
+  overflow-x: hidden;
+}
+
+
+.ambassador-form-container {
+  max-width: 800px;
+  width: 95%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff; 
+  border: 1px solid #e2e8f0; 
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); 
+  backdrop-filter: none;
+  position: relative;
+  z-index: 1;
+  text-align: start;
+}
+ 
+/* Label and input styles */
+.ambassador-form-container label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Input and select styles */
+.ambassador-form-container input[type="text"],
+.ambassador-form-container input[type="email"],
+.ambassador-form-container input[type="tel"],
+.ambassador-form-container input[type="password"],
+.ambassador-form-container input:not([type]),
+.ambassador-form-container select,
+.ambassador-form-container textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+
+.ambassador-form-container textarea {
+  resize: vertical;
+}
+
+/* Fieldset styles */
+.ambassador-form-container fieldset {
+  border: none;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.ambassador-form-container legend {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Error message styling */
+.ambassador-form-container .error-message {
+  color: #dc2626;
+  text-align: center;
+  font-weight: bold;
+}
+
+.ambassador-buttons-group {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }

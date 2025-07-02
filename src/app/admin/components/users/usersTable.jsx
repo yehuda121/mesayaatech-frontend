@@ -259,43 +259,37 @@ export default function UsersTable({ defaultStatusFilter = null }) {
 
         {selectedForm && selectedForm.userType === 'reservist' && (
           <div className='editForm-modal-overlay'>
-            <div className='editForm-modal-content'>
-              <EditReservistForm
-                userData={selectedForm}
-                onClose={() => setSelectedForm(null)}
-                onSave={handleSaveUser}
-                onDelete={handleDeleteUser}
-                role={'admin'}
-              />
-            </div>
+            <EditReservistForm
+              userData={selectedForm}
+              onClose={() => setSelectedForm(null)}
+              onSave={handleSaveUser}
+              onDelete={handleDeleteUser}
+              role={'admin'}
+            />
           </div>
         )}
 
         {selectedForm && selectedForm.userType === 'mentor' && (
           <div className='editForm-modal-overlay'>
-            <div className='editForm-modal-content'>
-              <EditMentorForm
-                userData={selectedForm}
-                onClose={() => setSelectedForm(null)}
-                onSave={handleSaveUser}
-                onDelete={handleDeleteUser}
-                role={'admin'}
-              />
-            </div>
+            <EditMentorForm
+              userData={selectedForm}
+              onClose={() => setSelectedForm(null)}
+              onSave={handleSaveUser}
+              onDelete={handleDeleteUser}
+              role={'admin'}
+            />
           </div>
         )}
 
         {selectedForm && selectedForm.userType === 'ambassador' && (
           <div className='editForm-modal-overlay'>
-            <div className='editForm-modal-content'>
-              <EditAmbassadorForm
-                userData={selectedForm}
-                onClose={() => setSelectedForm(null)}
-                onSave={handleSaveUser}
-                onDelete={handleDeleteUser}
-                role={'admin'}
-              />
-            </div>
+            <EditAmbassadorForm
+              userData={selectedForm}
+              onClose={() => setSelectedForm(null)}
+              onSave={handleSaveUser}
+              onDelete={handleDeleteUser}
+              role={'admin'}
+            />
           </div>
         )}
         

@@ -5,7 +5,6 @@ import SideBar from '@/app/components/SideBar';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import EditMentorForm from './components/EditMentorForm';
-import PostNewJob from '@/app/components/jobs/PostNewJob';
 import MyJobsList from '../../components/jobs/MyJobsList';
 import EditMentorJob from '@/app/components/jobs/EditJob';
 import EventsPage from '@/app/components/events/ViewAllEvents';
@@ -168,34 +167,13 @@ export default function MentorHomePage() {
               onSave={(updated) => setUserData(updated)}
               onBack={() => setView('dashboard')}
               onClose={() => setView('dashboard')}
+              mentorId={idNumber}
             />
           </div>
         )}
-
-        {/* {view === 'post-job' && (
-          <div>
-            <div className="mentor-button-group">
-              <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
-              <Button text={t('jobs', language)} onClick={() => handleNavigation('allJobs')} />
-            </div>
-            <PostNewJob
-              publisherId={`${email}#${idNumber}`}
-              publisherType="mentor"
-              onSave={() => {
-                setToast({ message: t('jobPostedSuccess', language), type: 'success' });
-                setView('myJobsList');
-              }}
-              onClose={() => handleNavigation('post-job')}
-            />
-          </div>
-        )} */}
         
         {view === 'myJobsList' && (
-          <div>
-            <div className="mentor-button-group">
-                <Button text={t('jobs', language)} onClick={() => handleNavigation('allJobs')} />
-                <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} />
-              </div>
+          <div className="mentor-main-view">
             <MyJobsList
               publisherId={`${email}#${idNumber}`}
               onEdit={(job) => {
@@ -207,11 +185,7 @@ export default function MentorHomePage() {
         )}
 
         {view === 'my-questions' && (
-          <div>
-            <div className="mentor-button-group">
-              <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
-              <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
-            </div>
+          <div className="mentor-main-view">
             <MyQuestions
               fullName={fullName}
               idNumber={idNumber}
@@ -251,7 +225,6 @@ export default function MentorHomePage() {
         {view === 'interview-ques' && 
           <div>
             <div className='mentor-button-group'>
-              <Button text={t('AddNewQues', language)} onClick={() => handleNavigation('AddNewQues')} />
               <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
             </div>
             <QuestionsList
@@ -262,23 +235,6 @@ export default function MentorHomePage() {
             />
           </div>
         }
-
-        {view === 'AddNewQues' && (
-          <div>
-            <div className='mentor-button-group'>
-              <Button text={t('interviewQues', language)} onClick={() => handleNavigation('interview-ques')} />
-              <Button text={t('myQuestions', language)} onClick={() => handleNavigation('my-questions')} />
-            </div>
-            <AddNewQues
-              fullName={fullName}
-              idNumber={idNumber}
-              onSuccess={() => {
-                setToast({ message: t('questionAdded', language), type: 'success' });
-                setView('interview-ques');
-              }}
-            />
-          </div>
-        )}
 
         {view === 'myReservists' && (
           <div className='mt-10'>
