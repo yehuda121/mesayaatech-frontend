@@ -528,6 +528,8 @@
     "professionalDetails": "פרטים מקצועיים",
     "myMentees": "המילואימניקים שלי",
     "unknownStage": "שלב לא ידוע",
-    "reservistFormExplenationForAdmin": "הסימון וי משקף את בחירת המילואימניק"
+    "reservistFormExplenationForAdmin": "הסימון וי משקף את בחירת המילואימניק",
+    "selectField": "בחר תחום",
+    "textTooLong": "הטקסט ארוך מידי"
 
 }

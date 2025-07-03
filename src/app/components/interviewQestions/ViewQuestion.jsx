@@ -39,7 +39,7 @@ export default function ViewQuestion({ question, onClose }) {
             <p><strong>{t('likes', language)}:</strong> {displayData.likes}</p>
           </div>
 
-          <div className="VQ-inner-scrolling">
+          <div className="VQ-inner-scrolling" dir={language === 'he' ? 'rtl' : 'ltr'}>
             {question.answers?.length > 0 ? (
               <>
                 <h3 className="VQ-answers">{t('answers', language)}</h3>
@@ -50,9 +50,9 @@ export default function ViewQuestion({ question, onClose }) {
                         <span className="VQ-answer-meta-date">
                           {formatDate(ans.createdAt)}
                         </span>
-                      <div className="VQ-answer-meta-row">
+                      <div className="VQ-answer-meta-row" dir={language === 'he' ? 'rtl' : 'ltr'}>
                         <span className="VQ-answer-meta-dot">• </span>
-                        <span className="VQ-answer-meta-name">
+                        <span className="VQ-answer-meta-name" dir="auto">
                           {ans.answeredName || t('unknownUser', language)}
                         </span> - {ans.text}
                       </div>

@@ -73,6 +73,11 @@
   padding: 10px;
   background-color: #fafafa;
   margin-top: 20px;
+  /* text-align: start; */
+}
+
+.VQ-answer-meta-row {
+  text-align: start;
 }
 
 /* Close button */
