@@ -4,25 +4,19 @@
 }
 
 .admin-main {
+  /* background-color: #16a34a; */
   padding: 2.5rem;
   text-align: right;
   margin-right: 250px;
-  padding: 2rem;
+  /* padding: 2rem; */
   width: calc(100% - 250px);
-  margin-top: 70px;
-  /* background-image: url('/logo-noBackground.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-position-y: bottom; */
+  margin-top: 90px;
 }
 
 .logo-background {
-  /* background-image: url('/logo-noBackground.png'); 
-  background-repeat: no-repeat;
-  background-position: center center;      */
-  background-size: contain;               /* או cover / 100px 100px וכו' */
-  opacity: 0.1;                            /* שקיפות – 0 לגמרי שקוף, 1 מלא */
-  background-blend-mode: normal;          /* אפשר multiply / overlay וכו' */
+  background-size: contain;              
+  opacity: 0.1;                          
+  background-blend-mode: normal;        
 }
 
 @media (min-width: 769px) {
@@ -171,39 +165,6 @@
   margin-top: -70px;
 }
 
-/* users form */
-/* .editForm-modal-overlay {
-  position: fixed;
-  top: 90px;
-  left: 0;
-  width: 100%;
-  right: 250px;
-  width: calc(100% - 250px);
-  height: calc(100% - 90px);
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  overflow-y: auto;
-  padding: 50px 20px;
-  z-index: 9999;
-}
-@media (max-width: 768px) {
-  .editForm-modal-overlay {
-    width: 100%;
-    margin-right: 0;
-  }
-}
-
-.editForm-modal-content {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  max-width: 900px;
-  width: 100%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-} */
-/* users form */
 /* users form modal overlay */
 .editForm-modal-overlay {
   position: fixed;
@@ -243,9 +204,25 @@
 .admin-create-event {
   /* margin-right: 7%; */
   padding: 25px;
+  background-color: #8b8c8e;
 }
 @media (max-width: 768px) {
   .admin-create-event {
     margin-right: 0;
   }
 }
+
+/* .add-job-box input,
+.add-job-box textarea,
+.add-job-box select {
+  width: 100%;
+} */
+ /* @media (max-width: 600px) {
+  .job-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: span 1;
+  }
+} */

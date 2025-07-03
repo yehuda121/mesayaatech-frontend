@@ -56,7 +56,7 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
 
   return (
     <>
-      <div className='mt-3 mb-3'>
+      <div className='mb-3'>
         <Button
           text={t('createEvent', language)}
           onClick={() => {

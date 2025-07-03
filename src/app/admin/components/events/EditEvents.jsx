@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import { useLanguage } from "@/app/utils/language/useLanguage";
-import './EditEventModal.css';
+import './EditAndCreateEvent.css';
 import  Button from '@/app/components/Button';
 
 export default function EditEventModal({ event, onClose, onSave }) {
