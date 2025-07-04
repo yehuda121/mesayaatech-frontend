@@ -91,7 +91,7 @@ export default function PostAnswer({ questionId, fullName, idNumber, onSuccess, 
           </label>
         </div>
         <div className="postAnswer-actions">
-          <Button onClick={handleSubmit}>{t('submit', language)}</Button>
+          <Button onClick={handleSubmit} disabled={submitting}>{t('submit', language)}</Button>
         </div>
         {toast && (
           <ToastMessage

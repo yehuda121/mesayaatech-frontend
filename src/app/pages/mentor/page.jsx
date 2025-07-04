@@ -13,7 +13,6 @@ import FindReservist from './components/FindReservist';
 import ViewAllJobs from '@/app/components/jobs/ViewAllJobs';
 import Button from '@/app/components/Button/Button';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
-import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
 import MyQuestions from '@/app/components/interviewQestions/MyQuestions';
 import MyReservists from './components/MyReservists/MyReservists';
 import MentorshipProgress from './components/MyReservists/MentorshipProgress';
@@ -154,7 +153,6 @@ export default function MentorHomePage() {
           <div>
             <div className="mentor-button-group">
               <Button text={t('myJobsList', language)} onClick={() => handleNavigation('myJobsList')} />
-              {/* <Button text={t('postNewJob', language)} onClick={() => handleNavigation('post-job')} /> */}
             </div>
             <ViewAllJobs />
           </div>

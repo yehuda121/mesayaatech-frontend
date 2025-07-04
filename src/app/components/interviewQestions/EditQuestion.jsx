@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import { translatedJobFields } from "@/app/components/jobs/jobFields";
+import Button from '@/app/components/Button/Button';
+import './ViewQuestion.css';
 
 export default function EditQuestion({ question, onClose, onSave }) {
   const [formData, setFormData] = useState({
@@ -24,8 +25,12 @@ export default function EditQuestion({ question, onClose, onSave }) {
     }))
   ];
 
+  const handleChange = (key, value) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+  };
+
   const handleSubmit = async () => {
-    if (!formData.text || !formData.category) {
+    if (!formData.text.trim() || !formData.category) {
       setToast({ message: t('missingFields', language), type: 'error' });
       return;
     }
@@ -59,50 +64,48 @@ export default function EditQuestion({ question, onClose, onSave }) {
     }
   };
 
-  const fields = [
-    {
-      key: 'text',
-      type: 'textarea',
-      labelOverride: 'questionText'
-    },
-    {
-      key: 'category',
-      type: 'select',
-      labelOverride: 'questionCategory',
-      options: categories.map(cat => ({
-        value: cat.value,
-        label: language === 'he' ? cat.labelHe : cat.labelEn
-      }))
-    }
-  ];
-
   const handleOverlayClick = (e) => {
-    if (e.target.classList.contains('modal-overlay')) {
+    if (e.target.classList.contains('editQuestion-overlay')) {
       onClose();
     }
   };
 
   return (
     <div
-      className="modal-overlay fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
+      className="editQuestion-overlay"
       onClick={handleOverlayClick}
       dir={language === 'he' ? 'rtl' : 'ltr'}
     >
-      <div
-        className="relative max-w-xl w-full mx-4"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <GenericForm
-          titleKey="editQuestion"
-          fields={fields}
-          data={formData}
-          onChange={setFormData}
-          onPrimary={handleSubmit}
-          onSecondary={onClose}
-          onCloseIcon={onClose}
-          primaryLabel="save"
-          secondaryLabel="cancel"
-        />
+      <div className="editQuestion-box" onClick={(e) => e.stopPropagation()}>
+        <button className="editQuestion-close" onClick={onClose}>×</button>
+        <h2 className="editQuestion-title">{t('editQuestion', language)}</h2>
+        <div className="editQuestion-grid">
+          <label>
+            {t('questionCategory', language)}
+            <select
+              value={formData.category}
+              onChange={e => handleChange('category', e.target.value)}
+            >
+              {categories.map(cat => (
+                <option key={cat.value} value={cat.value}>
+                  {language === 'he' ? cat.labelHe : cat.labelEn}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            {t('questionText', language)}
+            <textarea
+              value={formData.text}
+              onChange={e => handleChange('text', e.target.value)}
+              rows={5}
+              maxLength={500}
+            />
+          </label>
+        </div>
+        <div className="editQuestion-actions">
+          <Button onClick={handleSubmit}>{t('save', language)}</Button>
+        </div>
 
         {toast && (
           <ToastMessage
