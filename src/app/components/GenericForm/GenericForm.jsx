@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import Button from '@/app/components/Button';
+import Button from '@/app/components/Button/Button';
 import './GenericForm.css';
 import { FaEnvelope, FaPhone, FaUser, FaIdCard, FaLinkedin } from 'react-icons/fa';
 import { useLanguage } from "@/app/utils/language/useLanguage";

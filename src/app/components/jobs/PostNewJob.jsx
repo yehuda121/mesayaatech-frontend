@@ -289,7 +289,7 @@
 import { useState, useRef } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
-import Button from '@/app/components/Button';
+import Button from '@/app/components/Button/Button';
 import { Brain } from 'lucide-react';
 import { useLanguage } from '@/app/utils/language/useLanguage';
 import { translatedJobFields } from './jobFields';
@@ -433,11 +433,11 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
   ];
 
   return (
-    <div className="modal-overlay" onClick={closeModal}>
-      <div className="modal-container" dir={language === 'he' ? 'rtl' : 'ltr'} onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close-button" onClick={closeModal}>✖</button>
+    <div className="postNewJob-modal-overlay" onClick={closeModal}>
+      <div className="postNewJob-modal-container" dir={language === 'he' ? 'rtl' : 'ltr'} onClick={(e) => e.stopPropagation()}>
+        <button className="postNewJob-modal-close-button" onClick={closeModal}>✖</button>
 
-        <div className="auto-fill-box">
+        <div className="postNewJob-auto-fill-box">
           <h2>{t('autoFillTitle', language)}</h2>
           <p>{t('autoFillExplanation', language)}</p>
           <textarea
@@ -461,9 +461,9 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
 
         </div>
 
-        <div className="job-form-grid">
-          <div className="full-width">
-            <label>{t('field', language)}<span className="required"> *</span></label>
+        <div className="postNewJob-job-form-grid">
+          <div className="postNewJob-full-width">
+            <label>{t('field', language)}<span className="postNewJob-required"> *</span></label>
             <select value={jobData.field} onChange={(e) => handleChange('field', e.target.value)}>
               {getTranslatedJobFieldOptions().map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -472,7 +472,7 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
           </div>
 
           {[ 'company','location','role','minExperience','submitEmail','submitLink','companyWebsite','jobViewLink','description','requirements','advantages' ].map((key) => (
-            <div key={key} className="form-field">
+            <div key={key} className="postNewJob-form-field">
               <label>{t(key, language)}</label>
               {[ 'description','requirements','advantages' ].includes(key) ? (
                 <textarea value={jobData[key]} onChange={(e) => handleChange(key, e.target.value)} />
@@ -483,7 +483,7 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
           ))}
         </div>
 
-        <div className="form-buttons">
+        <div className="postNewJob-form-buttons">
           <Button text={t('submitJob', language)} onClick={handleSubmit} disabled={loading} />
           <Button text={t('cancel', language)} onClick={closeModal} variant="secondary" />
         </div>

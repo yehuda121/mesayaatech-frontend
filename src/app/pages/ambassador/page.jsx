@@ -9,7 +9,7 @@ import EditAmbassadorJob from '@/app/components/jobs/EditJob';
 import EventsPage from '@/app/components/events/ViewAllEvents';
 import InterviewPrep from '@/app/components/interviewQestions/QuestionsList';
 import ViewAllJobs from '@/app/components/jobs/ViewAllJobs';
-import Button from '@/app/components/Button';
+import Button from '@/app/components/Button/Button';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
 import MyQuestions from '@/app/components/interviewQestions/MyQuestions';
 import EditAmbassadorForm from './EditAmbassadorForm';

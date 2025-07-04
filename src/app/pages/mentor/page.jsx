@@ -11,7 +11,7 @@ import EventsPage from '@/app/components/events/ViewAllEvents';
 import QuestionsList from '@/app/components/interviewQestions/QuestionsList';
 import FindReservist from './components/FindReservist';
 import ViewAllJobs from '@/app/components/jobs/ViewAllJobs';
-import Button from '@/app/components/Button';
+import Button from '@/app/components/Button/Button';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
 import AddNewQues from '@/app/components/interviewQestions/AddNewQuestion';
 import MyQuestions from '@/app/components/interviewQestions/MyQuestions';

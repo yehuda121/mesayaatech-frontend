@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Button from "../components/Button";
+import Button from "../components/Button/Button";
 import { t } from "@/app/utils/loadTranslations";
 import './registrationForm.css';
 import { getLanguage, toggleLanguage } from "../utils/language/language";

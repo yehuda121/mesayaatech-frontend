@@ -2,22 +2,36 @@
 
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import GenericForm from '@/app/components/GenericForm/GenericForm';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import './ViewQuestion.css';
+import sanitizeText from '@/app/utils/sanitizeText';
+import Button from '@/app/components/Button/Button';
 
 export default function PostAnswer({ questionId, fullName, idNumber, onSuccess, onClose }) {
   const [formData, setFormData] = useState({ text: '' });
   const [toast, setToast] = useState(null);
   const language = useLanguage();
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
+    if (submitting) return;
+    setSubmitting(true);
+
     if (e?.preventDefault) e.preventDefault();
 
     if (!formData.text) {
       setToast({ message: t('missingAnswerText', language), type: 'error' });
       return;
     }
+    const sanitized = sanitizeText(formData.text.trim(), 1000);
+
+    if (sanitized === 'tooLong') {
+      setToast({ message: t('textTooLong', language), type: 'error' });
+      return;
+    }
+
+    formData.text = sanitized;
 
     try {
       const res = await fetch('http://localhost:5000/api/post-answer', {
@@ -45,45 +59,40 @@ export default function PostAnswer({ questionId, fullName, idNumber, onSuccess, 
     } catch (err) {
       console.error('Error posting answer:', err);
       setToast({ message: t('serverError', language), type: 'error' });
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  const fields = [
-    {
-      key: 'text',
-      type: 'textarea',
-      labelOverride: 'answer'
-    }
-  ];
-
   const handleOverlayClick = (e) => {
-    if (e.target.classList.contains('modal-overlay')) {
+    if (e.target.classList.contains('postAnswer-overlay')) {
       if (onClose) onClose();
     }
   };
 
   return (
     <div
-      className="modal-overlay fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
+      className="postAnswer-overlay"
       onClick={handleOverlayClick}
       dir={language === 'he' ? 'rtl' : 'ltr'}
     >
-      <div
-        className="relative max-w-xl w-full mx-4"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <GenericForm
-          titleKey="postAnswer"
-          fields={fields}
-          data={formData}
-          onChange={setFormData}
-          onSecondary={onClose}
-          onCloseIcon={onClose}
-          secondaryLabel="close"
-          onPrimary={handleSubmit}
-          primaryLabel="submit"
-        />
-
+      <div className="postAnswer-box" onClick={(e) => e.stopPropagation()}>
+        <button className="postAnswer-close" onClick={onClose}>×</button>
+        <h2 className="postAnswer-title">{t('postAnswer', language)}</h2>
+        <div className="postAnswer-grid">
+          <label>
+            {t('answer', language)}
+            <textarea
+              value={formData.text}
+              onChange={e => setFormData({ text: e.target.value })}
+              rows={6}
+              maxLength={1000}
+            />
+          </label>
+        </div>
+        <div className="postAnswer-actions">
+          <Button onClick={handleSubmit}>{t('submit', language)}</Button>
+        </div>
         {toast && (
           <ToastMessage
             message={toast.message}

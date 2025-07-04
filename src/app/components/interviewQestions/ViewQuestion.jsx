@@ -22,7 +22,7 @@ export default function ViewQuestion({ question, onClose }) {
   };
 
   return (
-    <div className="VQ-overlay">
+    <div className="VQ-overlay" onClick={onClose}>
       <div className="VQ-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
         {onClose && (
           <button className="VQ-close-button" onClick={onClose} aria-label="Close">✖</button>

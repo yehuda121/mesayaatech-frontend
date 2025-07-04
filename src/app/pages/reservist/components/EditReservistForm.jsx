@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
-import Button from '@/app/components/Button';
+import Button from '@/app/components/Button/Button';
 import './personalDetails.css';
 import { locations } from '@/app/components/Locations';
 import sanitizeText from '@/app/utils/sanitizeText';

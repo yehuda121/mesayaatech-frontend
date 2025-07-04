@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import Button from '@/app/components/Button';
+import Button from '@/app/components/Button/Button';
 import EditEvents from './EditEvents';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { Edit2, Trash2 } from 'lucide-react';

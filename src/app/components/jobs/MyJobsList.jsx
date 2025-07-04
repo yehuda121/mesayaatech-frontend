@@ -5,6 +5,8 @@ import { t } from '@/app/utils/loadTranslations';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { Edit2, Trash2 } from 'lucide-react';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 
 export default function MyJobsList({ publisherId, userType = "mentor", onEdit }) {
   const [jobs, setJobs] = useState([]);
@@ -12,6 +14,7 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
   const [filters, setFilters] = useState({ company: '', location: '', date: '' });
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
+  const [confirmData, setConfirmData] = useState(null);
   const language = useLanguage();
 
   useEffect(() => {
@@ -58,7 +61,7 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
 
 
   const handleDelete = async (jobId) => {
-    if (!confirm(t('confirmDelete', language))) return;
+    // if (!confirm(t('confirmDelete', language))) return;
 
     const userId = sessionStorage.getItem('userId');
     const userType = sessionStorage.getItem('userType');
@@ -71,15 +74,15 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
       });
 
       if (res.ok) {
-        alert(t('jobDeleted', language));
+        setToast({ message: t('jobDeleted', language), type: 'success' });
         setJobs((prev) => prev.filter((job) => job.jobId !== jobId));
         setFilteredJobs((prev) => prev.filter((job) => job.jobId !== jobId));
       } else {
-        alert(t('deleteFailed', language));
+        setToast({message: t('deleteFailed', language), type: 'error'});
       }
     } catch (err) {
       console.error('Delete failed:', err);
-      alert(t('serverError', language));
+      setToast({message: t('serverError', language), type: 'error'});
     }
   };
 
@@ -144,9 +147,15 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
               <button title={t('edit', language)} onClick={() => onEdit(job)}>
                 <Edit2 size={20}/>
               </button>
-              <button title={t('delete', language)} onClick={() => handleDelete(job.jobId)}>
+              <button title={t('delete', language)} 
+                // onClick={() => handleDelete(job.jobId)}>
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setConfirmData(job.jobId);
+                }}>
                 <Trash2 size={20}/>
               </button>
+
             </div>
           </div>
         )}
@@ -158,6 +167,18 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
           message={toast.message}
           type={toast.type}
           onClose={() => setToast(null)}
+        />
+      )}
+
+      {confirmData && (
+        <ConfirmDialog
+          title={t('confirmDelete', language)}
+          message={t('confirmDeleteJob', language)}
+          onConfirm={() => {
+            handleDelete(confirmData);
+            setConfirmData(null);
+          }}
+          onCancel={() => setConfirmData(null)}
         />
       )}
     </div>

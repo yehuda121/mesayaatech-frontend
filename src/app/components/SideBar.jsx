@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Button from "./Button";
+import Button from "./Button/Button";
 import { getLanguage, toggleLanguage } from "../utils/language/language";
 import "./SideBar.css";
 import { t } from "@/app/utils/loadTranslations";

@@ -125,7 +125,7 @@ import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/notifications/AlertMessage';
 import './EditAndCreateEvent.css';
 import { useLanguage } from "@/app/utils/language/useLanguage";
-import Button from '@/app/components/Button';
+import Button from '@/app/components/Button/Button';
 
 export default function CreateEventForm() {
   const language = useLanguage();

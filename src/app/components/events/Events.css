@@ -1,0 +1,92 @@
+/* components/events/events.css */
+.event-title {
+  font-size: 1.125rem; 
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-location {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-join-status {
+  color: #16a34a; 
+  font-weight: 600;
+}
+
+.event-filter-input {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 0.375rem; 
+}
+
+
+/* view event */
+/* Overlay */
+.event-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  margin-right: 250px;
+}
+
+@media (max-width: 768px) {
+  .event-modal-overlay {
+    margin-right: 0;
+  }
+}
+
+/* Modal box */
+.event-modal-box {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+}
+
+/* Close button */
+.event-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 20px;
+  color: #4b5563;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.event-modal-close:hover {
+  color: #ef4444;
+}
+
+/* Title */
+.event-modal-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* Content */
+.event-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: start;
+}
+
+.event-line-label {
+  font-weight: 600;
+}

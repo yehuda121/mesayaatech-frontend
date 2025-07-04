@@ -1,0 +1,31 @@
+.btn-base {
+  border: none;
+  border-radius: 0.5rem; /* rounded-lg */
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* shadow-md */
+  transition: all 0.2s ease-in-out; /* transition-all duration-200 */
+  color: white;
+  background-color: #002855;
+  cursor: pointer;
+}
+
+.btn-base:hover {
+  opacity: 0.8;
+}
+
+.btn-sm {
+  padding: 4px 12px;
+  font-size: 0.875rem; /* text-sm */
+}
+
+.btn-md {
+  padding: 8px 16px;
+  font-size: 1rem; /* text-base */
+}
+
+.btn-lg {
+  padding: 12px 24px;
+  font-size: 1.125rem; /* text-lg */
+}
+
+

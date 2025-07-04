@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import Button from '@/app/components/Button';
+import Button from '@/app/components/Button/Button';
 import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import AddNewMeeting from './AddNewMeeting';

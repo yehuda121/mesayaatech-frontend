@@ -9,7 +9,7 @@ import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import EditJob from './EditJob';
 import './jobs.css';
 import './filters.css';
-import Button from '../Button';
+import Button from '../Button/Button';
 import { FileSearch, Edit2, Trash2, X, PlusCircle } from 'lucide-react';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import ConfirmDialog from '../notifications/ConfirmDialog';

@@ -5,7 +5,7 @@ import { t } from '@/app/utils/loadTranslations';
 import ViewEvent from './viewEvent';
 import ToastMessage from '@/app/components/notifications/ToastMessage';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
-import './ViewAllEvents.css';
+import './Events.css';
 import { Eye, CalendarPlus } from 'lucide-react';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 

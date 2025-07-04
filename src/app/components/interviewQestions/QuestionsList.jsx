@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { t } from '@/app/utils/loadTranslations';
 import ViewQuestion from './ViewQuestion'; 
-import Button from '@/app/components/Button';
+import Button from '@/app/components/Button/Button';
 import { ThumbsUp, FileSearch, MessageCircleMore,  Book, BookOpen , Edit2,Trash2 } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 import { useLanguage } from "@/app/utils/language/useLanguage";
