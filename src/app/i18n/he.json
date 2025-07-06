@@ -530,6 +530,8 @@
     "unknownStage": "שלב לא ידוע",
     "reservistFormExplenationForAdmin": "הסימון וי משקף את בחירת המילואימניק",
     "selectField": "בחר תחום",
-    "textTooLong": "הטקסט ארוך מידי"
+    "textTooLong": "הטקסט ארוך מידי",
+    "editAnswer": "עריכת תשובה",
+    "answerUpdated": "התשובה עודכנה בהצלחה"
 
 }

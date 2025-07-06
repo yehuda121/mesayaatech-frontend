@@ -8,11 +8,16 @@ import './ViewQuestion.css';
 import sanitizeText from '@/app/utils/sanitizeText';
 import Button from '@/app/components/Button/Button';
 
-export default function PostAnswer({ questionId, fullName, idNumber, onSuccess, onClose }) {
+export default function PostAnswer({ questionId, onSuccess, onClose }) {
+
+  const idNumber = typeof window !== 'undefined' ? localStorage.getItem('idNumber') : null;
+  const fullName = typeof window !== 'undefined' ? localStorage.getItem('fullName') : null;
   const [formData, setFormData] = useState({ text: '' });
   const [toast, setToast] = useState(null);
   const language = useLanguage();
   const [submitting, setSubmitting] = useState(false);
+  const userType = typeof window !== 'undefined' ? localStorage.getItem('userType') : null;
+
 
   const handleSubmit = async (e) => {
     if (submitting) return;
@@ -41,7 +46,10 @@ export default function PostAnswer({ questionId, fullName, idNumber, onSuccess, 
           questionId,
           idNumber,
           fullName,
-          text: formData.text.trim()
+          text: formData.text.trim(),
+          answeredBy: `${userType}#${idNumber}`,
+          answeredName: fullName
+
         })
       });
 

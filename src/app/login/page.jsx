@@ -18,7 +18,7 @@ export default function LoginPage() {
   const language = useLanguage();
 
   useEffect(() => {
-    localStorage.clear();
+    // localStorage.clear();
     sessionStorage.clear();
   }, []);
 
@@ -51,13 +51,24 @@ export default function LoginPage() {
         sessionStorage.setItem('fullName', decoded.name);
         sessionStorage.setItem('idNumber', decoded['custom:idNumber'] || decoded.sub);
         sessionStorage.setItem('email', decoded.email);
+        localStorage.setItem('idNumber', decoded['custom:idNumber'] || decoded.sub);
+        localStorage.setItem('userType', role);
+        localStorage.setItem('fullName', decoded.name);
+        localStorage.setItem('email', decoded.email);
 
         // Redirect based on role
-        if (role === 'admin') router.replace('./admin');
-        else if (role === 'mentor') router.replace('/pages/mentor');
-        else if (role === 'reservist') router.replace('/pages/reservist');
-        else if (role === 'ambassador') router.replace('/pages/ambassador');
-        else router.push('/');
+        // if (role === 'admin') router.replace('./admin');
+        // else if (role === 'mentor') router.replace('/pages/mentor');
+        // else if (role === 'reservist') router.replace('/pages/reservist');
+        // else if (role === 'ambassador') router.replace('/pages/ambassador');
+        // else router.push('/');
+        setTimeout(() => {
+          if (role === 'admin') router.replace('./admin');
+          else if (role === 'mentor') router.replace('/pages/mentor');
+          else if (role === 'reservist') router.replace('/pages/reservist');
+          else if (role === 'ambassador') router.replace('/pages/ambassador');
+          else router.push('/');
+        }, 100);
 
         setMessage(t('loginSuccess', language));
       } else {

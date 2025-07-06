@@ -206,7 +206,7 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber, onClose 
   };
 
   return (
-    <div className="add-question-modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'} onClick={onClose}>
+    <div className="add-question-modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'} >
       <div className="add-question-form">
         <button className="add-question-close-button" onClick={onClose}>×</button>
         <h2 className="add-question-title">{t('addNewQuestion', language)}</h2>

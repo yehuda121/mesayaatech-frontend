@@ -530,7 +530,9 @@
     "unknownStage": "Unknown Stage",
     "reservistFormExplenationForAdmin": "The checkbox reflects the reserve's choice.",
     "selectField": "Select Field",
-    "textTooLong": "The text is too long"
+    "textTooLong": "The text is too long",
+    "editAnswer": "Edit Answer",
+    "answerUpdated": "Answer updated successfully"
 
 
 }

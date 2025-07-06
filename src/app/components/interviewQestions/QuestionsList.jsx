@@ -18,7 +18,8 @@ export default function QuestionsPage({ onAnswer }) {
   const [questions, setQuestions] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState('');
   const [sortMode, setSortMode] = useState('newest');
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedQuestionId, setSelectedQuestionId] = useState(null);
+  const selectedQuestion = questions.find(q => q.questionId === selectedQuestionId);
   const [userType, setUserType] = useState(null);
   const [idNumber, setIdNumber] = useState(null);
   const [filterLikedOnly, setFilterLikedOnly] = useState(false);
@@ -89,15 +90,32 @@ export default function QuestionsPage({ onAnswer }) {
     }
   };
 
+  // const fetchQuestions = async () => {
+  //   try {
+  //     const res = await fetch('http://localhost:5000/api/get-questions');
+  //     const data = await res.json();
+  //     setQuestions(data);
+  //   } catch (err) {
+  //     console.error('Error loading questions:', err);
+  //   }
+  // };
   const fetchQuestions = async () => {
     try {
       const res = await fetch('http://localhost:5000/api/get-questions');
       const data = await res.json();
-      setQuestions(data);
+  
+      const formatted = data.map(q => ({
+        ...q,
+        questionId: q.questionId || q.PK?.replace('question#', ''),
+        PK: q.PK,
+      }));
+  
+      setQuestions(formatted);
     } catch (err) {
       console.error('Error loading questions:', err);
     }
   };
+  
 
   const hasLiked = (likes = []) => {
     return likes.some(like => like.idNumber === idNumber);
@@ -251,7 +269,7 @@ export default function QuestionsPage({ onAnswer }) {
                 className='text-green-600'
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedQuestion(q);
+                  setSelectedQuestionId(q.questionId);
                 }}
                 title={t('viewQestion', language)}
               >
@@ -369,9 +387,11 @@ export default function QuestionsPage({ onAnswer }) {
 
       {selectedQuestion && (
         <ViewQuestion
-          question={selectedQuestion}
-          onClose={() => setSelectedQuestion(null)}
-        />
+        question={selectedQuestion}
+        onClose={() => setSelectedQuestionId(null)}
+        onUpdate={fetchQuestions}
+      />
+      
       )}
 
       {questionToAnswer && (
