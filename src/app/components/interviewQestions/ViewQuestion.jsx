@@ -5,28 +5,26 @@ import { t } from '@/app/utils/loadTranslations';
 import './ViewQuestion.css';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import EditAnswerModal from "./EditAnswerModal";
+import { Edit2, Trash2 } from 'lucide-react';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
+import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 
 export default function ViewQuestion({ question, onClose, onUpdate  }) {
   const language = useLanguage();
   const [editingAnswer, setEditingAnswer] = useState(null);
   const [answers, setAnswers] = useState(question.answers || []);
+  const [alert, setAlert] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
+
   useEffect(() => {
     setAnswers(question.answers || []);
   }, [question]);
   
-
-
   const idNumber = typeof window !== 'undefined' ? localStorage.getItem('idNumber') : null;
   const userType = typeof window !== 'undefined' ? localStorage.getItem('userType') : null;
   
-
-  
-  
-  console.log("📦 question object:", question);
-
   if (!question) return null;
   const finalQuestionId = question.questionId || question.PK;
-
 
   const formatDate = (dateString) =>
     new Date(dateString).toLocaleString(language === 'he' ? 'he-IL' : 'en-US');
@@ -43,16 +41,8 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
     const idNumber = localStorage.getItem('idNumber');
     const userType = localStorage.getItem('userType');
   
-    console.log("Sending delete request with:", {
-      questionId: finalQuestionId,
-      answerId: `answer#${answerId}`,
-      userId: idNumber,
-      userType
-    });
-    
     try {
       const res = await fetch('http://localhost:5000/api/delete-answer', {
-
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -63,28 +53,20 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
         }),
         
       });
-    //   if (res.ok) {
-    //     const updatedAnswers = question.answers.filter(ans => ans.answerId !== answerId);
-    //     question.answers = updatedAnswers;
-    //     setEditingAnswer(null); 
-    //   } else {
-    //     const data = await res.json();
-    //     alert(data?.error || t('serverError', language));
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    //   alert(t('serverError', language));
-    // }
-    if (res.ok) {
-      if (onUpdate) onUpdate();   
-      setEditingAnswer(null); 
-    } else {
-      const data = await res.json();
-      alert(data?.error || t('serverError', language));
-    }
+   
+      if (res.ok) {
+        if (onUpdate) onUpdate();
+        setAlert({ message: t('answerDeleted', language), type: 'success' });
+        setEditingAnswer(null); 
+      } else {
+        const data = await res.json();
+        setAlert({ message: data?.error || t('serverError', language), type: 'error' });
+      }
     } catch (err) {
       console.error(err);
-      alert(t('serverError', language));
+      setAlert({ message: t('serverError', language), type: 'error' });
+    }finally {
+      setConfirmDelete(null);
     }
   };
 
@@ -92,8 +74,6 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
     setEditingAnswer(null);    
     if (onUpdate) onUpdate();  
   };
-  
-  
 
   return (
     <div className="VQ-overlay" onClick={onClose}>
@@ -117,7 +97,6 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
             <p><strong>{t('createdBy', language)}:</strong> {displayData.createdBy}</p>
             <p><strong>{t('likes', language)}:</strong> {displayData.likes}</p>
           </div>
-
           
           <div className="VQ-inner-scrolling" dir={language === 'he' ? 'rtl' : 'ltr'}>
             {question.answers?.length > 0 ? (
@@ -126,15 +105,8 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
                 <ul className="VQ-answer-list">
                   {answers.map((ans) => {
                     
-                    const canEditOrDelete =
-                    userType === 'admin' ||
-                    (idNumber && ans.answeredBy?.split('#')[1] === idNumber);
-
-                      // console.log('🔎 תשובה:', ans.text);
-                      // console.log('answeredBy:', ans.answeredBy);
-                      // console.log('idNumber:', idNumber);
-                      // console.log('userType:', userType);
-                      // console.log('canEditOrDelete:', canEditOrDelete);
+                    const canEditOrDelete = userType === 'admin' ||
+                      (idNumber && ans.answeredBy?.split('#')[1] === idNumber);
 
                     return (
                       <li key={ans.answerId} className="VQ-answer-item">
@@ -147,8 +119,20 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
 
                           {canEditOrDelete && (
                             <span className="VQ-answer-actions" style={{ marginInlineStart: '10px' }}>
-                              <button onClick={() => setEditingAnswer(ans)}>✏️</button>
-                              <button onClick={() => handleDeleteAnswer(ans.answerId)}>🗑</button>
+                              <button
+                                title={t('edit', language)}
+                                className="VQ-edit-btn"
+                                onClick={() => setEditingAnswer(ans)}
+                              >
+                                <Edit2 size={18} />
+                              </button>
+                              <button
+                                title={t('delete', language)}
+                                className="VQ-delete-btn"
+                                onClick={() => setConfirmDelete(ans.answerId)}
+                              >
+                                <Trash2 size={18} />
+                              </button>
                             </span>
                           )}
                         </div>
@@ -172,6 +156,24 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
           onSuccess={handleEditSuccess}
         />
       )}
+
+      {alert && (
+        <AlertMessage
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
+
+      {confirmDelete && (
+        <ConfirmDialog
+          title={t('confirmDelete', language)}
+          message={t('confirmDeleteMessage', language)}
+          onConfirm={() =>handleDeleteAnswer(confirmDelete)}
+          onCancel={() => setConfirmDelete(null)}
+        />
+      )}
+
     </div>
   );
 }

@@ -532,6 +532,8 @@
     "selectField": "בחר תחום",
     "textTooLong": "הטקסט ארוך מידי",
     "editAnswer": "עריכת תשובה",
-    "answerUpdated": "התשובה עודכנה בהצלחה"
+    "answerUpdated": "התשובה עודכנה בהצלחה",
+    "answerDeleted": "התשובה נמחקה בהצלחה",
+    "confirmDeleteMessage": "האם אתה בטוח שברצונך למחוק את התשובה הזו?"
 
 }

@@ -61,7 +61,7 @@ export default function EditAnswerModal({ answer, questionId, onClose, onSuccess
       <div className="postAnswer-box" onClick={(e) => e.stopPropagation()}>
         <button className="postAnswer-close" onClick={onClose}>×</button>
         <h2 className="postAnswer-title">{t('editAnswer', language)}</h2>
-        <textarea value={text} onChange={(e) => setText(e.target.value)} rows={6} maxLength={1000} />
+        <textarea className='textarea-edit-answer' value={text} onChange={(e) => setText(e.target.value)} rows={6} maxLength={1000} />
         <div className="postAnswer-actions">
           <Button onClick={handleSubmit} disabled={submitting}>{t('saveChanges', language)}</Button>
         </div>
