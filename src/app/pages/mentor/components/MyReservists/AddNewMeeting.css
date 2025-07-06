@@ -1,0 +1,89 @@
+
+.ANM-wrapper {
+  position: fixed;
+  top: 90px;
+  margin-right: 250px;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: calc(100vw - 250px);
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 20px;
+  padding-bottom: 150px;
+  margin-bottom: 50px;
+    overflow-y: auto;
+
+}
+
+@media (max-width: 768px) {
+  .ANM-wrapper {
+    margin-right: 0;
+    width: 100vw;
+  }
+}
+
+.ANM-form-box {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  text-align: start;
+  max-height: 90vh;
+    overflow-y: auto;
+}
+
+.ANM-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.ANM-label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.ANM-input,
+.ANM-textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.ANM-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.ANM-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.ANM-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 20px;
+  color: #4b5563;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.ANM-close-btn:hover {
+  color: #ef4444;
+} 

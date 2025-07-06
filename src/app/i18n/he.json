@@ -534,6 +534,8 @@
     "editAnswer": "עריכת תשובה",
     "answerUpdated": "התשובה עודכנה בהצלחה",
     "answerDeleted": "התשובה נמחקה בהצלחה",
-    "confirmDeleteMessage": "האם אתה בטוח שברצונך למחוק את התשובה הזו?"
+    "confirmDeleteMessage": "האם אתה בטוח שברצונך למחוק את התשובה הזו?",
+    "meetingAddFailed": "אירעה שגיאה בעת הוספת הפגישה",
+    "meetingAddedSuccessfully": "הפגישה נוספה בהצלחה"
 
 }

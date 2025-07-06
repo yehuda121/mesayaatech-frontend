@@ -534,8 +534,9 @@
     "editAnswer": "Edit Answer",
     "answerUpdated": "Answer updated successfully",
     "answerDeleted": "Answer deleted successfully",
-    "confirmDeleteMessage": "Are you sure you want to delete this answer?"
-
+    "confirmDeleteMessage": "Are you sure you want to delete this answer?",
+    "meetingAddFailed": "Failed to add meeting",
+    "meetingAddedSuccessfully": "Meeting added successfully"
 
 
 }
