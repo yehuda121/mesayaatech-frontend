@@ -208,7 +208,6 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
     if (onClose) onClose();
   };
 
-
   // Handles subscribing or unsubscribing the user to job alert emails
   const handleEmailJobPreferencesUpdate = async () => {
     try {
@@ -254,7 +253,6 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
       setAlertMessage({ message: t('saveError', language), type: 'error' });
     }
   };
-
 
   const handleDeleteClick = () => {
     if (confirm(t('confirmDeleteUser', language))) {

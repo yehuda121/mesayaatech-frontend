@@ -536,7 +536,9 @@
     "answerDeleted": "Answer deleted successfully",
     "confirmDeleteMessage": "Are you sure you want to delete this answer?",
     "meetingAddFailed": "Failed to add meeting",
-    "meetingAddedSuccessfully": "Meeting added successfully"
+    "meetingAddedSuccessfully": "Meeting added successfully",
+    "eventUpdatedSuccessfully": "Event updated successfully",
+    "saving": "Saving..."
 
 
 }

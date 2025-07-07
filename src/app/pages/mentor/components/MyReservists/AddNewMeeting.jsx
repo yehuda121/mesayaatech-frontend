@@ -81,35 +81,38 @@ export default function AddNewMeeting({ mentorId, reservistId, onAdd, onClose })
          <button className="ANM-close-btn" onClick={onClose}>✖</button>
         <h2 className="ANM-title">{t('addMeeting', language)}</h2>
 
-        <label className="ANM-label">
-          {t('meetingDate', language)}
-          <input type="date" name="date" value={formData.date} onChange={handleChange} className="ANM-input" />
-        </label>
+        <div className="ANM-grid">
+          <label className="ANM-label">
+            {t('meetingDate', language)}<span style={{ color: 'red' }}>*</span>
+            <input type="date" name="date" value={formData.date} onChange={handleChange} className="ANM-input" />
+          </label>
 
-        <label className="ANM-label">
-          {t('meetingMode', language)}
-          <input type="text" name="mode" value={formData.mode} onChange={handleChange} className="ANM-input" />
+          <label className="ANM-label">
+            {t('meetingMode', language)}<span style={{ color: 'red' }}>*</span>
+            <input type="text" name="mode" value={formData.mode} onChange={handleChange} className="ANM-input" />
         </label>
+        {/* </div>
+        <div className="ANM-grid"> */}
+          <label className="ANM-label">
+            {t('meetingTopics', language)}
+            <textarea name="topics" value={formData.topics} onChange={handleChange} className="ANM-textarea" />
+          </label>
 
-        <label className="ANM-label">
-          {t('meetingTopics', language)}
-          <textarea name="topics" value={formData.topics} onChange={handleChange} className="ANM-textarea" />
-        </label>
+          <label className="ANM-label">
+            {t('meetingTasks', language)}
+            <textarea name="tasks" value={formData.tasks} onChange={handleChange} className="ANM-textarea" />
+          </label>
 
-        <label className="ANM-label">
-          {t('meetingTasks', language)}
-          <textarea name="tasks" value={formData.tasks} onChange={handleChange} className="ANM-textarea" />
-        </label>
+          <label className="ANM-label">
+            {t('futurTasks', language)}
+            <textarea name="futurTasks" value={formData.futurTasks} onChange={handleChange} className="ANM-textarea" />
+          </label>
 
-        <label className="ANM-label">
-          {t('futurTasks', language)}
-          <textarea name="futurTasks" value={formData.futurTasks} onChange={handleChange} className="ANM-textarea" />
-        </label>
-
-        <label className="ANM-label">
-          {t('note', language)}
-          <textarea name="note" value={formData.note} onChange={handleChange} className="ANM-textarea" />
-        </label>
+          <label className="ANM-label">
+            {t('note', language)}
+            <textarea name="note" value={formData.note} onChange={handleChange} className="ANM-textarea" />
+          </label>
+        </div>
 
         <div className="ANM-actions">
           <Button onClick={handleSubmit} >{t('save', language)}</Button>

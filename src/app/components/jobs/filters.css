@@ -43,3 +43,16 @@
     display: flex;
     justify-content: center;
 }
+
+.filter-close {
+  top: 12px;
+  right: 16px;
+  font-size: 20px;
+  color: #4b5563;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.filter-close:hover{
+  color: #ef4444;
+}

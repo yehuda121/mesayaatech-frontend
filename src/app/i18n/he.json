@@ -536,6 +536,8 @@
     "answerDeleted": "התשובה נמחקה בהצלחה",
     "confirmDeleteMessage": "האם אתה בטוח שברצונך למחוק את התשובה הזו?",
     "meetingAddFailed": "אירעה שגיאה בעת הוספת הפגישה",
-    "meetingAddedSuccessfully": "הפגישה נוספה בהצלחה"
+    "meetingAddedSuccessfully": "הפגישה נוספה בהצלחה",
+    "eventUpdatedSuccessfully": "האירוע עודכן בהצלחה",
+    "saving": "שומר..."
 
 }
