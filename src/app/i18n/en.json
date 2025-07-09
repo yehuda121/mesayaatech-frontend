@@ -532,7 +532,17 @@
     "selectField": "Select Field",
     "textTooLong": "The text is too long",
     "editAnswer": "Edit Answer",
-    "answerUpdated": "Answer updated successfully"
+    "answerUpdated": "Answer updated successfully",
+    "answerDeleted": "Answer deleted successfully",
+    "confirmDeleteMessage": "Are you sure you want to delete this answer?",
+    "meetingAddFailed": "Failed to add meeting",
+    "meetingAddedSuccessfully": "Meeting added successfully",
+    "eventUpdatedSuccessfully": "Event updated successfully",
+    "saving": "Saving...",
+    "aboutMeTooLong": "about me is too long",
+    "armyRoleTooLong": "army role is too long",
+    "pastMentoringTooLong": "past mentoring experience is too long"
+
 
 
 }

@@ -14,7 +14,7 @@ import ToastMessage from '@/app/components/notifications/ToastMessage';
 import MyQuestions from '@/app/components/interviewQestions/MyQuestions';
 import EditAmbassadorForm from './EditAmbassadorForm';
 import './ambassador.css';
-import ChangePassword from '@/app/login/ChangePassword';
+import ChangePassword from '@/app/login/ChangePassword/ChangePassword';
 import { useRoleGuard } from "@/app/utils/isExpectedRoll/useRoleGuard";
 import { useLanguage } from "@/app/utils/language/useLanguage";
 

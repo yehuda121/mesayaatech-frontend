@@ -1,5 +1,4 @@
 /* ToastMessage.jsx */
-
  .toast-message {
   position: fixed;
   bottom: 30px;
@@ -24,8 +23,6 @@
     top: 30px;
   }
 }
-
-
 
 /* Fade-out effect when not visible */
 .toast-message:not(:hover):not(.stay) {
@@ -69,7 +66,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000;
+  z-index: 1000;
+}
+
+@media (min-width: 769px) {
+  .confirm-dialog {
+    margin-right: 150px;
+  }
 }
 
 /* Confirmation dialog box */

@@ -26,7 +26,7 @@ html, body {
   color: #fff;
   text-align: center;
   width: 100vw;
-  z-index: 9999;
+  z-index: 99999;
 }
 
 /* Navbar */

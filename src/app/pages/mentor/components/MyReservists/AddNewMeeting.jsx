@@ -1,51 +1,61 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import GenericForm from '@/app/components/GenericForm/GenericForm';
-import ToastMessage from '@/app/components/Notifications/ToastMessage';
-import { useLanguage } from "@/app/utils/language/useLanguage";
+import { useLanguage } from '@/app/utils/language/useLanguage';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
+import sanitizeText from '@/app/utils/sanitizeText';
+import './AddNewMeeting.css';
+import Button from '@/app/components/Button/Button';
 
-export default function AddNewMeeting({ mentorId, reservistId, onAdd,onClose }) {
+export default function AddNewMeeting({ mentorId, reservistId, onAdd, onClose }) {
   const [formData, setFormData] = useState({
     date: '',
     mode: '',
     topics: '',
-    tasks: ''
+    tasks: '',
+    futurTasks: '',
+    note: ''
   });
-  const [toast, setToast] = useState(null);
+  const [alert, setAlert] = useState(null);
   const language = useLanguage();
 
-  const fields = [
-    { key: 'date', labelKey: 'meetingDate', type: 'date', required: true },
-    { key: 'mode', labelKey: 'meetingMode', type: 'text', required: true },
-    { key: 'topics', labelKey: 'meetingTopics', type: 'textarea' },
-    { key: 'tasks', labelKey: 'meetingTasks', type: 'textarea' },
-    { key: 'futurTasks', labelKey: 'futurTasks', type: 'textarea' },
-    { key: 'note', labelKey: 'note', type: 'note' }
-  ];
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
-  const validateMeetingForm = () => {
+  const validateForm = () => {
     const { date, mode, topics, tasks, futurTasks, note } = formData;
 
     if (!date) return t('meetingDateRequired', language);
-    if (!mode || mode.trim().length === 0) return t('meetingModeRequired', language);
-    if (mode.length > 50) return t('meetingModeTooLong', language);
-    if (topics && topics.length > 300) return t('meetingTopicsTooLong', language);
-    if (tasks && tasks.length > 300) return t('meetingTasksTooLong', language);
-    if (futurTasks && futurTasks.length > 300) return t('futurTasksTooLong', language);
-    if (note && note.length > 300) return t('noteTooLong', language);
+
+    const cleanedMode = sanitizeText(mode, 50);
+    if (!cleanedMode) return t('meetingModeRequired', language);
+    if (cleanedMode === 'tooLong') return t('meetingModeTooLong', language);
+
+    const cleanedFields = [
+      { value: topics, key: 'meetingTopicsTooLong' },
+      { value: tasks, key: 'meetingTasksTooLong' },
+      { value: futurTasks, key: 'futurTasksTooLong' },
+      { value: note, key: 'noteTooLong' }
+    ];
+
+    for (let { value, key } of cleanedFields) {
+      const result = sanitizeText(value, 300);
+      if (result === 'tooLong') return t(key, language);
+    }
 
     return null;
   };
 
   const handleSubmit = async () => {
-    const error = validateMeetingForm();
+    const error = validateForm();
     if (error) {
-      setToast({ message: error, type: 'error' });
+      setAlert({ message: error, type: 'error' });
       return;
     }
-    
+
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/add-meeting`, {
         method: 'POST',
@@ -54,34 +64,68 @@ export default function AddNewMeeting({ mentorId, reservistId, onAdd,onClose }) 
       });
 
       if (res.ok) {
+        setAlert({ message: t('meetingAddedSuccessfully', language), type: 'success' });
         onAdd();
       } else {
-        alert(t('meetingAddFailed', language));
+        setAlert({ message: t('meetingAddFailed', language), type: 'error' });
       }
     } catch (err) {
       console.error(err);
-      alert(t('meetingAddFailed', language));
+      setAlert({ message: t('meetingAddFailed', language), type: 'error' });
     }
   };
 
   return (
-    <>
-      <GenericForm
-        titleKey="addMeeting"
-        fields={fields}
-        data={formData}
-        onChange={setFormData}
-        onPrimary={handleSubmit}
-        primaryLabel="save"
-        onCloseIcon={onClose}
-      />
-      {toast && (
-        <ToastMessage
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
-    </>
+    <div className="ANM-wrapper" dir={language === 'he' ? 'rtl' : 'ltr'}>
+      <div className="ANM-form-box">
+         <button className="ANM-close-btn" onClick={onClose}>✖</button>
+        <h2 className="ANM-title">{t('addMeeting', language)}</h2>
+
+        <div className="ANM-grid">
+          <label className="ANM-label">
+            {t('meetingDate', language)}<span style={{ color: 'red' }}>*</span>
+            <input type="date" name="date" value={formData.date} onChange={handleChange} className="ANM-input" />
+          </label>
+
+          <label className="ANM-label">
+            {t('meetingMode', language)}<span style={{ color: 'red' }}>*</span>
+            <input type="text" name="mode" value={formData.mode} onChange={handleChange} className="ANM-input" />
+        </label>
+        {/* </div>
+        <div className="ANM-grid"> */}
+          <label className="ANM-label">
+            {t('meetingTopics', language)}
+            <textarea name="topics" value={formData.topics} onChange={handleChange} className="ANM-textarea" />
+          </label>
+
+          <label className="ANM-label">
+            {t('meetingTasks', language)}
+            <textarea name="tasks" value={formData.tasks} onChange={handleChange} className="ANM-textarea" />
+          </label>
+
+          <label className="ANM-label">
+            {t('futurTasks', language)}
+            <textarea name="futurTasks" value={formData.futurTasks} onChange={handleChange} className="ANM-textarea" />
+          </label>
+
+          <label className="ANM-label">
+            {t('note', language)}
+            <textarea name="note" value={formData.note} onChange={handleChange} className="ANM-textarea" />
+          </label>
+        </div>
+
+        <div className="ANM-actions">
+          <Button onClick={handleSubmit} >{t('save', language)}</Button>
+        </div>
+
+        {alert && (
+          <AlertMessage
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert(null)}
+          />
+        )}
+      </div>
+    </div>
   );
 }

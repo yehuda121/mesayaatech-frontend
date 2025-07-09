@@ -3,6 +3,9 @@ import './notificationsStyle.css';
 
 export default function ToastMessage({ message, type = 'info', duration = 3000, onClose }) {
   const [visible, setVisible] = useState(true);
+  if(message.length > 100) {
+    message = message.substring(0, 100) + '...';
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {

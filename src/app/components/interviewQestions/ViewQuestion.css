@@ -1,4 +1,4 @@
-/* Outer overlay */
+/* view question */
 .VQ-overlay {
   position: fixed;
   top: 90px;
@@ -90,6 +90,28 @@
   color: #e53e3e;
 }
 
+.VQ-answer-actions {
+  display: inline-flex;
+  gap: 8px;
+  /* margin-right: 10px; */
+}
+
+.VQ-answer-actions button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.VQ-edit-btn:hover {
+  color: #2563eb; 
+}
+
+.VQ-delete-btn:hover {
+  color: red;
+}
+
 
 /* --- add new question */
 .add-question-modal-overlay {
@@ -108,8 +130,11 @@
 @media (max-width: 768px) {
   .add-question-modal-overlay {
     right: 0;
-    width: 100vw;
+    width: 100%;
+    padding: 20px;
+    z-index: 99999999;
   }
+
 }
 
 .add-question-form {
@@ -345,20 +370,12 @@
   justify-content: center;
   margin-top: 24px;
 }
-.VQ-answer-actions {
-  display: inline-flex;
-  gap: 8px;
-  margin-right: 10px;
-}
 
-.VQ-answer-actions button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 2px 4px;
-}
-
-.VQ-answer-actions button:hover {
-  color: #2563eb;
+.textarea-edit-answer {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  resize: vertical;
 }

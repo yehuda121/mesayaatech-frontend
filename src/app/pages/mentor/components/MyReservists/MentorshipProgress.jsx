@@ -177,7 +177,7 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
         </div>
       )}
 
-      <div className="mentor-editMeeting-add-new-meeting-container">
+      <div>
         {showModal && (
           <div className='mentor-add-new-meeting'>
           <AddNewMeeting

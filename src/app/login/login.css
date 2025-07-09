@@ -62,7 +62,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.7); /* שכבה לבנה שקופה */
+    background: rgba(255, 255, 255, 0.7); /* semi-transparent overlay */
     z-index: 0;
   }
   .login-overlay {

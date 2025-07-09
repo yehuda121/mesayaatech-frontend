@@ -1,23 +1,130 @@
+// 'use client';
+
+// import { useState, useEffect } from 'react';
+// import GenericForm from '@/app/components/GenericForm/GenericForm';
+// import { t } from '@/app/utils/loadTranslations';
+// import { useLanguage } from "@/app/utils/language/useLanguage";
+
+// export default function EditMeeting({ meeting, index, mentorId, reservistId, onSave, onClose }) {
+//   const [formData, setFormData] = useState({
+//     date: meeting.date || '',
+//     mode: meeting.mode || '',
+//     topics: meeting.topics || '',
+//     tasks: meeting.tasks || '',
+//     futurTasks: meeting.futurTasks || '',
+//     note: meeting.note || ''
+//   });
+//   const [isSaving, setIsSaving] = useState(false);
+//   const language = useLanguage();
+
+//   const handleSave = async () => {
+//     setIsSaving(true);
+//     try {
+//       const res = await fetch('http://localhost:5000/api/update-meeting', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({
+//           mentorId,
+//           reservistId,
+//           meetingIndex: index,
+//           updatedMeeting: formData
+//         })
+//       });
+//       if (!res.ok) throw new Error();
+//       onSave();
+//     } catch (err) {
+//       alert(t('saveMeetingFailed', language));
+//     } finally {
+//       setIsSaving(false);
+//     }
+//   };
+
+//   if (!meeting) return <div>{t('meetingNotFound', language)}</div>;
+
+//   return (
+//     <GenericForm
+//       titleKey="editMeetingTitle"
+//       fields={[
+//         { key: 'date', type: 'date' },
+//         { key: 'mode', type: 'text' },
+//         { key: 'topics', type: 'textarea' },
+//         { key: 'tasks', type: 'textarea' },
+//         { key: 'futurTasks', type: 'textarea' },
+//         { key: 'note', type: 'textarea' }
+//       ]}
+//       data={formData}
+//       onChange={setFormData}
+//       onPrimary={handleSave}
+//       onSecondary={onClose}
+//       primaryLabel="save"
+//       secondaryLabel="cancel"
+//       disabledPrimary={isSaving}
+//       onCloseIcon={onClose}
+//     />
+//   );
+// }
+
+
 'use client';
 
-import { useState, useEffect } from 'react';
-import GenericForm from '@/app/components/GenericForm/GenericForm';
+import { useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import { useLanguage } from "@/app/utils/language/useLanguage";
+import { useLanguage } from '@/app/utils/language/useLanguage';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
+import Button from '@/app/components/Button/Button';
+import sanitizeText from '@/app/utils/sanitizeText';
+import './AddNewMeeting.css';
 
 export default function EditMeeting({ meeting, index, mentorId, reservistId, onSave, onClose }) {
   const [formData, setFormData] = useState({
-    date: meeting.date || '',
-    mode: meeting.mode || '',
-    topics: meeting.topics || '',
-    tasks: meeting.tasks || '',
-    futurTasks: meeting.futurTasks || '',
-    note: meeting.note || ''
+    date: meeting?.date || '',
+    mode: meeting?.mode || '',
+    topics: meeting?.topics || '',
+    tasks: meeting?.tasks || '',
+    futurTasks: meeting?.futurTasks || '',
+    note: meeting?.note || ''
   });
+
   const [isSaving, setIsSaving] = useState(false);
+  const [alert, setAlert] = useState(null);
   const language = useLanguage();
 
-  const handleSave = async () => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const validateForm = () => {
+    const { date, mode, topics, tasks, futurTasks, note } = formData;
+
+    if (!date) return t('meetingDateRequired', language);
+
+    const cleanedMode = sanitizeText(mode, 50);
+    if (!cleanedMode) return t('meetingModeRequired', language);
+    if (cleanedMode === 'tooLong') return t('meetingModeTooLong', language);
+
+    const cleanedFields = [
+      { value: topics, key: 'meetingTopicsTooLong' },
+      { value: tasks, key: 'meetingTasksTooLong' },
+      { value: futurTasks, key: 'futurTasksTooLong' },
+      { value: note, key: 'noteTooLong' }
+    ];
+
+    for (let { value, key } of cleanedFields) {
+      const result = sanitizeText(value, 300);
+      if (result === 'tooLong') return t(key, language);
+    }
+
+    return null;
+  };
+
+  const handleSubmit = async () => {
+    const error = validateForm();
+    if (error) {
+      setAlert({ message: error, type: 'error' });
+      return;
+    }
+
     setIsSaving(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-meeting`, {
@@ -30,10 +137,11 @@ export default function EditMeeting({ meeting, index, mentorId, reservistId, onS
           updatedMeeting: formData
         })
       });
+
       if (!res.ok) throw new Error();
       onSave();
     } catch (err) {
-      alert(t('saveMeetingFailed', language));
+      setAlert({ message: t('saveMeetingFailed', language), type: 'error' });
     } finally {
       setIsSaving(false);
     }
@@ -42,24 +150,61 @@ export default function EditMeeting({ meeting, index, mentorId, reservistId, onS
   if (!meeting) return <div>{t('meetingNotFound', language)}</div>;
 
   return (
-    <GenericForm
-      titleKey="editMeetingTitle"
-      fields={[
-        { key: 'date', type: 'date' },
-        { key: 'mode', type: 'text' },
-        { key: 'topics', type: 'textarea' },
-        { key: 'tasks', type: 'textarea' },
-        { key: 'futurTasks', type: 'textarea' },
-        { key: 'note', type: 'textarea' }
-      ]}
-      data={formData}
-      onChange={setFormData}
-      onPrimary={handleSave}
-      onSecondary={onClose}
-      primaryLabel="save"
-      secondaryLabel="cancel"
-      disabledPrimary={isSaving}
-      onCloseIcon={onClose}
-    />
+    <div className="ANM-wrapper" dir={language === 'he' ? 'rtl' : 'ltr'}>
+      <div className="ANM-form-box">
+        <button className="ANM-close-btn" onClick={onClose}>✖</button>
+        <h2 className="ANM-title">{t('editMeetingTitle', language)}</h2>
+
+        <div className="ANM-grid">
+          <label className="ANM-label">
+            {t('meetingDate', language)} <span style={{ color: 'red' }}>*</span>
+            <input type="date" name="date" value={formData.date} onChange={handleChange} className="ANM-input" />
+          </label>
+
+          <label className="ANM-label">
+            {t('meetingMode', language)} <span style={{ color: 'red' }}>*</span>
+            <input type="text" name="mode" value={formData.mode} onChange={handleChange} className="ANM-input" />
+          </label>
+        </div>
+
+        <div className="ANM-grid">
+          <label className="ANM-label">
+            {t('meetingTopics', language)}
+            <textarea name="topics" value={formData.topics} onChange={handleChange} className="ANM-textarea" />
+          </label>
+
+          <label className="ANM-label">
+            {t('meetingTasks', language)}
+            <textarea name="tasks" value={formData.tasks} onChange={handleChange} className="ANM-textarea" />
+          </label>
+        </div>
+
+        <div className="ANM-grid">
+          <label className="ANM-label">
+            {t('futurTasks', language)}
+            <textarea name="futurTasks" value={formData.futurTasks} onChange={handleChange} className="ANM-textarea" />
+          </label>
+
+          <label className="ANM-label">
+            {t('note', language)}
+            <textarea name="note" value={formData.note} onChange={handleChange} className="ANM-textarea" />
+          </label>
+        </div>
+
+        <div className="ANM-actions">
+          <Button onClick={handleSubmit} disabled={isSaving}>
+            {t('save', language)}
+          </Button>
+        </div>
+
+        {alert && (
+          <AlertMessage
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert(null)}
+          />
+        )}
+      </div>
+    </div>
   );
 }

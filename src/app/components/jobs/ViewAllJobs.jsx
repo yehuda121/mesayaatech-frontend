@@ -264,17 +264,6 @@ export default function ViewAllJobs() {
         <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
 
-      {/* {addNewJobMode && (
-        <AddNewJob
-          publisherId={userId}
-          type={userType}
-          onSave={(newJob) => {
-            setJobs(prev => [...prev, newJob]);
-            setAddNewJobMode(false);
-          }}
-          onClose={() => setAddNewJobMode(false)}
-        />
-      )} */}
       {addNewJobMode && (
         <div className="post-new-job-modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
           <AddNewJob
@@ -293,6 +282,10 @@ export default function ViewAllJobs() {
         <div className="filters-modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
           <div className="filters-modal-box">
             <h3 className='font-bold text-xl text-center'>{t('advancedSearch', language)}</h3>
+
+            <button className="filter-close" onClick={() => setShowAdvanced(false)}>
+              ✖
+            </button>
 
             {['location', 'company', 'field', 'experience', 'fromDate', 'toDate'].map((field) => (
               <div key={field} className="filters-modal-field">

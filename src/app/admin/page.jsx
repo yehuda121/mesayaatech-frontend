@@ -13,7 +13,7 @@ import { t } from '@/app/utils/loadTranslations';
 import './admin.css';
 import InterviewQestions from '@/app/components/interviewQestions/QuestionsList';
 import ViewMentorships from './components/mentorship/viewMentorships';
-import ChangePassword from '@/app/login/ChangePassword';
+import ChangePassword from '@/app/login/ChangePassword/ChangePassword';
 import InterviewPracticePanel from "@/app/components/interviewWithAi/InterviewPracticePanel";
 import { useRoleGuard } from "@/app/utils/isExpectedRoll/useRoleGuard";
 import { useLanguage } from "@/app/utils/language/useLanguage";

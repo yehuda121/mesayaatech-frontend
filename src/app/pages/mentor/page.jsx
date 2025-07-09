@@ -17,7 +17,7 @@ import MyQuestions from '@/app/components/interviewQestions/MyQuestions';
 import MyReservists from './components/MyReservists/MyReservists';
 import MentorshipProgress from './components/MyReservists/MentorshipProgress';
 import './mentor.css';
-import ChangePassword from '@/app/login/ChangePassword';
+import ChangePassword from '@/app/login/ChangePassword/ChangePassword';
 import { Brain } from 'lucide-react';
 import { useRoleGuard } from "@/app/utils/isExpectedRoll/useRoleGuard";
 import { useLanguage } from "@/app/utils/language/useLanguage";

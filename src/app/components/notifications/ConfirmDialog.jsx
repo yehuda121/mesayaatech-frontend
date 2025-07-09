@@ -2,6 +2,10 @@ import React from 'react';
 import './notificationsStyle.css';
 
 export default function ConfirmDialog({ title, message, onConfirm, onCancel }) {
+  if (!message) return null;
+  if(message.length > 100) {
+    message = message.substring(0, 100) + '...';
+  }
   return (
     <div className="confirm-overlay">
       <div className="confirm-dialog">

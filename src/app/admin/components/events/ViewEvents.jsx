@@ -84,7 +84,7 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
           />,
           <Button
             key="toggle"
-            className="card-filter button-filter"
+            // className="card-filter button-filter"
             size="sm"
             onClick={() => setShowPast(!showPast)}
           >

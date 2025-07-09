@@ -39,49 +39,6 @@
   }
 }
 
-/* AddNewMeeting and EditMeeting */
-
-/* Modal center position for both AddNewMeeting and EditMeeting */
-.mentor-add-new-meeting {
-  position: fixed;
-  top: 55%;
-  right: 0%;
-  left: 45%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  max-height: 100%; /* prevent the modal from growing too large */
-  width: 70%;
-  overflow-y: auto; /* enable internal scroll if content exceeds */
-  padding: 20px;
-  border-radius: 8px; /* optional: nicer corners */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-}
-.mentor-add-new-meeting::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-/* Main container for edit meeting screen */
-.mentor-editMeeting-add-new-meeting-container {
-  position: relative;
-  top: 60px; 
-  padding: 20px;
-  overflow-y: auto;
-  height: calc(100vh - 60px);
-  box-sizing: border-box;
-  z-index: 1;
-}
-
-@media (max-width: 768px) {
-  .mentor-editMeeting-add-new-meeting-container {
-    margin-right: 0; 
-  }
-  .mentor-add-new-meeting{
-    width: 100%;
-    left: 50%;
-  }
-}
-
 .mentor-top-bar {
   position: fixed;
   top: 0;

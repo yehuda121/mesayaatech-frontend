@@ -76,10 +76,10 @@ export default function CreateEventForm() {
   };
 
   return (
-    <div className='createEventForm'>
-    <div className="event-form-wrapper" dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <h2 className='createEventTitle'>{t('createEventTitle', language)}</h2>
-      <form className="event-form-grid">
+    <div className='CE-createEventForm'>
+    <div className="CE-event-form-wrapper" dir={language === 'he' ? 'rtl' : 'ltr'}>
+      <h2 className='CE-createEventTitle'>{t('createEventTitle', language)}</h2>
+      <form className="CE-event-form-grid">
         <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder={t('eventTitle', language)} required />
         <input type="date" name="date" value={formData.date} onChange={handleChange} required />
         <input type="time" name="time" value={formData.time} onChange={handleChange} />
@@ -88,7 +88,7 @@ export default function CreateEventForm() {
         <textarea name="notes" value={formData.notes} onChange={handleChange} placeholder={t('eventNotes', language)} rows={3}></textarea>
       </form>
 
-      <div className='creat-event-button'>
+      <div className='CE-creat-event-button'>
         <Button onClick={handleSubmit} disabled={loading}>
           {loading ? t('loading', language) : t('eventSubmit', language)}
         </Button>

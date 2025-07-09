@@ -94,7 +94,7 @@ export default function EditJob({ job, onClose, onSave }) {
   ];
 
   return (
-    <div className="edit-job-overlay" dir={language === 'he' ? 'rtl' : 'ltr'} onClick={onClose}>
+    <div className="edit-job-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
       <div className="edit-job-form">
         <button className='edit-job-close-button' onClick={onClose}>✖</button>
         <h2 className="edit-job-title">{t('editJobTitle', language)}</h2>
