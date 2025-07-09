@@ -23,7 +23,7 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/import-events');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/import-events`);
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       const futureEvents = data.filter(event => new Date(event.date) >= new Date());
@@ -50,7 +50,7 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/toggle-join-event', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/toggle-join-event`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ eventId, idNumber, fullName, email })

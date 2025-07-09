@@ -31,14 +31,9 @@ export default function ChangePassword() {
     setMessage('');
 
     const accessToken = sessionStorage.getItem('accessToken');
-    // console.log('Access token retrieved from sessionStorage:', accessToken ? '[REDACTED]' : 'null');
-
-    // console.log('Sending change password request to backend...');
-    // console.log('Current password:', currentPassword ? '[REDACTED]' : 'empty');
-    // console.log('New password:', newPassword ? '[REDACTED]' : 'empty');
 
     try {
-      const res = await fetch('http://localhost:5000/api/change-password', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

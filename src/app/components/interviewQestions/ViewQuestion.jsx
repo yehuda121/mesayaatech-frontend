@@ -51,8 +51,7 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
     });
     
     try {
-      const res = await fetch('http://localhost:5000/api/delete-answer', {
-
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-answer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -63,18 +62,6 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
         }),
         
       });
-    //   if (res.ok) {
-    //     const updatedAnswers = question.answers.filter(ans => ans.answerId !== answerId);
-    //     question.answers = updatedAnswers;
-    //     setEditingAnswer(null); 
-    //   } else {
-    //     const data = await res.json();
-    //     alert(data?.error || t('serverError', language));
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    //   alert(t('serverError', language));
-    // }
     if (res.ok) {
       if (onUpdate) onUpdate();   
       setEditingAnswer(null); 
@@ -93,8 +80,6 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
     if (onUpdate) onUpdate();  
   };
   
-  
-
   return (
     <div className="VQ-overlay" onClick={onClose}>
       <div

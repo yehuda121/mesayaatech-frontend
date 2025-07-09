@@ -28,7 +28,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
 
   // Load user's previous questions and scores
   const fetchHistory = async () => {
-    const res = await fetch("http://localhost:5000/api/interview/fetch-questions-history?userId=" + userId);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/interview/fetch-questions-history?userId=` + userId);
     const data = await res.json();
     if (res.ok) {
       setHistory(data.history || []);
@@ -43,7 +43,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
     }
     setIsLoadingQuestion(true);
     try {
-      const res = await fetch("http://localhost:5000/api/interview/getQuestion", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/interview/getQuestion`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, email, category, difficulty, language }),
@@ -74,7 +74,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
     }
     setIsLoadingEvaluation(true);
     try {
-      const res = await fetch("http://localhost:5000/api/interview/evaluateAnswer", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/interview/evaluateAnswer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, question, userAnswer, language, category, difficulty }),
@@ -91,21 +91,6 @@ export default function InterviewPracticePanel({ userId, email, language, role }
     }
     setIsLoadingEvaluation(false);
   };
-
-  // const handleSubmitToBank = async () => {
-  //   setIsLoadingBankSubmit(true);
-  //   try {
-  //     await fetch("http://localhost:5000/api/submit-question-to-bank", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ question, category, difficulty, language }),
-  //     });
-  //     setAlert({ type: "success", message: t("interviewSubmittedToBank", language) });
-  //   } catch {
-  //     setAlert({ type: "error", message: t("interviewBankError", language) });
-  //   }
-  //   setIsLoadingBankSubmit(false);
-  // };
 
   const avgScore =
     history.length > 0 ? Math.round((history.reduce((sum, q) => sum + (q.score || 0), 0) / history.length) * 100) / 100 : null;
@@ -127,7 +112,6 @@ export default function InterviewPracticePanel({ userId, email, language, role }
             </option>
           ))}
         </select>
-
 
         <select value={difficulty} onChange={e => setDifficulty(e.target.value)} className="border p-2 rounded">
           <option value="">{t("interviewSelectDifficulty", language)}</option>

@@ -20,7 +20,7 @@ export default function FindReservist({ mentorId, onBack }) {
   useEffect(() => {
     const fetchReservists = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/match-reservists-to-mentor?mentorId=${mentorId}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/match-reservists-to-mentor?mentorId=${mentorId}`);
         const data = await res.json();
         // Filter out reservists who are not interested in a mentor
         const filteredData = data.filter(r => 
@@ -41,7 +41,7 @@ export default function FindReservist({ mentorId, onBack }) {
     console.log("mentorId: ", mentorId);
     console.log("reservistId: ", reservistId);
     try {
-      const res = await fetch('http://localhost:5000/api/assign-mentor', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/assign-mentor`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mentorId, reservistId }),

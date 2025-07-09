@@ -66,7 +66,7 @@ export default function QuestionsPage({ onAnswer }) {
 
   const handleReadToggle = async (questionId, alreadyRead) => {
     try {
-      const res = await fetch('http://localhost:5000/api/toggle-question-read', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/toggle-question-read`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ questionId, idNumber, fullName })
@@ -90,18 +90,9 @@ export default function QuestionsPage({ onAnswer }) {
     }
   };
 
-  // const fetchQuestions = async () => {
-  //   try {
-  //     const res = await fetch('http://localhost:5000/api/get-questions');
-  //     const data = await res.json();
-  //     setQuestions(data);
-  //   } catch (err) {
-  //     console.error('Error loading questions:', err);
-  //   }
-  // };
   const fetchQuestions = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/get-questions');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-questions`);
       const data = await res.json();
   
       const formatted = data.map(q => ({
@@ -123,7 +114,7 @@ export default function QuestionsPage({ onAnswer }) {
 
   const handleLike = async (questionId, alreadyLiked) => {
     try {
-      const res = await fetch('http://localhost:5000/api/toggle-question-like', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/toggle-question-like`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ questionId, idNumber, fullName })
@@ -176,7 +167,7 @@ export default function QuestionsPage({ onAnswer }) {
 
   const confirmDelete = async (questionId) => {
     try {
-      const res = await fetch('http://localhost:5000/api/delete-question', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-question`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ questionId, idNumber, fullName })

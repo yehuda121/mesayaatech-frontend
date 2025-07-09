@@ -9,7 +9,7 @@ import GenericCardSection from '@/app/components/GenericCardSection/GenericCardS
 import { Edit2, Trash2 } from 'lucide-react';
 import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
 import { useLanguage } from "@/app/utils/language/useLanguage";
-import DraggableButton from '@/app/components/DraggableButton/DraggableButton';
+// import DraggableButton from '@/app/components/DraggableButton/DraggableButton';
 
 export default function ViewEvents({ events, setEvents, handleNavigation }) {
   const [filter, setFilter] = useState({ title: '', date: '' });
@@ -24,7 +24,7 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
 
   const fetchEvents = async () => {
     try {
-      const url = `http://localhost:5000/api/import-events${showPast ? '?includePast=true' : ''}`;
+      const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/import-events${showPast ? '?includePast=true' : ''}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
@@ -36,7 +36,7 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
 
   const handleDelete = async (event) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/delete-event`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-event`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ eventId: event.eventId })

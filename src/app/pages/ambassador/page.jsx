@@ -48,7 +48,7 @@ export default function AmbassadorHomePage() {
 
     const fetchUserForm = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/get-user-form?userType=ambassador&idNumber=${idNumber}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=ambassador&idNumber=${idNumber}`);
         const data = await res.json();
         setUserData(data);
       } catch (err) {

@@ -50,7 +50,7 @@ export default function ReservistHomePage() {
     const fetchUserForm = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/get-user-form?userType=${userType}&idNumber=${idNumber}`
+          `${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=${userType}&idNumber=${idNumber}`
         );
         const data = await res.json();
         setUserData(data);
@@ -61,7 +61,7 @@ export default function ReservistHomePage() {
           if (mentorIdNumber) {
             try {
               const mentorRes = await fetch(
-                `http://localhost:5000/api/get-user-form?userType=mentor&idNumber=${mentorIdNumber}`
+                `${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=mentor&idNumber=${mentorIdNumber}`
               );
               const mentorData = await mentorRes.json();
               setMentorName(mentorData.fullName || '');

@@ -24,7 +24,7 @@ export default function EditAnswerModal({ answer, questionId, onClose, onSuccess
 
     try {
       setSubmitting(true);
-      const res = await fetch('http://localhost:5000/api/update-answer', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-answer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

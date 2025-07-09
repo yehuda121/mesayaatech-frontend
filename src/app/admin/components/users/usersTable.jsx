@@ -21,7 +21,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/imports-user-registration-form/all`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`);
       const data = await res.json();
       if (!Array.isArray(data)) {
         console.error(t('fetchErrorNotArray', language));
@@ -37,7 +37,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
   const handleStatusChange = async (user, status) => {
     try {
       if (status === 'approved') {
-        const createRes = await fetch('http://localhost:5000/api/approve-user', {
+        const createRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/approve-user`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -55,7 +55,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
         }
       }
 
-      const res = await fetch('http://localhost:5000/api/update-user-status/', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-user-status/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -86,7 +86,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
   const handleDeleteUser = async (user) => {
     try {
       if (user.status === 'approved' && user.email) {
-        const cognitoRes = await fetch('http://localhost:5000/api/delete-cognito-user', {
+        const cognitoRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-cognito-user`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: user.email })
@@ -98,7 +98,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
         }
       }
 
-      const res = await fetch('http://localhost:5000/api/delete-user-form', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-user-form`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -149,7 +149,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
 
   const handleSaveUser = async (updatedUser) => {
     try {
-      const res = await fetch('http://localhost:5000/api/update-user-form', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-user-form`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedUser)

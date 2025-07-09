@@ -22,7 +22,7 @@ export default function MyQuestions({ idNumber, fullName, onEdit  }) {
 
   const fetchMyQuestions = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/get-questions');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-questions`);
       const data = await res.json();
       const mine = data.filter(q => q.createdBy?.trim() === fullName?.trim());
       setMyQuestions(mine);
@@ -33,7 +33,7 @@ export default function MyQuestions({ idNumber, fullName, onEdit  }) {
 
   const handleDelete = async (questionId) => {
     try {
-      const res = await fetch('http://localhost:5000/api/delete-question', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-question`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ questionId, idNumber, fullName })

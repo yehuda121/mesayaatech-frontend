@@ -30,7 +30,7 @@ export default function MentorRegisterForm() {
     }
 
     try {
-      const resUsers = await fetch(`http://localhost:5000/api/imports-user-registration-form?userType=mentor`);
+      const resUsers = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form?userType=mentor`);
       const existingUsers = await resUsers.json();
 
       const emailExists = existingUsers.some(user => user.email === formData.email);
@@ -45,7 +45,7 @@ export default function MentorRegisterForm() {
         return false;
       }
 
-      const res = await fetch('http://localhost:5000/api/upload-registration-form', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload-registration-form`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, userType: 'mentor', status: 'pending' }),

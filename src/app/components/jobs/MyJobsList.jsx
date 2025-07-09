@@ -22,7 +22,7 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
       try {
         const encodedPublisherId = encodeURIComponent(publisherId);
         const res = await fetch(
-          `http://localhost:5000/api/jobs-by-publisherID/by-publisher?publisherId=${encodedPublisherId}&idType=${userType}`
+          `${process.env.NEXT_PUBLIC_API_BASE}/api/jobs-by-publisherID/by-publisher?publisherId=${encodedPublisherId}&idType=${userType}`
         );
         const data = await res.json();
 
@@ -67,7 +67,7 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
     const userType = sessionStorage.getItem('userType');
 
     try {
-      const res = await fetch('http://localhost:5000/api/delete-job', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-job`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ jobId, userId, userType })

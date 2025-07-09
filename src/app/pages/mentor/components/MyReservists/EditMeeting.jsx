@@ -20,7 +20,7 @@ export default function EditMeeting({ meeting, index, mentorId, reservistId, onS
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const res = await fetch('http://localhost:5000/api/update-meeting', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-meeting`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

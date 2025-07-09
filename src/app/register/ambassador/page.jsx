@@ -76,7 +76,7 @@ export default function AmbassadorRegisterForm() {
     }
 
     try {
-      const existingRes = await fetch(`http://localhost:5000/api/imports-user-registration-form?userType=ambassador`);
+      const existingRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form?userType=ambassador`);
       const existingUsers = await existingRes.json();
 
       const emailExists = existingUsers.some(user => user.email === formData.email);
@@ -85,7 +85,7 @@ export default function AmbassadorRegisterForm() {
       if (emailExists) return showAlert(t('emailAlreadyExists', language), 'error');
       if (idExists) return showAlert(t('idNumberAlreadyExists', language), 'error');
 
-      const res = await fetch('http://localhost:5000/api/upload-registration-form', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload-registration-form`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, userType: 'ambassador', status: 'pending' }),

@@ -28,13 +28,13 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
 
   const fetchProgress = async () => {
     try {
-      await fetch('http://localhost:5000/api/init-progress', {
+      await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/init-progress`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mentorId, reservistId })
       });
 
-      const res = await fetch(`http://localhost:5000/api/getMentorshipProgress?mentorId=${mentorId}&reservistId=${reservistId}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/getMentorshipProgress?mentorId=${mentorId}&reservistId=${reservistId}`);
       const data = await res.json();
       if (res.ok) setProgressData(data);
       else throw new Error(data.error);
@@ -49,7 +49,7 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
       message: t('confirmStageAdvance', language),
       onConfirm: async () => {
         try {
-          const res = await fetch('http://localhost:5000/api/advance-stage', {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/advance-stage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ mentorId, reservistId })
@@ -79,7 +79,7 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
       message: t('confirmDeleteMeeting', language),
       onConfirm: async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/delete-meeting', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-meeting`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ mentorId, reservistId, meetingIndex: index })
