@@ -538,6 +538,10 @@
     "meetingAddFailed": "אירעה שגיאה בעת הוספת הפגישה",
     "meetingAddedSuccessfully": "הפגישה נוספה בהצלחה",
     "eventUpdatedSuccessfully": "האירוע עודכן בהצלחה",
-    "saving": "שומר..."
+    "saving": "שומר...",
+    "fullNameTooLong": "שם מלא ארוך מדי (מקסימום 50 תווים)",
+    "aboutMeTooLong": "ספר על עצמך בקצרה ארוך מדי",
+    "armyRoleTooLong": "תפקיד בצבא ארוך מדי",
+    "pastMentoringTooLong": "ניסיון חניכה קודם ארוך מדי"
 
 }

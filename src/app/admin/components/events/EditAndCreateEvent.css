@@ -1,81 +1,3 @@
-/* edit event */
-.EE-overlay {
-  position: fixed;
-  top: 90px;
-  left: 0;
-  right: 0;
-  bottom: 40px;
-  z-index: 10000;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 20px;
-  overflow-y: auto;
-  margin-right: 250px;
-  background-color: rgba(0, 0, 0, 0.4);
-  height: calc(100vh - 90px); /* Adjusted to account for the header height */
-}
-
-@media (max-width: 768px) {
-  .EE-overlay {
-    margin-right: 0;
-  }
-}
-
-/* Container */
-.EE-container {
-  position: relative;
-  max-width: 800px;
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  text-align: start;
-  overflow-y: auto;
-  max-height: 100vh;
-}
-
-/* Title */
-.EE-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: #333;
-}
-
-/* Input fields */
-.EE-input-group {
-  margin-bottom: 1rem;
-}
-
-.EE-label {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-weight: 600;
-}
-
-.EE-input,
-.EE-textarea {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-}
-
-.EE-input-narrow {
-  max-width: 150px;
-}
-
-.EE-textarea {
-  min-height: 80px;
-  resize: vertical;
-}
-
 /* Participants section */
 .EE-participants-section {
   margin-top: 2rem;
@@ -109,7 +31,6 @@
 /* Buttons */
 .EE-close-button {
   position: absolute;
-  /* top: 15px; */
   font-size: 22px;
   font-weight: bold;
   color: #666;
@@ -150,7 +71,7 @@
   left: 0;
   right: 0;
   bottom: 40px;
-  z-index: 10000;
+  /* z-index: 10000; */
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -168,7 +89,7 @@
 }
 
 .CE-event-form-wrapper {
-  margin-top: 90px;
+  margin-top: 40px;
   max-width: 800px;
   width: 80%;
   padding: 2rem 1rem;

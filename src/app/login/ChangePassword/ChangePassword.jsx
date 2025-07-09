@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Eye, EyeOff, RefreshCcw } from 'lucide-react';
 import { t } from '@/app/utils/loadTranslations';
-import './login.css';
+import './ChangePassword.css';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import Button from '@/app/components/Button/Button';
 
 export default function ChangePassword() {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -29,13 +30,7 @@ export default function ChangePassword() {
     e.preventDefault();
     setLoading(true);
     setMessage('');
-
     const accessToken = sessionStorage.getItem('accessToken');
-    // console.log('Access token retrieved from sessionStorage:', accessToken ? '[REDACTED]' : 'null');
-
-    // console.log('Sending change password request to backend...');
-    // console.log('Current password:', currentPassword ? '[REDACTED]' : 'empty');
-    // console.log('New password:', newPassword ? '[REDACTED]' : 'empty');
 
     try {
       const res = await fetch('http://localhost:5000/api/change-password', {
@@ -47,22 +42,16 @@ export default function ChangePassword() {
         body: JSON.stringify({ currentPassword, newPassword })
       });
 
-      console.log('Response status:', res.status);
-
       const data = await res.json();
-      console.log('Response data:', data);
-
       if (res.ok) {
-        console.log('Password changed successfully.');
         setMessage(t('passwordChangeSuccess', language));
         setCurrentPassword('');
         setNewPassword('');
       } else {
-        console.warn('Password change failed:', data.message || 'Unknown error');
         setMessage(t('passwordChangeError', language) + ': ' + (data.message || t('generalError', language)));
       }
     } catch (err) {
-      console.error('Network or server error during password change:', err);
+      console.error(err);
       setMessage(t('generalError', language));
     } finally {
       setLoading(false);
@@ -72,13 +61,10 @@ export default function ChangePassword() {
   if (!language) return null;
 
   return (
-    <div dir={language === 'he' ? 'rtl' : 'ltr'} className="login-page">
-      <div className="login-overlay">
-        <div className="login-title">
+    <div className="CP-change-password-page" dir={language === 'he' ? 'rtl' : 'ltr'} >
+      <div className="CP-change-password-overlay">
+        <div className="CP-change-password-title">
           <span>{t('changePasswordTitle', language)}</span>
-          <button onClick={() => setLanguage(toggleLanguage())} className="text-sm underline">
-            {t('switchLang', language)}
-          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -88,25 +74,23 @@ export default function ChangePassword() {
             placeholder={t('currentPassword', language)}
             onChange={(e) => setCurrentPassword(e.target.value)}
             required
-            className="login-input"
+            className="CP-change-password-input"
           />
 
-          <div className="relative">
+          <div className="CP-relative">
             <input
               type={showPassword ? 'text' : 'password'}
               value={newPassword}
               placeholder={t('newPassword', language)}
               onChange={(e) => setNewPassword(e.target.value)}
               required
-              className="login-input pr-20"
+              className="CP-change-password-input pr-20"
             />
 
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className={`absolute top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 ${
-                language === 'he' ? 'left-12' : 'right-12'
-              }`}
+              className={`CP-change-password-icon toggle ${language === 'he' ? 'left-12' : 'right-12'}`}
               title={showPassword ? t('hidePassword', language) : t('showPassword', language)}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -115,21 +99,20 @@ export default function ChangePassword() {
             <button
               type="button"
               onClick={generateRandomPassword}
-              className={`absolute top-1/2 -translate-y-1/2 text-blue-600 hover:text-blue-800 ${
-                language === 'he' ? 'left-3' : 'right-3'
-              }`}
+              className={`CP-change-password-icon generate ${language === 'he' ? 'left-3' : 'right-3'}`}
               title={t('generatePassword', language)}
             >
               <RefreshCcw size={18} />
             </button>
           </div>
-
-          <button type="submit" className="login-button" disabled={loading}>
-            {loading ? t('loading', language) : t('changePassword', language)}
-          </button>
+          <div className={loading ? "CP-change-password-button-loading" : "CP-change-password-button"}>
+            <Button>
+              {loading ? t('loading', language) : t('changePassword', language)}
+            </Button>
+          </div>
         </form>
 
-        {message && <p className="text-center text-red-500 mt-3">{message}</p>}
+        {message && <p className="CP-change-password-message">{message}</p>}
       </div>
     </div>
   );

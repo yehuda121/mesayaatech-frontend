@@ -130,8 +130,11 @@
 @media (max-width: 768px) {
   .add-question-modal-overlay {
     right: 0;
-    width: 100vw;
+    width: 100%;
+    padding: 20px;
+    z-index: 99999999;
   }
+
 }
 
 .add-question-form {

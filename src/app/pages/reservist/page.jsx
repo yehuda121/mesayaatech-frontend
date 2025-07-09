@@ -13,7 +13,7 @@ import InterviewQues  from '@/app/components/interviewQestions/QuestionsList';
 import MentorringProscess from './components/mentorringProscess';
 import InterviewPracticePanel from "@/app/components/interviewWithAi/InterviewPracticePanel";
 import './reservist.css';
-import ChangePassword from '@/app/login/ChangePassword';
+import ChangePassword from '@/app/login/ChangePassword/ChangePassword';
 import { Brain } from 'lucide-react';
 import { useRoleGuard } from "@/app/utils/isExpectedRoll/useRoleGuard";
 import { useLanguage } from "@/app/utils/language/useLanguage";

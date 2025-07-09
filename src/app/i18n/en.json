@@ -538,7 +538,11 @@
     "meetingAddFailed": "Failed to add meeting",
     "meetingAddedSuccessfully": "Meeting added successfully",
     "eventUpdatedSuccessfully": "Event updated successfully",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "aboutMeTooLong": "about me is too long",
+    "armyRoleTooLong": "army role is too long",
+    "pastMentoringTooLong": "past mentoring experience is too long"
+
 
 
 }

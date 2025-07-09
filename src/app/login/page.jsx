@@ -3,11 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
-import { getLanguage, toggleLanguage } from '../utils/language/language';
+import { getLanguage, toggleLanguage } from "@/app/utils/language/language";
 import { t } from '@/app/utils/loadTranslations';
 import './login.css';
 import { Eye, EyeOff } from 'lucide-react';
-import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,17 +14,25 @@ export default function LoginPage() {
   const [message, setMessage] = useState('');
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const language = useLanguage();
+  const [language, setLanguage] = useState(getLanguage());
+  const API = process.env.NEXT_PUBLIC_API_BASE;
 
   useEffect(() => {
     // localStorage.clear();
     sessionStorage.clear();
   }, []);
 
+  useEffect(() => {
+    setLanguage(getLanguage());
+    const handleLanguageChange = () => setLanguage(getLanguage());
+    window.addEventListener("languageChanged", handleLanguageChange);
+    return () => window.removeEventListener("languageChanged", handleLanguageChange);
+  }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/login', {
+      const res = await fetch(`${API}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -56,12 +63,6 @@ export default function LoginPage() {
         localStorage.setItem('fullName', decoded.name);
         localStorage.setItem('email', decoded.email);
 
-        // Redirect based on role
-        // if (role === 'admin') router.replace('./admin');
-        // else if (role === 'mentor') router.replace('/pages/mentor');
-        // else if (role === 'reservist') router.replace('/pages/reservist');
-        // else if (role === 'ambassador') router.replace('/pages/ambassador');
-        // else router.push('/');
         setTimeout(() => {
           if (role === 'admin') router.replace('./admin');
           else if (role === 'mentor') router.replace('/pages/mentor');
@@ -87,7 +88,12 @@ export default function LoginPage() {
       <div className="login-overlay">
         <div className="login-title">
           <span>{t('login', language)}</span>
-          <button onClick={() => setLanguage(toggleLanguage())} className="text-sm underline">
+          <button 
+           className="text-sm underline"
+            onClick={() => {
+              const newLang = toggleLanguage();
+              setLanguage(newLang);
+            }}>
             {t('switchLang', language)}
           </button>
         </div>
