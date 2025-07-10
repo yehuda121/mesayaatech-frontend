@@ -203,33 +203,23 @@
   text-decoration: underline;
 }
 
-
-
 /* edit-job */
 .edit-job-overlay {
   margin-top: 90px;
   position: fixed;
   top: 0;
   right: 250px;
-  width: calc(100vw - 250px);
+  width: calc(100% - 250px);
   height: 100vh;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  padding: 20px;
   text-align: start;
-  padding: 120px;
+  padding: 100px;
   overflow-y: auto;
   max-height: fit-content;
-}
-
-@media (max-width: 768px) {
-  .edit-job-overlay {
-    right: 0;
-    width: 100vw;
-  }
 }
 
 .edit-job-form {
@@ -252,15 +242,10 @@
 
 .edit-job-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
-@media (max-width: 768px) {
-  .edit-job-grid {
-    grid-template-columns: 1fr;
-  }
-}
 .edit-job-close-button{
   top: 12px;
   right: 16px;
@@ -305,4 +290,15 @@
 .edit-job-actions .save:disabled {
   background: #94a3b8;
   cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .edit-job-overlay {
+    right: 0;
+    width: 100%;
+    padding: 20px;
+  }
+  .edit-job-grid {
+    grid-template-columns: 1fr;
+  }
 }

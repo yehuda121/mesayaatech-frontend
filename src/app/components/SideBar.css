@@ -19,8 +19,7 @@ html, body {
   text-align: left;
 }
 
-/* Header */
-.header {
+.SB-header {
   position: fixed;
   background-color: #002855;
   color: #fff;
@@ -29,8 +28,7 @@ html, body {
   z-index: 99999;
 }
 
-/* Navbar */
-.navbar {
+.SB-navbar {
   /* position: sticky; */
   display: flex;
   justify-content: space-between;
@@ -39,22 +37,27 @@ html, body {
   position: relative;
 }
 
-/* logo */
-.logo-image {
+.SB-logo-image {
   width: 100px;
   height: auto;
 }
 
 /* icons (☰ ✖) */
-.menu-icons {
+.SB-menu-icons {
   display: none;
 }
 
-.menu-icon, .close-icon {
+.SB-menu-icon {
   font-size: 30px;
   cursor: pointer;
   user-select: none;
   color: white;
+}
+.SB-close-icon{
+  font-size: 30px;
+  cursor: pointer;
+  user-select: none;
+  color:  #003f7d;
 }
 
 .Button:hover {
@@ -140,7 +143,7 @@ html, body {
 }
 
 @media (max-width: 768px) {
-  .menu-icons {
+  .SB-menu-icons {
     display: block;
     position: absolute;
     top: 20px;
@@ -149,35 +152,33 @@ html, body {
   }
 
   .sidebar {
-    transform: translateX(100%); /* סגור ברירת מחדל במובייל */
+    transform: translateX(100%); 
   }
 
   .sidebar.open {
-    transform: translateX(0); /* נפתח בלחיצה */
+    transform: translateX(0); 
   }
 
-  /* במסכים קטנים – לא צריך margin כי הסיידבר מכסה */
   .dashboard-main {
     margin-right: 0;
   }
 }
 
-/* מסכים רגילים – פינוי מקום קבוע לסיידבר */
 @media (min-width: 769px) {
   .dashboard-main {
-    margin-right: 250px; /* כדי לא להידרס ע"י הסיידבר */
+    margin-right: 250px; 
     padding: 20px;
   }
 
   .menu-icons {
-    display: none; /* ☰ לא מוצג במסכים רחבים */
+    display: none; 
   }
 
   .sidebar {
-    transform: translateX(0) !important; /* תמיד פתוח */
+    transform: translateX(0) !important;
   }
 }
 
-.divider {
+.SB-divider {
   height: 30px;
 }

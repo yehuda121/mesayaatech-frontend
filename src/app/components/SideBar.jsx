@@ -42,15 +42,15 @@ export default function SideBar({ navItems }) {
   }, []);
 
   return (
-    <header className="header">
-      <nav className="navbar">
-        <div className="logo">
-          <img src="/logo.png" alt="Logo" className="logo-image" />
+    <header className="SB-header">
+      <nav className="SB-navbar">
+        <div className="SB-logo">
+          <img src="/logo.png" alt="Logo" className="SB-logo-image" />
         </div>
 
-        <div className="menu-icons">
-          {!menuOpen && <div className="menu-icon" onClick={toggleMenu}>☰</div>}
-          {menuOpen && <div className="close-icon" onClick={toggleMenu}>✖</div>}
+        <div className="SB-menu-icons">
+          {!menuOpen && <div className="SB-menu-icon" onClick={toggleMenu}>☰</div>}
+          {menuOpen && <div className="SB-close-icon" onClick={toggleMenu}>✖</div>}
         </div>
 
         <div className={`sidebar ${menuOpen ? 'open' : 'closed'}`} ref={menuRef}>
@@ -62,7 +62,7 @@ export default function SideBar({ navItems }) {
             <img src="/icons/globe-icon.png" alt="globe" className="SB-lang-img" />
           </button>
 
-          <div className="divider"></div>
+          <div className="SB-divider"></div>
 
           {navItems.map(({ labelHe, labelEn, path, onClick, icon }) => (
             <Button

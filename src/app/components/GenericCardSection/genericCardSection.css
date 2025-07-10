@@ -212,3 +212,48 @@
 .clear-filters-btn:hover {
   color: #000;
 }
+
+
+.questions-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.questions-filters .filter-input {
+  flex: 1 1 260px;
+  min-width: 200px;
+  max-width: 100%;
+}
+
+.questions-filters .card-filter.button-filter {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.questions-filters .card-filter.date-filter {
+  flex: 0 0 160px;
+}
+
+@media (max-width: 768px) {
+  .questions-filters {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .questions-filters .filter-input {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .questions-filters .card-filter.date-filter {
+    flex: 0 0 100%;
+  }
+}
+.questions-filters .compact-filter {
+  flex: 0 0 auto;
+  max-width: fit-content;
+  min-width: 80px;
+}

@@ -189,6 +189,7 @@ export default function QuestionsPage({ onAnswer }) {
   const filters = [
     <div
       key="filter-wrap"
+      className="questions-filters"
       style={{
         display: 'flex',
         width: '100%',
@@ -210,7 +211,7 @@ export default function QuestionsPage({ onAnswer }) {
         key="category"
         value={filteredCategory}
         onChange={(e) => setFilteredCategory(e.target.value)}
-        className="filter-input"
+        className="filter-input compact-filter"
       >
         {categories.map(cat => (
           <option key={cat.value} value={cat.value}>
@@ -222,7 +223,7 @@ export default function QuestionsPage({ onAnswer }) {
         key="sort"
         value={sortMode}
         onChange={(e) => setSortMode(e.target.value)}
-        className="filter-input"
+        className="filter-input compact-filter"
       >
         <option value="newest">{t('sortByNewest', language)}</option>
         <option value="popular">{t('sortByPopularity', language)}</option>

@@ -81,6 +81,10 @@
   gap: 1rem;
   background-color: #f8fafc;
   padding: 1.5rem;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 450px;
 }
 
 .users-table-wrapper {
@@ -90,6 +94,18 @@
   background-color: white;
   border-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 450px;
+}
+@media (max-width: 768px){
+  .users-table-container{
+    width:100%;
+    /* padding: 1%;
+    left: 0;
+    right: 0; */
+  }
 }
 
 .users-filters {
@@ -124,6 +140,16 @@
   .users-filters select {
     flex: 1 1 100%;
   }
+  /* .users-table-containe{
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 500px;
+  }
+  .users-table-wrapper {
+    overflow-x: auto;    
+    overflow-y: visible;  
+    min-width: 100%;   
+  } */
 }
 
 .users-button {

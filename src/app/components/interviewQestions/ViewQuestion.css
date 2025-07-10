@@ -12,6 +12,7 @@
   margin-right: 250px;
   padding: 20px;
   padding-bottom: 30%;
+  height: 100%;
 }
 
 @media (max-width: 768px) {
@@ -33,6 +34,7 @@
   max-height: 90vh;
   min-height: 300px;
   max-width: 600px;
+  overflow-y: auto;
 }
 
 .VQ-title {

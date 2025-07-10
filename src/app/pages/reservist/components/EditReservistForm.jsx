@@ -37,7 +37,7 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
       if (!userData?.idNumber) return;
 
       try {
-        const res = await fetch(`http://localhost:5000/api/jobAlerts/get-subscribers?idNumber=${userData.idNumber}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobAlerts/get-subscribers?idNumber=${userData.idNumber}`);
         const result = await res.json();
 
         let jobEmailAlerts = false;
@@ -165,7 +165,7 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
     setSaving(true);
     try {
       if (formData.notInterestedInMentor && mentorId) {
-        const resDelete = await fetch('http://localhost:5000/api/delete-progress', {
+        const resDelete = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-progress`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ reservistId: userData.idNumber, mentorId: mentorId })
@@ -178,7 +178,7 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
         formData.mentorId = null;
       }
 
-      const res = await fetch('http://localhost:5000/api/update-user-form', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-user-form`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -217,7 +217,7 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
       if (unchanged) return;
 
       if (!NewEmailJobPrefs.jobEmailAlerts) {
-        await fetch('http://localhost:5000/api/jobAlerts/delete-subscriber', {
+        await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobAlerts/delete-subscriber`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ idNumber: userData.idNumber })
@@ -233,7 +233,7 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
         return;
       }
 
-      const res = await fetch('http://localhost:5000/api/jobAlerts/add-subscriber', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobAlerts/add-subscriber`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

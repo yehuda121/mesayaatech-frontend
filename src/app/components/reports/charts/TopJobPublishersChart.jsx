@@ -22,7 +22,7 @@ export default function TopJobPublishersChart({ data }) {
           return { publisher: language === 'he' ? 'מנהל' : 'Admin', count: item.count };
         } else {
           try {
-            const res = await fetch(`http://localhost:5000/api/get-user-form?userType=${userType}&idNumber=${idNumber}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=${userType}&idNumber=${idNumber}`);
             const userData = await res.json();
             return { publisher: userData.fullName || email, count: item.count };
           } catch (err) {
