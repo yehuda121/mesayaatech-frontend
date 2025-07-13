@@ -7,7 +7,6 @@ import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import MultiStepForm from '@/app/components/MultiStepForm/MultiStepForm';
 import PageIntro from '@/app/components/PageIntro';
 import { t } from '@/app/utils/loadTranslations';
-import sanitizeText from '@/app/utils/sanitizeText';
 import '../registrationForm.css';
 
 export default function AmbassadorRegisterForm() {
@@ -28,7 +27,7 @@ export default function AmbassadorRegisterForm() {
 
   const handleSubmit = async (formData) => {
     try {
-      const existingRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form?userType=ambassador`);
+      const existingRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`);
       const existingUsers = await existingRes.json();
 
       const emailExists = existingUsers.some(user => user.email === formData.email);

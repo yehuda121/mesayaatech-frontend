@@ -1,7 +1,4 @@
-/* ============================================= */
 /* GF - Unified Generic Form Styles for all cases */
-/* ============================================= */
-
 /* Wrapper for full page form */
 .GF-generic-form-wrapper {
   display: flex;
@@ -38,24 +35,6 @@
   max-height: 100%;
 }
 
-/* Special case: viewProcess modal with higher top margin */
- /* .GF-generic-modal-overlay-viewProcess {
-  z-index: 10000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 15%;
-  max-height: 100%;
-  overflow: hidden; 
-}
-.GF-meeting-history-wrapper-viewProcess {
-  max-height: 200px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 0.5rem;
-  padding: 10px;
-  background-color: #fafafa;
-} */
  /* Outer modal overlay */
 .GF-generic-modal-overlay-viewProcess {
   /* position: fixed; */
@@ -94,7 +73,6 @@
     max-height: 50px; 
   }
 }
-
 
 /* Special case: EditJob modal with higher top margin */
 .GF-generic-modal-overlay-for-edit-job {
@@ -268,22 +246,6 @@ input[type="file"] {
 .GF-modal-close:hover {
   color: #e53e3e;
 }
-
-/* .GF-primary-button {
-  background-color: #004080;
-  color: white;
-  padding: 0.75rem 2rem;
-  border-radius: 2rem;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.GF-primary-button:hover {
-  background-color: #0060b0;
-} */
 
 .GF-input-with-icon {
   position: relative;

@@ -87,6 +87,7 @@
   color: #002855;
   background: rgba(230, 229, 244, 0.4);  
   border-radius: 12px;
+  -webkit-backdrop-filter: none;/* Safari support */
   backdrop-filter: blur(2px);
   box-shadow: 0 4px 10px rgba(217, 213, 238, 0.79);
 }

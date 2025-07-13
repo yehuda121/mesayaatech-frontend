@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import '@/app/components/GenericForm/GenericForm.css';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
-import sanitizeText from '@/app/utils/sanitizeText';
 import '../registrationForm.css';
 import PageIntro from '@/app/components/PageIntro';
 import MultiStepForm from '@/app/components/MultiStepForm/MultiStepForm';
@@ -24,7 +23,7 @@ export default function MentorRegisterForm() {
 
   const handleSubmit = async (formData) => {
     try {
-      const resUsers = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form?userType=mentor`);
+      const resUsers = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`);
       const existingUsers = await resUsers.json();
 
       const emailExists = existingUsers.some(user => user.email === formData.email);

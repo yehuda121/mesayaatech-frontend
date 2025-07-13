@@ -7,7 +7,6 @@ import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import PageIntro from '@/app/components/PageIntro';
 import MultiStepForm from '@/app/components/MultiStepForm/MultiStepForm';
 import { t } from '@/app/utils/loadTranslations';
-import sanitizeText from '@/app/utils/sanitizeText';
 import '../registrationForm.css';
 
 export default function ReserveRegisterForm() {
@@ -28,7 +27,7 @@ export default function ReserveRegisterForm() {
 
   const handleSubmit = async (formData) => {
     try {
-      const existingRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form?userType=reservist`);
+      const existingRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`);
       const existingUsers = await existingRes.json();
 
       const emailExists = existingUsers.some(user => user.email === formData.email);

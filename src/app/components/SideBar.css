@@ -1,4 +1,4 @@
-/* Reset*/
+
 body, h1, h2, h3, p, a, button {
   margin: 0;
   padding: 0;
@@ -12,6 +12,8 @@ html, body {
   color: #333;
   background-color: white;
   text-align: right;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .text-ltr {
@@ -50,12 +52,14 @@ html, body {
 .SB-menu-icon {
   font-size: 30px;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   color: white;
 }
 .SB-close-icon{
   font-size: 30px;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   color:  #003f7d;
 }
