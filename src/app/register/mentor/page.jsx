@@ -23,12 +23,6 @@ export default function MentorRegisterForm() {
   }, []);
 
   const handleSubmit = async (formData) => {
-    const validationErrors = validateForm(formData);
-    if (validationErrors.length > 0) {
-      showAlert(validationErrors[0], 'error');
-      return false;
-    }
-
     try {
       const resUsers = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form?userType=mentor`);
       const existingUsers = await resUsers.json();
@@ -63,49 +57,6 @@ export default function MentorRegisterForm() {
       showAlert(`${t('mentorError', language)}: ${error.message}`, 'error');
       return false;
     }
-  };
-
-  const validateForm = (formData) => {
-    const errors = [];
-    const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
-    const phonePattern = /^(05\d{8}|05\d{1}-\d{7})$/;
-    const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
-
-    const fullName = sanitizeText(formData.fullName.trim(), 70);
-    const idNumber = formData.idNumber.replace(/\s/g, '');
-    const email = formData.email.trim();
-    const phone = formData.phone.trim();
-    const specialties = (formData.specialties || []).map(v =>
-      v.normalize("NFKC").replace(/[\u200E\u200F\u202A-\u202E]/g, '').trim()
-    ).filter(v => v !== '');
-
-    const location = formData.location.trim();
-    const experience = sanitizeText(formData.experience, 1000);
-    const pastMentoring = sanitizeText(formData.pastMentoring, 1000);
-    const availability = sanitizeText(formData.availability, 200);
-    const linkedin = formData.linkedin.trim();
-    const notes = sanitizeText(formData.notes, 500);
-    const aboutMe = sanitizeText(formData.aboutMe, 1000);
-
-    if (!fullName) errors.push(t('fullNameRequired', language));
-    else if (fullName === 'tooLong') errors.push(t('fullNameIsTooLong', language));
-    else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
-
-    if (!/^\d{9}$/.test(idNumber)) errors.push(t('idNumberInvalid', language));
-    if (!email) errors.push(t('emailRequired', language));
-    else if (!emailPattern.test(email)) errors.push(t('emailInvalid', language));
-    if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
-    if (specialties.length === 0) errors.push(t('mainProfessionRequired', language));
-    if (!location) errors.push(t('locationRequired', language));
-    if (!experience) errors.push(t('experienceRequired', language));
-    else if (experience === 'tooLong') errors.push(t('experienceIsTooLong', language));
-    if (pastMentoring === 'tooLong') errors.push(t('pastMentoringIsTooLong', language));
-    if (availability === 'tooLong') errors.push(t('availabilityIsTooLong', language));
-    if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
-    if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
-    if (aboutMe === 'tooLong') errors.push(t('aboutMeIsTooLong', language));
-
-    return errors;
   };
 
   const showAlert = (msg, type) => {

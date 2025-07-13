@@ -12,8 +12,6 @@ import ProgressBar from './ProgressBar';
 
 export default function MultiStepForm({ onSubmit, language, userType }) {
   const [step, setStep] = useState(1);
-  
-  
   const [formData, setFormData] = useState({
     fullName: '',
     idNumber: '',
@@ -34,7 +32,6 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
     position: '',
     canShareJobs: '',
     jobFields: [],
-
   });
 
   const [error, setError] = useState('');
@@ -59,21 +56,28 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
     const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
 
     if (step === 1) {
+      // full name check
       if (!formData.fullName?.trim()) return t('fullNameRequired', language);
-      if (formData.fullName.length > 70) return t('fullNameIsTooLong', language);
+      const fullName = sanitizeText(formData.fullName, 70);
+      if (fullName === 'tooLong') return t('fullNameIsTooLong', language);
       if (/[^א-תa-zA-Z\s]/.test(formData.fullName)) return t('fullNameInvalid', language);
-
+      
+      // id check
       if (!/^\d{9}$/.test(formData.idNumber)) return t('idNumberInvalid', language);
 
+      // email check
       if (!formData.email?.trim()) return t('emailRequired', language);
-      if (!emailPattern.test(formData.email)) return t('emailInvalid', language);
+      if (!emailPattern.test(formData.email) || sanitizeText(formData.email, 200) === 'tooLong') return t('emailInvalid', language);
 
+      // phone number check
       if (formData.phone && !phonePattern.test(formData.phone)) return t('phoneInvalid', language);
     }
 
     if (step === 2) {
+      // check location
       if (!formData.location?.trim()) return t('locationRequired', language);
 
+      // check experience field (ambassador dont need it)
       if (userType !== 'ambassador') {
         const experience = sanitizeText(formData.experience, 1000);
         if (!experience) return t('experienceRequired', language);
@@ -81,6 +85,7 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
       }
 
       if (userType === 'mentor') {
+        // check fields of experience
         const cleaned = (formData.specialties || []).map(v =>
           v.normalize("NFKC").replace(/[\u200E\u200F\u202A-\u202E]/g, '').trim()
         ).filter(v => v !== '');
@@ -92,8 +97,10 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
         const cleaned = (formData.fields || []).map(v =>
           v.normalize("NFKC").replace(/[\u200E\u200F\u202A-\u202E]/g, '').trim()
         ).filter(v => v !== '');
+        // check arni role
         if (!formData.armyRole?.trim()) return t('armyRoleRequired', language);
-        if (/[^\w\sא-ת]/.test(formData.armyRole)) return t('armyRoleInvalid', language);
+        if (sanitizeText(formData.armyRole, 150) === 'tooLong') return t('armyRoleInvalid', language);
+        // check fields of interest
         if (cleaned.length === 0) return t('professionalFieldsRequired', language);
         formData.fields = cleaned;
       }
@@ -102,31 +109,41 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
         const cleaned = (formData.jobFields || []).map(v =>
           v.normalize("NFKC").replace(/[\u200E\u200F\u202A-\u202E]/g, '').trim()
         ).filter(v => v !== '');
+
+        // check the current company field
         if (!formData.currentCompany?.trim()) return t('currentCompanyRequired', language);
+        else if (sanitizeText(formData.currentCompany, 100) === 'tooLong') return t('currentCompanyInvalid', language);
+        // check the position field
         if (!formData.position?.trim()) return t('positionRequired', language);
+        else if (sanitizeText(formData.position, 100) === 'tooLong') return t('positionInvalid', language);
+        // check canShareJobs field
         if (!formData.canShareJobs?.trim()) return t('canShareRequired', language);
+        // check jobFields 
         if (cleaned.length === 0) return t('ambassadorJobFieldsRequired', language);
         formData.jobFields = cleaned;
       }
-      
     }
 
     if (step === 3 && userType === 'mentor') {
-        const pastMentoring = sanitizeText(formData.pastMentoring, 1000);
-        const availability = sanitizeText(formData.availability, 200);
-        if (pastMentoring === 'tooLong') return t('pastMentoringIsTooLong', language);
-        if (availability === 'tooLong') return t('availabilityIsTooLong', language);
-      }
+      const pastMentoring = sanitizeText(formData.pastMentoring, 1000);
+      const availability = sanitizeText(formData.availability, 200);
+      // check pastMentoring field
+      if (pastMentoring === 'tooLong') return t('pastMentoringIsTooLong', language);
+      // check availability
+      if (availability === 'tooLong') return t('availabilityIsTooLong', language);
+    }
       
-
     if (step === 4) {
-      const linkedin = formData.linkedin?.trim();
-      const notes = sanitizeText(formData.notes, 500);
+      const linkedin = sanitizeText(formData.linkedin, 150);
+      const notes = sanitizeText(formData.notes, 1000);
+      // check linkdin link
       if (linkedin && !urlPattern.test(linkedin)) return t('linkedinInvalid', language);
+      // check notes
       if (notes === 'tooLong') return t('notesIsTooLong', language);
     }
 
     if (step === 5) {
+      // check about me field
       const aboutMe = sanitizeText(formData.aboutMe, 1000);
       if (aboutMe === 'tooLong') return t('aboutMeIsTooLong', language);
     }
@@ -150,7 +167,7 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
   };
 
   return (
-    <div className={`register-form-container ${language === 'he' ? 'rtl' : 'ltr'}`} dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div className='register-form-container' dir={language === 'he' ? 'rtl' : 'ltr'}>
       <ProgressBar step={step} totalSteps={steps.length} />
 
       {error && (

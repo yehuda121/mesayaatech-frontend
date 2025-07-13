@@ -541,7 +541,11 @@
     "saving": "Saving...",
     "aboutMeTooLong": "about me is too long",
     "armyRoleTooLong": "army role is too long",
-    "pastMentoringTooLong": "past mentoring experience is too long"
+    "pastMentoringTooLong": "past mentoring experience is too long",
+    "professionalFieldsRequired": "professional fields are required",
+    "currentCompanyRequired": "Current company is required",
+    "currentCompanyInvalid": "Current company is invalid",
+    "positionRequired": "Current position is required"
 
 
 

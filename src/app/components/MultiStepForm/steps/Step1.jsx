@@ -6,7 +6,9 @@ export default function Step1({ data, onChange, onNext, language }) {
   return (
     <div className="step-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
       <div className="form-group">
-        <label htmlFor="fullName">{t('fullName', language)}</label>
+        <label htmlFor="fullName">{t('fullName', language)}
+          <span className="required-star">*</span>
+        </label>
         <input
           id="fullName"
           type="text"
@@ -16,7 +18,7 @@ export default function Step1({ data, onChange, onNext, language }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="idNumber">{t('idNumber', language)}</label>
+        <label htmlFor="idNumber">{t('idNumber', language)}<span className="required-star">*</span></label>
         <input
           id="idNumber"
           type="text"
@@ -26,7 +28,7 @@ export default function Step1({ data, onChange, onNext, language }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="email">{t('email', language)}</label>
+        <label htmlFor="email">{t('email', language)}<span className="required-star">*</span></label>
         <input
           id="email"
           type="email"

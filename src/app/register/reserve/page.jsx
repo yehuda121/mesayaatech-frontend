@@ -26,56 +26,7 @@ export default function ReserveRegisterForm() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const validateForm = (formData) => {
-    const errors = [];
-    const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
-    const phonePattern = /^(05\d{8}|05\d{1}-\d{7})$/;
-    const urlPattern = /^https?:\/\/[\w\.-]+\.\w+.*$/;
-
-    const fullName = formData.fullName?.trim() || '';
-    const idNumber = formData.idNumber?.replace(/\s/g, '') || '';
-    const email = formData.email?.trim() || '';
-    const phone = formData.phone?.trim() || '';
-    const armyRole = formData.armyRole?.trim() || '';
-    const location = formData.location?.trim() || '';
-    const experience = sanitizeText(formData.experience, 1000);
-    const linkedin = formData.linkedin?.trim() || '';
-    const notes = sanitizeText(formData.notes, 500);
-    const aboutMe = sanitizeText(formData.aboutMe, 1000);
-
-    if (!fullName) errors.push(t('fullNameRequired', language));
-    else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
-
-    if (!/^\d{9}$/.test(idNumber)) errors.push(t('idNumberInvalid', language));
-
-    if (!email) errors.push(t('emailRequired', language));
-    else if (!emailPattern.test(email)) errors.push(t('emailInvalid', language));
-
-    if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
-
-    if (!armyRole) errors.push(t('armyRoleRequired', language));
-    else if (/[^\w\sא-ת]/.test(armyRole)) errors.push(t('armyRoleInvalid', language));
-
-    if (!location) errors.push(t('locationRequired', language));
-
-    if (!experience) errors.push(t('experienceRequired', language));
-    else if (experience === 'tooLong') errors.push(t('experienceIsTooLong', language));
-
-    if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
-
-    if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
-    if (aboutMe === 'tooLong') errors.push(t('aboutMeIsTooLong', language));
-
-    return errors;
-  };
-
   const handleSubmit = async (formData) => {
-    const validationErrors = validateForm(formData);
-    if (validationErrors.length > 0) {
-      showAlert(validationErrors[0], 'error');
-      return;
-    }
-
     try {
       const existingRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form?userType=reservist`);
       const existingUsers = await existingRes.json();

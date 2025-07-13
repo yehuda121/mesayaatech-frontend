@@ -106,19 +106,35 @@
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
   }
   
-  
-  .rtl {
-    direction: rtl;
-    text-align: right;
-  }
-  
-  .ltr {
-    direction: ltr;
-    text-align: left;
-  }
   .checkbox-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
   
+
+  
+.required-star {
+  color: red;
+  font-size: 1.2em;
+  margin-left: 4px;
+}
+
+.checkbox-group-title {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.checkbox-list {
+  text-align: start;
+  align-items: start;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  white-space: nowrap;
+}

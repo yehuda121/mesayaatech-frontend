@@ -541,6 +541,10 @@
     "fullNameTooLong": "שם מלא ארוך מדי (מקסימום 50 תווים)",
     "aboutMeTooLong": "ספר על עצמך בקצרה ארוך מדי",
     "armyRoleTooLong": "תפקיד בצבא ארוך מדי",
-    "pastMentoringTooLong": "ניסיון חניכה קודם ארוך מדי"
+    "pastMentoringTooLong": "ניסיון חניכה קודם ארוך מדי",
+    "professionalFieldsRequired": "חובה למלא תחומי עיסוק",
+    "currentCompanyRequired": "יש להזין את שם החברה הנוכחית",
+    "currentCompanyInvalid": "שם החברה לא חוקי",
+    "positionRequired": "יש להזין את התפקיד הנוכחי שלך"
 
 }
