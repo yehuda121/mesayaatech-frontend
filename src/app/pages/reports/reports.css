@@ -10,6 +10,24 @@
   padding: 2rem;
   width: calc(100% - 250px);
   margin-top: 70px;
+  height: 100vh;
+  
+}
+.reports-main::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  background-image: url('/logo.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.1; 
+  width: 80%;
+  height: 100%;
+  margin-top: 90px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 @media (max-width: 768px) {

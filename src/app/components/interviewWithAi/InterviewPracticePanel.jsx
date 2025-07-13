@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import Button from '@/app/components/Button/Button';
-import AlertMessage from '@/app/components/notifications/AlertMessage';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import { t } from '@/app/utils/loadTranslations';
 
 export default function InterviewPracticePanel({ userId, email, language, role }) {

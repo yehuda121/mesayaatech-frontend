@@ -93,3 +93,15 @@
 .VP-close-button:hover {
   color: #e53e3e;
 }
+
+
+
+/* viewMentorship */
+.viewMentorship-container{
+  padding: 30px;
+}
+@media (max-width: 768px){
+  .viewMentorship-container{
+    padding: 0;
+  }
+}

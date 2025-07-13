@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
-import ToastMessage from '@/app/components/notifications/ToastMessage';
+import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
+import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import ReservistDetailsModal from './ReservistDetails';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { UserPlus , FileSearch , EyeOff, Eye, Trash2 } from 'lucide-react';

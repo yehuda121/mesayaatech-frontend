@@ -314,7 +314,6 @@
     "conformArrive": "אישור הגעה",
     "longText": "הטקסט ארוך מידי",
     "MissingNameOrID": "חסר שם או ת.ז",
-  
     "emailTooLong": "המייל ארוך מדי (מקסימום 100 תווים)",
     "professionTooLong": "המקצוע ארוך מדי (מקסימום 60 תווים)",
     "experienceTooLong": "הניסיון תעסוקתי ארוך מדי (מקסימום 1000 תווים)",
@@ -476,7 +475,7 @@
     "interviewQuestionError": "אירעה שגיאה בעת שליפת השאלה",
     "interviewEvaluationError": "אירעה שגיאה בעת הערכת התשובה",
     "interviewSubmittedToBank": "השאלה נשלחה למאגר בהצלחה",
-    "interviewWithAi": "AI ראיון עם",
+    "interviewWithAi": "ראיון עם בינה מלאכותית",
     "interviewPreviousQuestions": "שאלות קודמות",
     "yourQuestion": "התשובה שלך",
     "idealAnswer": "תשובה אידיאלית",

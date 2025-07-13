@@ -7,7 +7,7 @@ import Button from '@/app/components/Button/Button';
 import EditEvents from './EditEvents';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { Edit2, Trash2 } from 'lucide-react';
-import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
+import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function ViewEvents({ events, setEvents, handleNavigation }) {

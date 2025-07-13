@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import AlertMessage from '@/app/components/notifications/AlertMessage';
-import ConfirmDialog from '@/app/components/notifications/ConfirmDialog';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
+import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import Button from '@/app/components/Button/Button';
 import './personalDetails.css';
 import { locations } from '@/app/components/Locations';

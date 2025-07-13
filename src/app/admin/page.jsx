@@ -17,6 +17,7 @@ import ChangePassword from '@/app/login/ChangePassword/ChangePassword';
 import InterviewPracticePanel from "@/app/components/interviewWithAi/InterviewPracticePanel";
 import { useRoleGuard } from "@/app/utils/isExpectedRoll/useRoleGuard";
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import { Brain } from 'lucide-react';
 
 export default function AdminPage() {
   const [fullName, setFullName] = useState('');
@@ -108,6 +109,7 @@ export default function AdminPage() {
       labelHe: t('interviewWithAi', 'he'), 
       labelEn: t('interviewWithAi', 'en'), 
       path: '#InterviewPracticePanel',
+      icon: <Brain size={18} className="inline mr-2" />,
       onClick: () => setView('InterviewPracticePanel') 
     },
     {

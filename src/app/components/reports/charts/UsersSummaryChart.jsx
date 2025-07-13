@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { t } from '@/app/utils/loadTranslations';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import './charts.css';
 
 export default function UsersSummaryChart({ data }) {
   const language = useLanguage();
@@ -18,7 +19,7 @@ export default function UsersSummaryChart({ data }) {
 
   return (
     <div 
-      style={{ textAlign: 'start', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '50px', marginTop: '30px' }}
+      className="users-summary-container"
       dir={language === 'he'? 'rtl' : 'ltr'}
       >
       <div>
@@ -57,7 +58,6 @@ export default function UsersSummaryChart({ data }) {
               cy="50%"
               outerRadius={120}
               fill="#8884d8"
-              // label
             >
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index]} />

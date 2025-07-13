@@ -7,6 +7,7 @@
   color: white;
   background-color: #002855;
   cursor: pointer;
+  /* text-align: start; */
 }
 
 .btn-base:hover {
@@ -28,4 +29,8 @@
   font-size: 1.125rem; /* text-lg */
 }
 
-
+.icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 0.5rem; 
+}

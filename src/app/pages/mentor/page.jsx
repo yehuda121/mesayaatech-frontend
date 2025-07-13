@@ -12,7 +12,7 @@ import QuestionsList from '@/app/components/interviewQestions/QuestionsList';
 import FindReservist from './components/FindReservist';
 import ViewAllJobs from '@/app/components/jobs/ViewAllJobs';
 import Button from '@/app/components/Button/Button';
-import ToastMessage from '@/app/components/notifications/ToastMessage';
+import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import MyQuestions from '@/app/components/interviewQestions/MyQuestions';
 import MyReservists from './components/MyReservists/MyReservists';
 import MentorshipProgress from './components/MyReservists/MentorshipProgress';
@@ -142,10 +142,8 @@ export default function MentorHomePage() {
             <h1 className="mentor-welcome">
               {t('mentorWelcomeTitle', language).replace('{{name}}', userData?.fullName || '')}
             </h1>
-            <div className="mentor-main-view flex gap-8 items-start">
-              <EventsPage idNumber={idNumber} fullName={fullName} email={email} />
-              <MyReservists onManageReservist={handleManageReservist} />
-            </div>
+            
+            <MyReservists onManageReservist={handleManageReservist} />
           </>
         )}
 

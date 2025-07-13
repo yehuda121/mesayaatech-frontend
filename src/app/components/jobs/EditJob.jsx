@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import ToastMessage from '@/app/components/notifications/ToastMessage';
+import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import Button from '@/app/components/Button/Button';

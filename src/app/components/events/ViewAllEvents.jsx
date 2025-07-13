@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import ViewEvent from './viewEvent';
-import ToastMessage from '@/app/components/notifications/ToastMessage';
+import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import './Events.css';
 import { Eye, CalendarPlus } from 'lucide-react';

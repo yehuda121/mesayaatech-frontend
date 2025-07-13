@@ -9,7 +9,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import { translatedJobFields } from "@/app/components/jobs/jobFields";
 import PostAnswer from './PostAnswer';
-import ConfirmDialog from '../notifications/ConfirmDialog';
+import ConfirmDialog from '../Notifications/ConfirmDialog';
 import EditQuestion from './EditQuestion';
 import DraggableButton from '@/app/components/DraggableButton/DraggableButton';
 import AddQuestion from './AddNewQuestion';

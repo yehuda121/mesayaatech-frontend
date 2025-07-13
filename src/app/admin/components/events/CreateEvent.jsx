@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import AlertMessage from '@/app/components/notifications/AlertMessage';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import './EditAndCreateEvent.css';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import Button from '@/app/components/Button/Button';

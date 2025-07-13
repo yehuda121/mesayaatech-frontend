@@ -4,10 +4,11 @@ import { useEffect, useState, useMemo } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import ViewProgress from './ViewProgress';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
-import AlertMessage from '@/app/components/notifications/AlertMessage';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import GenericCardSection from '@/app/components/GenericCardSection/GenericCardSection';
 import { Eye } from 'lucide-react';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import './ViewProgress.css';
 
 export default function MentorshipsView() {
   const [mentorships, setMentorships] = useState([]);
@@ -87,7 +88,7 @@ export default function MentorshipsView() {
   ];
 
   return (
-    <div style={{ maxWidth: '1000px', margin: 'auto', padding: '30px' }}>
+    <div className='viewMentorship-container'>
       <GenericCardSection
         titleKey="allMentorships"
         filters={filters}

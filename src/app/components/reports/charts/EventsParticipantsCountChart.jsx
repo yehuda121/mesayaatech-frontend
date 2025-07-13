@@ -17,11 +17,11 @@ export default function EventsParticipantsCountChart({ data }) {
   const language = useLanguage();
   
   if (!data) {
-    console.log('📭 No data received yet');
+    console.log('No data received yet');
     return <p>no data</p>;
   }
   if (!Array.isArray(data)) {
-    console.log('❗Data is not array:', data);
+    console.log('Data is not array:', data);
     return <p>!Array.isArray(data)</p>;
   }
 

@@ -5,7 +5,7 @@ import { getLanguage, toggleLanguage } from '@/app/utils/language/language';
 import { useRouter } from 'next/navigation';
 import '@/app/components/GenericForm/GenericForm.css';
 import { t } from '@/app/utils/loadTranslations';
-import AlertMessage from '@/app/components/notifications/AlertMessage';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import sanitizeText from '@/app/utils/sanitizeText';
 import '../registrationForm.css';
 import PageIntro from '@/app/components/PageIntro';

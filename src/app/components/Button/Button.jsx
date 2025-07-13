@@ -9,13 +9,13 @@ const Button = ({ children, text, icon ,className, color = "#002855", size = "md
   };
 
   return (
-    <button
+    <button dir="auto"
       className={`btn-base ${sizeClasses[size]} ${className}`}
       onClick={onClick}
       {...props}
     >
       {children || text}
-      {icon && <span className="mr-2 ml-2">{icon}</span>}
+      {icon && <span className="icon-wrap">{icon}</span>}
     </button>
   );
 };

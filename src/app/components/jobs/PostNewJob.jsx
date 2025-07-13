@@ -175,7 +175,6 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
             icon={!autoFilling && <Brain size={18} className="inline mr-2" />}
             disabled={autoFilling}
           />
-
         </div>
 
         <div className="postNewJob-job-form-grid">

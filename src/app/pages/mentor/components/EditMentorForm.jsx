@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
-import AlertMessage from '@/app/components/notifications/AlertMessage';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import Button from '@/app/components/Button/Button';
 import './mentorForm.css';
 import { locations } from '@/app/components/Locations';

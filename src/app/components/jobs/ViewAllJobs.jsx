@@ -12,7 +12,7 @@ import './filters.css';
 import Button from '../Button/Button';
 import { FileSearch, Edit2, Trash2, X, PlusCircle } from 'lucide-react';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
-import ConfirmDialog from '../notifications/ConfirmDialog';
+import ConfirmDialog from '../Notifications/ConfirmDialog';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import DraggableAddJobButton from '../DraggableButton/DraggableButton';
 import AddNewJob from './PostNewJob';
@@ -36,7 +36,7 @@ export default function ViewAllJobs() {
   const [editingJob, setEditingJob] = useState(null);
   const [jobToDelete, setJobToDelete] = useState(null);
   const language = useLanguage();
-  const [addNewJobMode, setAddNewJobMode] = useState(false);
+  const [addNewJobModel, setAddNewJobModel] = useState(false);
 
   const categories = [
     { value: '', labelHe: 'הכל', labelEn: 'All' },
@@ -232,7 +232,7 @@ export default function ViewAllJobs() {
       {userType !== 'reservist' && (
         <DraggableAddJobButton
           title={t('postNewJob', language)}
-          onClick={() => setAddNewJobMode(true)}
+          onClick={() => setAddNewJobModel(true)}
         />
       )}
 
@@ -264,16 +264,16 @@ export default function ViewAllJobs() {
         <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
 
-      {addNewJobMode && (
+      {addNewJobModel && (
         <div className="post-new-job-modal-overlay" dir={language === 'he' ? 'rtl' : 'ltr'}>
           <AddNewJob
             publisherId={userId}
-            type={userType}
+            publisherType={userType}
             onSave={(newJob) => {
               setJobs(prev => [...prev, newJob]);
-              setAddNewJobMode(false);
+              setAddNewJobModel(false);
             }}
-            onClose={() => setAddNewJobMode(false)}
+            onClose={() => setAddNewJobModel(false)}
           />
         </div>
       )}

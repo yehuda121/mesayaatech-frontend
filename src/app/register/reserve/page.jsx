@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getLanguage, toggleLanguage } from '../../utils/language/language';
 import { useRouter } from 'next/navigation';
-import AlertMessage from '@/app/components/notifications/AlertMessage';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import PageIntro from '@/app/components/PageIntro';
 import MultiStepForm from '@/app/components/MultiStepForm/MultiStepForm';
 import { t } from '@/app/utils/loadTranslations';
