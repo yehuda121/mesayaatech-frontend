@@ -7,7 +7,6 @@ import EditReservistForm from './components/EditReservistForm';
 import ViewJobs from '@/app/components/jobs/ViewAllJobs';
 import JobDetailsModal from '@/app/components/jobs/viewJob';
 import { useRouter } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
 import { t } from '@/app/utils/loadTranslations';
 import InterviewQues  from '@/app/components/interviewQestions/QuestionsList';
 import MentorringProscess from './components/mentorringProscess';

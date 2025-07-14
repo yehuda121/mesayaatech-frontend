@@ -8,14 +8,16 @@ import GenericCardSection from '@/app/components/GenericCardSection/GenericCardS
 import './Events.css';
 import { Eye, CalendarPlus } from 'lucide-react';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function ViewAllEvents({ idNumber, fullName, email }) {
   const [filter, setFilter] = useState({ title: '', date: '' });
   const [events, setEvents] = useState([]);
   const [joinedEvents, setJoinedEvents] = useState({});
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [toast, setToast] = useState(null);
+  // const [toast, setToast] = useState(null);
   const language = useLanguage();
+  const [toastMessage, setToastMessage] = useState(null);
 
   useEffect(() => {
     fetchEvents();
@@ -45,7 +47,7 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
 
   const handleToggleJoin = async (eventId) => {
     if (!idNumber || !fullName || !email) {
-      setToast({ message: t('missingUserDetails', language), type: 'error' });
+      setToastMessage({ message: t('missingUserDetails', language), type: 'error' });
       return;
     }
 
@@ -59,13 +61,13 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
       const data = await res.json();
       if (res.ok) {
         setJoinedEvents((prev) => ({ ...prev, [eventId]: data.joined }));
-        setToast({ message: t(data.joined ? 'successJoin' : 'successUnjoin', language), type: 'success' });
+        setToastMessage({ message: t(data.joined ? 'successJoin' : 'successUnjoin', language), type: 'success' });
       } else {
-        setToast({ message: data.error || t('joinError', language), type: 'error' });
+        setToastMessage({ message: data.error || t('joinError', language), type: 'error' });
       }
     } catch (err) {
       console.error('Join error:', err);
-      setToast({ message: t('serverError', language), type: 'error' });
+      setToastMessage({ message: t('serverError', language), type: 'error' });
     }
   };
 
@@ -84,7 +86,16 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
             placeholder={t('filterTitle', language)}
             className="card-filter flexible"
             value={filter.title}
-            onChange={(e) => setFilter({ ...filter, title: e.target.value })}
+            onChange={(e) => {
+              const result = sanitizeText(e.target.value, 100);
+              if (result.wasModified) {
+                setToastMessage({
+                  message: t('unsafeInputSanitized', language),
+                  type: 'warning'
+                });
+              }
+              setFilter({ ...filter, title: result.text });
+            }}
           />,
           <input
             key="date"
@@ -144,12 +155,12 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
         <ViewEvent event={selectedEvent} onClose={() => setSelectedEvent(null)} />
       )}
 
-      {toast && (
+      {toastMessage  && (
         <ToastMessage
-          message={toast.message}
-          type={toast.type}
+          message={toastMessage.message}
+          type={toastMessage.type}
           duration={3000}
-          onClose={() => setToast(null)}
+          onClose={() => setToastMessage(null)}
         />
       )}
     </>

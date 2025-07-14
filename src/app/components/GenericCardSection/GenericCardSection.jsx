@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import './genericCardSection.css';
 import { useLanguage } from "@/app/utils/language/useLanguage";

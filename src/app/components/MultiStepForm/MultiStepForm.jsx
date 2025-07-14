@@ -9,6 +9,7 @@ import Step3 from './steps/Step3';
 import Step4 from './steps/Step4';
 import Step5 from './steps/Step5';
 import ProgressBar from './ProgressBar';
+import ToastMessage from '@/app/components/Notifications/ToastMessage';
 
 export default function MultiStepForm({ onSubmit, language, userType }) {
   const [step, setStep] = useState(1);
@@ -35,6 +36,7 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
   });
 
   const [error, setError] = useState('');
+  const [toast, setToast] = useState(null);
 
   const steps = 
   userType === 'reservist'
@@ -59,15 +61,23 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
       // full name check
       if (!formData.fullName?.trim()) return t('fullNameRequired', language);
       const fullName = sanitizeText(formData.fullName, 70);
-      if (fullName === 'tooLong') return t('fullNameIsTooLong', language);
-      if (/[^א-תa-zA-Z\s]/.test(formData.fullName)) return t('fullNameInvalid', language);
-      
+      if (fullName.wasModified) {
+        setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+        setFormData(prev => ({ ...prev, fullName: fullName.text }));
+      }
+      if (/[^א-תa-zA-Z\s]/.test(fullName.text)) return t('fullNameInvalid', language);
+
       // id check
       if (!/^\d{9}$/.test(formData.idNumber)) return t('idNumberInvalid', language);
 
       // email check
       if (!formData.email?.trim()) return t('emailRequired', language);
-      if (!emailPattern.test(formData.email) || sanitizeText(formData.email, 200) === 'tooLong') return t('emailInvalid', language);
+      const email = sanitizeText(formData.email, 100, 'email');
+      if (email.tooLong || !emailPattern.test(email.text)) return t('emailInvalid', language);
+      if (email.wasModified) {
+        setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+        setFormData(prev => ({ ...prev, email: email.text }));
+      }
 
       // phone number check
       if (formData.phone && !phonePattern.test(formData.phone)) return t('phoneInvalid', language);
@@ -80,8 +90,12 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
       // check experience field (ambassador dont need it)
       if (userType !== 'ambassador') {
         const experience = sanitizeText(formData.experience, 1000);
-        if (!experience) return t('experienceRequired', language);
-        if (experience === 'tooLong') return t('experienceIsTooLong', language);
+        if (!experience.text.trim()) return t('experienceRequired', language);
+        if (experience.tooLong) return t('experienceIsTooLong', language);
+        if (experience.wasModified) {
+          setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+          setFormData(prev => ({ ...prev, experience: experience.text }));
+        }
       }
 
       if (userType === 'mentor') {
@@ -99,7 +113,12 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
         ).filter(v => v !== '');
         // check arni role
         if (!formData.armyRole?.trim()) return t('armyRoleRequired', language);
-        if (sanitizeText(formData.armyRole, 150) === 'tooLong') return t('armyRoleInvalid', language);
+        const armyRole = sanitizeText(formData.armyRole, 150);
+        if (armyRole.tooLong) return t('armyRoleInvalid', language);
+        if (armyRole.wasModified) {
+          setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+          setFormData(prev => ({ ...prev, armyRole: armyRole.text }));
+        }
         // check fields of interest
         if (cleaned.length === 0) return t('professionalFieldsRequired', language);
         formData.fields = cleaned;
@@ -112,12 +131,25 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
 
         // check the current company field
         if (!formData.currentCompany?.trim()) return t('currentCompanyRequired', language);
-        else if (sanitizeText(formData.currentCompany, 100) === 'tooLong') return t('currentCompanyInvalid', language);
+        const company = sanitizeText(formData.currentCompany, 100);
+        if (company.tooLong) return t('currentCompanyInvalid', language);
+        if (company.wasModified) {
+          setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+          setFormData(prev => ({ ...prev, currentCompany: company.text }));
+        }
+
         // check the position field
         if (!formData.position?.trim()) return t('positionRequired', language);
-        else if (sanitizeText(formData.position, 100) === 'tooLong') return t('positionInvalid', language);
+        const position = sanitizeText(formData.position, 100);
+        if (position.tooLong) return t('positionInvalid', language);
+        if (position.wasModified) {
+          setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+          setFormData(prev => ({ ...prev, position: position.text }));
+        }
+
         // check canShareJobs field
         if (!formData.canShareJobs?.trim()) return t('canShareRequired', language);
+
         // check jobFields 
         if (cleaned.length === 0) return t('ambassadorJobFieldsRequired', language);
         formData.jobFields = cleaned;
@@ -128,28 +160,49 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
       const pastMentoring = sanitizeText(formData.pastMentoring, 1000);
       const availability = sanitizeText(formData.availability, 200);
       // check pastMentoring field
-      if (pastMentoring === 'tooLong') return t('pastMentoringIsTooLong', language);
+      if (pastMentoring.tooLong) return t('pastMentoringIsTooLong', language);
+      if (pastMentoring.wasModified) {
+        setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+        setFormData(prev => ({ ...prev, pastMentoring: pastMentoring.text }));
+      }
       // check availability
-      if (availability === 'tooLong') return t('availabilityIsTooLong', language);
+      if (availability.tooLong) return t('availabilityIsTooLong', language);
+      if (availability.wasModified) {
+        setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+        setFormData(prev => ({ ...prev, availability: availability.text }));
+      }
     }
-      
+
     if (step === 4) {
       const linkedin = sanitizeText(formData.linkedin, 150);
       const notes = sanitizeText(formData.notes, 1000);
       // check linkdin link
-      if (linkedin && !urlPattern.test(linkedin)) return t('linkedinInvalid', language);
+      if (linkedin.text && !urlPattern.test(linkedin.text)) return t('linkedinInvalid', language);
+      if (linkedin.wasModified) {
+        setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+        setFormData(prev => ({ ...prev, linkedin: linkedin.text }));
+      }
       // check notes
-      if (notes === 'tooLong') return t('notesIsTooLong', language);
+      if (notes.tooLong) return t('notesIsTooLong', language);
+      if (notes.wasModified) {
+        setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+        setFormData(prev => ({ ...prev, notes: notes.text }));
+      }
     }
 
     if (step === 5) {
       // check about me field
       const aboutMe = sanitizeText(formData.aboutMe, 1000);
-      if (aboutMe === 'tooLong') return t('aboutMeIsTooLong', language);
+      if (aboutMe.tooLong) return t('aboutMeIsTooLong', language);
+      if (aboutMe.wasModified) {
+        setToast({ message: t('unsafeInputSanitized', language), type: 'warning' });
+        setFormData(prev => ({ ...prev, aboutMe: aboutMe.text }));
+      }
     }
 
     return ''; // No errors
   };
+
 
   const handleNext = () => {
     const errorMsg = validateStep();
@@ -207,6 +260,14 @@ export default function MultiStepForm({ onSubmit, language, userType }) {
           }
         }}
       />
+      {toast && (
+        <ToastMessage
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
     </div>
   );
 }

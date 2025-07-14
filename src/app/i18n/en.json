@@ -545,7 +545,15 @@
     "professionalFieldsRequired": "professional fields are required",
     "currentCompanyRequired": "Current company is required",
     "currentCompanyInvalid": "Current company is invalid",
-    "positionRequired": "Current position is required"
+    "positionRequired": "Current position is required",
+    "fullNameSanitized": "Full name was automatically sanitized due to invalid characters.",
+    "armyRoleSanitized": "Army role was automatically sanitized due to invalid characters.",
+    "experienceSanitized": "Experience was automatically sanitized due to invalid characters.",
+    "aboutMeSanitized": "About me section was automatically sanitized due to invalid characters.",
+    "notesSanitized": "Notes were automatically sanitized due to invalid characters.",
+    "unsafeInputSanitized": "Your input was sanitized for security reasons",
+    "jobUnsubscribeFailed": "We couldn't unsubscribe from job alerts",
+    "jobSubscribeFailed": "We couldn't update your job alert preferences"
 
 
 

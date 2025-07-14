@@ -7,30 +7,29 @@ import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import Button from '@/app/components/Button/Button';
 import './personalDetails.css';
 import { locations } from '@/app/components/Locations';
-import sanitizeText from '@/app/utils/sanitizeText';
 import AccordionSection from '@/app/components/AccordionSection';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import SanitizeForm from './SanitizeForm';
 
-export default function EditReservistForm({ userData, mentorId, mentorName, onSave, onClose, onDelete, role, onChangePasswordClick  }) {
+export default function EditReservistForm({ userData, mentorId, onSave, onClose, onDelete, role, onChangePasswordClick  }) {
   const [formData, setFormData] = useState(userData || {});
   const [initialData, setInitialData] = useState(userData || {});
   const [saving, setSaving] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState(null);
   const jobFieldsArray = Object.keys(translatedJobFields);
-  const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
   const language = useLanguage();
-
   const [initialEmailJobPrefs, setInitialEmailJobPrefs] = useState({
     jobEmailAlerts: false,
     jobInterestFields: []
   });
-
   const [NewEmailJobPrefs, setNewEmailJobPrefs] = useState({
     jobEmailAlerts: false,
     jobInterestFields: []
   });
+  const isModified = JSON.stringify(formData) !== JSON.stringify(initialData) ||
+    JSON.stringify(NewEmailJobPrefs) !== JSON.stringify(initialEmailJobPrefs);
 
  useEffect(() => {
     const initFormData = async () => {
@@ -43,14 +42,20 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
         let jobEmailAlerts = false;
         let jobInterestFields = [];
 
-        if (Array.isArray(result) && result.length > 0) {
-          const subscriber = result[0];
+        const subscriber = Array.isArray(result) && result.length > 0 ? result[0] : null;
+
+        if (subscriber) {
           jobEmailAlerts = true;
           jobInterestFields = Array.isArray(subscriber.fieldsOfInterest) ? subscriber.fieldsOfInterest : [];
         }
 
         setInitialEmailJobPrefs({ jobEmailAlerts, jobInterestFields });
         setNewEmailJobPrefs({ jobEmailAlerts, jobInterestFields });
+        
+        setFormData(prev => ({
+          ...prev,
+          jobEmailAlerts,
+        }));
       } catch (err) {
         console.error("Failed to fetch job email preferences:", err);
       }
@@ -104,65 +109,30 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
     }
   };
 
-  const validateForm = () => {
-    const errors = [];
-    const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
-    const phonePattern = /^(05\d{8}|05\d{1}-\d{7})$/;
-    const idPattern = /^\d{9}$/;
-    const urlPattern = /^https?:\/\/[\w\.-]+\.\w+/;
-
-    const fullName = formData.fullName?.trim() || '';
-    const email = formData.email?.trim() || '';
-    const phone = formData.phone?.trim() || '';
-    const idNumber = formData.idNumber?.trim() || '';
-    const armyRole = sanitizeText(formData.armyRole || '', 60);
-    const location = formData.location?.trim() || '';
-    const fields = formData.fields || [];
-    const experience = sanitizeText(formData.experience || '', 1000);
-    const linkedin = formData.linkedin?.trim() || '';
-    const aboutMeIntro = sanitizeText(formData.aboutMeIntro || '', 1000);
-    const notes = sanitizeText(formData.notes || '', 500);
-
-    if (!fullName) errors.push(t('fullNameRequired', language));
-    else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
-    else if (fullName.length > 50) errors.push(t('fullNameTooLong', language));
-
-    if (!idPattern.test(idNumber)) errors.push(t('idNumberInvalid', language));
-
-    if (email && !emailPattern.test(email)) errors.push(t('emailInvalid', language));
-    else if (email.length > 100) errors.push(t('emailTooLong', language));
-
-    if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
-
-    if (!armyRole) errors.push(t('armyRoleRequired', language));
-    else if (armyRole === 'tooLong') errors.push(t('professionTooLong', language));
-
-    if (!location) errors.push(t('locationRequired', language));
-    else if (location.length > 60) errors.push(t('locationTooLong', language));
-
-    if (!experience) errors.push(t('experienceRequired', language));
-    else if (experience === 'tooLong') errors.push(t('experienceTooLong', language));
-
-    if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
-    else if (linkedin.length > 200) errors.push(t('linkedinTooLong', language));
-
-    if (aboutMeIntro === 'tooLong') errors.push(t('aboutMeTooLong', language));
-    if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
-
-    return errors;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const validationErrors = validateForm();
-    if (validationErrors.length > 0) {
-      setAlertMessage({ message: validationErrors[0], type: 'error' });
+    const { errors, sanitized } = SanitizeForm({ formData, language, t });
+
+    if (errors.length > 0) {
+      setAlertMessage({ message: errors[0], type: 'error' });
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      setFormData(prev => ({ ...prev, ...sanitized }));
       return;
     }
 
+    const updatedFormData = { ...formData, ...sanitized };
+
     setSaving(true);
+
+    const emailUpdateResult = await handleEmailJobPreferencesUpdate();
+
+    if (!emailUpdateResult.success) {
+      setAlertMessage({ message: emailUpdateResult.message, type: 'error' });
+      setSaving(false);
+      return;
+    }
+
     try {
       if (formData.notInterestedInMentor && mentorId) {
         const resDelete = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-progress`, {
@@ -181,13 +151,14 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-user-form`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(updatedFormData)
       });
 
       const result = await res.json();
       if (res.ok) {
         setAlertMessage({ message: t('saveSuccess', language), type: 'success' });
-        setInitialData(formData);
+        setInitialData(updatedFormData);
+        setFormData(updatedFormData);
         onSave(result);
       } else {
         setAlertMessage({ message: result.error || t('saveError', language), type: 'error' });
@@ -203,6 +174,7 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
 
   const handleCancel = () => {
     setFormData(initialData);
+    setNewEmailJobPrefs({ ...initialEmailJobPrefs });
     setAlertMessage(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (onClose) onClose();
@@ -210,27 +182,33 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
 
   // Handles subscribing or unsubscribing the user to job alert emails
   const handleEmailJobPreferencesUpdate = async () => {
+    if (role === 'admin') return { success: true };
+
     try {
-      const unchanged = initialEmailJobPrefs.jobEmailAlerts === NewEmailJobPrefs.jobEmailAlerts &&
+      const unchanged =
+        initialEmailJobPrefs.jobEmailAlerts === NewEmailJobPrefs.jobEmailAlerts &&
         JSON.stringify(initialEmailJobPrefs.jobInterestFields) === JSON.stringify(NewEmailJobPrefs.jobInterestFields);
 
-      if (unchanged) return;
+      if (unchanged) return { success: true };
 
       if (!NewEmailJobPrefs.jobEmailAlerts) {
-        await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobAlerts/delete-subscriber`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobAlerts/delete-subscriber`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ idNumber: userData.idNumber })
         });
+
+        if (!res.ok) {
+          return { success: false, message: t('jobUnsubscribeFailed', language) };
+        }
+
         setInitialEmailJobPrefs({ jobEmailAlerts: false, jobInterestFields: [] });
         setNewEmailJobPrefs({ jobEmailAlerts: false, jobInterestFields: [] });
-        setAlertMessage({ message: t('jobUnsubscribed', language), type: 'success' });
-        return;
+        return { success: true };
       }
 
       if (NewEmailJobPrefs.jobInterestFields.length === 0) {
-        setAlertMessage({ message: t('jobAlertMustSelectFields', language), type: 'error' });
-        return;
+        return { success: false, message: t('jobAlertMustSelectFields', language) };
       }
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobAlerts/add-subscriber`, {
@@ -244,15 +222,19 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
         })
       });
 
-      if (res.ok) {
-        setInitialEmailJobPrefs({ ...NewEmailJobPrefs });
-        setAlertMessage({ message: t('jobSubscribed', language), type: 'success' });
+      if (!res.ok) {
+        return { success: false, message: t('jobSubscribeFailed', language) };
       }
+
+      setInitialEmailJobPrefs({ ...NewEmailJobPrefs });
+      return { success: true };
+
     } catch (err) {
       console.error('Email preference update error:', err);
-      setAlertMessage({ message: t('saveError', language), type: 'error' });
+      return { success: false, message: t('saveError', language) };
     }
   };
+
 
   const handleDeleteClick = () => {
     if (confirm(t('confirmDeleteUser', language))) {
@@ -267,13 +249,13 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
         <form onSubmit={handleSubmit}>
           {/* Section 1: Personal Info */}
           <AccordionSection titleKey={t('editPersonalInfoTitle', language)} initiallyOpen={true}>
-            <label>{t('fullName', language)}*:
+            <label>{t('fullName', language)}<span className="required-star">*</span>:
               <input name="fullName" value={formData.fullName || ''} onChange={handleChange} />
             </label>
-            <label className='text-red'>{t('idNumber', language)}*:
+            <label className='text-red'>{t('idNumber', language)}<span className="required-star">*</span>:
               <input name="idNumber" value={formData.idNumber || ''} readOnly style={{ color: 'red' }}/>
             </label>
-            <label>{t('email', language)}*:
+            <label>{t('email', language)}<span className="required-star">*</span>:
               <input name="email" value={formData.email || ''} readOnly style={{ color: 'red' }}/>
             </label>
             <label>{t('phone', language)}:
@@ -283,11 +265,11 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
 
           {/* Section 2: Registration Form */}
           <AccordionSection titleKey={t('editRegistrationFormTitle', language)}>
-            <label>{t('armyRole', language)}*:
+            <label>{t('armyRole', language)}<span className="required-star">*</span>:
               <input name="armyRole" value={formData.armyRole || ''} onChange={handleChange} />
             </label>
 
-            <label>{t('location', language)}*:
+            <label>{t('location', language)}<span className="required-star">*</span>:
               <select name="location" value={formData.location} onChange={handleChange}>
                 <option value="">{t('selectLocation', language)}</option>
                 {locations.map((region, regionIndex) => (
@@ -307,7 +289,7 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
             </label>
 
             <fieldset>
-              <legend>{t('fields', language)}</legend>
+              <legend>{t('fields', language)}<span className="required-star">*</span></legend>
               {jobFieldsArray.map((field) => (
                 <label key={field} className="register-checkbox-label">
                   <input
@@ -322,7 +304,7 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
               ))}
             </fieldset>
 
-            <label>{t('experience', language)}*:
+            <label>{t('experience', language)}<span className="required-star">*</span>:
               <textarea name="experience" value={formData.experience || ''} onChange={handleChange} />
             </label>
             <label>{t('linkedin', language)}:
@@ -342,53 +324,56 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
               <p className='text-center'>{t('reservistFormExplenationForAdmin', language)}</p>
             )}
             { role !== 'admin' && (
-              <button type="button" onClick={onChangePasswordClick} className="mb-4 text-blue-600 underline">
-                {t('changePassword', language)}
-              </button>
+              <>
+                <button type="button" onClick={onChangePasswordClick} className="mb-4 text-blue-600 underline">
+                  {t('changePassword', language)}
+                </button>
+              
+
+                <label className="register-checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="jobEmailAlerts"
+                    checked={NewEmailJobPrefs.jobEmailAlerts}
+                    onChange={(e) =>
+                      setNewEmailJobPrefs(prev => ({
+                        ...prev,
+                        jobEmailAlerts: e.target.checked
+                      }))
+                    }
+                  />
+                  {' '}{t('receiveJobEmails', language)}
+                </label>
+
+                {NewEmailJobPrefs.jobEmailAlerts && (
+                  <fieldset>
+                    <legend>{t('jobFieldsToReceive', language)}<span className="required-star">*</span></legend>
+                    {jobFieldsArray.map((field) => (
+                      <label key={field} className="register-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="jobInterestFields"
+                          value={field}
+                          checked={NewEmailJobPrefs.jobInterestFields.includes(field)}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setNewEmailJobPrefs(prev => ({
+                              ...prev,
+                              jobInterestFields: checked
+                                ? [...prev.jobInterestFields, field]
+                                : prev.jobInterestFields.filter(f => f !== field)
+                            }));
+                          }}
+                        />
+                        {' '}{translatedJobFields[field][language]}
+                      </label>
+                    ))}
+                  </fieldset>
+                )}
+              </>
             )}
 
-            <label className="register-checkbox-label">
-              <input
-                type="checkbox"
-                name="jobEmailAlerts"
-                checked={NewEmailJobPrefs.jobEmailAlerts}
-                onChange={(e) =>
-                  setNewEmailJobPrefs(prev => ({
-                    ...prev,
-                    jobEmailAlerts: e.target.checked
-                  }))
-                }
-              />
-              {' '}{t('receiveJobEmails', language)}
-            </label>
-
-            {NewEmailJobPrefs.jobEmailAlerts && (
-              <fieldset>
-                <legend>{t('jobFieldsToReceive', language)}</legend>
-                {jobFieldsArray.map((field) => (
-                  <label key={field} className="register-checkbox-label">
-                    <input
-                      type="checkbox"
-                      name="jobInterestFields"
-                      value={field}
-                      checked={NewEmailJobPrefs.jobInterestFields.includes(field)}
-                      onChange={(e) => {
-                        const checked = e.target.checked;
-                        setNewEmailJobPrefs(prev => ({
-                          ...prev,
-                          jobInterestFields: checked
-                            ? [...prev.jobInterestFields, field]
-                            : prev.jobInterestFields.filter(f => f !== field)
-                        }));
-                      }}
-                    />
-                    {' '}{translatedJobFields[field][language]}
-                  </label>
-                ))}
-              </fieldset>
-            )}
-
-            <label className="register-checkbox-label">
+            {/* <label className="register-checkbox-label">
               <input
                 type="checkbox"
                 name="eventEmailAlerts"
@@ -396,16 +381,8 @@ export default function EditReservistForm({ userData, mentorId, mentorName, onSa
                 onChange={handleChange}
               />
               {' '}{t('receiveEventEmails', language)}
-            </label>
+            </label> */}
 
-            { role !== 'admin' && (
-              <Button
-                size='small'
-                text={t('updateEmailPrefs', language)}
-                type="button"
-                onClick={handleEmailJobPreferencesUpdate}
-              />
-            )}
             <label className="register-checkbox-label">
               <input
                 type="checkbox"

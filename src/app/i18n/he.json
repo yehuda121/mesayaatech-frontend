@@ -545,6 +545,14 @@
     "professionalFieldsRequired": "חובה למלא תחומי עיסוק",
     "currentCompanyRequired": "יש להזין את שם החברה הנוכחית",
     "currentCompanyInvalid": "שם החברה לא חוקי",
-    "positionRequired": "יש להזין את התפקיד הנוכחי שלך"
+    "positionRequired": "יש להזין את התפקיד הנוכחי שלך",
+    "fullNameSanitized": "השם המלא עודכן אוטומטית בגלל תווים לא תקינים.",
+    "armyRoleSanitized": "התפקיד הצבאי עודכן אוטומטית בגלל תווים לא תקינים.",
+    "experienceSanitized": "הניסיון עודכן אוטומטית בגלל תווים לא תקינים.",
+    "aboutMeSanitized": "הטקסט על עצמך עודכן אוטומטית בגלל תווים לא תקינים.",
+    "notesSanitized": "ההערות עודכנו אוטומטית בגלל תווים לא תקינים.",
+    "jobUnsubscribeFailed": "לא הצלחנו לבטל את ההרשמה לדיוור",
+    "jobSubscribeFailed": "לא הצלחנו לעדכן את תחומי העניין לדיוור",
+    "unsafeInputSanitized": "הקלט שלך עבר ניקוי מסיבות אבטחה"
 
 }
