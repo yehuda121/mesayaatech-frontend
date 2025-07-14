@@ -1,212 +1,5 @@
-register-pa/* ===== Register Page Layout (Top Section, Buttons, Structure) ===== */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.register-page {
-  position: relative;
-  background: url('/logo-bg.png') no-repeat center center fixed;
-  background-size: 110vw 280vh;
-  background-color: rgba(255, 255, 255, 0.8);
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-blend-mode: lighten;
-  overflow-x: hidden;
-}
-
-
-
-.register-layout,
-.register-form-container {
-  position: relative;
-  z-index: 1;
-}
-
-.register-layout {
-  padding-top: 75px;
-  padding-right: 250px;
-  box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-  .register-layout {
-    padding-right: 0;
-    padding-left: 0;
-  }
-} 
-
-.register-top-section {
-  background-color: #002855;
-  color: #fff;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 60px 20px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.register-top-section h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.register-top-section p {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.aboutSection {
-  padding: 4rem 2rem;
-  direction: rtl;
-  width: 100%;
-}
-
-.register-options-section {
-  margin-top: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.register-options-title {
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #333;
-}
-
-.register-buttons-group {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-
-/* ===== Shared Form Container (All Roles) ===== */
-.register-form-container {
-  max-width: 800px;
-  width: 95%;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #ffffff; 
-  border: 1px solid #e2e8f0; 
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  -webkit-backdrop-filter: none;/* Safari support */
-  backdrop-filter: none; 
-  position: relative;
-  z-index: 1;
-}
-
-.top-buttons-wrapper {
-  direction: ltr;
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-/* ===== Shared Form Utilities ===== */
-/* Top buttons – always aligned to the right */
-.register-form-top-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-}
-.register-form-top-buttons button {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #004080;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-
-.register-form-top-buttons button:hover {
-  text-decoration: underline;
-}
-
-
-/* Directional layout */
-.register-form-direction-rtl {
-  direction: rtl;
-  text-align: right;
-}
-
-.register-form-direction-ltr {
-  direction: ltr;
-  text-align: left;
-}
-
-/* Label and input styles */
-.register-form-container label {
-  display: block;
-  margin-bottom: 1rem;
-  font-weight: 500;
-}
-
-/* Input and select styles */
-.register-form-container input[type="text"],
-.register-form-container input[type="email"],
-.register-form-container input[type="tel"],
-.register-form-container input[type="password"],
-.register-form-container input:not([type]),
-.register-form-container select,
-.register-form-container textarea {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 0.375rem;
-  font-size: 1rem;
-}
-
-.register-form-container textarea {
-  resize: vertical;
-}
-
-/* Fieldset styles */
-.register-form-container fieldset {
-  border: none;
-  margin-bottom: 1rem;
-  padding: 0;
-}
-
-.register-form-container legend {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-/* Error message styling */
-.register-form-container .error-message {
-  color: #dc2626;
-  text-align: center;
-  font-weight: bold;
-}
-
-
-/* ===== Optional Shared Checkbox Label Utility ===== */
-.register-checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-/* ==== HEADER (copy of landing but renamed) ==== */
 .register-header {
   background-color: #002855;
-  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -243,27 +36,6 @@ html, body {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* ==== TOP SECTION ==== */
-.register-top-section {
-  background-color: #002855;
-  color: #fff;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 60px 20px;
-  text-align: center;
-}
-
-.register-top-section h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.register-top-section p {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-/* ==== ABOUT SECTION (now contains buttons) ==== */
 .register-about-section {
   padding: 4rem 2rem;
   text-align: center;
@@ -282,16 +54,10 @@ html, body {
   flex-wrap: wrap;
 }
 
-/* === Optional: Language Icon === */
 .lang-icon {
   font-size: 20px;
 }
 
-.lang-text {
-  color: white !important;
-}
-
-/* === MENTOR PAGE HEADER & INTRO === */
 .mentor-header {
   display: flex;
   justify-content: space-between;
@@ -302,23 +68,24 @@ html, body {
   position: sticky;
   top: 0;
   z-index: 100;
+  direction: ltr;
+  background-color: #002855;
 }
 
 .mentor-logo {
-  height: 60px;
+  max-width: 80px;
   object-fit: contain;
 }
 
 .mentor-header-buttons button {
   background-color: transparent;
-  color: #004080;
-  border: 1px solid #004080;
+  color: white;
+  border: 1px solid white;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: bold;
+  border-radius: 6px;
   cursor: pointer;
-  margin-inline-start: 0.5rem;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
+  margin-inline: 5px;
 }
 
 .mentor-header-buttons button:hover {
@@ -365,33 +132,6 @@ html, body {
   margin: 0 auto;
 }
 
-
-.register-form-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 2rem 1rem;
-  margin: 0 auto;
-  max-width: 1000px;
-  width: 100%;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.GF-form-title-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 0.5rem; 
-  margin-bottom: 0.1rem;
-}
-
-.GF-generic-form-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #00122e;
-  text-align: center;
-}
-
 .register-hero {
   position: relative;
   min-height: calc(100vh - 100px);
@@ -406,8 +146,6 @@ html, body {
   direction: rtl;
 }
 
-
-
 .register-overlay-content {
   background-color: rgba(255, 255, 255, 0.94);
   padding: 4rem 3.5rem;
@@ -418,7 +156,6 @@ html, body {
   text-align: center;
   transition: all 0.3s ease;
 }
-
 
 .register-overlay-content h1 {
   font-size: 2.9rem;
