@@ -235,7 +235,6 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
     }
   };
 
-
   const handleDeleteClick = () => {
     if (confirm(t('confirmDeleteUser', language))) {
       onDelete(userData);

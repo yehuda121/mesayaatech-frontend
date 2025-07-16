@@ -539,7 +539,7 @@
     "eventUpdatedSuccessfully": "האירוע עודכן בהצלחה",
     "saving": "שומר...",
     "fullNameTooLong": "שם מלא ארוך מדי (מקסימום 50 תווים)",
-    "aboutMeTooLong": "ספר על עצמך בקצרה ארוך מדי",
+    "aboutMeTooLong": "(1000 תווים) ספר על עצמך בקצרה ארוך מדי",
     "armyRoleTooLong": "תפקיד בצבא ארוך מדי",
     "pastMentoringTooLong": "ניסיון חניכה קודם ארוך מדי",
     "professionalFieldsRequired": "חובה למלא תחומי עיסוק",

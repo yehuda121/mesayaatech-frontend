@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import SideBar from '@/app/components/SideBar';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
-import EditMentorForm from './components/EditMentorForm';
+import EditMentorForm from './components/mentorRegistrationForm/EditMentorForm';
 import MyJobsList from '../../components/jobs/MyJobsList';
 import EditMentorJob from '@/app/components/jobs/EditJob';
 import EventsPage from '@/app/components/events/ViewAllEvents';

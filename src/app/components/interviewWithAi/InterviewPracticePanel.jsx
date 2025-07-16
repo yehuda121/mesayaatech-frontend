@@ -6,6 +6,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import Button from '@/app/components/Button/Button';
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import { t } from '@/app/utils/loadTranslations';
+import { sanitizeAnswer } from './sanitizeAnswer';
+import './InterviewPracticePanel.css';
 
 export default function InterviewPracticePanel({ userId, email, language, role }) {
   const [view, setView] = useState("history");
@@ -26,7 +28,6 @@ export default function InterviewPracticePanel({ userId, email, language, role }
     fetchHistory();
   }, [userId]);
 
-  // Load user's previous questions and scores
   const fetchHistory = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/interview/fetch-questions-history?userId=` + userId);
     const data = await res.json();
@@ -96,14 +97,14 @@ export default function InterviewPracticePanel({ userId, email, language, role }
     history.length > 0 ? Math.round((history.reduce((sum, q) => sum + (q.score || 0), 0) / history.length) * 100) / 100 : null;
 
   return (
-    <div className="p-4 flex flex-col " dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div className="IPP-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
       {alert && <AlertMessage {...alert} onClose={() => setAlert(null)} />}
 
-      <div className="mb-4 flex gap-2 flex-wrap">
+      <div className="IPP-selectGroup">
         <select
           value={category}
           onChange={e => setCategory(e.target.value)}
-          className="border p-2 rounded"
+          className="IPP-select"
         >
           <option value="">{t("interviewSelectCategory", language)}</option>
           {Object.entries(translatedJobFields).map(([hebrewKey, translations]) => (
@@ -113,13 +114,13 @@ export default function InterviewPracticePanel({ userId, email, language, role }
           ))}
         </select>
 
-        <select value={difficulty} onChange={e => setDifficulty(e.target.value)} className="border p-2 rounded">
+        <select value={difficulty} onChange={e => setDifficulty(e.target.value)} className="IPP-select">
           <option value="">{t("interviewSelectDifficulty", language)}</option>
           {difficulties.map(level => (
             <option key={level} value={level}>{t(`interviewDifficulty_${level}`, language)}</option>
           ))}
         </select>
-        
+
         <Button onClick={() => {
           setView("question");
           setQuestion(null);
@@ -137,53 +138,51 @@ export default function InterviewPracticePanel({ userId, email, language, role }
           {t("myQuestions", language)}
         </Button>
 
-        <p className="mt-2">({t("interviewRemainingQuestions", language)}: {remaining} / 10)</p>
-
+        <p className="IPP-remaining">({t("interviewRemainingQuestions", language)}: {remaining} / 10)</p>
       </div>
 
       {view === "question" && question && (
-        <div className="mb-4 flex flex-col items-start" dir={language === 'he' ? 'rtl' : 'tlr'}>
-          <p className="font-bold mb-2">{t("question", language)}:</p>
-          <p className="bg-gray-100 p-3 rounded mb-2">{cleanText(question)}</p>
-          
+        <div className="IPP-questionBox" dir={language === 'he' ? 'rtl' : 'tlr'}>
+          <p className="IPP-questionLabel">{t("question", language)}:</p>
+          <p className="IPP-questionText">{cleanText(question)}</p>
+
           <textarea
             rows={4}
             value={userAnswer}
-            onChange={ e => {
-              // console.log("onChange value:", e.target.value);
-              setUserAnswer(e.target.value)
+            onChange={e => {
+              const sanitized = sanitizeAnswer(e.target.value);
+              if (sanitized !== e.target.value) {
+                setAlert({
+                  message: t('unsafeInputSanitized', language),
+                  type: 'warning'
+                });
+              }
+              setUserAnswer(sanitized);
             }}
-            className="w-full border p-2 rounded"
+            className="IPP-textarea"
             placeholder={t("interviewYourAnswerPlaceholder", language)}
           />
 
-          <div className="flex gap-2 mt-2">            
+          <div className="IPP-buttonGroup">
             <Button onClick={handleEvaluate} disabled={isLoadingEvaluation || evaluation}>
               {isLoadingEvaluation ? t("loading", language) : t("interviewEvaluate", language)}
             </Button>
-            {/* {role !== "reservist" && (
-              <Button variant="secondary" onClick={handleSubmitToBank} disabled={isLoadingBankSubmit}>
-                {isLoadingBankSubmit ? t("loading", language) : t("interviewSubmitToBank", language)}
-              </Button>
-            )} */}
           </div>
         </div>
       )}
 
       {view === "question" && evaluation && (
-        <div className={`border rounded p-3 mb-4 flex flex-col items-start ${
-          language === "he" ? "text-right" : "text-left"}`}
-        >
-          <p><strong>{t("interviewScore", language)}:</strong> {evaluation.score} / 10</p>
-          <p><strong>{t("interviewPositiveFeedback", language)}:</strong> {cleanText(evaluation.feedback?.positive)}</p>
-          <p><strong>{t("interviewNegativeFeedback", language)}:</strong> {cleanText(evaluation.feedback?.negative)}</p>
-          <p><strong>{t("interviewIdealAnswer", language)}:</strong> {cleanText(evaluation.idealAnswer)}</p>
+        <div className={`IPP-evaluationBox ${language === "he" ? "text-right" : "text-left"}`}>
+          <p className="IPP-evaluationText"><strong>{t("interviewScore", language)}:</strong> {evaluation.score} / 10</p>
+          <p className="IPP-evaluationText"><strong>{t("interviewPositiveFeedback", language)}:</strong> {cleanText(evaluation.feedback?.positive)}</p>
+          <p className="IPP-evaluationText"><strong>{t("interviewNegativeFeedback", language)}:</strong> {cleanText(evaluation.feedback?.negative)}</p>
+          <p className="IPP-evaluationText"><strong>{t("interviewIdealAnswer", language)}:</strong> {cleanText(evaluation.idealAnswer)}</p>
         </div>
       )}
 
       {view === "history" && (
         <div>
-          <h2 className="text-lg font-semibold mb-2 flex flex-col items-center">{t("interviewProgressGraph", language)}</h2>
+          <h2 className="IPP-historyTitle">{t("interviewProgressGraph", language)}</h2>
           {history.length > 0 ? (
             <div dir="ltr">
               <ResponsiveContainer width="100%" height={300}>
@@ -201,20 +200,20 @@ export default function InterviewPracticePanel({ userId, email, language, role }
           )}
 
           {avgScore !== null && (
-            <p className="mt-2 flex flex-col items-start">{t("interviewAverageScore", language)}: {avgScore}</p>
+            <p className="IPP-average">{t("interviewAverageScore", language)}: {avgScore}</p>
           )}
 
-          <p className="mt-2 flex flex-col items-start">{t("interviewRemainingQuestions", language)}: {remaining} / 10</p>
+          <p className="IPP-historyRemaining">{t("interviewRemainingQuestions", language)}: {remaining} / 10</p>
 
-          <h3 className="text-md font-bold mt-4 flex flex-col items-center">{t("interviewPreviousQuestions", language)}</h3>
+          <h3 className="IPP-previousTitle">{t("interviewPreviousQuestions", language)}</h3>
 
-          <ul className="list-disc ml-5 mt-2 flex flex-col items-start">
+          <ul className="IPP-questionList">
             {history.map((item, index) => {
               const question = item.question?.S || item.question;
               const userAnswer = item.userAnswer?.S || item.userAnswer;
               const idealAnswer = item.idealAnswer?.S || item.idealAnswer;
               return (
-                <li key={index} className="mb-3">
+                <li key={index} className="IPP-questionItem">
                   <div><strong>{t("question", language)}:</strong> {question}</div>
                   <div><strong>{t("yourQuestion", language)}:</strong> {userAnswer}</div>
                   <div><strong>{t("idealAnswer", language)}:</strong> {idealAnswer}</div>
@@ -222,7 +221,6 @@ export default function InterviewPracticePanel({ userId, email, language, role }
               );
             })}
           </ul>
-
         </div>
       )}
     </div>

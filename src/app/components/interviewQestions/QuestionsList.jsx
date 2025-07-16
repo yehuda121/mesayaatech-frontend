@@ -14,6 +14,7 @@ import EditQuestion from './EditQuestion';
 import DraggableButton from '@/app/components/DraggableButton/DraggableButton';
 import AddQuestion from './AddNewQuestion';
 import sanitizeText from '@/app/utils/sanitizeText';
+import AlertMessage from '../Notifications/AlertMessage';
 
 export default function QuestionsPage({ onAnswer }) {
   const [questions, setQuestions] = useState([]);
@@ -31,6 +32,7 @@ export default function QuestionsPage({ onAnswer }) {
   const language = useLanguage();
   const [confirmDialog, setConfirmDialog] = useState(null);
   const [alert, setAlert] = useState(null);
+  const [sanitizedAlert, setSanitizedAlert] = useState(null);
   const [questionToEdit, setQuestionToEdit] = useState(null); 
   const [showAddQuestion, setShowAddQuestion] = useState(false);
 
@@ -203,7 +205,16 @@ export default function QuestionsPage({ onAnswer }) {
         key="search"
         type="text"
         value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
+        onChange={(e) => {
+          const result = sanitizeText(e.target.value, 100);
+          if (result.wasModified) {
+            setSanitizedAlert({
+              message: t('unsafeInputSanitized', language),
+              type: 'warning'
+            });
+          }
+          setSearchText(result.text);
+        }}
         placeholder={t('searchByText', language)}
         className="filter-input"
       />
@@ -238,8 +249,6 @@ export default function QuestionsPage({ onAnswer }) {
       >
         {filterReadOnly ? t('cancel', language) : t('readQuestions', language)}
       </Button>
-    
-
     </div>
   ];
 
@@ -397,6 +406,15 @@ export default function QuestionsPage({ onAnswer }) {
           onClose={() => setQuestionToAnswer(null)}
         />
       )}
+
+      {sanitizedAlert && (
+        <AlertMessage
+          message={sanitizedAlert.message}
+          type={sanitizedAlert.type}
+          onClose={() => setSanitizedAlert(null)}
+        />
+      )}
+
     </div>
   );
 }

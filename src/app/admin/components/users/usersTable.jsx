@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import EditReservistForm from '@/app/pages/reservist/components/EditReservistForm';
-import EditMentorForm from '@/app/pages/mentor/components/EditMentorForm';
+import EditMentorForm from '@/app/pages/mentor/components/mentorRegistrationForm/EditMentorForm';
 import EditAmbassadorForm from '@/app/pages/ambassador/EditAmbassadorForm';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 
