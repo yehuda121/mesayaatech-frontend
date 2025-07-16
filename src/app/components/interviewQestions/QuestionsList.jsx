@@ -13,6 +13,7 @@ import ConfirmDialog from '../Notifications/ConfirmDialog';
 import EditQuestion from './EditQuestion';
 import DraggableButton from '@/app/components/DraggableButton/DraggableButton';
 import AddQuestion from './AddNewQuestion';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function QuestionsPage({ onAnswer }) {
   const [questions, setQuestions] = useState([]);
@@ -107,7 +108,6 @@ export default function QuestionsPage({ onAnswer }) {
     }
   };
   
-
   const hasLiked = (likes = []) => {
     return likes.some(like => like.idNumber === idNumber);
   };

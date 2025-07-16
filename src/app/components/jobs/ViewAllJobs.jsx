@@ -16,6 +16,7 @@ import ConfirmDialog from '../Notifications/ConfirmDialog';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import DraggableAddJobButton from '../DraggableButton/DraggableButton';
 import AddNewJob from './PostNewJob';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function ViewAllJobs() {
   const [jobs, setJobs] = useState([]);
@@ -151,7 +152,22 @@ export default function ViewAllJobs() {
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
+
+    // Run sanitize on free text fields only
+    const freeTextFields = ['searchText', 'location', 'company'];
+    if (freeTextFields.includes(name)) {
+      const result = sanitizeText(value, 100);
+      if (result.wasModified) {
+        setToast({
+          message: t('unsafeInputSanitized', language),
+          type: 'warning'
+        });
+      }
+      setFilters(prev => ({ ...prev, [name]: result.text }));
+    } else {
+      // For non-text inputs like select or date
+      setFilters(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const clearSingleField = (fieldName) => {
