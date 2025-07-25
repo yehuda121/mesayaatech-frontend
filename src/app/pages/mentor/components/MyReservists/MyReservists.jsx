@@ -29,7 +29,7 @@ export default function MyReservists({ onManageReservist }) {
     if (!mentorId) return;
 
     const fetchReservists = async () => {
-      console.log("mentorId: ", mentorId);
+      // console.log("mentorId: ", mentorId);
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-my-reservists?mentorId=${mentorId}`);
         const data = await res.json();

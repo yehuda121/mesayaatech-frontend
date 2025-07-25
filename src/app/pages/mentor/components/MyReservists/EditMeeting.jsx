@@ -27,34 +27,39 @@ export default function EditMeeting({ meeting, index, mentorId, reservistId, onS
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const validateForm = () => {
-    const { date, mode, topics, tasks, futurTasks, note } = formData;
-
-    if (!date) return t('meetingDateRequired', language);
-
-    const cleanedMode = sanitizeText(mode, 50);
-    if (!cleanedMode) return t('meetingModeRequired', language);
-    if (cleanedMode === 'tooLong') return t('meetingModeTooLong', language);
-
-    const cleanedFields = [
-      { value: topics, key: 'meetingTopicsTooLong' },
-      { value: tasks, key: 'meetingTasksTooLong' },
-      { value: futurTasks, key: 'futurTasksTooLong' },
-      { value: note, key: 'noteTooLong' }
-    ];
-
-    for (let { value, key } of cleanedFields) {
-      const result = sanitizeText(value, 300);
-      if (result === 'tooLong') return t(key, language);
+  // Apply sanitization to relevant fields
+  const sanitizeFields = (data) => {
+    const limits = {
+      mode: 500,
+      topics: 500,
+      tasks: 1000,
+      futurTasks: 1000,
+      note: 1000
+    };
+    let modified = false;
+    const sanitized = { ...data };
+    for (const [key, maxLen] of Object.entries(limits)) {
+      const { text, wasModified } = sanitizeText(data[key] || '', maxLen);
+      sanitized[key] = text;
+      if (wasModified) {
+        modified = true;
+        console.log("sanetized: ", key);
+      }
     }
-
-    return null;
+    return { sanitized, modified };
   };
 
   const handleSubmit = async () => {
-    const error = validateForm();
-    if (error) {
-      setAlert({ message: error, type: 'error' });
+    if (!formData.date || !formData.mode) {
+      let message = !formData.date ? t('meetingDateRequired', language) : t('meetingModeRequired', language);
+      setAlert({ message: message, type: 'warning' });
+      return;
+    } 
+
+    const { sanitized, modified } = sanitizeFields(formData);
+    setFormData(sanitized);
+    if (modified) {
+      setAlert({ message: t('textSanitizedWarning', language), type: 'warning' });
       return;
     }
 

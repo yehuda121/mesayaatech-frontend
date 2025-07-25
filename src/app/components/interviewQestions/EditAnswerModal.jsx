@@ -6,19 +6,26 @@ import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import './ViewQuestion.css';
 import Button from '@/app/components/Button/Button';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function EditAnswerModal({ answer, questionId, onClose, onSuccess }) {
-  const [text, setText] = useState(answer.text);
+  const [newAnswer, setNewAnswer] = useState(answer.text);
   const [toast, setToast] = useState(null);
   const language = useLanguage();
   const [submitting, setSubmitting] = useState(false);
-
   const idNumber = typeof window !== 'undefined' ? localStorage.getItem('idNumber') : null;
   const userType = typeof window !== 'undefined' ? localStorage.getItem('userType') : null;
 
   const handleSubmit = async () => {
-    if (!text.trim()) {
+    if (!newAnswer.trim()) {
       setToast({ message: t('missingAnswerText', language), type: 'error' });
+      return;
+    }
+    
+    const { text, wasModified } = sanitizeText(newAnswer, 1000);
+    setNewAnswer(text);
+    if (wasModified) {
+      setToast({ message: t('textSanitizedWarning', language), type: 'warning' });
       return;
     }
 
@@ -30,7 +37,7 @@ export default function EditAnswerModal({ answer, questionId, onClose, onSuccess
         body: JSON.stringify({
           questionId,
           answerId: answer.answerId,
-          updatedText: text.trim(),
+          updatedText: newAnswer.trim(),
           userId: idNumber,
           userType,
         }),
@@ -39,10 +46,10 @@ export default function EditAnswerModal({ answer, questionId, onClose, onSuccess
       if (res.ok) {
         setToast({ message: t('answerUpdated', language), type: 'success' });
         setTimeout(() => {
-            onSuccess({
-                ...answer,
-                text: text.trim(),
-              });
+          onSuccess({
+            ...answer,
+            text: newAnswer.trim(),
+          });
               
         }, 400);
       } else {
@@ -61,7 +68,7 @@ export default function EditAnswerModal({ answer, questionId, onClose, onSuccess
       <div className="postAnswer-box" onClick={(e) => e.stopPropagation()}>
         <button className="postAnswer-close" onClick={onClose}>×</button>
         <h2 className="postAnswer-title">{t('editAnswer', language)}</h2>
-        <textarea className='textarea-edit-answer' value={text} onChange={(e) => setText(e.target.value)} rows={6} maxLength={1000} />
+        <textarea className='textarea-edit-answer' value={newAnswer} onChange={(e) => setNewAnswer(e.target.value)} rows={6} maxLength={1000} />
         <div className="postAnswer-actions">
           <Button onClick={handleSubmit} disabled={submitting}>{t('saveChanges', language)}</Button>
         </div>

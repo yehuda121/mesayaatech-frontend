@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
+import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import Button from '@/app/components/Button/Button';
 import { Brain } from 'lucide-react';
 import { useLanguage } from '@/app/utils/language/useLanguage';
@@ -18,24 +19,47 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
   });
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const [confirmData, setConfirmData] = useState(null);
   const fileInputRef = useRef();
   const language = useLanguage();
   const [autoFilling, setAutoFilling] = useState(false);
 
   const handleChange = (key, value) => setJobData(prev => ({ ...prev, [key]: value }));
 
+  const sanitizeJobData = (rawJobData) => {
+    const fieldsToCheck = {
+      company: 100,
+      location: 60,
+      role: 100,
+      description: 1000,
+      requirements: 1000,
+      advantages: 1000,
+      jobTextInput: 2500
+    };
+    let wasAnyFieldModified = false;
+    const sanitized = { ...rawJobData };
+    for (const [key, maxLength] of Object.entries(fieldsToCheck)) {
+      const { text, wasModified } = sanitizeText(rawJobData[key] || '', maxLength);
+      sanitized[key] = text;
+      if (wasModified) wasAnyFieldModified = true;
+    }
+    return { sanitized, wasAnyFieldModified };
+  };
+
   const handleAutoFill = async () => {
     const { jobTextInput, attachment } = jobData;
     if (jobTextInput && attachment) return setToast({ message: t('onlyOneInputAllowed', language), type: 'error' });
     if (!jobTextInput && !attachment) return setToast({ message: t('textOrImageRequired', language), type: 'error' });
-    if (jobTextInput.length > 1500)return setToast({ message: t('textTooLong', language), type: 'error' });
+    if (jobTextInput.length > 2500) return setToast({ message: t('textTooLong', language), type: 'error' });
     setAutoFilling(true);
 
     try {
       if (jobTextInput) {
+        const { text, wasModified } = sanitizeText(jobTextInput, 2500);
+        if (wasModified) setToast({ message: t('textSanitizedWarning', language), type: 'warning' });
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/parse-job-text`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: jobTextInput })
+          body: JSON.stringify({ text })
         });
         const result = await res.json();
         setJobData(prev => ({ ...prev, ...result, jobTextInput: '', attachment: null }));
@@ -43,15 +67,16 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
       if (attachment) {
         const formData = new FormData();
         formData.append('image', attachment);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/extract-image-text`, 
-          {
-             method: 'POST', body: formData
-          });
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/extract-image-text`, {
+          method: 'POST', body: formData
+        });
         const result = await res.json();
         if (result?.text) {
+          const { text, wasModified } = sanitizeText(result.text, 2500);
+          if (wasModified) setToast({ message: t('textSanitizedWarning', language), type: 'warning' });
           const fillRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/parse-job-text`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: result.text })
+            body: JSON.stringify({ text })
           });
           const parsed = await fillRes.json();
           setJobData(prev => ({ ...prev, ...parsed, jobTextInput: '', attachment: null }));
@@ -66,53 +91,23 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
     }
   };
 
-  const validateForm = () => {
-    const errors = [];
-    const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
-    const urlPattern = /^https?:\/\/[\w\.-]+\.\w+/;
-    const field = jobData.field?.trim() || '';
-    const company = sanitizeText(jobData.company || '', 100);
-    const location = sanitizeText(jobData.location || '', 60);
-    const role = sanitizeText(jobData.role || '', 100);
-    const minExperience = jobData.minExperience;
-    const description = sanitizeText(jobData.description || '', 1000);
-    const requirements = sanitizeText(jobData.requirements || '', 1000);
-    const advantages = sanitizeText(jobData.advantages || '', 1000);
-    const submitEmail = jobData.submitEmail?.trim() || '';
-    const submitLink = jobData.submitLink?.trim() || '';
-    const companyWebsite = jobData.companyWebsite?.trim() || '';
-    const jobViewLink = jobData.jobViewLink?.trim() || '';
+  const handleSubmit = async () => {
+    if(!jobData.company || !jobData.field || !jobData.role) {
+      setToast({ message: t('missingPostJobFields', language), type: 'error' });
+      return;
+    } 
 
-    if (!field) errors.push(t('fieldRequired', language));
-
-    if (!company) errors.push(t('companyRequired', language));
-    else if (company === 'tooLong') errors.push(t('companyTooLong', language));
-
-    if (!role) errors.push(t('roleRequired', language));
-    else if (role === 'tooLong') errors.push(t('roleTooLong', language));
-
-    if (location === 'tooLong') errors.push(t('locationTooLong', language));
-    if (minExperience && isNaN(minExperience)) errors.push(t('experienceInvalid', language));
-
-    if (description === 'tooLong') errors.push(t('descriptionTooLong', language));
-    if (requirements === 'tooLong') errors.push(t('requirementsTooLong', language));
-    if (advantages === 'tooLong') errors.push(t('advantagesTooLong', language));
-
-    if (submitEmail && !emailPattern.test(submitEmail)) errors.push(t('emailInvalid', language));
-    if (submitLink && !urlPattern.test(submitLink)) errors.push(t('urlInvalid', language));
-    if (companyWebsite && !urlPattern.test(companyWebsite)) errors.push(t('urlInvalid', language));
-    if (jobViewLink && !urlPattern.test(jobViewLink)) errors.push(t('urlInvalid', language));
-
-    return errors;
+    const { sanitized, wasAnyFieldModified } = sanitizeJobData(jobData);
+    if (wasAnyFieldModified) {
+      setJobData(sanitized);
+      return setConfirmData(sanitized);
+    }
+    submitSanitizedJob(sanitized);
   };
 
-  const handleSubmit = async () => {
-    const validationErrors = validateForm();
-    if (validationErrors.length > 0) return setToast({ message: validationErrors[0], type: 'error' });
-    if (!publisherId || !publisherType) return setToast({ message: t('userNotRecognized', language), type: 'error' });
-
+  const submitSanitizedJob = async (finalJobData) => {
     const formData = new FormData();
-    Object.entries(jobData).forEach(([key, value]) => {
+    Object.entries(finalJobData).forEach(([key, value]) => {
       formData.append(key, value instanceof File ? value : value || '');
     });
     formData.append('publisherId', publisherId);
@@ -187,16 +182,22 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
             </select>
           </div>
 
-          {[ 'company','location','role','minExperience','submitEmail','submitLink','companyWebsite','jobViewLink','description','requirements','advantages' ].map((key) => (
-            <div key={key} className="postNewJob-form-field">
-              <label>{t(key, language)}</label>
-              {[ 'description','requirements','advantages' ].includes(key) ? (
-                <textarea value={jobData[key]} onChange={(e) => handleChange(key, e.target.value)} />
-              ) : (
-                <input type="text" value={jobData[key]} onChange={(e) => handleChange(key, e.target.value)} />
-              )}
-            </div>
-          ))}
+          {[ 'company','location','role','minExperience','submitEmail','submitLink','companyWebsite','jobViewLink','description','requirements','advantages' ].map((key) => {
+            const isRequired = ['company', 'role'].includes(key);
+            return (
+              <div key={key} className="postNewJob-form-field">
+                <label>
+                  {t(key, language)}
+                  {isRequired && <span className="postNewJob-required"> *</span>}
+                </label>
+                {['description', 'requirements', 'advantages'].includes(key) ? (
+                  <textarea value={jobData[key]} onChange={(e) => handleChange(key, e.target.value)} />
+                ) : (
+                  <input type="text" value={jobData[key]} onChange={(e) => handleChange(key, e.target.value)} />
+                )}
+              </div>
+            );
+          })}
         </div>
 
         <div className="postNewJob-form-buttons">
@@ -205,6 +206,17 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
         </div>
 
         {toast && <ToastMessage message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+        {confirmData && (
+          <ConfirmDialog
+            title={t('fieldsSanitizedWarning', language)}
+            message={t('fieldsSanitizedConfirm', language)}
+            onConfirm={() => {
+              submitSanitizedJob(confirmData);
+              setConfirmData(null);
+            }}
+            onCancel={() => setConfirmData(null)}
+          />
+        )}
       </div>
     </div>
   );

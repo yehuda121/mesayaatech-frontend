@@ -6,6 +6,7 @@ import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import Button from '@/app/components/Button/Button';
+import sanitizeText from '@/app/utils/sanitizeText';
 import './ViewQuestion.css';
 
 export default function AddNewQuestion({ onSuccess, fullName, idNumber, onClose }) {
@@ -39,7 +40,7 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber, onClose 
   const handleSubmit = async (e) => {
     if (e?.preventDefault) e.preventDefault();
 
-    if (!formData.text || !formData.category || !formData.createdBy) {
+    if (!formData.text.trim() || !formData.category || !formData.createdBy) {
       const message = !formData.text
         ? t('missingQuestionText', language)
         : !formData.category
@@ -47,8 +48,12 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber, onClose 
         : t('missingCreatedBy', language);
       setToast({ message, type: 'error' });
       return;
-    } else if (formData.text.length > 500) {
-      setToast({ message: t('questionTooLong', language), type: 'error' });
+    } 
+    
+    const { text, wasModified } = sanitizeText(formData.text.trim(), 1000);
+    setFormData({ text: text, category: formData.category, createdBy: formData.createdBy });
+    if (wasModified) {
+      setToast({ message: t('textSanitizedWarning', language), type: 'warning' });
       return;
     }
 

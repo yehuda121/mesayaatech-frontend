@@ -6,6 +6,7 @@ import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import { translatedJobFields } from "@/app/components/jobs/jobFields";
 import Button from '@/app/components/Button/Button';
+import sanitizeText from '@/app/utils/sanitizeText';
 import './ViewQuestion.css';
 
 export default function EditQuestion({ question, onClose, onSave }) {
@@ -15,7 +16,6 @@ export default function EditQuestion({ question, onClose, onSave }) {
   });
   const [toast, setToast] = useState(null);
   const language = useLanguage();
-
   const categories = [
     { value: "", labelHe: "הכל", labelEn: "All" },
     ...Object.entries(translatedJobFields).map(([value, labels]) => ({
@@ -30,13 +30,16 @@ export default function EditQuestion({ question, onClose, onSave }) {
   };
 
   const handleSubmit = async () => {
+    console.log('cat: ', formData.category);
     if (!formData.text.trim() || !formData.category) {
       setToast({ message: t('missingFields', language), type: 'error' });
       return;
     }
 
-    if (formData.text.length > 500) {
-      setToast({ message: t('questionTooLong', language), type: 'error' });
+    const { text, wasModified } = sanitizeText(formData.text.trim(), 1000);
+    setFormData({ text: text, category: formData.category });
+    if (wasModified) {
+      setToast({ message: t('textSanitizedWarning', language), type: 'warning' });
       return;
     }
 

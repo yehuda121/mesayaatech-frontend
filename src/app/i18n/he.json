@@ -553,6 +553,14 @@
     "notesSanitized": "ההערות עודכנו אוטומטית בגלל תווים לא תקינים.",
     "jobUnsubscribeFailed": "לא הצלחנו לבטל את ההרשמה לדיוור",
     "jobSubscribeFailed": "לא הצלחנו לעדכן את תחומי העניין לדיוור",
-    "unsafeInputSanitized": "הקלט שלך עבר ניקוי מסיבות אבטחה"
+    "unsafeInputSanitized": "הקלט שלך עבר ניקוי מסיבות אבטחה",
+    "filterFreeText": "סינון לפי טקסט חופשי",
+    "textSanitizedWarning": "הטקסט עבר סינון מטעמי אבטחה. ודא שהזנת תוכן בטוח.",
+    "fieldsSanitizedWarning": "חלק מהשדות שונו לצורך אבטחה.",
+    "fieldsSanitizedConfirm": "האם לפרסם את המשרה עם השינויים?",
+    "sanitizedAutoFillNotice": "חלק מהשדות שונו לצורך אבטחה לאחר מילוי אוטומטי.",
+    "confirmPostWithSanitizedFields": "חלק מהשדות שונו בעקבות בדיקות אבטחה. האם ברצונך להמשיך ולפרסם את המשרה עם השינויים?",
+    "missingPostJobFields": "יש למלא את השדות עם כוכבית."
+
 
 }

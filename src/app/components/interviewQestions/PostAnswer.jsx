@@ -9,7 +9,6 @@ import sanitizeText from '@/app/utils/sanitizeText';
 import Button from '@/app/components/Button/Button';
 
 export default function PostAnswer({ questionId, onSuccess, onClose }) {
-
   const idNumber = typeof window !== 'undefined' ? localStorage.getItem('idNumber') : null;
   const fullName = typeof window !== 'undefined' ? localStorage.getItem('fullName') : null;
   const [formData, setFormData] = useState({ text: '' });
@@ -17,7 +16,6 @@ export default function PostAnswer({ questionId, onSuccess, onClose }) {
   const language = useLanguage();
   const [submitting, setSubmitting] = useState(false);
   const userType = typeof window !== 'undefined' ? localStorage.getItem('userType') : null;
-
 
   const handleSubmit = async (e) => {
     if (submitting) return;
@@ -27,16 +25,17 @@ export default function PostAnswer({ questionId, onSuccess, onClose }) {
 
     if (!formData.text) {
       setToast({ message: t('missingAnswerText', language), type: 'error' });
-      return;
-    }
-    const sanitized = sanitizeText(formData.text.trim(), 1000);
-
-    if (sanitized === 'tooLong') {
-      setToast({ message: t('textTooLong', language), type: 'error' });
+      setSubmitting(false);
       return;
     }
 
-    formData.text = sanitized;
+    const { text, wasModified } = sanitizeText(formData.text.trim(), 1000);
+    setFormData({ text });
+    if (wasModified) {
+      setToast({ message: t('textSanitizedWarning', language), type: 'warning' });
+      setSubmitting(false);
+      return;
+    }
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/post-answer`, {

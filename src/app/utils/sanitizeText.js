@@ -1,5 +1,3 @@
-
-
 /**
  * Sanitizes user input string by removing dangerous content,
  * trimming whitespace, enforcing max length, and detecting modifications.

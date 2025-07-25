@@ -1,26 +1,3 @@
-// import React from 'react';
-// import './notificationsStyle.css';
-
-// export default function AlertMessage({ message, type = 'info', onClose }) {
-//   if (!message) return null;
-
-//   const shortMessage = message.length > 100
-//     ? message.substring(0, 100) + '...'
-//     : message;
-
-//   return (
-//     <div className={`alert-message ${type}`}>
-//       <span className="alert-icon">
-//         {type === 'success' && '✅'}
-//         {type === 'error' && '❌'}
-//         {type === 'warning' && '⚠️'}
-//         {type === 'info' && 'ℹ️'}
-//       </span>
-//       <span className="alert-text">{shortMessage}</span>
-//       <button className="alert-close-btn" onClick={onClose}>✖</button>
-//     </div>
-//   );
-// }
 import React from 'react';
 import './notificationsStyle.css';
 

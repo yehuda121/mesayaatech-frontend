@@ -7,15 +7,16 @@ import { Edit2, Trash2 } from 'lucide-react';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function MyJobsList({ publisherId, userType = "mentor", onEdit }) {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
-  const [filters, setFilters] = useState({ company: '', location: '', date: '' });
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const [confirmData, setConfirmData] = useState(null);
   const language = useLanguage();
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -61,8 +62,6 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
 
 
   const handleDelete = async (jobId) => {
-    // if (!confirm(t('confirmDelete', language))) return;
-
     const userId = sessionStorage.getItem('userId');
     const userType = sessionStorage.getItem('userType');
 
@@ -86,17 +85,43 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
     }
   };
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    const newFilters = { ...filters, [name]: value };
-    setFilters(newFilters);
-    const filtered = jobs.filter((job) => {
-      const companyMatch = !newFilters.company || job?.company?.includes(newFilters.company);
-      const locationMatch = !newFilters.location || job?.location?.includes(newFilters.location);
-      const dateMatch = !newFilters.date || job?.postedAt?.startsWith(newFilters.date);
-      return companyMatch && locationMatch && dateMatch;
-    });
-    setFilteredJobs(filtered);
+  const handleFreeTextFilter = (e) => {
+    const rawText = e.target.value ?? '';  
+    const { text, wasModified } = sanitizeText(rawText, 500);
+
+    // Update display value (sanitized)
+    setSearchText(text);
+
+    if (wasModified) {
+      setToast({
+        message: t('textSanitizedWarning', language),
+        type: 'warning'
+      });
+    }
+
+    const lowerText = String(text || '').toLowerCase();
+
+    const sortedFiltered = (Array.isArray(jobs) ? jobs : [])
+      .map((job) => {
+        let company = '';
+        let role = '';
+        let location = '';
+
+        company = String(job.company || '').toLowerCase();
+        role = String(job.role || '').toLowerCase();
+        location = String(job.location || '').toLowerCase();
+
+        let score = 0;
+        if (company.includes(lowerText)) score += 3;
+        if (role.includes(lowerText)) score += 2;
+        if (location.includes(lowerText)) score += 1;
+
+        return { ...job, _matchScore: score };
+      })
+      .sort((a, b) => b._matchScore - a._matchScore)
+      .map(({ _matchScore, ...job }) => job); // Remove match score from result
+
+    setFilteredJobs(sortedFiltered);
   };
 
   if (loading) {
@@ -109,27 +134,11 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
         titleKey="myPostedJobs"
         filters={[
           <input
-            key="company"
-            name="company"
-            placeholder={t('filterByCompany', language)}
-            value={filters.company}
-            onChange={handleFilterChange}
-            className="card-filter"
-          />,
-          <input
-            key="location"
-            name="location"
-            placeholder={t('filterByLocation', language)}
-            value={filters.location}
-            onChange={handleFilterChange}
-            className="card-filter"
-          />,
-          <input
-            key="date"
-            name="date"
-            placeholder={t('filterByDate', language)}
-            value={filters.date}
-            onChange={handleFilterChange}
+            key="freeText"
+            name="freeText"
+            placeholder={t('filterFreeText', language)}
+            value={searchText || ''}
+            onChange={handleFreeTextFilter}
             className="card-filter"
           />
         ]}

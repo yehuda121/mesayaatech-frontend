@@ -553,7 +553,16 @@
     "notesSanitized": "Notes were automatically sanitized due to invalid characters.",
     "unsafeInputSanitized": "Your input was sanitized for security reasons",
     "jobUnsubscribeFailed": "We couldn't unsubscribe from job alerts",
-    "jobSubscribeFailed": "We couldn't update your job alert preferences"
+    "jobSubscribeFailed": "We couldn't update your job alert preferences",
+    "filterFreeText": "Filter by free text",
+    "textSanitizedWarning": "The text was sanitized for security. Please ensure your input is safe.",
+    "fieldsSanitizedConfirm": "Do you want to publish the job with these changes?",
+    "fieldsSanitizedWarning": "Some fields were modified for security reasons.",
+    "sanitizedAutoFillNotice": "Some fields were modified for security reasons after auto-filling.",
+    "confirmPostWithSanitizedFields": "Some fields were sanitized for security. Do you want to proceed and publish the job with these changes?",
+    "missingPostJobFields": "Please fill in the required fields marked with an asterisk."
+
+
 
 
 
