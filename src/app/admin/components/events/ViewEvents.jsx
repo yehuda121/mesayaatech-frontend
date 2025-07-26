@@ -9,12 +9,16 @@ import GenericCardSection from '@/app/components/GenericCardSection/GenericCardS
 import { Edit2, Trash2 } from 'lucide-react';
 import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import sanitizeText from '@/app/utils/sanitizeText';
+import ToastMessage from '@/app/components/Notifications/ToastMessage';
 
 export default function ViewEvents({ events, setEvents, handleNavigation }) {
   const [filter, setFilter] = useState({ title: '', date: '' });
   const [showPast, setShowPast] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
   const [jobToDelete, setJobToDelete] = useState(null);
+  const [toastMessage, setToastMessage] = useState(null);
+
   const language = useLanguage();
 
   useEffect(() => {
@@ -71,7 +75,17 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
             type="text"
             placeholder={t('filterTitle', language)}
             value={filter.title}
-            onChange={(e) => setFilter({ ...filter, title: e.target.value })}
+            onChange={(e) => {
+              const result = sanitizeText(e.target.value, 100);
+              if (result.wasModified) {
+                setToastMessage({
+                  message: t('unsafeInputSanitized', language),
+                  type: 'warning'
+                });
+              }
+              setFilter({ ...filter, title: result.text });
+            }}
+            // onChange={(e) => setFilter({ ...filter, title: e.target.value })}
             className="card-filter flexible"
           />,
           <input
@@ -141,6 +155,15 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
             );
             setEditingEvent(null);
           }}
+        />
+      )}
+
+      {toastMessage  && (
+        <ToastMessage
+          message={toastMessage.message}
+          type={toastMessage.type}
+          duration={3000}
+          onClose={() => setToastMessage(null)}
         />
       )}
     </>

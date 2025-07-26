@@ -4,19 +4,35 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import '../login.css';
-import { useLanguage } from "@/app/utils/language/useLanguage";
+import { getLanguage, toggleLanguage } from "@/app/utils/language/language";
+import sanitizeText from '@/app/utils/sanitizeText';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const language = useLanguage();
+  const [language, setLanguage] = useState(getLanguage());
+
+  useEffect(() => {
+    setLanguage(getLanguage());
+    const handleLanguageChange = () => setLanguage(getLanguage());
+    window.addEventListener("languageChanged", handleLanguageChange);
+    return () => window.removeEventListener("languageChanged", handleLanguageChange);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
+
+    const sanitizedEmail = sanitizeText(email, 100, 'email');
+    if (sanitizedEmail.wasModified) {
+      setEmail(sanitizedEmail.text);
+      setMessage(t('fieldsSanitizedWarning', language));
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/forgot-password`, {

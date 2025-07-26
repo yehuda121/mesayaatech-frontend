@@ -7,10 +7,10 @@ import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import Button from '@/app/components/Button/Button';
 import './mentorForm.css';
 import { locations } from '@/app/components/Locations';
-// import sanitizeText from '@/app/utils/sanitizeText';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import AccordionSection from '@/app/components/AccordionSection';
 import SanitizeMentorForm from './SanitizeMentorForm';
+import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 
 export default function EditMentorForm({ userData, onSave, onClose, onDelete, role, mentorId }) {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
   const [initialData, setInitialData] = useState(userData || {});
   const [alert, setAlert] = useState(null);
   const [saving, setSaving] = useState(false);
-  const [mentees, setMentees] = useState([]);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const language = useLanguage();
 
   useEffect(() => {
@@ -78,13 +78,19 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
     if (onClose) onClose();
   };
 
-  const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
-
   const handleDeleteClick = () => {
-    if (confirm(t('confirmDeleteUser', language))) {
-      onDelete(userData);
-    }
+    setShowConfirmDialog(true);
   };
+  const confirmDelete = () => {
+    setShowConfirmDialog(false);
+    onDelete(userData);
+  };
+
+  const cancelDelete = () => {
+    setShowConfirmDialog(false);
+  };
+
+  const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
 
   return (
     <div className="mentor-form-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
@@ -96,10 +102,10 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
             <input name="fullName" value={formData.fullName || ''} onChange={handleChange} />
           </label>
           <label>{t('idNumber', language)}<span className="required-star">*</span>:
-            <input name="idNumber" value={formData.idNumber || ''} readOnly/>
+            <input name="idNumber" value={formData.idNumber || ''} readOnly className="readonly-red"/>
           </label>
           <label>{t('email', language)}<span className="required-star">*</span>:
-            <input name="email" value={formData.email || ''} readOnly />
+            <input name="email" value={formData.email || ''} readOnly className="readonly-red"/>
           </label>
           <label>{t('phone', language)}:
             <input name="phone" value={formData.phone || ''} onChange={handleChange} />
@@ -166,6 +172,16 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
       {alert && (
         <AlertMessage message={alert.message} type={alert.type} onClose={() => setAlert(null)} />
       )}
+
+      {showConfirmDialog && (
+        <ConfirmDialog
+          title={t('confirmDelete', language)}
+          message={t('confirmDeleteUser', language)}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
+
     </div>
   );
 }

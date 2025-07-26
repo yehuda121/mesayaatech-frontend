@@ -26,6 +26,11 @@ const SanitizeMentorForm = ({ formData, language, t }) => {
     sanitizeText(formData.notes || '', 500);
   const { text: aboutMeIntroMentor, tooLong: aboutMeTooLong, wasModified: aboutMeModified } =
     sanitizeText(formData.aboutMeIntroMentor || '', 1000);
+  const { text: specialties, tooLong: specialtiesTooLong, wasModified: specialtiesModified } = 
+    sanitizeText(formData.specialties || '', 200);
+
+  if(specialtiesTooLong) errors.push(t('specialtiesTooLong', language));
+  else if(specialtiesModified) errors.push(t('unsafeInputSanitized', language));
 
   if (!fullName) {
     errors.push(t('fullNameRequired', language));
@@ -95,6 +100,7 @@ const SanitizeMentorForm = ({ formData, language, t }) => {
     errors,
     sanitized: {
       fullName,
+      specialties,
       email,
       phone,
       idNumber,

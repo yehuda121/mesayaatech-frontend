@@ -200,6 +200,7 @@
     "navMeetings": "Upcoming Meetings",
     "navFeedback": "Mentor Feedback",
     "welcome": "Welcome",
+    "specialtiesTooLong": "Specialties is Too Long",
     "approvalTitle": "Thanks for registering!",
     "approvalText": "Your application has been sent for admin approval. You'll receive an email once it's approved. No need to wait here 😊",
     "goToHome": "Go to Homepage",
@@ -560,7 +561,9 @@
     "fieldsSanitizedWarning": "Some fields were modified for security reasons.",
     "sanitizedAutoFillNotice": "Some fields were modified for security reasons after auto-filling.",
     "confirmPostWithSanitizedFields": "Some fields were sanitized for security. Do you want to proceed and publish the job with these changes?",
-    "missingPostJobFields": "Please fill in the required fields marked with an asterisk."
+    "missingPostJobFields": "Please fill in the required fields marked with an asterisk.",
+    "publisherName": "Publisher Name",
+    "jobCount": "Number of Jobs"
 
 
 

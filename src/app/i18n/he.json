@@ -560,7 +560,10 @@
     "fieldsSanitizedConfirm": "האם לפרסם את המשרה עם השינויים?",
     "sanitizedAutoFillNotice": "חלק מהשדות שונו לצורך אבטחה לאחר מילוי אוטומטי.",
     "confirmPostWithSanitizedFields": "חלק מהשדות שונו בעקבות בדיקות אבטחה. האם ברצונך להמשיך ולפרסם את המשרה עם השינויים?",
-    "missingPostJobFields": "יש למלא את השדות עם כוכבית."
+    "missingPostJobFields": "יש למלא את השדות עם כוכבית.",
+    "specialtiesTooLong": "התמחות ארוך מידי",
+    "publisherName": "שם מפרסם",
+    "jobCount": "כמות משרות"
 
 
 }

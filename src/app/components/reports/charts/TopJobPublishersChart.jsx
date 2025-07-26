@@ -18,6 +18,11 @@ export default function TopJobPublishersChart({ data }) {
         const userType = item.publisherType;
         // console.log("item: ", userType);
 
+        if (!idNumber || !userType) {
+          // Return fallback (email only)
+          return { publisher: email || 'unknown', count: item.count };
+        }
+
         if (email === 'mesayaatech@gmail.com') {
           return { publisher: language === 'he' ? 'מנהל' : 'Admin', count: item.count };
         } else {
@@ -44,8 +49,8 @@ export default function TopJobPublishersChart({ data }) {
       <ResponsiveContainer height={300}>
         <BarChart data={processedData}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="publisher" />
-          <YAxis />
+          <XAxis dataKey="publisher" label={{ value: t('publisherName', language), position: 'insideBottom', offset: -5 }} />
+          <YAxis label={{ value: t('jobCount', language), angle: -90, position: 'insideLeft' }} />
           <Tooltip />
           <Bar dataKey="count" fill="#ff6666" />
         </BarChart>

@@ -5,7 +5,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff, RefreshCcw } from 'lucide-react';
 import { t } from '@/app/utils/loadTranslations';
 import '../login.css';
-import { useLanguage } from "@/app/utils/language/useLanguage";
+import { getLanguage, toggleLanguage } from "@/app/utils/language/language";
+import sanitizeText from '@/app/utils/sanitizeText';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 
 export default function ResetPassword() {
   const router = useRouter();
@@ -16,7 +18,8 @@ export default function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const language = useLanguage();
+  const [alert, setAlert] = useState(null);
+  const [language, setLanguage] = useState(getLanguage());
 
   const generateRandomPassword = () => {
     const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
@@ -29,10 +32,31 @@ export default function ResetPassword() {
     setNewPassword(password);
   };
 
+  useEffect(() => {
+    setLanguage(getLanguage());
+    const handleLanguageChange = () => setLanguage(getLanguage());
+    window.addEventListener("languageChanged", handleLanguageChange);
+    return () => window.removeEventListener("languageChanged", handleLanguageChange);
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
+
+    const cleanCode = sanitizeText(verificationCode, 20, 'default');
+    const cleanPassword = sanitizeText(newPassword, 100, 'default');
+
+    if (cleanCode.wasModified || cleanPassword.wasModified) {
+      setVerificationCode(cleanCode.text);
+      setNewPassword(cleanPassword.text);
+      setAlert({
+        type: 'warning',
+        message: t('fieldsSanitizedWarning', language)
+      });
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/confirm-forgot-password`, {
@@ -118,6 +142,14 @@ export default function ResetPassword() {
         </form>
 
         {message && <p className="text-center text-red-500 mt-3">{message}</p>}
+        {alert && (
+          <AlertMessage
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert(null)}
+          />
+        )}
+
       </div>
     </div>
   );

@@ -236,9 +236,20 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
   };
 
   const handleDeleteClick = () => {
-    if (confirm(t('confirmDeleteUser', language))) {
-      onDelete(userData);
-    }
+    setConfirmDialog({
+      title: t('confirmDelete', language),
+      message: t('confirmDeleteUser', language),
+      onConfirm: confirmDelete,
+      onCancel: cancelDelete
+    });
+  };
+  const confirmDelete = () => {
+    setConfirmDialog(null);
+    onDelete(userData);
+  };
+
+  const cancelDelete = () => {
+    setConfirmDialog(null);
   };
 
   return (
@@ -252,10 +263,10 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
               <input name="fullName" value={formData.fullName || ''} onChange={handleChange} />
             </label>
             <label className='text-red'>{t('idNumber', language)}<span className="required-star">*</span>:
-              <input name="idNumber" value={formData.idNumber || ''} readOnly style={{ color: 'red' }}/>
+              <input name="idNumber" value={formData.idNumber || ''} readOnly className="readonly-red"/>
             </label>
             <label>{t('email', language)}<span className="required-star">*</span>:
-              <input name="email" value={formData.email || ''} readOnly style={{ color: 'red' }}/>
+              <input name="email" value={formData.email || ''} readOnly className="readonly-red"/>
             </label>
             <label>{t('phone', language)}:
               <input name="phone" value={formData.phone || ''} onChange={handleChange} />
@@ -408,7 +419,11 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
         )}
 
         {confirmDialog && (
-          <ConfirmDialog title={confirmDialog.title} message={confirmDialog.message} onConfirm={confirmDialog.onConfirm} onCancel={confirmDialog.onCancel} />
+          <ConfirmDialog 
+            title={confirmDialog.title} 
+            message={confirmDialog.message} 
+            onConfirm={confirmDialog.onConfirm} 
+            onCancel={confirmDialog.onCancel} />
         )}
       </div>
     </div>

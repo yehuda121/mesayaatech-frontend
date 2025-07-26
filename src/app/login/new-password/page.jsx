@@ -4,6 +4,10 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Eye, EyeOff, RefreshCcw } from 'lucide-react';
+import sanitizeText from '@/app/utils/sanitizeText';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
+import { t } from '@/app/utils/loadTranslations';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function NewPasswordPage() {
   const [email, setEmail] = useState('');
@@ -13,6 +17,8 @@ export default function NewPasswordPage() {
   const [showPassword, setShowPassword] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [alert, setAlert] = useState(null);
+  const language = useLanguage();
 
   useEffect(() => {
     const emailFromUrl = searchParams.get('email');
@@ -39,11 +45,22 @@ export default function NewPasswordPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const cleanPassword = sanitizeText(newPassword, 100, 'default');
+    if (cleanPassword.wasModified) {
+      setNewPassword(cleanPassword.text);
+      setAlert({
+        type: 'warning',
+        message: t('fieldsSanitizedWarning', language)
+      });
+      return;
+    }
+
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/completeNewPassword`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, newPassword, session })
+        body: JSON.stringify({ email, newPassword: cleanPassword.text, session })
       });
 
       const data = await res.json();
@@ -99,6 +116,15 @@ export default function NewPasswordPage() {
         </button>
 
         {message && <p className="mt-4 text-center text-red-500">{message}</p>}
+
+        {alert && (
+          <AlertMessage
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert(null)}
+          />
+        )}
+
       </form>
     </div>
   );

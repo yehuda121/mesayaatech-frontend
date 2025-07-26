@@ -7,6 +7,8 @@ import { getLanguage, toggleLanguage } from "@/app/utils/language/language";
 import { t } from '@/app/utils/loadTranslations';
 import './login.css';
 import { Eye, EyeOff } from 'lucide-react';
+import sanitizeText from '@/app/utils/sanitizeText';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,6 +17,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [language, setLanguage] = useState(getLanguage());
+  const [alert, setAlert] = useState(null);
 
   useEffect(() => {
     // localStorage.clear();
@@ -30,6 +33,21 @@ export default function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    const sanitizedEmail = sanitizeText(email, 100, 'email');
+    const sanitizedPassword = sanitizeText(password, 100);
+
+    if (sanitizedEmail.wasModified || sanitizedPassword.wasModified) {
+      setAlert({
+        type: 'warning',
+        message: t('fieldsSanitizedWarning', language) 
+      });
+
+      setEmail(sanitizedEmail.text);
+      setPassword(sanitizedPassword.text);
+      return;
+    }
+
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/login`, {
         method: 'POST',
@@ -146,6 +164,14 @@ export default function LoginPage() {
         </form>
 
         {message && <p className="text-center text-red-500">{message}</p>}
+        {alert && (
+          <AlertMessage
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert(null)}
+          />
+        )}
+
       </div>
     </div>
   );

@@ -117,7 +117,6 @@ legend {
   overflow-x: hidden;
 }
 
-
 .ambassador-form-container {
   max-width: 800px;
   width: 95%;
@@ -184,4 +183,15 @@ legend {
   justify-content: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+}
+
+.required-star {
+  color: red;
+  font-size: 1.2em;
+  margin-inline: 4px;
+}
+
+.readonly-red {
+  color: red;
+  background-color: #fff0f0;
 }

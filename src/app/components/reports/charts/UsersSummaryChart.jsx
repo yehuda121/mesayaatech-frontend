@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { t } from '@/app/utils/loadTranslations';
 import { useLanguage } from "@/app/utils/language/useLanguage";
-import './charts.css';
+import './Charts.css';
 
 export default function UsersSummaryChart({ data }) {
   const language = useLanguage();

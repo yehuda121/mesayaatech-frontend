@@ -8,9 +8,10 @@ import Button from '@/app/components/Button/Button';
 import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import './ambassador.css';
 import { locations } from '@/app/components/Locations';
-import sanitizeText from '@/app/utils/sanitizeText';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import AccordionSection from '@/app/components/AccordionSection';
+import SanitizeAmbassadorForm from './SanitizeAmbassadorForm';
+import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 
 export default function EditAmbassadorForm({ userData, onSave , onClose, onDelete, role }) {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
   const [initialData, setInitialData] = useState(userData || {});
   const [alert, setAlert] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const language = useLanguage();
 
   useEffect(() => {
@@ -41,70 +43,32 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
     }
   };
 
-  const validateForm = () => {
-    const errors = [];
-    const emailPattern = /^[\w\.-]+@[\w\.-]+\.\w+$/;
-    const phonePattern = /^(05\d{8}|05\d{1}-\d{7})$/;
-    const idPattern = /^\d{9}$/;
-    const urlPattern = /^https?:\/\/[\w\.-]+\.\w+/;
-
-    const fullName = formData.fullName?.trim() || '';
-    const idNumber = formData.idNumber?.trim() || '';
-    const phone = formData.phone?.trim() || '';
-    const location = formData.location?.trim() || '';
-    const canShareJobs = formData.canShareJobs?.trim() || '';
-    const linkedin = formData.linkedin?.trim() || '';
-    const currentCompany = sanitizeText(formData.currentCompany || '', 200);
-    const position = sanitizeText(formData.position || '', 200);
-    const notes = sanitizeText(formData.notes || '', 500);
-    const aboutMe = sanitizeText(formData.aboutMe || '', 1000);
-
-    if (!fullName) errors.push(t('fullNameRequired', language));
-    else if (/[^א-תa-zA-Z\s]/.test(fullName)) errors.push(t('fullNameInvalid', language));
-    else if (fullName.length > 50) errors.push(t('fullNameTooLong', language));
-
-    if (!idPattern.test(idNumber)) errors.push(t('idNumberInvalid', language));
-
-    if (phone && !phonePattern.test(phone)) errors.push(t('phoneInvalid', language));
-
-    if (!location) errors.push(t('locationRequired', language));
-    else if (location.length > 60) errors.push(t('locationTooLong', language));
-
-    if (!canShareJobs) errors.push(t('canShareRequired', language));
-
-    if (linkedin && !urlPattern.test(linkedin)) errors.push(t('linkedinInvalid', language));
-    else if (linkedin.length > 200) errors.push(t('linkedinTooLong', language));
-
-    if (currentCompany === 'tooLong') errors.push(t('currentCompanyIsTooLong', language));
-    if (position === 'tooLong') errors.push(t('positionIsTooLong', language));
-    if (notes === 'tooLong') errors.push(t('notesIsTooLong', language));
-    if (aboutMe === 'tooLong') errors.push(t('aboutMeIsTooLong', language));
-
-    return errors;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const validationErrors = validateForm();
-    if (validationErrors.length > 0) {
-      setAlert({ message: validationErrors[0], type: 'error' });
+    const { errors, sanitized } = SanitizeAmbassadorForm({ formData, language, t });
+
+    if (errors.length > 0) {
+      setAlert({ message: errors[0], type: 'error' });
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      setFormData(prev => ({ ...prev, ...sanitized }));
       return;
     }
+
+    const updatedFormData = { ...formData, ...sanitized };
 
     setSaving(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-user-form`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(updatedFormData)
       });
       const result = await res.json();
       if (res.ok) {
         setAlert({ message: t('saveSuccess', language), type: 'success' });
-        setInitialData(formData);
-        sessionStorage.setItem('ambassadorFullName', formData.fullName);
+        setInitialData(updatedFormData);
+        sessionStorage.setItem('ambassadorFullName', updatedFormData.fullName);
         onSave(result);
       } else {
         setAlert({ message: result.error || t('saveError', language), type: 'error' });
@@ -126,9 +90,15 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
   };
 
   const handleDeleteClick = () => {
-    if (confirm(t('confirmDeleteUser', language))) {
-      onDelete(userData);
-    }
+    setShowConfirmDialog(true);
+  };
+  const confirmDelete = () => {
+    setShowConfirmDialog(false);
+    onDelete(userData);
+  };
+
+  const cancelDelete = () => {
+    setShowConfirmDialog(false);
   };
 
   const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
@@ -141,16 +111,16 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
 
         <form onSubmit={handleSubmit}>
           <AccordionSection titleKey={t('personalDetails', language)} initiallyOpen={true}>
-            <label>{t('fullName', language)}*:
+            <label>{t('fullName', language)}<span className="required-star">*</span>:
               <input name="fullName" value={formData.fullName || ''} onChange={handleChange} />
             </label>
 
-            <label>{t('email', language)}*:
-              <input name="idNumber" value={formData.email || ''} readOnly />
+            <label>{t('email', language)}<span className="required-star">*</span>:
+              <input name="idNumber" value={formData.email || ''} readOnly className="readonly-red"/>
             </label>
 
-            <label>{t('idNumber', language)}*:
-              <input name="email" value={formData.idNumber || ''} readOnly />
+            <label>{t('idNumber', language)}<span className="required-star">*</span>:
+              <input name="email" value={formData.idNumber || ''} readOnly className="readonly-red"/>
             </label>
 
             <label>{t('phone', language)}:
@@ -167,7 +137,7 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
               <input name="position" value={formData.position || ''} onChange={handleChange} />
             </label>
 
-            <label>{t('location', language)}*:
+            <label>{t('location', language)}<span className="required-star">*</span>:
               <select name="location" value={formData.location} onChange={handleChange}>
                 <option value="">{t('selectLocation', language)}</option>
                 {locations.map((region, regionIndex) => (
@@ -186,7 +156,7 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
               </select>
             </label>
 
-            <label>{t('canShareJobs', language)}*:
+            <label>{t('canShareJobs', language)}<span className="required-star">*</span>:
               <select name="canShareJobs" value={formData.canShareJobs || ''} onChange={handleChange}>
                 <option value="">{language === 'he' ? 'בחר' : 'Select'}</option>
                 <option value="כן">{language === 'he' ? 'כן' : 'Yes'}</option>
@@ -228,6 +198,16 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
         {alert && (
           <AlertMessage message={alert.message} type={alert.type} onClose={() => setAlert(null)} />
         )}
+
+        {showConfirmDialog && (
+          <ConfirmDialog
+            title={t('confirmDelete', language)}
+            message={t('confirmDeleteUser', language)}
+            onConfirm={confirmDelete}
+            onCancel={cancelDelete}
+          />
+        )}
+
       </div>
     </div>
   );

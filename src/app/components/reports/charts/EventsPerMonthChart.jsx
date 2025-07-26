@@ -8,10 +8,21 @@ import { useLanguage } from "@/app/utils/language/useLanguage";
 export default function EventsPerMonthChart({ data }) {
   const language = useLanguage();
 
-  const chartData = Object.entries(data).map(([month, count]) => ({
-    month,
-    count
-  }));
+  // const chartData = Object.entries(data).map(([month, count]) => ({
+  //   month,
+  //   count
+  // }));
+
+  const chartData = Object.entries(data)
+  .map(([month, count]) => {
+    const [mm, yyyy] = month.split('/');
+    return {
+      month,
+      count,
+      sortKey: new Date(`${yyyy}-${mm}-01`) 
+    };
+  })
+  .sort((a, b) => b.sortKey - a.sortKey); // sort from new to old
 
   const marginDirection = language === 'he' ? 'marginRight' : 'marginLeft';
 

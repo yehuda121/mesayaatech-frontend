@@ -6,6 +6,8 @@ import { t } from '@/app/utils/loadTranslations';
 import './ChangePassword.css';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import Button from '@/app/components/Button/Button';
+import sanitizeText from '@/app/utils/sanitizeText';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 
 export default function ChangePassword() {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -14,6 +16,7 @@ export default function ChangePassword() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const language = useLanguage();
+  const [alert, setAlert] = useState(null);
 
   const generateRandomPassword = () => {
     const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
@@ -32,6 +35,20 @@ export default function ChangePassword() {
     setMessage('');
     const accessToken = sessionStorage.getItem('accessToken');
 
+    const cleanCurrent = sanitizeText(currentPassword, 100);
+    const cleanNew = sanitizeText(newPassword, 100);
+
+    if (cleanCurrent.wasModified || cleanNew.wasModified) {
+      setCurrentPassword(cleanCurrent.text);
+      setNewPassword(cleanNew.text);
+      setAlert({
+        type: 'warning',
+        message: t('fieldsSanitizedWarning', language)
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/change-password`, {
         method: 'POST',
@@ -39,7 +56,7 @@ export default function ChangePassword() {
           'Content-Type': 'application/json',
           Authorization: accessToken
         },
-        body: JSON.stringify({ currentPassword, newPassword })
+        body: JSON.stringify({ currentPassword: cleanCurrent.text, newPassword: cleanNew.text })
       });
 
       const data = await res.json();
@@ -113,6 +130,14 @@ export default function ChangePassword() {
         </form>
 
         {message && <p className="CP-change-password-message">{message}</p>}
+
+        {alert && (
+          <AlertMessage
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert(null)}
+          />
+        )}
       </div>
     </div>
   );

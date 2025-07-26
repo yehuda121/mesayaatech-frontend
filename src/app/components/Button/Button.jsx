@@ -9,7 +9,9 @@ const Button = ({ children, text, icon ,className, color = "#002855", size = "md
   };
 
   return (
-    <button dir="auto"
+    <button 
+      dir="auto"
+      style={{ backgroundColor: color }}
       className={`btn-base ${sizeClasses[size]} ${className}`}
       onClick={onClick}
       {...props}
