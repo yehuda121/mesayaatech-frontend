@@ -10,19 +10,34 @@ import { Eye, CalendarPlus } from 'lucide-react';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import sanitizeText from '@/app/utils/sanitizeText';
 
-export default function ViewAllEvents({ idNumber, fullName, email }) {
+export default function ViewAllEvents({ idNumber: propIdNumber, fullName: propFullName, email: propEmail }) {
   const [filter, setFilter] = useState({ title: '', date: '' });
   const [events, setEvents] = useState([]);
   const [joinedEvents, setJoinedEvents] = useState({});
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const language = useLanguage();
+  const [userInfo, setUserInfo] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
+  const language = useLanguage();
+
+  // Load user info from props or sessionStorage
+  useEffect(() => {
+    const id = propIdNumber || sessionStorage.getItem('idNumber');
+    const name = propFullName || sessionStorage.getItem('fullName');
+    const mail = propEmail || sessionStorage.getItem('email');
+
+    if (id && name && mail) {
+      setUserInfo({ idNumber: id, fullName: name, email: mail });
+    }
+  }, [propIdNumber, propFullName, propEmail]);
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    if (userInfo?.idNumber) {
+      fetchEvents(userInfo.idNumber);
+    }
+  }, [userInfo]);
 
-  const fetchEvents = async () => {
+  // Fetch events and map joined status
+  const fetchEvents = async (idNumber) => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/import-events`, {
         method: 'GET',
@@ -50,8 +65,9 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
     }
   };
 
+  // Toggle join/unjoin for a given event
   const handleToggleJoin = async (eventId) => {
-    if (!idNumber || !fullName || !email) {
+    if (!userInfo?.idNumber || !userInfo?.fullName || !userInfo?.email) {
       setToastMessage({ message: t('missingUserDetails', language), type: 'error' });
       return;
     }
@@ -59,8 +75,16 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/toggle-join-event`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
-        body: JSON.stringify({ eventId, idNumber, fullName, email })
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+        },
+        body: JSON.stringify({
+          eventId,
+          idNumber: userInfo.idNumber,
+          fullName: userInfo.fullName,
+          email: userInfo.email
+        })
       });
 
       const data = await res.json();
@@ -160,7 +184,7 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
         <ViewEvent event={selectedEvent} onClose={() => setSelectedEvent(null)} />
       )}
 
-      {toastMessage  && (
+      {toastMessage && (
         <ToastMessage
           message={toastMessage.message}
           type={toastMessage.type}
