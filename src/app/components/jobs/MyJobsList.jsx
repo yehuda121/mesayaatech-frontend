@@ -22,9 +22,14 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
     const fetchJobs = async () => {
       try {
         const encodedPublisherId = encodeURIComponent(publisherId);
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE}/api/jobs-by-publisherID/by-publisher?publisherId=${encodedPublisherId}&idType=${userType}`
-        );
+        const url =
+          `${process.env.NEXT_PUBLIC_API_BASE}/api/jobs-by-publisherID/by-publisher?publisherId=${encodedPublisherId}&idType=${userType}`;
+        const res = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+          }
+        });
         const data = await res.json();
 
         if (Array.isArray(data)) {
@@ -68,7 +73,7 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-job`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ jobId, userId, userType })
       });
 

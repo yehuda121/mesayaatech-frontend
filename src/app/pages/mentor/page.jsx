@@ -55,7 +55,12 @@ export default function MentorHomePage() {
 
     const fetchUserForm = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=mentor&idNumber=${idNumber}`);
+        const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=mentor&idNumber=${idNumber}`;
+        const res = await fetch(url, {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+        });
+
         const data = await res.json();
         setUserData(data);
       } catch (err) {

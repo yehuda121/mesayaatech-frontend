@@ -31,7 +31,12 @@ export default function MyReservists({ onManageReservist }) {
     const fetchReservists = async () => {
       // console.log("mentorId: ", mentorId);
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-my-reservists?mentorId=${mentorId}`);
+        const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/get-my-reservists?mentorId=${mentorId}`;
+        const res = await fetch(url, {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+        });
+
         const data = await res.json();
         if (Array.isArray(data)) setReservists(data);
       } catch (err) {

@@ -22,7 +22,13 @@ export default function MyQuestions({ idNumber, fullName, onEdit  }) {
 
   const fetchMyQuestions = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-questions`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-questions`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+        }
+      });
+
       const data = await res.json();
       const mine = data.filter(q => q.createdBy?.trim() === fullName?.trim());
       setMyQuestions(mine);

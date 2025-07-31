@@ -36,7 +36,12 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
       if (!userData?.idNumber) return;
 
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobAlerts/get-subscribers?idNumber=${userData.idNumber}`);
+        const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/jobAlerts/get-subscribers?idNumber=${userData.idNumber}`;
+        const res = await fetch(url, {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+        });
+
         const result = await res.json();
 
         let jobEmailAlerts = false;
@@ -137,7 +142,7 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
       if (formData.notInterestedInMentor && mentorId) {
         const resDelete = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-progress`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
           body: JSON.stringify({ reservistId: userData.idNumber, mentorId: mentorId })
         });
         if (!resDelete.ok) {
@@ -150,7 +155,7 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-user-form`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify(updatedFormData)
       });
 
@@ -194,7 +199,7 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
       if (!NewEmailJobPrefs.jobEmailAlerts) {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobAlerts/delete-subscriber`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
           body: JSON.stringify({ idNumber: userData.idNumber })
         });
 
@@ -213,7 +218,7 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobAlerts/add-subscriber`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({
           idNumber: userData.idNumber,
           email: userData.email,

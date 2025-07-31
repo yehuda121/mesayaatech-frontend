@@ -50,7 +50,13 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchPendingUsers = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+          }
+        });
+
         const data = await res.json();
         if (Array.isArray(data)) {
           const filtered = data.filter(u => u.status === 'pending');

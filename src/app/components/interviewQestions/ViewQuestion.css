@@ -114,6 +114,14 @@
   color: red;
 }
 
+.VQ-answer-separator {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #ccc;
+  opacity: 0.6;
+}
+
+
 
 /* --- add new question */
 .add-question-modal-overlay {

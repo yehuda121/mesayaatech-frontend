@@ -60,7 +60,7 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber, onClose 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload-question`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ ...formData, idNumber }),
       });
 

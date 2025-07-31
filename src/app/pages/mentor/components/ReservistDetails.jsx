@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
-import { Contact } from 'lucide-react';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function ReservistDetailsModal({ reservist, onClose }) {

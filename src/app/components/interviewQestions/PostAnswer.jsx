@@ -40,7 +40,7 @@ export default function PostAnswer({ questionId, onSuccess, onClose }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/post-answer`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({
           questionId,
           idNumber,
@@ -80,7 +80,6 @@ export default function PostAnswer({ questionId, onSuccess, onClose }) {
   return (
     <div
       className="postAnswer-overlay"
-      onClick={handleOverlayClick}
       dir={language === 'he' ? 'rtl' : 'ltr'}
     >
       <div className="postAnswer-box" onClick={(e) => e.stopPropagation()}>

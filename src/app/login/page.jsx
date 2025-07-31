@@ -20,11 +20,6 @@ export default function LoginPage() {
   const [alert, setAlert] = useState(null);
 
   useEffect(() => {
-    // localStorage.clear();
-    sessionStorage.clear();
-  }, []);
-
-  useEffect(() => {
     setLanguage(getLanguage());
     const handleLanguageChange = () => setLanguage(getLanguage());
     window.addEventListener("languageChanged", handleLanguageChange);
@@ -51,7 +46,7 @@ export default function LoginPage() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/login`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ email, password })
       });
 

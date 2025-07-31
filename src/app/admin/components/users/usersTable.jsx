@@ -21,7 +21,13 @@ export default function UsersTable({ defaultStatusFilter = null }) {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+        }
+      });
+
       const data = await res.json();
       if (!Array.isArray(data)) {
         console.error(t('fetchErrorNotArray', language));
@@ -39,7 +45,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
       if (status === 'approved') {
         const createRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/approve-user`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
           body: JSON.stringify({
             email: user.email,
             name: user.fullName,
@@ -57,7 +63,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-user-status/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({
           fullName: user.fullName,
           idNumber: user.idNumber,
@@ -88,7 +94,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
       if (user.status === 'approved' && user.email) {
         const cognitoRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-cognito-user`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json' , 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`},
           body: JSON.stringify({ email: user.email })
         });
         if (!cognitoRes.ok) {
@@ -100,7 +106,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-user-form`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({
           userType: user.userType,
           idNumber: user.idNumber
@@ -151,7 +157,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-user-form`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify(updatedUser)
       });
 

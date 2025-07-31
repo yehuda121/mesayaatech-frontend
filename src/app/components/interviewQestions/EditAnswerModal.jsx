@@ -13,7 +13,7 @@ export default function EditAnswerModal({ answer, questionId, onClose, onSuccess
   const [toast, setToast] = useState(null);
   const language = useLanguage();
   const [submitting, setSubmitting] = useState(false);
-  const idNumber = typeof window !== 'undefined' ? localStorage.getItem('idNumber') : null;
+  const idNumber = typeof window !== 'undefined' ? localStorage.getItem('idNumber') : null;  
   const userType = typeof window !== 'undefined' ? localStorage.getItem('userType') : null;
 
   const handleSubmit = async () => {
@@ -33,7 +33,7 @@ export default function EditAnswerModal({ answer, questionId, onClose, onSuccess
       setSubmitting(true);
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-answer`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({
           questionId,
           answerId: answer.answerId,
@@ -50,7 +50,6 @@ export default function EditAnswerModal({ answer, questionId, onClose, onSuccess
             ...answer,
             text: newAnswer.trim(),
           });
-              
         }, 400);
       } else {
         const data = await res.json();
@@ -64,7 +63,7 @@ export default function EditAnswerModal({ answer, questionId, onClose, onSuccess
   };
 
   return (
-    <div className="postAnswer-overlay" onClick={(e) => e.target.classList.contains('postAnswer-overlay') && onClose()}>
+    <div className="postAnswer-overlay">
       <div className="postAnswer-box" onClick={(e) => e.stopPropagation()}>
         <button className="postAnswer-close" onClick={onClose}>×</button>
         <h2 className="postAnswer-title">{t('editAnswer', language)}</h2>

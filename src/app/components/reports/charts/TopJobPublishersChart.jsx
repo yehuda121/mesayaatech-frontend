@@ -27,7 +27,11 @@ export default function TopJobPublishersChart({ data }) {
           return { publisher: language === 'he' ? 'מנהל' : 'Admin', count: item.count };
         } else {
           try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=${userType}&idNumber=${idNumber}`);
+            const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=${userType}&idNumber=${idNumber}`;
+            const res = await fetch(url, {
+              method: 'GET',
+              headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+            });
             const userData = await res.json();
             return { publisher: userData.fullName || email, count: item.count };
           } catch (err) {

@@ -563,8 +563,9 @@
     "confirmPostWithSanitizedFields": "Some fields were sanitized for security. Do you want to proceed and publish the job with these changes?",
     "missingPostJobFields": "Please fill in the required fields marked with an asterisk.",
     "publisherName": "Publisher Name",
-    "jobCount": "Number of Jobs"
-
+    "jobCount": "Number of Jobs",
+    "stageAdvanced": "Stage Advanced",
+    "successUnjoin": "You been removed from the list successfully"
 
 
 

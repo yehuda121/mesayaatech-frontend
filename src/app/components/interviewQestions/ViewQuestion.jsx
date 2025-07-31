@@ -44,7 +44,7 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-answer`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({
           questionId: finalQuestionId,
           answerId,
@@ -103,7 +103,7 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
               <>
                 <h3 className="VQ-answers">{t('answers', language)}</h3>
                 <ul className="VQ-answer-list">
-                  {answers.map((ans) => {
+                  {answers.map((ans, index) => {
                     
                     const canEditOrDelete = userType === 'admin' ||
                       (idNumber && ans.answeredBy?.split('#')[1] === idNumber);
@@ -114,8 +114,8 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
                         <div className="VQ-answer-meta-row" dir={language === 'he' ? 'rtl' : 'ltr'}>
                           <span className="VQ-answer-meta-dot">• </span>
                           <span className="VQ-answer-meta-name" dir="auto">
-                            {ans.answeredName || t('unknownUser', language)}
-                          </span> - {ans.text}
+                            {ans.answeredName || t('unknownUser', language)}:
+                          </span> {ans.text}
 
                           {canEditOrDelete && (
                             <span className="VQ-answer-actions" style={{ marginInlineStart: '10px' }}>
@@ -136,6 +136,7 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
                             </span>
                           )}
                         </div>
+                        {index < answers.length - 1 && <div className="VQ-answer-separator"></div>}
                       </li>
                     );
                   })}

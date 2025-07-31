@@ -50,7 +50,7 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-user-form`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify(updatedFormData)
       });
       const result = await res.json();

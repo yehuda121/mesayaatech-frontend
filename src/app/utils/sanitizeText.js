@@ -15,8 +15,8 @@ function sanitizeText(text, maxLength, type = 'default') {
     return { text: '', tooLong: false, wasModified: false };
   }
 
-  const original = text;
-  let cleaned = text.trim();
+  const original = text.trim();
+  let cleaned = original;
 
   // Remove <script>...</script> tags
   cleaned = cleaned.replace(/<script.*?>.*?<\/script>/gi, '');
@@ -36,11 +36,12 @@ function sanitizeText(text, maxLength, type = 'default') {
   }
 
   // Remove special dangerous characters
-  cleaned = cleaned.replace(/[${}"]/g, '');
+  cleaned = cleaned.replace(/[${}]/g, '');
 
   const tooLong = cleaned.length > maxLength;
-  const finalText = tooLong ? cleaned.slice(0, maxLength) : cleaned;
-  const wasModified = finalText !== original;
+  const finalText = tooLong ? cleaned.slice(0, maxLength).trim() : cleaned;
+  // const wasModified = finalText !== original;
+  const wasModified = finalText.trim() !== original.trim();
 
   return {
     text: finalText,
@@ -66,10 +67,6 @@ function mongoSanitize(input) {
       }
     }
     return input;
-  }
-
-  if (typeof input === 'string') {
-    return input.replace(/^\$|\./g, '');
   }
 
   return input;

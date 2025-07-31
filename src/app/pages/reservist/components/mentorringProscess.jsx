@@ -35,11 +35,16 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
     try {
       await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/init-progress`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ mentorId: mentorIdNumber, reservistId })
       });
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/getMentorshipProgress?mentorId=${mentorIdNumber}&reservistId=${reservistId}`);
+      const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/getMentorshipProgress?mentorId=${mentorIdNumber}&reservistId=${reservistId}`;
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+      });
+
       const data = await res.json();
       if (res.ok) setProgressData(data);
       else throw new Error(data.error);

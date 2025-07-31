@@ -103,7 +103,7 @@ export default function EditJob({ job, onClose, onSave }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-job`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({
           jobId: finalData.jobId,
           updatedData: finalData,

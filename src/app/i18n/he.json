@@ -563,7 +563,8 @@
     "missingPostJobFields": "יש למלא את השדות עם כוכבית.",
     "specialtiesTooLong": "התמחות ארוך מידי",
     "publisherName": "שם מפרסם",
-    "jobCount": "כמות משרות"
-
+    "jobCount": "כמות משרות",
+    "stageAdvanced": "התקדמת לשלב הבא",
+    "successUnjoin": "הוסרת מהרשימה בהצלחה"
 
 }

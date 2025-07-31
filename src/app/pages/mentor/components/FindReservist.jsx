@@ -20,7 +20,12 @@ export default function FindReservist({ mentorId, onBack }) {
   useEffect(() => {
     const fetchReservists = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/match-reservists-to-mentor?mentorId=${mentorId}`);
+        const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/match-reservists-to-mentor?mentorId=${mentorId}`;
+        const res = await fetch(url, {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+        });
+
         const data = await res.json();
         // Filter out reservists who are not interested in a mentor
         const filteredData = data.filter(r => 
@@ -43,7 +48,7 @@ export default function FindReservist({ mentorId, onBack }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/assign-mentor`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ mentorId, reservistId }),
       });
 

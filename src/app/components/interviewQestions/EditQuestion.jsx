@@ -46,7 +46,7 @@ export default function EditQuestion({ question, onClose, onSave }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/update-question`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({
           questionId: question.questionId,
           ...formData
@@ -67,16 +67,9 @@ export default function EditQuestion({ question, onClose, onSave }) {
     }
   };
 
-  const handleOverlayClick = (e) => {
-    if (e.target.classList.contains('editQuestion-overlay')) {
-      onClose();
-    }
-  };
-
   return (
     <div
       className="editQuestion-overlay"
-      onClick={handleOverlayClick}
       dir={language === 'he' ? 'rtl' : 'ltr'}
     >
       <div className="editQuestion-box" onClick={(e) => e.stopPropagation()}>

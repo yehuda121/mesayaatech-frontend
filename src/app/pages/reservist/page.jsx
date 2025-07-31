@@ -48,9 +48,12 @@ export default function ReservistHomePage() {
 
     const fetchUserForm = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=${userType}&idNumber=${idNumber}`
-        );
+        const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=${userType}&idNumber=${idNumber}`;
+        const res = await fetch(url, {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+        });
+
         const data = await res.json();
         setUserData(data);
         setFullName(data.fullName);
@@ -59,9 +62,12 @@ export default function ReservistHomePage() {
           const mentorIdNumber = data.mentorId.split('#')[1]; 
           if (mentorIdNumber) {
             try {
-              const mentorRes = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=mentor&idNumber=${mentorIdNumber}`
-              );
+              const mentorUrl = `${process.env.NEXT_PUBLIC_API_BASE}/api/get-user-form?userType=mentor&idNumber=${mentorIdNumber}` ;
+              const mentorRes = await fetch(mentorUrl, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+              });
+
               const mentorData = await mentorRes.json();
               setMentorName(mentorData.fullName || '');
             } catch (err) {

@@ -15,7 +15,6 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
   const [events, setEvents] = useState([]);
   const [joinedEvents, setJoinedEvents] = useState({});
   const [selectedEvent, setSelectedEvent] = useState(null);
-  // const [toast, setToast] = useState(null);
   const language = useLanguage();
   const [toastMessage, setToastMessage] = useState(null);
 
@@ -25,7 +24,13 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/import-events`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/import-events`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+        }
+      });
+
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       const futureEvents = data.filter(event => new Date(event.date) >= new Date());
@@ -41,7 +46,7 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
       setJoinedEvents(joinedMap);
     } catch (err) {
       console.error('Failed to load events:', err);
-      setToast({ message: t('serverError', language), type: 'error' });
+      setToastMessage({ message: t('serverError', language), type: 'error' });
     }
   };
 
@@ -54,7 +59,7 @@ export default function ViewAllEvents({ idNumber, fullName, email }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/toggle-join-event`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ eventId, idNumber, fullName, email })
       });
 

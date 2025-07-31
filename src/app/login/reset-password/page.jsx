@@ -61,7 +61,7 @@ export default function ResetPassword() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/confirm-forgot-password`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ email, verificationCode, newPassword })
       });
 

@@ -25,7 +25,13 @@ export default function MentorshipsView() {
 
   const fetchMentorships = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/getAllProgress`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/getAllProgress`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+        }
+      });
+
       const data = await res.json();
       if (res.ok) {
         const enriched = data.map(item => ({

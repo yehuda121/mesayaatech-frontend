@@ -71,7 +71,7 @@ export default function QuestionsPage({ onAnswer }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/toggle-question-read`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ questionId, idNumber, fullName })
       });
 
@@ -95,7 +95,13 @@ export default function QuestionsPage({ onAnswer }) {
 
   const fetchQuestions = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-questions`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-questions`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+        }
+      });
+
       const data = await res.json();
   
       const formatted = data.map(q => ({
@@ -118,7 +124,7 @@ export default function QuestionsPage({ onAnswer }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/toggle-question-like`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ questionId, idNumber, fullName })
       });
 
@@ -171,7 +177,7 @@ export default function QuestionsPage({ onAnswer }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-question`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ questionId, idNumber, fullName })
       });
       if (res.ok) {

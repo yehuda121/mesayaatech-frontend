@@ -58,7 +58,11 @@ export default function ViewAllJobs() {
 
   const fetchJobs = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/import-jobs`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/import-jobs`, {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+      });
+
       if (!res.ok) throw new Error('Failed to fetch jobs');
       const data = await res.json();
       setJobs(data);
@@ -73,7 +77,7 @@ export default function ViewAllJobs() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-job`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ jobId, userId, userType })
       });
       if (res.ok) {

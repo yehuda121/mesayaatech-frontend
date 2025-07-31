@@ -54,7 +54,7 @@ export default function ChangePassword() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: accessToken
+          Authorization: `Bearer ${accessToken}`
         },
         body: JSON.stringify({ currentPassword: cleanCurrent.text, newPassword: cleanNew.text })
       });

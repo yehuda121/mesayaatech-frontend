@@ -58,7 +58,8 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
         const { text, wasModified } = sanitizeText(jobTextInput, 2500);
         if (wasModified) setToast({ message: t('textSanitizedWarning', language), type: 'warning' });
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/parse-job-text`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          method: 'POST', 
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
           body: JSON.stringify({ text })
         });
         const result = await res.json();
@@ -68,14 +69,17 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
         const formData = new FormData();
         formData.append('image', attachment);
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/extract-image-text`, {
-          method: 'POST', body: formData
+          method: 'POST', 
+          headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
+          body: formData
         });
         const result = await res.json();
         if (result?.text) {
           const { text, wasModified } = sanitizeText(result.text, 2500);
           if (wasModified) setToast({ message: t('textSanitizedWarning', language), type: 'warning' });
           const fillRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/parse-job-text`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
             body: JSON.stringify({ text })
           });
           const parsed = await fillRes.json();
@@ -115,7 +119,12 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobs`, { method: 'POST', body: formData });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/jobs`, { 
+        method: 'POST', 
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
+        body: formData 
+      });
+      
       if (res.ok) {
         const result = await res.json();
         setToast({ message: t('jobAddedSuccessfully', language), type: 'success' });

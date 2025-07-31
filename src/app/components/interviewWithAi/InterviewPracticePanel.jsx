@@ -29,7 +29,14 @@ export default function InterviewPracticePanel({ userId, email, language, role }
   }, [userId]);
 
   const fetchHistory = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/interview/fetch-questions-history?userId=` + userId);
+    const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/interview/fetch-questions-history?userId=` + userId;
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+      }
+    });
+
     const data = await res.json();
     if (res.ok) {
       setHistory(data.history || []);
@@ -46,7 +53,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/interview/getQuestion`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ userId, email, category, difficulty, language }),
       });
       const data = await res.json();
@@ -77,7 +84,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/interview/evaluateAnswer`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ userId, question, userAnswer, language, category, difficulty }),
       });
       const data = await res.json();

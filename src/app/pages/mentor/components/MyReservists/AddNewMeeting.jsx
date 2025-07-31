@@ -64,7 +64,7 @@ export default function AddNewMeeting({ mentorId, reservistId, onAdd, onClose })
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/add-meeting`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ mentorId, reservistId, meeting: sanitized })
       });
 

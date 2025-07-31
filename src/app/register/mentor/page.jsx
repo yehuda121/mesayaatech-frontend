@@ -23,7 +23,11 @@ export default function MentorRegisterForm() {
 
   const handleSubmit = async (formData) => {
     try {
-      const resUsers = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`);
+      const resUsers = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`, {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+      });
+
       const existingUsers = await resUsers.json();
 
       const emailExists = existingUsers.some(user => user.email === formData.email);
@@ -40,7 +44,7 @@ export default function MentorRegisterForm() {
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload-registration-form`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ ...formData, userType: 'mentor', status: 'pending' }),
       });
 

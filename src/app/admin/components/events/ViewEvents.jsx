@@ -28,7 +28,12 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
   const fetchEvents = async () => {
     try {
       const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/import-events${showPast ? '?includePast=true' : ''}`;
-      const res = await fetch(url);
+      const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+        }
+      });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setEvents(data);
@@ -41,7 +46,7 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-event`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ eventId: event.eventId })
       });
       if (res.ok) {
