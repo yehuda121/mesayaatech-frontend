@@ -1,8 +1,12 @@
-export const translatedJobFields = {
-  hiTech: { he: "הייטק", en: "Hi-Tech" },
-  finance: { he: "פיננסים", en: "Finance" },
-  logistics: { he: "לוגיסטיקה", en: "Logistics" },
-  marketing: { he: "שיווק", en: "Marketing" },
-  education: { he: "חינוך", en: "Education" },
-  other: { he: "אחר", en: "Other" }
+export const JobFields = {
+  hiTech: "Hi-Tech",
+  finance: "Finance",
+  logistics: "Logistics",
+  marketing: "Marketing",
+  education: "Education",
+  other: "Other"
 };
+
+/**
+ * "When a new field is added, a corresponding AI prompt (in the jason file) must be added in the backend to handle the new field."
+ */

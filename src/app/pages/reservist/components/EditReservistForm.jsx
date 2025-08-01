@@ -8,7 +8,7 @@ import Button from '@/app/components/Button/Button';
 import './personalDetails.css';
 import { locations } from '@/app/components/Locations';
 import AccordionSection from '@/app/components/AccordionSection';
-import { translatedJobFields } from '@/app/components/jobs/jobFields';
+import { JobFields  } from '@/app/components/jobs/jobFields';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import SanitizeForm from './SanitizeForm';
 
@@ -18,7 +18,7 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
   const [saving, setSaving] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState(null);
-  const jobFieldsArray = Object.keys(translatedJobFields);
+  const jobFieldsArray = Object.keys(JobFields );
   const language = useLanguage();
   const [initialEmailJobPrefs, setInitialEmailJobPrefs] = useState({
     jobEmailAlerts: false,
@@ -314,7 +314,7 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
                     checked={(formData.fields || []).includes(field)}
                     onChange={handleChange}
                   />
-                  {' '}{translatedJobFields[field][language]}
+                  {' '}{t(field, language)}
                 </label>
               ))}
             </fieldset>
@@ -380,7 +380,7 @@ export default function EditReservistForm({ userData, mentorId, onSave, onClose,
                             }));
                           }}
                         />
-                        {' '}{translatedJobFields[field][language]}
+                        {' '}{t(field, language)}
                       </label>
                     ))}
                   </fieldset>

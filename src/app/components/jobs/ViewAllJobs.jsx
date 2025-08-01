@@ -11,7 +11,7 @@ import './jobs.css';
 import './filters.css';
 import Button from '../Button/Button';
 import { FileSearch, Edit2, Trash2, X, PlusCircle } from 'lucide-react';
-import { translatedJobFields } from '@/app/components/jobs/jobFields';
+import { JobFields } from '@/app/components/jobs/jobFields';
 import ConfirmDialog from '../Notifications/ConfirmDialog';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import DraggableAddJobButton from '../DraggableButton/DraggableButton';
@@ -38,13 +38,11 @@ export default function ViewAllJobs() {
   const [jobToDelete, setJobToDelete] = useState(null);
   const language = useLanguage();
   const [addNewJobModel, setAddNewJobModel] = useState(false);
-
-  const categories = [
-    { value: '', labelHe: 'הכל', labelEn: 'All' },
-    ...Object.entries(translatedJobFields).map(([value, labelObj]) => ({
+  const fieldOptions = [
+    { value: '', label: t('all', language) },
+    ...Object.keys(JobFields).map(value => ({
       value,
-      labelHe: labelObj.he,
-      labelEn: labelObj.en
+      label: t(`${value}`, language)
     }))
   ];
 
@@ -70,6 +68,10 @@ export default function ViewAllJobs() {
       console.error('Failed to fetch jobs:', error);
       setToast({ message: t('serverError', language), type: 'error' });
     }
+  };
+
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
   };
 
   // Delete job API call
@@ -134,15 +136,24 @@ export default function ViewAllJobs() {
       const selectedExp = parseInt(filters.experience);
       filtered = filtered.filter(job => {
         const jobExp = job?.minExperience;
-        return (jobExp !== undefined && jobExp !== null) ? jobExp <= selectedExp : true;
+        return typeof jobExp === 'number' && jobExp <= selectedExp;
       });
     }
 
     if (filters.fromDate) {
-      filtered = filtered.filter(job => new Date(job?.createdAt) >= new Date(filters.fromDate));
+      filtered = filtered.filter(job => {
+        const jobDate = new Date(job?.postedAt);
+        const from = new Date(filters.fromDate);
+        return jobDate >= from;
+      });
     }
     if (filters.toDate) {
-      filtered = filtered.filter(job => new Date(job?.createdAt) <= new Date(filters.toDate));
+      filtered = filtered.filter(job => {
+        const jobDate = new Date(job?.postedAt);
+        const to = new Date(filters.toDate);
+        to.setHours(23, 59, 59, 999); // Include entire day
+        return jobDate <= to;
+      });
     }
 
     filtered.sort((a, b) => {
@@ -221,7 +232,8 @@ export default function ViewAllJobs() {
           <div className="job-card-content">
             <h3 className="font-bold text-lg">{job?.company || t('noCompany', language)}</h3>
             {job?.location && <p>{t('location', language)}: {job.location}</p>}
-            {job?.description && <p>{t('description', language)}: {job.description.slice(0, 100)}...</p>}
+            {job?.role && <p>{t('role', language)}: {job.role}</p>}
+            {job?.description && <p>{t('description', language)}: {job.description.slice(0, 40)}...</p>}
 
             <div className="mt-2 flex items-center gap-2">
               <button
@@ -277,6 +289,7 @@ export default function ViewAllJobs() {
             setJobs(prev => prev.map(j => j.jobId === updatedJob.jobId ? updatedJob : j));
             setEditingJob(null);
           }}
+          showToast={showToast}
         />
       )}
 
@@ -294,6 +307,7 @@ export default function ViewAllJobs() {
               setAddNewJobModel(false);
             }}
             onClose={() => setAddNewJobModel(false)}
+            showToast={showToast}
           />
         </div>
       )}
@@ -320,9 +334,9 @@ export default function ViewAllJobs() {
 
                 {field === 'field' ? (
                   <select name={field} value={filters[field]} onChange={handleFilterChange}>
-                    {categories.map((cat) => (
-                      <option key={cat.value} value={cat.value}>
-                        {language === 'he' ? cat.labelHe : cat.labelEn}
+                    {fieldOptions.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
                       </option>
                     ))}
                   </select>

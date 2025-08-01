@@ -1,10 +1,3 @@
-
-// export function getLanguage() {
-//   if (typeof window !== 'undefined') {
-//     return localStorage.getItem('language') || 'he';
-//   }
-//   return 'he'; 
-// }
 export function getLanguage() {
   if (typeof window !== 'undefined') {
     const lang = localStorage.getItem('language');
@@ -12,7 +5,6 @@ export function getLanguage() {
   }
   return 'he';
 }
-
 
 export function toggleLanguage() {
   if (typeof window !== 'undefined') {

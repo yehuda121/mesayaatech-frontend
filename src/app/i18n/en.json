@@ -491,9 +491,6 @@
     "passwordChangeSuccess": "Password updated successfully",
     "passwordChangeError": "Error updating password",
     "editPersonalDetails": "Edit Personal Details",
-
-
-
     "editPersonalInfoTitle": "Edit Personal Information",
     "editRegistrationFormTitle": "Edit Registration Form",
     "securitySettingsTitle": "Security & Notifications",
@@ -506,19 +503,7 @@
     "jobSubscribed": "You have been subscribed to job alerts",
     "jobUnsubscribed": "You have been unsubscribed from job alerts",
     "jobAlertMustSelectFields": "Please select at least one field to subscribe to job alerts",
-    "hiTech": "Hi-Tech",
-    "finance": "Finance",
-    "logistics": "Logistics",
-    "marketing": "Marketing",
-    "education": "Education",
-    "other": "Other",
     "management": "management",
-    "הייטק": "hiTech",
-    "פיננסים": "finance",
-    "לוגיסטיקה": "logistics",
-    "שיווק": "marketing",
-    "חינוך": "education",
-    "אחר": "other",
     "next": "Next",
     "selectOption": "Select an option",
     "fullNameIsTooLong": "Full name is too long (max 70 characters)",
@@ -530,7 +515,6 @@
     "myMentees": "My Mentees",
     "unknownStage": "Unknown Stage",
     "reservistFormExplenationForAdmin": "The checkbox reflects the reserve's choice.",
-    "selectField": "Select Field",
     "textTooLong": "The text is too long",
     "editAnswer": "Edit Answer",
     "answerUpdated": "Answer updated successfully",
@@ -565,8 +549,18 @@
     "publisherName": "Publisher Name",
     "jobCount": "Number of Jobs",
     "stageAdvanced": "Stage Advanced",
-    "successUnjoin": "You been removed from the list successfully"
-
+    "successUnjoin": "You been removed from the list successfully",
+    "selectField": "Select field",
+    "hiTech": "Hi-Tech",
+    "finance": "Finance",
+    "logistics": "Logistics",
+    "marketing": "Marketing",
+    "education": "Education",
+    "other": "Other",
+    "yes": "Yes",
+    "no": "No",
+    "maybe": "Maybe",
+    "select": "Select"
 
 
 

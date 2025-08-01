@@ -12,7 +12,7 @@ export default function ForgotPassword() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [language, setLanguage] = useState(getLanguage());
+  const [language, setLanguage] = useState(null);
 
   useEffect(() => {
     setLanguage(getLanguage());

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import Button from '@/app/components/Button/Button';
-import { translatedJobFields } from '@/app/components/jobs/jobFields';
+import { JobFields } from '@/app/components/jobs/jobFields';
 import './ambassador.css';
 import { locations } from '@/app/components/Locations';
 import { useLanguage } from "@/app/utils/language/useLanguage";
@@ -158,25 +158,37 @@ export default function EditAmbassadorForm({ userData, onSave , onClose, onDelet
 
             <label>{t('canShareJobs', language)}<span className="required-star">*</span>:
               <select name="canShareJobs" value={formData.canShareJobs || ''} onChange={handleChange}>
-                <option value="">{language === 'he' ? 'בחר' : 'Select'}</option>
-                <option value="כן">{language === 'he' ? 'כן' : 'Yes'}</option>
-                <option value="אולי">{language === 'he' ? 'אולי' : 'Maybe'}</option>
-                <option value="לא">{language === 'he' ? 'לא' : 'No'}</option>
+                <option value="">{t('select', language)}</option>
+                <option value="Yes">{t('yes', language)}</option>
+                <option value="No">{t('no', language)}</option>
+                <option value="Maybe">{t('maybe', language)}</option>
               </select>
             </label>
 
             <fieldset>
               <legend>{t('ambassadorJobFieldsTitle', language)}</legend>
-              {Object.keys(translatedJobFields).map((field) => (
-                <label key={field} className="register-checkbox-label" style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}>
+              {Object.keys(JobFields).map((field) => (
+                <label
+                  key={field}
+                  className="register-checkbox-label"
+                  style={{ flexDirection: language === 'he' ? 'row-reverse' : 'row' }}
+                >
                   <input
                     type="checkbox"
                     name="jobFields"
                     value={field}
                     checked={(formData.jobFields || []).includes(field)}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setFormData((prev) => ({
+                        ...prev,
+                        jobFields: checked
+                          ? Array.from(new Set([...(prev.jobFields || []), field]))
+                          : (prev.jobFields || []).filter((f) => f !== field),
+                      }));
+                    }}
                   />
-                  {translatedJobFields[field][language]}
+                  {t(field, language)}
                 </label>
               ))}
             </fieldset>

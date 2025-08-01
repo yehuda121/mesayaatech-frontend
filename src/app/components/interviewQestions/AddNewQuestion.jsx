@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import { translatedJobFields } from '@/app/components/jobs/jobFields';
+import { JobFields  } from '@/app/components/jobs/jobFields';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import Button from '@/app/components/Button/Button';
@@ -24,12 +24,11 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber, onClose 
     return <p style={{ color: 'red' }}>{t('MissingNameOrID', language)}</p>;
   }
 
-  const categories = [
-    { value: "", labelHe: "הכל", labelEn: "All" },
-    ...Object.entries(translatedJobFields).map(([value, labels]) => ({
+  const fieldOptions = [
+    { value: '', label: t('all', language) },
+    ...Object.keys(JobFields).map(value => ({
       value,
-      labelHe: labels.he,
-      labelEn: labels.en,
+      label: t(`${value}`, language)
     }))
   ];
 
@@ -99,9 +98,9 @@ export default function AddNewQuestion({ onSuccess, fullName, idNumber, onClose 
               value={formData.category}
               onChange={e => handleChange('category', e.target.value)}
             >
-              {categories.map(cat => (
-                <option key={cat.value} value={cat.value}>
-                  {language === 'he' ? cat.labelHe : cat.labelEn}
+              {fieldOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
                 </option>
               ))}
             </select>

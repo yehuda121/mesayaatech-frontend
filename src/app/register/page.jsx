@@ -8,7 +8,7 @@ import './registrationForm.css';
 import { getLanguage, toggleLanguage } from "../utils/language/language";
 
 export default function RegisterPage() {
-  const [language, setLanguage] = useState(getLanguage());
+  const [language, setLanguage] = useState(null);
   const router = useRouter();
   
   useEffect(() => {
@@ -18,6 +18,8 @@ export default function RegisterPage() {
     return () => window.removeEventListener("languageChanged", handleLanguageChange);
   }, []);
 
+  if (!language) return null;
+  
   return (
     <div className="register-page">
       <header className="register-header">

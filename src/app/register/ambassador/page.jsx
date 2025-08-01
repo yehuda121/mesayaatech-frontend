@@ -11,13 +11,14 @@ import '../registrationForm.css';
 
 export default function AmbassadorRegisterForm() {
   const router = useRouter();
-  const [language, setLanguage] = useState(getLanguage());
+  const [language, setLanguage] = useState(null);
   const [alert, setAlert] = useState(null);
 
   useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
+    setLanguage(getLanguage());
+    const handleLanguageChange = () => setLanguage(getLanguage());
+    window.addEventListener("languageChanged", handleLanguageChange);
+    return () => window.removeEventListener("languageChanged", handleLanguageChange);
   }, []);
 
   const showAlert = (msg, type) => {
@@ -57,6 +58,8 @@ export default function AmbassadorRegisterForm() {
       showAlert(t('ambassadorError', language), 'error');
     }
   };
+
+  if (!language) return null;
 
   return (
     <div className="register-page">

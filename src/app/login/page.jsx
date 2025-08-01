@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [message, setMessage] = useState('');
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [language, setLanguage] = useState(getLanguage());
+  const [language, setLanguage] = useState(null);
   const [alert, setAlert] = useState(null);
 
   useEffect(() => {

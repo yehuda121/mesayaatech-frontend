@@ -7,11 +7,11 @@ import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import Button from '@/app/components/Button/Button';
 import { Brain } from 'lucide-react';
 import { useLanguage } from '@/app/utils/language/useLanguage';
-import { translatedJobFields } from './jobFields';
+import { JobFields } from '@/app/components/jobs/jobFields';
 import sanitizeText from '@/app/utils/sanitizeText';
 import './jobs.css';
 
-export default function PostNewJobModal({ publisherId, publisherType, onSave, onClose }) {
+export default function PostNewJobModal({ publisherId, publisherType, onSave, onClose, showToast }) {
   const [jobData, setJobData] = useState({
     field: '', company: '', location: '', role: '', minExperience: '',
     description: '', requirements: '', advantages: '', submitEmail: '',
@@ -112,8 +112,15 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
   const submitSanitizedJob = async (finalJobData) => {
     const formData = new FormData();
     Object.entries(finalJobData).forEach(([key, value]) => {
-      formData.append(key, value instanceof File ? value : value || '');
+      if (key === 'minExperience') {
+        if (value !== '' && !isNaN(value)) {
+          formData.append(key, parseInt(value));
+        }
+      } else {
+        formData.append(key, value instanceof File ? value : value || '');
+      }
     });
+
     formData.append('publisherId', publisherId);
     formData.append('publisherType', publisherType);
 
@@ -127,7 +134,7 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
       
       if (res.ok) {
         const result = await res.json();
-        setToast({ message: t('jobAddedSuccessfully', language), type: 'success' });
+        showToast?.(t('jobAddedSuccessfully', language), 'success');
         setJobData({
           field: '', company: '', location: '', role: '', minExperience: '',
           description: '', requirements: '', advantages: '', submitEmail: '',
@@ -148,9 +155,12 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
 
   const closeModal = () => onClose();
 
-  const getTranslatedJobFieldOptions = () => [
+  const fieldOptions = [
     { value: '', label: t('selectField', language) },
-    ...Object.entries(translatedJobFields).map(([key, val]) => ({ value: key, label: val[language] }))
+    ...Object.keys(JobFields).map(value => ({
+      value,
+      label: t(`${value}`, language)
+    }))
   ];
 
   return (
@@ -185,8 +195,10 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
           <div className="postNewJob-full-width">
             <label>{t('field', language)}<span className="postNewJob-required"> *</span></label>
             <select value={jobData.field} onChange={(e) => handleChange('field', e.target.value)}>
-              {getTranslatedJobFieldOptions().map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              {fieldOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </select>
           </div>
@@ -202,7 +214,18 @@ export default function PostNewJobModal({ publisherId, publisherType, onSave, on
                 {['description', 'requirements', 'advantages'].includes(key) ? (
                   <textarea value={jobData[key]} onChange={(e) => handleChange(key, e.target.value)} />
                 ) : (
-                  <input type="text" value={jobData[key]} onChange={(e) => handleChange(key, e.target.value)} />
+                  <input
+                    type={key === 'minExperience' ? 'number' : 'text'}
+                    min={key === 'minExperience' ? 0 : undefined}
+                    step={key === 'minExperience' ? 1 : undefined}
+                    value={jobData[key]}
+                    onChange={(e) =>
+                      handleChange( key,
+                        key === 'minExperience' && e.target.value !== '' ? parseInt(e.target.value) : e.target.value
+                      )
+                    }
+                  />
+
                 )}
               </div>
             );

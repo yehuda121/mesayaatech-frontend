@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import { translatedJobFields } from '@/app/components/jobs/jobFields';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import './jobs.css';
 
@@ -28,10 +27,9 @@ export default function ViewJob({ job, onClose }) {
 
   const renderField = (fieldValue) => {
     if (!fieldValue) return null;
-    const fieldLabel = translatedJobFields[fieldValue]?.[language] || fieldValue;
     return (
       <p>
-        <strong className="viewJob-line-label">{t('field', language)}:</strong> {fieldLabel}
+        <strong className="viewJob-line-label">{t('field', language)}:</strong> {t(fieldValue, language)}
       </p>
     );
   };
@@ -51,7 +49,11 @@ export default function ViewJob({ job, onClose }) {
           {renderIfExists('role', job.role)}
           {renderIfExists('location', job.location)}
           {renderField(job.field)}
-          {renderIfExists('minExperience', job.minExperience)}
+          {job.minExperience !== undefined && job.minExperience !== null && (
+            <p>
+              <strong className="viewJob-line-label">{t('minExperience', language)}:</strong> {job.minExperience}
+            </p>
+          )}
           {renderIfExists('description', job.description)}
           {renderIfExists('requirements', job.requirements)}
           {renderIfExists('advantages', job.advantages)}

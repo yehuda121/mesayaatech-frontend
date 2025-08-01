@@ -7,7 +7,7 @@ import Button from '@/app/components/Button/Button';
 import { ThumbsUp, FileSearch, MessageCircleMore,  Book, BookOpen , Edit2,Trash2 } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 import { useLanguage } from "@/app/utils/language/useLanguage";
-import { translatedJobFields } from "@/app/components/jobs/jobFields";
+import { JobFields  } from "@/app/components/jobs/jobFields";
 import PostAnswer from './PostAnswer';
 import ConfirmDialog from '../Notifications/ConfirmDialog';
 import EditQuestion from './EditQuestion';
@@ -36,12 +36,11 @@ export default function QuestionsPage({ onAnswer }) {
   const [questionToEdit, setQuestionToEdit] = useState(null); 
   const [showAddQuestion, setShowAddQuestion] = useState(false);
 
-  const categories = [
-    { value: "", labelHe: "הכל", labelEn: "All" },
-    ...Object.entries(translatedJobFields).map(([value, labels]) => ({
+  const fieldOptions = [
+    { value: '', label: t('all', language) },
+    ...Object.keys(JobFields).map(value => ({
       value,
-      labelHe: labels.he,
-      labelEn: labels.en,
+      label: t(`${value}`, language)
     }))
   ];
 
@@ -230,9 +229,9 @@ export default function QuestionsPage({ onAnswer }) {
         onChange={(e) => setFilteredCategory(e.target.value)}
         className="filter-input compact-filter"
       >
-        {categories.map(cat => (
-          <option key={cat.value} value={cat.value}>
-            {language === 'he' ? cat.labelHe : cat.labelEn}
+        {fieldOptions.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
           </option>
         ))}
       </select>

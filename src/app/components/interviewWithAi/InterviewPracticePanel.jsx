@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { translatedJobFields } from '@/app/components/jobs/jobFields';
+import { JobFields } from '@/app/components/jobs/jobFields';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import Button from '@/app/components/Button/Button';
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
@@ -13,6 +13,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
   const [view, setView] = useState("history");
   const [question, setQuestion] = useState(null);
   const [category, setCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [userAnswer, setUserAnswer] = useState("");
   const [evaluation, setEvaluation] = useState(null);
@@ -49,6 +50,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
       setAlert({ type: "warning", message: t("interviewMissingFields", language) });
       return;
     }
+
     setIsLoadingQuestion(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/interview/getQuestion`, {
@@ -85,7 +87,7 @@ export default function InterviewPracticePanel({ userId, email, language, role }
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/interview/evaluateAnswer`, {
         method: "POST",
         headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
-        body: JSON.stringify({ userId, question, userAnswer, language, category, difficulty }),
+        body: JSON.stringify({ userId, question, userAnswer, language, category: selectedCategory, difficulty }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -99,6 +101,13 @@ export default function InterviewPracticePanel({ userId, email, language, role }
     }
     setIsLoadingEvaluation(false);
   };
+  const fieldOptions = [
+    { value: '', label: t('selectField', language) },
+    ...Object.keys(JobFields).map(value => ({
+      value,
+      label: t(`${value}`, language)
+    }))
+  ];
 
   const avgScore =
     history.length > 0 ? Math.round((history.reduce((sum, q) => sum + (q.score || 0), 0) / history.length) * 100) / 100 : null;
@@ -110,13 +119,12 @@ export default function InterviewPracticePanel({ userId, email, language, role }
       <div className="IPP-selectGroup">
         <select
           value={category}
-          onChange={e => setCategory(e.target.value)}
+          onChange={e => {setCategory(e.target.value); setSelectedCategory(e.target.value);}}
           className="IPP-select"
         >
-          <option value="">{t("interviewSelectCategory", language)}</option>
-          {Object.entries(translatedJobFields).map(([hebrewKey, translations]) => (
-            <option key={hebrewKey} value={translations.en}>
-              {translations[language]}
+          {fieldOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
             </option>
           ))}
         </select>

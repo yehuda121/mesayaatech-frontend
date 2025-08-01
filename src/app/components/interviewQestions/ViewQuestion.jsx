@@ -92,7 +92,7 @@ export default function ViewQuestion({ question, onClose, onUpdate  }) {
         <div className="VQ-content">
           <div className="VQ-question-info">
             <p><strong>{t('question', language)}:</strong> {displayData.text}</p>
-            <p><strong>{t('category', language)}:</strong> {displayData.category}</p>
+            <p><strong>{t('field', language)}:</strong> {t(displayData.category, language)}</p>
             <p><strong>{t('createdAt', language)}:</strong> {displayData.createdAt}</p>
             <p><strong>{t('createdBy', language)}:</strong> {displayData.createdBy}</p>
             <p><strong>{t('likes', language)}:</strong> {displayData.likes}</p>

@@ -95,6 +95,8 @@ export default function ReportsDashboard() {
         router.push('../../admin');
     }
 
+    if (!language) return null;
+    
     return (
         <div className="reports-container">
             <SideBar navItems={navItems} />

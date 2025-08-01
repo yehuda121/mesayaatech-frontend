@@ -153,7 +153,9 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
             <h3 className="font-bold text-lg">{job.company || t('noCompany', language)}</h3>
             {job.role && <p><strong>{t('role', language)}:</strong> {job.role}</p>}
             {job.location && <p><strong>{t('location', language)}:</strong> {job.location}</p>}
-            {job.minExperience && <p><strong>{t('minExperience', language)}:</strong> {job.minExperience}</p>}
+            {job.minExperience !== undefined && job.minExperience !== null && (
+              <p><strong>{t('minExperience', language)}:</strong> {job.minExperience}</p>
+            )}
             {job.requirements && <p><strong>{t('requirements', language)}:</strong> {job.requirements}</p>}
             {job.advantages && <p><strong>{t('advantages', language)}:</strong> {job.advantages}</p>}
             {job.description && <p className="job-description">{job.description}</p>}

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import { useLanguage } from "@/app/utils/language/useLanguage";
-import { translatedJobFields } from "@/app/components/jobs/jobFields";
+import { JobFields  } from "@/app/components/jobs/jobFields";
 import Button from '@/app/components/Button/Button';
 import sanitizeText from '@/app/utils/sanitizeText';
 import './ViewQuestion.css';
@@ -16,14 +16,14 @@ export default function EditQuestion({ question, onClose, onSave }) {
   });
   const [toast, setToast] = useState(null);
   const language = useLanguage();
-  const categories = [
-    { value: "", labelHe: "הכל", labelEn: "All" },
-    ...Object.entries(translatedJobFields).map(([value, labels]) => ({
+  const fieldOptions = [
+    { value: '', label: t('all', language) },
+    ...Object.keys(JobFields).map(value => ({
       value,
-      labelHe: labels.he,
-      labelEn: labels.en,
+      label: t(`${value}`, language)
     }))
   ];
+
 
   const handleChange = (key, value) => {
     setFormData(prev => ({ ...prev, [key]: value }));
@@ -82,9 +82,9 @@ export default function EditQuestion({ question, onClose, onSave }) {
               value={formData.category}
               onChange={e => handleChange('category', e.target.value)}
             >
-              {categories.map(cat => (
-                <option key={cat.value} value={cat.value}>
-                  {language === 'he' ? cat.labelHe : cat.labelEn}
+              {fieldOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
                 </option>
               ))}
             </select>

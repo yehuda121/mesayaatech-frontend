@@ -136,6 +136,8 @@ export default function AdminPage() {
     router.push('../pages/reports');
   }
 
+  if (!language) return null;
+  
   return (
     <div>
       <SideBar navItems={navItems} />

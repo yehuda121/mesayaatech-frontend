@@ -2,7 +2,7 @@
 
 import { t } from '@/app/utils/loadTranslations';
 import { locations } from '@/app/components/Locations';
-import { translatedJobFields } from '@/app/components/jobs/jobFields';
+import { JobFields } from '@/app/components/jobs/jobFields';
 
 export default function Step2({ data, onChange, onNext, onBack, language, userType }) {
   const locationOptions = locations.flatMap((region) =>
@@ -12,9 +12,9 @@ export default function Step2({ data, onChange, onNext, onBack, language, userTy
     }))
   );
 
-  const fieldOptions = Object.entries(translatedJobFields).map(([value, labels]) => ({
-    value: labels[language],
-    label: labels[language],
+  const fieldOptions = Object.keys(JobFields).map(value => ({
+    value,
+    label: t(value, language)
   }));
 
   return (
@@ -23,7 +23,9 @@ export default function Step2({ data, onChange, onNext, onBack, language, userTy
       {userType === 'reservist' && (
         <>
           <div className="form-group">
-            <label htmlFor="armyRole">{t('armyRole', language)}<span className="required-star">*</span></label>
+            <label htmlFor="armyRole">
+              {t('armyRole', language)}<span className="required-star">*</span>
+            </label>
             <input
               id="armyRole"
               type="text"
@@ -33,32 +35,27 @@ export default function Step2({ data, onChange, onNext, onBack, language, userTy
           </div>
 
           <div className="form-group">
-            <label 
-              className="checkbox-group-title">
+            <label className="checkbox-group-title">
               {t('professionalFieldsSelect', language)}
               <span className="required-star">*</span>
             </label>
-            <div className='checkbox-list' dir={language === 'he' ? 'rtl' : 'ltr'}>
-              {fieldOptions.map((opt) => {
-                const label = opt.label.trim();
-                return (
-                  <div key={label} className="checkbox-row">
-                    <input
-                      type="checkbox"
-                      value={label}
-                      checked={(data.fields || []).includes(label)}
-                      onChange={(e) => {
-                        const cleaned = label.normalize("NFKC").replace(/[\u200E-\u202E]/g, '').trim();
-                        const updated = e.target.checked
-                          ? [...(data.fields || []), cleaned]
-                          : (data.fields || []).filter((v) => v !== cleaned);
-                        onChange('fields', updated);
-                      }}
-                    />
-                    {label}
-                  </div>
-                );
-              })}
+            <div className="checkbox-list" dir={language === 'he' ? 'rtl' : 'ltr'}>
+              {fieldOptions.map((opt) => (
+                <div key={opt.value} className="checkbox-row">
+                  <input
+                    type="checkbox"
+                    value={opt.value}
+                    checked={(data.fields || []).includes(opt.value)}
+                    onChange={(e) => {
+                      const updated = e.target.checked
+                        ? [...(data.fields || []), opt.value]
+                        : (data.fields || []).filter((v) => v !== opt.value);
+                      onChange('fields', updated);
+                    }}
+                  />
+                  <label>{opt.label}</label>
+                </div>
+              ))}
             </div>
           </div>
         </>
@@ -68,42 +65,36 @@ export default function Step2({ data, onChange, onNext, onBack, language, userTy
       {userType === 'mentor' && (
         <div className="form-group">
           <label className="checkbox-group-title">
-            {t('mainProfession', language)}
-            <span className="required-star">*</span>
+            {t('mainProfession', language)}<span className="required-star">*</span>
           </label>
-
-          <div className='checkbox-list' dir={language === 'he' ? 'rtl' : 'ltr'}>
-            {fieldOptions.map((opt) => {
-              const label = opt.label.trim();
-              return (
-                <div key={label} className="checkbox-row">
-                  <input
-                    type="checkbox"
-                    value={label}
-                    checked={(data.specialties || []).includes(label)}
-                    onChange={(e) => {
-                      const cleaned = label.normalize("NFKC").replace(/[\u200E-\u202E]/g, '').trim();
-                      const updated = e.target.checked
-                        ? [...(data.specialties || []), cleaned]
-                        : (data.specialties || []).filter((v) => v !== cleaned);
-                      onChange('specialties', updated);
-                    }}
-                  />
-                  <label>{label}</label>
-                </div>
-              );
-            })}
+          <div className="checkbox-list" dir={language === 'he' ? 'rtl' : 'ltr'}>
+            {fieldOptions.map((opt) => (
+              <div key={opt.value} className="checkbox-row">
+                <input
+                  type="checkbox"
+                  value={opt.value}
+                  checked={(data.specialties || []).includes(opt.value)}
+                  onChange={(e) => {
+                    const updated = e.target.checked
+                      ? [...(data.specialties || []), opt.value]
+                      : (data.specialties || []).filter((v) => v !== opt.value);
+                    onChange('specialties', updated);
+                  }}
+                />
+                <label>{opt.label}</label>
+              </div>
+            ))}
           </div>
         </div>
       )}
-
-
 
       {/* AMBASSADOR */}
       {userType === 'ambassador' && (
         <>
           <div className="form-group">
-            <label htmlFor="currentCompany">{t('currentCompany', language)}<span className="required-star">*</span></label>
+            <label htmlFor="currentCompany">
+              {t('currentCompany', language)}<span className="required-star">*</span>
+            </label>
             <input
               id="currentCompany"
               type="text"
@@ -113,7 +104,9 @@ export default function Step2({ data, onChange, onNext, onBack, language, userTy
           </div>
 
           <div className="form-group">
-            <label htmlFor="position">{t('position', language)}<span className="required-star">*</span></label>
+            <label htmlFor="position">
+              {t('position', language)}<span className="required-star">*</span>
+            </label>
             <input
               id="position"
               type="text"
@@ -123,7 +116,9 @@ export default function Step2({ data, onChange, onNext, onBack, language, userTy
           </div>
 
           <div className="form-group">
-            <label htmlFor="canShareJobs">{t('canShareJobs', language)}<span className="required-star">*</span></label>
+            <label htmlFor="canShareJobs">
+              {t('canShareJobs', language)}<span className="required-star">*</span>
+            </label>
             <select
               id="canShareJobs"
               value={data.canShareJobs || ''}
@@ -138,30 +133,25 @@ export default function Step2({ data, onChange, onNext, onBack, language, userTy
 
           <div className="form-group">
             <label className="checkbox-group-title">
-              {t('ambassadorJobFieldsTitle', language)}
-              <span className="required-star">*</span>
+              {t('ambassadorJobFieldsTitle', language)}<span className="required-star">*</span>
             </label>
-            <div className='checkbox-list' dir={language === 'he' ? 'rtl' : 'ltr'}>
-              {fieldOptions.map((opt) => {
-                const label = opt.label.trim();
-                return (
-                  <div key={label} className="checkbox-row">
-                    <input
-                      type="checkbox"
-                      value={label}
-                      checked={(data.jobFields || []).includes(label)}
-                      onChange={(e) => {
-                        const cleaned = label.normalize("NFKC").replace(/[\u200E-\u202E]/g, '').trim();
-                        const updated = e.target.checked
-                          ? [...(data.jobFields || []), cleaned]
-                          : (data.jobFields || []).filter((v) => v !== cleaned);
-                        onChange('jobFields', updated);
-                      }}
-                    />
-                    {label}
-                  </div>
-                );
-              })}
+            <div className="checkbox-list" dir={language === 'he' ? 'rtl' : 'ltr'}>
+              {fieldOptions.map((opt) => (
+                <div key={opt.value} className="checkbox-row">
+                  <input
+                    type="checkbox"
+                    value={opt.value}
+                    checked={(data.jobFields || []).includes(opt.value)}
+                    onChange={(e) => {
+                      const updated = e.target.checked
+                        ? [...(data.jobFields || []), opt.value]
+                        : (data.jobFields || []).filter((v) => v !== opt.value);
+                      onChange('jobFields', updated);
+                    }}
+                  />
+                  <label>{opt.label}</label>
+                </div>
+              ))}
             </div>
           </div>
         </>
@@ -169,7 +159,9 @@ export default function Step2({ data, onChange, onNext, onBack, language, userTy
 
       {/* LOCATION - COMMON */}
       <div className="form-group">
-        <label htmlFor="location">{t('location', language)}<span className="required-star">*</span></label>
+        <label htmlFor="location">
+          {t('location', language)}<span className="required-star">*</span>
+        </label>
         <select
           id="location"
           value={data.location}
@@ -187,7 +179,9 @@ export default function Step2({ data, onChange, onNext, onBack, language, userTy
       {/* EXPERIENCE - COMMON */}
       {userType !== 'ambassador' && (
         <div className="form-group">
-          <label htmlFor="experience">{t('experience', language)}<span className="required-star">*</span></label>
+          <label htmlFor="experience">
+            {t('experience', language)}<span className="required-star">*</span>
+          </label>
           <textarea
             id="experience"
             value={data.experience}

@@ -12,13 +12,14 @@ import MultiStepForm from '@/app/components/MultiStepForm/MultiStepForm';
 
 export default function MentorRegisterForm() {
   const router = useRouter();
-  const [language, setLanguage] = useState(getLanguage());
+  const [language, setLanguage] = useState(null);
   const [alert, setAlert] = useState(null);
 
   useEffect(() => {
-    const handleLangChange = () => setLanguage(getLanguage());
-    window.addEventListener('languageChanged', handleLangChange);
-    return () => window.removeEventListener('languageChanged', handleLangChange);
+    setLanguage(getLanguage());
+    const handleLanguageChange = () => setLanguage(getLanguage());
+    window.addEventListener("languageChanged", handleLanguageChange);
+    return () => window.removeEventListener("languageChanged", handleLanguageChange);
   }, []);
 
   const handleSubmit = async (formData) => {
@@ -66,6 +67,8 @@ export default function MentorRegisterForm() {
     setAlert({ message: msg, type });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  if (!language) return null;
 
   return (
     <div className="register-page">

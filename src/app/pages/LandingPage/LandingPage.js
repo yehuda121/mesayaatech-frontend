@@ -8,15 +8,19 @@ import "./LandingPage.css";
 
 export default function LandingPage() {
   const router = useRouter();
-  const [language, setLanguage] = useState(getLanguage());
+  const [language, setLanguage] = useState(null);
 
   useEffect(() => {
-    setLanguage(getLanguage());
+    const lang = getLanguage();
+    setLanguage(lang);
+
     const handleLanguageChange = () => setLanguage(getLanguage());
     window.addEventListener("languageChanged", handleLanguageChange);
     return () => window.removeEventListener("languageChanged", handleLanguageChange);
   }, []);
 
+  if (!language) return null;
+  
   return (
     <div dir={language === 'he' ? 'rtl' : 'ltr'}>
       <header className="landing-header">

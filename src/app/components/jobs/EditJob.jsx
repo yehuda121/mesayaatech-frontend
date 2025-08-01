@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
-import { translatedJobFields } from '@/app/components/jobs/jobFields';
+import { JobFields } from '@/app/components/jobs/jobFields';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import Button from '@/app/components/Button/Button';
 import sanitizeText from '@/app/utils/sanitizeText';
 import './jobs.css';
 
-export default function EditJob({ job, onClose, onSave }) {
+export default function EditJob({ job, onClose, onSave, showToast }) {
   const [formData, setFormData] = useState(job || {});
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState(null);
@@ -68,6 +68,12 @@ export default function EditJob({ job, onClose, onSave }) {
         console.log("sanetized: ", key);
       }
     }
+    // Handle minExperience separately
+    if (data.minExperience !== '' && !isNaN(data.minExperience)) {
+      sanitized.minExperience = parseInt(data.minExperience);
+    } else {
+      delete sanitized.minExperience;
+    }
     return { sanitized, modified };
   };
 
@@ -112,7 +118,8 @@ export default function EditJob({ job, onClose, onSave }) {
         })
       });
       if (res.ok) {
-        setToast({ message: t('jobUpdatedSuccess', language), type: 'success' });
+        // setToast({ message: t('jobUpdatedSuccess', language), type: 'success' });
+        showToast?.(t('jobUpdatedSuccess', language), 'success');
         onSave(finalData);
       } else {
         const err = await res.json();
@@ -127,10 +134,10 @@ export default function EditJob({ job, onClose, onSave }) {
   };
 
   const fieldOptions = [
-    { value: '', label: language === 'he' ? 'בחר תחום' : 'Select field' },
-    ...Object.keys(translatedJobFields).map(value => ({
+    { value: '', label: t('selectField', language) },
+    ...Object.keys(JobFields).map(value => ({
       value,
-      label: language === 'he' ? translatedJobFields[value].he : translatedJobFields[value].en
+      label: t(`${value}`, language)
     }))
   ];
 
@@ -168,7 +175,11 @@ export default function EditJob({ job, onClose, onSave }) {
             </select>
           </label>
           <label>{t('location', language)}<input value={formData.location || ''} onChange={e => handleChange('location', e.target.value)} /></label>
-          <label>{t('minExperience', language)}<input type="number" min="0" step="1" value={formData.minExperience || ''} onChange={e => handleChange('minExperience', e.target.value)} /></label>
+          <label>{t('minExperience', language)}  
+            <input type="number" min="0" step="1" value={formData.minExperience !== undefined && formData.minExperience !== null ? formData.minExperience : ''}
+              onChange={e => handleChange('minExperience', e.target.value)}
+            />
+          </label>
           <label>{t('description', language)}<textarea value={formData.description || ''} onChange={e => handleChange('description', e.target.value)} /></label>
           <label>{t('requirements', language)}<textarea value={formData.requirements || ''} onChange={e => handleChange('requirements', e.target.value)} /></label>
           <label>{t('advantages', language)}<textarea value={formData.advantages || ''} onChange={e => handleChange('advantages', e.target.value)} /></label>
