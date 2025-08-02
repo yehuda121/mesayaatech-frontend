@@ -113,6 +113,8 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-4" autoComplete="on">
           <input
             type="email"
+            id="email"
+            name="email"
             value={email}
             placeholder={t('email', language)}
             onChange={(e) => setEmail(e.target.value)}
@@ -124,6 +126,8 @@ export default function LoginPage() {
           <div className="relative" dir={language === 'he' ? 'rtl' : 'ltr'}>
             <input
               type={showPassword ? 'text' : 'password'}
+              id="password"
+              name="password"
               value={password}
               placeholder={t('password', language)}
               onChange={(e) => setPassword(e.target.value)}
