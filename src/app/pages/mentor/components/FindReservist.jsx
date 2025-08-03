@@ -66,7 +66,7 @@ export default function FindReservist({ mentorId, onBack }) {
   const renderCard = (r) => (
     <div key={r.idNumber} className="reservist-card">
       <h3 className="text-lg font-bold text-blue-700 mb-2">{r.fullName}</h3>
-      <p><strong>{t('fields', language)}:</strong> {r.fields?.join(', ')}</p>
+      <p><strong>{t('fields', language)}:</strong>{' '}{r.fields?.map(f => t(f, language)).join(', ')}</p>
       <p><strong>{t('location', language)}:</strong> {r.location}</p>
       {r.aboutMe && (
         <p><strong>{t('aboutMe', language)}:</strong> {r.aboutMe}</p>

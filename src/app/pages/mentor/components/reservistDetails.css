@@ -1,0 +1,27 @@
+.reservistDetails-modal-overlay {
+  position: fixed;
+  top: 90px;
+  right: 250px;
+  left: auto;
+  width: calc(100vw - 250px);
+  max-height: calc(100vh - 90px);
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  padding: 1rem;
+  z-index: 9999;
+
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .reservistDetails-modal-overlay {
+    right: 0;
+    width: 100vw;
+    padding: 1rem 0.5rem;
+  }
+}

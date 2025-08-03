@@ -41,7 +41,7 @@
     "fetchErrorNotArray": "השרת לא החזיר מערך תקין",
     "fetchUsersError": "שגיאה בשליפת משתמשים",
     "cognitoCreateError": "שגיאה ביצירת משתמש ב־Cognito",
-    "emailSendFail": "שליחת האימייל נכשלה – ודא שכתובת הדוא\"ל תקינה",
+    "emailSendFail": "שליחת האימייל נכשלה, ודא שכתובת הדוא\"ל תקינה",
     "dynamoStatusError": "שגיאה בעדכון סטטוס ב־DynamoDB",
     "statusGeneralError": "שגיאה כללית במהלך שינוי סטטוס",
     "generalStatusError": "אירעה שגיאה בעת שינוי הסטטוס",
@@ -541,6 +541,8 @@
     "yes": "כן",
     "no": "לא",
     "maybe": "אולי",
-    "select": "בחר"
+    "select": "בחר",
+    "invalidEmail": "כתובת המייל אינה תקינה",
+    "invalidPassword": "הסיסמה שגויה"
 
 }

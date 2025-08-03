@@ -3,6 +3,7 @@
 import { t } from '@/app/utils/loadTranslations';
 import GenericForm from '@/app/components/GenericForm/GenericForm';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import './reservistDetails.css';
 
 export default function ReservistDetailsModal({ reservist, onClose }) {
   const language = useLanguage();
@@ -26,7 +27,7 @@ export default function ReservistDetailsModal({ reservist, onClose }) {
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="reservistDetails-modal-overlay">
       <GenericForm
         titleKey="reservistDetails"
         fields={[]}
@@ -34,7 +35,7 @@ export default function ReservistDetailsModal({ reservist, onClose }) {
         onChange={() => {}}
         onCloseIcon={onClose}
       >
-        <div className="modal-body text-start space-y-2">
+        <div className="text-start space-y-2">
           <p className='font-bold text-center'>{t('Contact', language)}</p>
           {renderLine('fullName', reservist.fullName)}
           {renderLine('idNumber', reservist.idNumber)}
@@ -44,7 +45,7 @@ export default function ReservistDetailsModal({ reservist, onClose }) {
           <p className='font-bold text-center'>{t('aboutMe', language)}</p>
           {renderLine('aboutMe', reservist.aboutMe)}
           {renderLine('armyRole', reservist.armyRole)}    
-          {renderLine('fields', reservist.fields?.join(', '))}
+          {renderLine('fields', reservist.fields?.map(f => t(f, language)).join(', '))}
           {renderLine('experience', reservist.experience)}
           {renderLine('linkedin', reservist.linkedin, true)}
           {renderLine('notes', reservist.notes)}

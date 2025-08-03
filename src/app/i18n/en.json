@@ -538,7 +538,9 @@
     "yes": "Yes",
     "no": "No",
     "maybe": "Maybe",
-    "select": "Select"
+    "select": "Select",
+    "invalidEmail": "כתובת המייל אינה תקינה",
+    "invalidPassword": "הסיסמה שגויה"
 
 
 

@@ -6,6 +6,7 @@ import EditReservistForm from '@/app/pages/reservist/components/EditReservistFor
 import EditMentorForm from '@/app/pages/mentor/components/mentorRegistrationForm/EditMentorForm';
 import EditAmbassadorForm from '@/app/pages/ambassador/EditAmbassadorForm';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 
 export default function UsersTable({ defaultStatusFilter = null }) {
   const [users, setUsers] = useState([]);
@@ -14,6 +15,7 @@ export default function UsersTable({ defaultStatusFilter = null }) {
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const language = useLanguage();
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -30,13 +32,14 @@ export default function UsersTable({ defaultStatusFilter = null }) {
 
       const data = await res.json();
       if (!Array.isArray(data)) {
-        console.error(t('fetchErrorNotArray', language));
+        setToast({ message: t('fetchErrorNotArray', language), type: 'error' });
         setUsers([]);
         return;
       }
       setUsers(data);
     } catch (err) {
-      console.error(t('fetchUsersError', language), err);
+      // console.error(t('fetchUsersError', language), err);
+      setToast({ message: t('fetchUsersError', language), type: 'error' });
     }
   };
 
@@ -55,8 +58,8 @@ export default function UsersTable({ defaultStatusFilter = null }) {
         });
         if (!createRes.ok) {
           const errorText = await createRes.text();
-          console.error(t('cognitoCreateError', language), errorText);
-          alert(t('emailSendFail', language));
+          // console.error(t('cognitoCreateError', language), errorText);
+          setToast({ message: t('emailSendFail', language), type: 'error' });
           return;
         }
       }
@@ -72,7 +75,8 @@ export default function UsersTable({ defaultStatusFilter = null }) {
         })
       });
       if (!res.ok) {
-        console.error(t('dynamoStatusError', language), await res.text());
+        // console.error(t('dynamoStatusError', language), await res.text());
+        setToast({ message: t('dynamoStatusError', language), type: 'error' });
         return;
       }
 
@@ -84,8 +88,8 @@ export default function UsersTable({ defaultStatusFilter = null }) {
         )
       );
     } catch (err) {
-      console.error(t('statusGeneralError', language), err);
-      alert(t('generalStatusError', language));
+      // console.error(t('statusGeneralError', language), err);
+      setToast({ message: t('generalStatusError', language), type: 'error' });
     }
   };
 
@@ -99,8 +103,8 @@ export default function UsersTable({ defaultStatusFilter = null }) {
         });
         if (!cognitoRes.ok) {
           const text = await cognitoRes.text();
-          console.error(t('cognitoDeleteError', language), text);
-          alert(t('cognitoDeleteError', language));
+          // console.error(t('cognitoDeleteError', language), text);
+          setToast({ message: t('cognitoDeleteError', language), type: 'error' });
         }
       }
 
@@ -114,17 +118,17 @@ export default function UsersTable({ defaultStatusFilter = null }) {
       });
       if (!res.ok) {
         const text = await res.text();
-        console.error(t('dynamoDeleteError', language), text);
-        alert(t('dynamoDeleteError', language));
+        // console.error(t('dynamoDeleteError', language), text);
+        setToast({ message: t('dynamoDeleteError', language), type: 'error' });
         return;
       }
 
       setUsers(prev => prev.filter(u => !(u.idNumber === user.idNumber && u.userType === user.userType)));
       setSelectedForm(null);
-      alert(t('userDeletedSuccessfully', language));
+      setToast({ message: t('userDeletedSuccessfully', language), type: 'success' });
     } catch (err) {
-      console.error(t('generalDeleteError', language), err);
-      alert(t('generalDeleteError', language));
+      // console.error(t('generalDeleteError', language), err);
+      setToast({ message: t('generalDeleteError', language), type: 'error' });
     }
   };
 
@@ -162,7 +166,8 @@ export default function UsersTable({ defaultStatusFilter = null }) {
       });
 
       if (!res.ok) {
-        console.error(t('updateUserError', language), await res.text());
+        // console.error(t('updateUserError', language), await res.text());
+        setToast({ message: t('updateUserError', language), type: 'error' });
         return;
       }
 
@@ -175,7 +180,8 @@ export default function UsersTable({ defaultStatusFilter = null }) {
       );
       setSelectedForm(null);
     } catch (err) {
-      console.error(t('updateUserError', language), err);
+      // console.error(t('updateUserError', language), err);
+      setToast({ message: t('updateUserError', language), type: 'error' });
     }
   };
 
@@ -297,6 +303,14 @@ export default function UsersTable({ defaultStatusFilter = null }) {
               role={'admin'}
             />
           </div>
+        )}
+
+        {toast && (
+          <AlertMessage
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
         )}
         
       </div>

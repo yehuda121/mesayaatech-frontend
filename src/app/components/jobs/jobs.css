@@ -2,8 +2,8 @@
 /* postNewJob */
 .postNewJob-modal-overlay {
   position: fixed;
-  top: 0;
-  right: 0;
+  top: 90px;
+  right: 250px;
   bottom: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.4);
@@ -12,8 +12,10 @@
   justify-content: center;
   align-items: flex-start;
   padding: 30px;
-  margin-right: 250px;
-  margin-top: 90px;
+
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-x: auto;
 }
 
 .postNewJob-modal-container {
@@ -32,6 +34,7 @@
 @media (max-width: 768px) {
   .postNewJob-modal-overlay {
     margin-right: 0;
+    right: 0;
   }
 }
 
@@ -70,6 +73,9 @@
 
 .postNewJob-auto-fill-box input[type="file"] {
   margin-bottom: 16px;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-x: auto;
 }
 
 .postNewJob-job-form-grid {
@@ -81,6 +87,9 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-x: auto;
 }
 
 .postNewJob-full-width {

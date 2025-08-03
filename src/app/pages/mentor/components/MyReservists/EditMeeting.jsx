@@ -15,16 +15,19 @@ export default function EditMeeting({ meeting, index, mentorId, reservistId, onS
     topics: meeting?.topics || '',
     tasks: meeting?.tasks || '',
     futurTasks: meeting?.futurTasks || '',
-    note: meeting?.note || ''
+    note: meeting?.note || '',
+    stage: meeting?.stage || 1
   });
-
   const [isSaving, setIsSaving] = useState(false);
   const [alert, setAlert] = useState(null);
   const language = useLanguage();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'stage' ? Number(value) : value
+    }));
   };
 
   // Apply sanitization to relevant fields
@@ -85,6 +88,14 @@ export default function EditMeeting({ meeting, index, mentorId, reservistId, onS
     }
   };
 
+  const progressStages = [
+    t('stage1', language),
+    t('stage2', language),
+    t('stage3', language),
+    t('stage4', language),
+    t('stage5', language)
+  ];
+
   if (!meeting) return <div>{t('meetingNotFound', language)}</div>;
 
   return (
@@ -94,6 +105,22 @@ export default function EditMeeting({ meeting, index, mentorId, reservistId, onS
         <h2 className="ANM-title">{t('editMeetingTitle', language)}</h2>
 
         <div className="ANM-grid">
+          <label className="ANM-label">
+            {t('progressStage', language)} <span style={{ color: 'red' }}>*</span>
+            <input
+              type="number"
+              name="stage"
+              min="1"
+              max="5"
+              value={formData.stage}
+              onChange={handleChange}
+              className="ANM-input"
+            />
+            <div style={{ fontSize: '0.85rem', marginTop: '4px', color: '#444' }}>
+              {progressStages[formData.stage - 1] || t('unknownStage', language)}
+            </div>
+          </label>
+
           <label className="ANM-label">
             {t('meetingDate', language)} <span style={{ color: 'red' }}>*</span>
             <input type="date" name="date" value={formData.date} onChange={handleChange} className="ANM-input" />

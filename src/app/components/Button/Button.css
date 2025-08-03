@@ -8,6 +8,9 @@
   background-color: #002855;
   cursor: pointer;
   /* text-align: start; */
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-x: auto;
 }
 
 .btn-base:hover {

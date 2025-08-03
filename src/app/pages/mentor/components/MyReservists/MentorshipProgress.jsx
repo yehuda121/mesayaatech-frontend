@@ -161,6 +161,13 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
             emptyTextKey="noMeetingsYet"
             renderCard={(m) => (
             <div>
+              <p>
+                <strong>{t('progressStage', language)}:</strong>{' '}
+                {Number.isInteger(m.stage) && m.stage >= 1 && m.stage <= progressStages.length
+                  ? progressStages[m.stage - 1]
+                  : t('unknownStage', language)}
+              </p>
+
               <p><strong>{t('meetingDate', language)}:</strong> {m.date}</p>
               <p><strong>{t('meetingMode', language)}:</strong> {m.mode}</p>
               <p><strong>{t('meetingTopics', language)}:</strong> {m.topics}</p>
@@ -187,6 +194,7 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
           <AddNewMeeting
             mentorId={mentorId}
             reservistId={reservistId}
+            currentStage={progressData?.progressStage}
             onAdd={() => {
               fetchProgress();
               setShowModal(false);

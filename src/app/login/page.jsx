@@ -85,7 +85,16 @@ export default function LoginPage() {
 
         setMessage(t('loginSuccess', language));
       } else {
-        setMessage(t('loginError', language) + ': ' + (data.message || t('loginFailed', language)));
+        let userMessage;
+        if (data?.message?.toLowerCase().includes('email')) {
+          userMessage = t('invalidEmail', language);
+        } else if (data?.message?.toLowerCase().includes('password')) {
+          userMessage = t('invalidPassword', language);
+        } else {
+          userMessage = t('loginFailed', language);
+        }
+        console.error('Login error:', data?.message);
+        setMessage(`${t('loginError', language)}: ${userMessage}`);
       }
     } catch (err) {
       console.error(err);

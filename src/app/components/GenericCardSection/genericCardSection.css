@@ -1,6 +1,6 @@
 /* Container & Title */
 .card-section-container {
-  max-width: 1200px;
+  /* max-width: 1200px; */
   margin: 0 auto;
   padding: 2rem;
   display: flex;
@@ -8,6 +8,10 @@
   gap: 1.5rem;
   background-color: #f0f0f0;
   border-radius: 20px;
+
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-x: hidden;
 }
 
 .card-section-title {
@@ -112,7 +116,11 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   text-align: start;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-x: auto;
 }
+
 @media (max-width: 768px) {
   .card-section-grid {
     grid-template-columns: 1fr; 

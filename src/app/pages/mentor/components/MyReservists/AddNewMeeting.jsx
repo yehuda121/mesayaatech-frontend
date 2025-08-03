@@ -8,22 +8,27 @@ import sanitizeText from '@/app/utils/sanitizeText';
 import './AddNewMeeting.css';
 import Button from '@/app/components/Button/Button';
 
-export default function AddNewMeeting({ mentorId, reservistId, onAdd, onClose }) {
+export default function AddNewMeeting({ mentorId, reservistId, currentStage, onAdd, onClose }) {
   const [formData, setFormData] = useState({
     date: '',
     mode: '',
     topics: '',
     tasks: '',
     futurTasks: '',
-    note: ''
+    note: '',
+    stage: currentStage || 1
   });
   const [alert, setAlert] = useState(null);
   const language = useLanguage();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'stage' ? Number(value) : value
+    }));
   };
+
 
   // Apply sanitization to relevant fields
   const sanitizeFields = (data) => {
@@ -65,7 +70,7 @@ export default function AddNewMeeting({ mentorId, reservistId, onAdd, onClose })
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/add-meeting`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
-        body: JSON.stringify({ mentorId, reservistId, meeting: sanitized })
+        body: JSON.stringify({ mentorId, reservistId, meeting: { ...sanitized, stage: formData.stage }})
       });
 
       if (res.ok) {
@@ -80,6 +85,14 @@ export default function AddNewMeeting({ mentorId, reservistId, onAdd, onClose })
     }
   };
 
+  const progressStages = [
+    t('stage1', language),
+    t('stage2', language),
+    t('stage3', language),
+    t('stage4', language),
+    t('stage5', language)
+  ];
+
   return (
     <div className="ANM-wrapper" dir={language === 'he' ? 'rtl' : 'ltr'}>
       <div className="ANM-form-box">
@@ -87,6 +100,22 @@ export default function AddNewMeeting({ mentorId, reservistId, onAdd, onClose })
         <h2 className="ANM-title">{t('addMeeting', language)}</h2>
 
         <div className="ANM-grid">
+          <label className="ANM-label">
+            {t('progressStage', language)} <span style={{ color: 'red' }}>*</span>
+            <input
+              type="number"
+              name="stage"
+              min="1"
+              max="5"
+              value={formData.stage}
+              onChange={handleChange}
+              className="ANM-input"
+            />
+            <div style={{ fontSize: '0.85rem', marginTop: '4px', color: '#444' }}>
+              {progressStages[formData.stage - 1] || t('unknownStage', language)}
+            </div>
+          </label>
+
           <label className="ANM-label">
             {t('meetingDate', language)}<span style={{ color: 'red' }}>*</span>
             <input type="date" name="date" value={formData.date} onChange={handleChange} className="ANM-input" />
