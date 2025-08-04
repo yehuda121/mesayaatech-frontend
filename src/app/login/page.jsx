@@ -86,10 +86,8 @@ export default function LoginPage() {
         setMessage(t('loginSuccess', language));
       } else {
         let userMessage;
-        if (data?.message?.toLowerCase().includes('email')) {
-          userMessage = t('invalidEmail', language);
-        } else if (data?.message?.toLowerCase().includes('password')) {
-          userMessage = t('invalidPassword', language);
+        if (data?.message?.toLowerCase().includes('email') || data?.message?.toLowerCase().includes('password')) {
+          userMessage = t('invalidEmailOrPassword', language);
         } else {
           userMessage = t('loginFailed', language);
         }

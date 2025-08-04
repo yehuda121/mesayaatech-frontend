@@ -145,18 +145,9 @@ export default function AdminPage() {
         <main className="admin-main">
           {view === '' && (
             <>
-              {loadingPending ? (
-                <p className='adminHomePageTitle'>{t('loading', language)}</p>
-              ) : pendingUsers.length > 0 ? (
-                <UsersTable users={pendingUsers} />
+              {loadingPending ? (<p className='adminHomePageTitle'>{t('loading', language)}</p>
               ) : (
-                <>
-                  <p className='adminHomePageTitle'>{t('noPendingUsers', language)}</p>
-                  <div className='CreateEventClass'>
-                    <CreateEvent />
-                  </div>
-                </>
-              )}
+              <UsersTable users={pendingUsers} /> )}
             </>
           )}
 

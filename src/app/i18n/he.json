@@ -542,7 +542,14 @@
     "no": "לא",
     "maybe": "אולי",
     "select": "בחר",
-    "invalidEmail": "כתובת המייל אינה תקינה",
-    "invalidPassword": "הסיסמה שגויה"
+    "invalidEmailOrPassword": "כתובת המייל או הסיסמה אינם תקינים",
+    "passwordTooShort": "הסיסמה קצרה מדי",
+    "passwordMissingUppercase": "הסיסמה חייבת לכלול אות גדולה",
+    "passwordMissingLowercase": "הסיסמה חייבת לכלול אות קטנה",
+    "passwordMissingNumber": "הסיסמה חייבת לכלול מספר",
+    "InvalidPassword": "הסיסמה לא תקינה"
+
+
+
 
 }

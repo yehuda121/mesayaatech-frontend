@@ -26,13 +26,13 @@ export default function ChangePassword() {
     }
     password += 'Aa!1';
     setNewPassword(password);
-    console.log('Generated new random password:', password);
+    // console.log('Generated new random password:', password);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage('');
+    setAlert(null);
     const accessToken = sessionStorage.getItem('accessToken');
 
     const cleanCurrent = sanitizeText(currentPassword, 100);
@@ -41,10 +41,7 @@ export default function ChangePassword() {
     if (cleanCurrent.wasModified || cleanNew.wasModified) {
       setCurrentPassword(cleanCurrent.text);
       setNewPassword(cleanNew.text);
-      setAlert({
-        type: 'warning',
-        message: t('fieldsSanitizedWarning', language)
-      });
+      setAlert({ type: 'warning', message: t('fieldsSanitizedWarning', language) });
       setLoading(false);
       return;
     }
@@ -61,15 +58,28 @@ export default function ChangePassword() {
 
       const data = await res.json();
       if (res.ok) {
-        setMessage(t('passwordChangeSuccess', language));
+        setAlert({ type: 'success', message: t('passwordChangeSuccess', language) });
         setCurrentPassword('');
         setNewPassword('');
       } else {
-        setMessage(t('passwordChangeError', language) + ': ' + (data.message || t('generalError', language)));
+        let ErrorMessage = t('passwordChangeError', language);
+        if (data.message?.includes('Password not long enough')) {
+          ErrorMessage = t('passwordTooShort', language);
+        } else if (data.message?.includes('must include uppercase')) {
+          ErrorMessage = t('passwordMissingUppercase', language);
+        } else if (data.message?.includes('must include lowercase')) {
+          ErrorMessage = t('passwordMissingLowercase', language);
+        } else if (data.message?.includes('must include number')) {
+          ErrorMessage = t('passwordMissingNumber', language);
+        } else if (data.message) {
+          ErrorMessage = t('InvalidPassword', language);
+        }
+        console.error(data.message);
+        setAlert({ type: 'error', message: ErrorMessage });
       }
     } catch (err) {
       console.error(err);
-      setMessage(t('generalError', language));
+      setAlert({ type: 'error', message: t('generalError', language) });
     } finally {
       setLoading(false);
     }
@@ -128,8 +138,6 @@ export default function ChangePassword() {
             </Button>
           </div>
         </form>
-
-        {message && <p className="CP-change-password-message">{message}</p>}
 
         {alert && (
           <AlertMessage
