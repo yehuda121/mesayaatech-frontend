@@ -7,6 +7,7 @@ import { t } from '@/app/utils/loadTranslations';
 import { normalizeLocation } from '@/app/utils/normalizeLocation';
 import { locations } from '@/app/components/Locations';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import './Charts.css';
 
 export default function LocationsSummaryChart({ data }) {
   const language = useLanguage();
@@ -42,9 +43,7 @@ export default function LocationsSummaryChart({ data }) {
   };
 
   return (
-    <div style={{ textAlign: 'start', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '50px', marginTop: '30px' }}
-        dir={language === 'he' ? 'rtl' : 'ltr'}>
-
+    <div className="locations-summary-container" dir={language === 'he' ? 'rtl' : 'ltr'}>
         <div>
             <table style={{ borderCollapse: 'collapse', fontSize: '1.1rem' }}>
             <thead>

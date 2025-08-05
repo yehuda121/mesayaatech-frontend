@@ -10,6 +10,8 @@
   padding: 2rem;
   width: calc(100% - 220px);
   margin-top: 60px;
+  min-width: 360px;
+  overflow-x: auto;
 }
 
 .ambassador-main-view {
@@ -54,6 +56,9 @@
   padding: 2rem;
   background-color: #f9f9f9;
   border-radius: 8px;
+
+  min-width: 360px;
+  overflow-x: auto;
 }
 
 .form-title {
@@ -115,6 +120,8 @@ legend {
   flex-direction: column;
   background-blend-mode: lighten;
   overflow-x: hidden;
+  min-width: 360px;
+  overflow-x: auto;
 }
 
 .ambassador-form-container {

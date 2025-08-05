@@ -100,6 +100,11 @@ export default function ViewAllEvents({ idNumber: propIdNumber, fullName: propFu
     }
   };
 
+  function truncateText(text, maxLength = 30) {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '…' : text;
+  }
+
   const filteredEvents = events.filter((e) =>
     e.title.includes(filter.title) && (!filter.date || e.date === filter.date)
   );
@@ -137,9 +142,10 @@ export default function ViewAllEvents({ idNumber: propIdNumber, fullName: propFu
         data={filteredEvents}
         renderCard={(event) => (
           <>
-            <div className="event-title">{event.title}</div>
+            <div className="event-title">{truncateText(event.title)}</div>
             <div>{event.date} {event.time}</div>
-            <div className="event-location">{event.location}</div>
+            <div className="event-location">{truncateText(event.location)}</div>
+
             <div className="mt-2 flex items-center gap-3">
               {joinedEvents[event.eventId] ? (
                 <button

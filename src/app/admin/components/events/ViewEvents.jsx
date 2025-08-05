@@ -11,15 +11,18 @@ import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import sanitizeText from '@/app/utils/sanitizeText';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
+import DraggableAddButton from '@/app/components/DraggableButton/DraggableButton';
+import CreateEvent from './CreateEvent';
 
-export default function ViewEvents({ events, setEvents, handleNavigation }) {
+export default function ViewEvents() {
   const [filter, setFilter] = useState({ title: '', date: '' });
   const [showPast, setShowPast] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
-  const [jobToDelete, setJobToDelete] = useState(null);
+  const [eventToDelete, setEventToDelete] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
-
+  const [showCreateEventModal, setShowCreateEventModal] = useState(false);
   const language = useLanguage();
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     fetchEvents();
@@ -51,27 +54,24 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
       });
       if (res.ok) {
         setEvents(prev => prev.filter(e => e.eventId !== event.eventId));
-        setJobToDelete(null);
+        setEventToDelete(null);
       }
     } catch (err) {
       console.error('Error deleteing event:', err);
     }
   };
 
-  const filteredEvents = events.filter((e) =>
-    e.title.includes(filter.title) && (!filter.date || e.date === filter.date)
-  );
+  const filteredEvents = events.filter((e) => {
+    const isPast = new Date(e.date) < new Date(); 
+    const titleMatch = e.title.includes(filter.title);
+    const dateMatch = !filter.date || e.date === filter.date;
+
+    return (showPast ? isPast : !isPast) && titleMatch && dateMatch;
+  });
+
 
   return (
     <>
-      <div className='mb-3'>
-        <Button
-          text={t('createEvent', language)}
-          onClick={() => {
-            handleNavigation('create-event')
-          }}
-        />
-      </div>
       <GenericCardSection
         titleKey="viewEvents"
         filters={[
@@ -90,7 +90,6 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
               }
               setFilter({ ...filter, title: result.text });
             }}
-            // onChange={(e) => setFilter({ ...filter, title: e.target.value })}
             className="card-filter flexible"
           />,
           <input
@@ -102,7 +101,6 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
           />,
           <Button
             key="toggle"
-            // className="card-filter button-filter"
             size="sm"
             onClick={() => setShowPast(!showPast)}
           >
@@ -130,7 +128,7 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
               <button title={t('editevent', language)} onClick={(e) => { e.stopPropagation(); setEditingEvent(event); }}>
                 <Edit2 size={18}/>
               </button>
-              <button title={t('deleteEvent', language)} onClick={(e) => { e.stopPropagation(); setJobToDelete(event); }}>
+              <button title={t('deleteEvent', language)} onClick={(e) => { e.stopPropagation(); setEventToDelete(event); }}>
                 <Trash2 size={18} />
               </button>
             </div>
@@ -141,12 +139,21 @@ export default function ViewEvents({ events, setEvents, handleNavigation }) {
         emptyTextKey="noEventsFound"
       />
 
-      {jobToDelete && (
+      <DraggableAddButton
+        title={t('createEventTitle', language)}
+        onClick={() => setShowCreateEventModal(true)}
+      />
+
+      {showCreateEventModal && (
+        <CreateEvent onClose={() => setShowCreateEventModal(false)} />
+      )}
+
+      {eventToDelete && (
         <ConfirmDialog
           title={t('confirmDelete', language)}
           message={t('confirmDeleteEvent', language)}
-          onConfirm={() => handleDelete(jobToDelete)}
-          onCancel={() => setJobToDelete(null)}
+          onConfirm={() => handleDelete(eventToDelete)}
+          onCancel={() => setEventToDelete(null)}
         />
       )}
 

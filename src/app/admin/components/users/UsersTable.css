@@ -1,0 +1,134 @@
+/* === UsersTable.jsx === */
+.table-style {
+  width: 100%;
+  background-color: #ffffff; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+.table-style th,
+.table-style td {
+  padding: 0.85rem 1.25rem;
+  text-align: right;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table-style th {
+  background-color: #f0f4f8;
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.table-style td {
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+.table-style tr:hover {
+  background-color: #f9fafb;
+}
+
+.users-table-container {
+  direction: rtl;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #f8fafc;
+  padding: 1.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.users-table-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 450px;
+}
+@media (max-width: 768px){
+  .users-table-container{
+    width:100%;
+  }
+}
+
+.users-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+}
+
+.users-filters input[type="text"],
+.users-filters select {
+  padding: 0.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.users-filters input[type="text"] {
+  flex: 1 1 48%;
+}
+
+.users-filters select {
+  flex: 1 1 23%;
+}
+
+@media (max-width: 768px) {
+  .users-filters input[type="text"],
+  .users-filters select {
+    flex: 1 1 100%;
+  }
+}
+
+.users-button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.375rem;
+  color: white;
+  transition: background-color 0.2s ease;
+  margin-left: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.users-button.approve {
+  background-color: #22c55e;
+}
+
+.users-button.approve:hover {
+  background-color: #16a34a;
+}
+
+.users-button.deny {
+  background-color: #ef4444;
+}
+
+.users-button.deny:hover {
+  background-color: #dc2626;
+}
+
+.users-button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.users-buttons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.CreateEventClass{
+  margin-top: -70px;
+}
+

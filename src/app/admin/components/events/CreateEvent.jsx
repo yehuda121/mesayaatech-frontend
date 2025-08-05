@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
-import './EditAndCreateEvent.css';
+import './Events.css';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import Button from '@/app/components/Button/Button';
 import sanitizeText from '@/app/utils/sanitizeText';
 
-export default function CreateEventForm() {
+export default function CreateEventForm({ onClose }) {
   const language = useLanguage();
   const [formData, setFormData] = useState({
     title: '',
@@ -93,18 +93,21 @@ export default function CreateEventForm() {
     }
   };
 
+  function truncateText(text, maxLength = 50) {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '…' : text;
+  }
+
   return (
     <div className='CE-createEventForm'>
     <div className="CE-event-form-wrapper" dir={language === 'he' ? 'rtl' : 'ltr'}>
+      {onClose && (
+        <button className="CE-modal-close-btn-inside" onClick={onClose}>
+          ✖
+        </button>
+      )}
+
       <h2 className='CE-createEventTitle'>{t('createEventTitle', language)}</h2>
-      {/* <form className="CE-event-form-grid">
-        <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder={t('eventTitle', language)} required />
-        <input type="date" name="date" value={formData.date} onChange={handleChange} required />
-        <input type="time" name="time" value={formData.time} onChange={handleChange} />
-        <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder={t('eventLocation', language)} />
-        <textarea name="description" value={formData.description} onChange={handleChange} placeholder={t('eventDescription', language)} rows={3}></textarea>
-        <textarea name="notes" value={formData.notes} onChange={handleChange} placeholder={t('eventNotes', language)} rows={3}></textarea>
-      </form> */}
 
       <form className="CE-event-form-grid">
         <div className="CE-form-field">

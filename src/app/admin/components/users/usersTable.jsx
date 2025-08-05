@@ -7,6 +7,7 @@ import EditMentorForm from '@/app/pages/mentor/components/mentorRegistrationForm
 import EditAmbassadorForm from '@/app/pages/ambassador/EditAmbassadorForm';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
+import './UsersTable.css';
 
 export default function UsersTable({ defaultStatusFilter = null }) {
   const [users, setUsers] = useState([]);

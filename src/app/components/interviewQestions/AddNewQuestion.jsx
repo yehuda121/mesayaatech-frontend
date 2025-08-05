@@ -7,7 +7,7 @@ import { useLanguage } from "@/app/utils/language/useLanguage";
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import Button from '@/app/components/Button/Button';
 import sanitizeText from '@/app/utils/sanitizeText';
-import './ViewQuestion.css';
+import './style/AddNewQuestion.css';
 
 export default function AddNewQuestion({ onSuccess, fullName, idNumber, onClose }) {
   const [formData, setFormData] = useState({ text: '', category: '', createdBy: '' });

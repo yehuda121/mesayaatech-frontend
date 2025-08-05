@@ -7,7 +7,7 @@ import { useLanguage } from "@/app/utils/language/useLanguage";
 import { JobFields  } from "@/app/components/jobs/jobFields";
 import Button from '@/app/components/Button/Button';
 import sanitizeText from '@/app/utils/sanitizeText';
-import './ViewQuestion.css';
+import './style/EditQuestion.css';
 
 export default function EditQuestion({ question, onClose, onSave }) {
   const [formData, setFormData] = useState({

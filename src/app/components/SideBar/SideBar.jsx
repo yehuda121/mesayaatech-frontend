@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Button from "./Button/Button";
-import { getLanguage, toggleLanguage } from "../utils/language/language";
+import Button from "../Button/Button";
+import { getLanguage, toggleLanguage } from "../../utils/language/language";
 import "./SideBar.css";
 import { t } from "@/app/utils/loadTranslations";
 
@@ -11,9 +11,7 @@ export default function SideBar({ navItems }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const router = useRouter();
-
   const toggleMenu = () => setMenuOpen(!menuOpen);
-
   const handleToggleLanguage = () => {
     const newLang = toggleLanguage();
     setLanguage(newLang);
@@ -64,12 +62,12 @@ export default function SideBar({ navItems }) {
 
           <div className="SB-divider"></div>
 
-          {navItems.map(({ labelHe, labelEn, path, onClick, icon }) => (
+          {navItems.map(({ label, labelHe, labelEn, path, onClick, icon }) => (
             <Button
-              key={labelEn}
+              key={label || labelEn}
               text={
                 <span className="flex items-center" dir={language === 'he' ? 'rtl' : 'ltr'}>
-                  {language === "he" ? labelHe : labelEn}
+                  {label ? label : language === "he" ? labelHe : labelEn}
                   {icon && <span className="mr-2 ml-2">{icon}</span>}
                 </span>
               }

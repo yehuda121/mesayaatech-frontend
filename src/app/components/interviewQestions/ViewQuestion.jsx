@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
-import './ViewQuestion.css';
+import './style/ViewQuestion.css';
 import { useLanguage } from "@/app/utils/language/useLanguage";
 import EditAnswerModal from "./EditAnswerModal";
 import { Edit2, Trash2 } from 'lucide-react';

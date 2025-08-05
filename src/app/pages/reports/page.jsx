@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react';
-import SideBar from '@/app/components/SideBar';
+import SideBar from '@/app/components/SideBar/SideBar';
 import { t } from '@/app/utils/loadTranslations';
 import { useEffect, useState } from 'react';
 import './reports.css';

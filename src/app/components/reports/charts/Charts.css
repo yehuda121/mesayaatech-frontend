@@ -12,6 +12,24 @@
 @media (max-width: 768px) {
   .users-summary-container {
     flex-direction: column-reverse;
-    direction: rtl !important;
+    direction: rtl;
+  }
+}
+
+/* locations summary chart */
+.locations-summary-container {
+  text-align: start;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  margin-top: 30px;
+  flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  .locations-summary-container {
+    flex-direction: column-reverse;
+    direction: rtl;
   }
 }

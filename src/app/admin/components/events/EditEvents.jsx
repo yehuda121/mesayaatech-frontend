@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import { useLanguage } from '@/app/utils/language/useLanguage';
-import './EditAndCreateEvent.css';
+import './Events.css';
 import Button from '@/app/components/Button/Button';
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import sanitizeText from '@/app/utils/sanitizeText';

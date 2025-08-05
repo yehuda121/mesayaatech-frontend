@@ -50,7 +50,6 @@
   cursor: not-allowed;
 }
 
-/* Error message */
 .EE-error-message {
   color: red;
   margin-top: 1rem;
@@ -71,7 +70,7 @@
   left: 0;
   right: 0;
   bottom: 40px;
-  /* z-index: 10000; */
+  z-index: 10000;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -80,6 +79,9 @@
   margin-right: 250px;
   background-color: rgba(0, 0, 0, 0.4);
   height: calc(100vh - 90px);
+  text-align: start;
+  min-width: 360px;
+  overflow-x: auto;
 }
 
 @media (max-width: 768px) {
@@ -111,7 +113,6 @@
 .CE-event-form-grid textarea {
   width: 100%;
   min-width: 0;
-  overflow-wrap: break-word;
 }
 
 
@@ -164,4 +165,24 @@
 .CE-form-field label {
   font-weight: 500;
   margin-bottom: 6px;
+}
+
+.CE-modal-close-btn-inside {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #333;
+  z-index: 10001;
+}
+
+.CE-modal-close-btn-inside:hover {
+  color: red;
+}
+
+.CE-event-form-wrapper {
+  position: relative; 
 }

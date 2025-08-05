@@ -1,0 +1,87 @@
+/* post answer */
+.postAnswer-overlay {
+  position: fixed;
+  top: 90px;
+  left: 0;
+  right: 0;
+  bottom: 40px;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  overflow-y: auto;
+  margin-right: 250px;
+  background-color: rgba(0, 0, 0, 0.4);
+  height: calc(100vh - 90px);
+  text-align: start;
+  min-width: 360px;
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .postAnswer-overlay {
+    right: 0;
+    width: 100vw;
+  }
+}
+
+.postAnswer-box {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.postAnswer-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 30px;
+  background: none;
+  border: none;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.postAnswer-close:hover {
+  color: #ef4444;
+}
+
+.postAnswer-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.postAnswer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.postAnswer-grid label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+}
+
+.postAnswer-grid textarea {
+  margin-top: 4px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.postAnswer-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}

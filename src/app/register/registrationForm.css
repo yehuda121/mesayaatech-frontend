@@ -1,3 +1,9 @@
+.register-page{
+  min-width: 360px;
+  overflow-x: auto;
+  /* word-break: break-word; */
+}
+
 .register-header {
   background-color: #002855;
   display: flex;
@@ -8,12 +14,14 @@
   top: 0;
   z-index: 1000;
   direction: ltr;
+  overflow-x: auto;
 }
 
 .register-logo-img {
   height: 100px;
   object-fit: contain;
   padding: 0.5rem;
+  min-width: 100px;
 }
 
 .register-header-buttons {

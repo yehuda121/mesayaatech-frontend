@@ -10,7 +10,6 @@
   border-radius: 20px;
 
   max-width: 100%;
-  word-wrap: break-word;
   overflow-x: hidden;
 }
 
@@ -27,6 +26,9 @@
   gap: 1rem;
   justify-content: center;
   margin-top: 0.5rem;
+
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .card-filter {
@@ -96,6 +98,8 @@
 
   .card-filter.date-filter {
     width: 100%;
+    max-height: fit-content;
+    max-height: 50px;
   }
 
   .card-filter.flexible {
@@ -117,7 +121,6 @@
   gap: 1rem;
   text-align: start;
   max-width: 100%;
-  word-wrap: break-word;
   overflow-x: auto;
 }
 

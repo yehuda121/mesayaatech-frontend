@@ -13,8 +13,8 @@
   align-items: flex-start;
   padding: 30px;
 
+  min-width: 360px;
   max-width: 100%;
-  word-wrap: break-word;
   overflow-x: auto;
 }
 
@@ -74,7 +74,6 @@
 .postNewJob-auto-fill-box input[type="file"] {
   margin-bottom: 16px;
   max-width: 100%;
-  word-wrap: break-word;
   overflow-x: auto;
 }
 
@@ -88,7 +87,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   max-width: 100%;
-  word-wrap: break-word;
   overflow-x: auto;
 }
 
@@ -146,16 +144,23 @@
 }
 
 /* view job */
-.viewJob-modal-overlay {
-  margin-top: 90px;
+ .viewJob-modal-overlay {
   position: fixed;
-  inset: 0;
+  top: 90px;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  height: calc(100vh - 90px);
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; 
   z-index: 9999;
   margin-right: 250px;
+  min-width: 360px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 20px 0; 
 }
 
 @media (max-width: 768px) {
@@ -213,10 +218,9 @@
 }
 
 /* edit-job */
-.edit-job-overlay {
-  margin-top: 90px;
+/* .edit-job-overlay {
   position: fixed;
-  top: 0;
+  top: 90px;
   right: 250px;
   width: calc(100% - 250px);
   height: 100vh;
@@ -228,7 +232,7 @@
   text-align: start;
   padding: 100px;
   overflow-y: auto;
-  max-height: fit-content;
+  max-height: 100vh;
 }
 
 .edit-job-form {
@@ -239,7 +243,36 @@
   width: 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
-  max-height: 90vh;
+  max-height: 100vh;
+} */
+ .edit-job-overlay {
+  position: fixed;
+  top: 90px;
+  right: 250px;
+  width: calc(100% - 250px);
+  height: calc(100vh - 90px);
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 9999;
+  text-align: start;
+  padding: 40px 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 90px);
+  box-sizing: border-box;
+}
+
+.edit-job-form {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 700px;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  max-height: 100%;
+  box-sizing: border-box;
 }
 
 .edit-job-title {
@@ -301,7 +334,7 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .edit-job-overlay {
     right: 0;
     width: 100%;
@@ -309,5 +342,19 @@
   }
   .edit-job-grid {
     grid-template-columns: 1fr;
+  }
+} */
+@media (max-width: 768px) {
+  .edit-job-overlay {
+    right: 0;
+    width: 100%;
+    padding: 20px 10px;
+  }
+  .edit-job-grid {
+    grid-template-columns: 1fr;
+  }
+  .edit-job-form {
+    padding: 20px;
+    max-width: 100%;
   }
 }

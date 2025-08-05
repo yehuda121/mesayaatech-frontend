@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { t } from '@/app/utils/loadTranslations';
 import ToastMessage from '@/app/components/Notifications/ToastMessage';
 import { useLanguage } from "@/app/utils/language/useLanguage";
-import './ViewQuestion.css';
+import './style/PostAnswer.css';
 import sanitizeText from '@/app/utils/sanitizeText';
 import Button from '@/app/components/Button/Button';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import SideBar from '@/app/components/SideBar';
+import SideBar from '@/app/components/SideBar/SideBar';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import EditMentorForm from './components/mentorRegistrationForm/EditMentorForm';

@@ -7,8 +7,9 @@
   flex-direction: column;
   background-blend-mode: lighten;
   overflow-x: hidden;
+  min-width: 360px;
+  overflow-x: auto;
 }
-
 
 .reservist-form-container {
   max-width: 800px;

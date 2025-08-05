@@ -1,9 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import SideBar from '@/app/components/SideBar';
+import SideBar from '@/app/components/SideBar/SideBar';
 import UsersTable from './components/users/usersTable';
-import CreateEvent from './components/events/CreateEvent';
 import ViewEvents from './components/events/ViewEvents';
 import EditEvents from './components/events/EditEvents';
 import ViewJobs from '../components/jobs/ViewAllJobs';
@@ -26,7 +25,6 @@ export default function AdminPage() {
   const [userType, setUserType] = useState('');
   const [view, setView] = useState('');
   const [eventToEdit, setEventToEdit] = useState(null);
-  const [events, setEvents] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [pendingUsers, setPendingUsers] = useState([]);
@@ -82,51 +80,43 @@ export default function AdminPage() {
 
   const navItems = [
     {
-      labelHe: t('users', 'he'),
-      labelEn: t('users', 'en'),
+      label: t('users', language),
       path: '#view-users',
       onClick: () => handleNavigation('view-users')
     },
     {
-      labelHe: t('events', 'he'),
-      labelEn: t('events', 'en'),
+      label: t('events', language),
       path: '#view-events',
       onClick: () => handleNavigation('view-events')
     },
     {
-      labelHe: t('jobs', 'he'),
-      labelEn: t('jobs', 'en'),
+      label: t('jobs', language),
       path: '#view-jobs',
       onClick: () => handleNavigation('view-jobs')
     },
     {
-      labelHe: t('interviewQues', 'he'),
-      labelEn: t('interviewQues', 'en'),
+      label: t('interviewQues', language),
       path: '#interview-ques',
       onClick: () => handleNavigation('interview-ques')
     },
     {
-      labelHe: t('viewMentorships', 'he'),
-      labelEn: t('viewMentorships', 'en'),
+      label: t('viewMentorships', language),
       path: '#view-mentorships',
       onClick: () => handleNavigation('view-mentorships')
     },
     { 
-      labelHe: t('interviewWithAi', 'he'), 
-      labelEn: t('interviewWithAi', 'en'), 
+      label: t('interviewWithAi', language),
       path: '#InterviewPracticePanel',
       icon: <Brain size={18} className="inline mr-2" />,
       onClick: () => setView('InterviewPracticePanel') 
     },
     {
-      labelHe: t('Reports', 'he'),
-      labelEn: t('Reports', 'en'),
+      label: t('Reports', language),
       path: '#Reports',
       onClick: () => moovToReport()
     },
     {
-      labelHe: t('changePassword', 'he'),
-      labelEn: t('changePassword', 'en'),
+      label: t('changePassword', language),
       path: '#changePassword',
       onClick: () => handleNavigation('change-password')
     },
@@ -151,18 +141,9 @@ export default function AdminPage() {
             </>
           )}
 
-          {view === 'create-event' && 
-            <div className='CreateEventClass'>
-              <CreateEvent />
-            </div>
-          }
-
           {view === 'view-events' && (
             <ViewEvents
-              events={events}
-              setEvents={setEvents}
               onEdit={(ev) => setEventToEdit(ev)}
-              handleNavigation={handleNavigation}
             />
           )}
 

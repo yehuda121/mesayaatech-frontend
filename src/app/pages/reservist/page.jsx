@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import SideBar from '@/app/components/SideBar';
+import SideBar from '@/app/components/SideBar/SideBar';
 import Events from '@/app/components/events/ViewAllEvents';
 import EditReservistForm from './components/EditReservistForm';
 import ViewJobs from '@/app/components/jobs/ViewAllJobs';
