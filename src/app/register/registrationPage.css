@@ -1,0 +1,135 @@
+.register-options-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.register-buttons-group {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.register-hero {
+  position: relative;
+  min-height: calc(100vh - 100px);
+  background: url('/registration_page.png') no-repeat left center;
+  background-size: contain;
+  background-color: #f9fbfd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+  gap: 2rem;
+  direction: rtl;
+}
+
+.register-overlay-content {
+  background-color: rgba(255, 255, 255, 0.94);
+  padding: 4rem 3.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  max-width: 550px;
+  width: 100%;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.register-overlay-content h1 {
+  font-size: 2.9rem;
+  font-weight: bold;
+  color: #002855;
+  margin-bottom: 1.9rem;
+}
+
+.register-overlay-content p {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 3rem;
+}
+
+.register-buttons-group button {
+  font-size: 1.1rem;       
+  padding: 0.75rem 1.5rem;   
+  min-width: 100px;          
+  border-radius: 0.6rem;     
+}
+
+@media (max-width: 400px) {
+  .register-overlay-content h1 {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* regiters (mentor - reservist - ambassador */
+.mentor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  direction: ltr;
+  background-color: #002855;
+}
+
+.mentor-logo {
+  max-width: 80px;
+  object-fit: contain;
+}
+
+.mentor-header-buttons button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-inline: 5px;
+}
+
+.mentor-header-buttons button:hover {
+  background-color: #004080;
+  color: white;
+}
+
+.mentor-intro-section {
+  text-align: center;
+  padding: 3rem 1rem 1.5rem;
+  color: #002855;
+}
+
+.mentor-intro-section h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+  color: #00122e;
+  text-shadow: none;
+  letter-spacing: -0.3px;
+  line-height: 1.4;
+  font-family: 'Segoe UI', 'Open Sans', sans-serif;
+}
+
+.mentor-intro-section h1::after {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 3px;
+  background: #004080;
+  margin: 1rem auto 0;
+  border-radius: 2px;
+  opacity: 1;
+}
+
+.mentor-intro-section p {
+  font-size: 1.2rem;
+  color: #004080;
+  line-height: 1.7;
+  max-width: 650px;
+  margin: 0 auto;
+}

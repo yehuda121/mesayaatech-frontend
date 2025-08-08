@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import '@/app/components/GenericForm/GenericForm.css';
 import { t } from '@/app/utils/loadTranslations';
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
-import '../registrationForm.css';
+import '../registrationPage.css';
 import PageIntro from '@/app/components/PageIntro';
 import MultiStepForm from '@/app/components/MultiStepForm/MultiStepForm';
 

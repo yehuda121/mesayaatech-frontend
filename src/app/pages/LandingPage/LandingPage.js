@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { getLanguage, toggleLanguage } from "../../utils/language/language";
 import { t } from "@/app/utils/loadTranslations";
 import "./LandingPage.css";
+import Button from "@/app/components/Button/Button";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -20,18 +21,17 @@ export default function LandingPage() {
   }, []);
 
   if (!language) return null;
-  
+   
   return (
     <div dir={language === 'he' ? 'rtl' : 'ltr'}>
-      <header className="landing-header">
-        <div className="landing-logo">
+      <header className="LP-header">
+        <div className="LP-logo">
           <img src="/logo.png" alt="Logo" className="logo-img" />
         </div>
-        <div className="landing-buttons">
+        <div className="LP-buttons">
           <button onClick={() => router.push("/login")}>{t('login', language)}</button>
           <button onClick={() => router.push("/register")}>{t('signup', language)}</button>
-          <button
-            onClick={() => {
+          <button onClick={() => {
               const newLang = toggleLanguage();
               setLanguage(newLang);
             }}
@@ -42,37 +42,37 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <div className="LPtop_Section with-image">
-        <img src="/landingPage.png" alt="Reservist collage" className="LPimage" />
-        <div className="LPtop_Content">
+      <div className="LP-top_Section with-image">
+        <img src="/landingPage.png" alt="Reservist collage" className="LP-image" />
+        <div className="LP-top_Content">
           <h1>{t('landingTitle', language)}</h1>
           <p>{t('landingSubtitle', language)}</p>
         </div>
-        <div className="LPtop_Gradient"></div>
+        <div className="LP-top_Gradient"></div>
       </div>
 
-      <main className="LPabout_main">
-        <section className="LPaboutSection">
+      <main className="LP-about_main">
+        <section className="LP-about-section">
           <h2>{t('aboutProject', language)}</h2>
 
-          <div className="LPaboutGrid">
-            <div className="LPaboutCard">
+          <div className="LP-about-grid">
+            <div className="LP-about-card">
               <h3>{t('aboutGoalTitle', language)}</h3>
               <p>{t('aboutGoalText', language)}</p>
             </div>
-            <div className="LPaboutCard">
+            <div className="LP-about-card">
               <h3>{t('aboutFeaturesTitle', language)}</h3>
               <p>{t('aboutFeaturesText', language)}</p>
             </div>
-            <div className="LPaboutCard">
+            <div className="LP-about-card">
               <h3>{t('aboutAudienceTitle', language)}</h3>
               <p>{t('aboutAudienceText', language)}</p>
             </div>
           </div>
 
-          <button className="cta-button" onClick={() => router.push("/register")}>
+          <Button  onClick={() => router.push("/register")}>
             {t('joinNow', language)}
-          </button>
+          </Button>
         </section>
       </main>
     </div>

@@ -7,7 +7,7 @@ import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import MultiStepForm from '@/app/components/MultiStepForm/MultiStepForm';
 import PageIntro from '@/app/components/PageIntro';
 import { t } from '@/app/utils/loadTranslations';
-import '../registrationForm.css';
+import '../registrationPage.css';
 
 export default function AmbassadorRegisterForm() {
   const router = useRouter();

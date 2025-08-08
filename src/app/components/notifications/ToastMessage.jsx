@@ -19,7 +19,7 @@ export default function ToastMessage({ message, type = 'info', duration = 3000, 
 
   return (
     <div className={`toast-message ${type}`}>
-      <span>{message}</span>
+      <span>{message.length > 100 ? message.substring(0, 100) + '...' : message}</span>
       <button className="toast-close-btn" onClick={() => {
         setVisible(false);
         setTimeout(onClose, 300);

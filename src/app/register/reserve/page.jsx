@@ -7,7 +7,7 @@ import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import PageIntro from '@/app/components/PageIntro';
 import MultiStepForm from '@/app/components/MultiStepForm/MultiStepForm';
 import { t } from '@/app/utils/loadTranslations';
-import '../registrationForm.css';
+import '../registrationPage.css';
 
 export default function ReserveRegisterForm() {
   const router = useRouter();

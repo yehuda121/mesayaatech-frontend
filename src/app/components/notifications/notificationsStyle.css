@@ -4,6 +4,7 @@
   bottom: 30px;
   right: calc(30px + 250px); 
   min-width: 250px;
+  max-width: 320px;
   padding: 16px 24px;
   border-radius: 6px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -21,6 +22,7 @@
   .toast-message {
     right: 30px;
     top: 30px;
+    top: auto;
   }
 }
 
