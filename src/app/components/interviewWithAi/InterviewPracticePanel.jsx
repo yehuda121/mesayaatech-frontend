@@ -7,9 +7,10 @@ import Button from '@/app/components/Button/Button';
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import { t } from '@/app/utils/loadTranslations';
 import { sanitizeAnswer } from './sanitizeAnswer';
+import { useLanguage } from "@/app/utils/language/useLanguage";
 import './InterviewPracticePanel.css';
 
-export default function InterviewPracticePanel({ userId, email, language, role }) {
+export default function InterviewPracticePanel() {
   const [view, setView] = useState("history");
   const [question, setQuestion] = useState(null);
   const [category, setCategory] = useState("");
@@ -22,12 +23,25 @@ export default function InterviewPracticePanel({ userId, email, language, role }
   const [alert, setAlert] = useState(null);
   const [isLoadingQuestion, setIsLoadingQuestion] = useState(false);
   const [isLoadingEvaluation, setIsLoadingEvaluation] = useState(false);
-  const [isLoadingBankSubmit, setIsLoadingBankSubmit] = useState(false);
+  const [userId , setUserId ] = useState(null);
+  const [email, setEmail] = useState('');
+  const [userType, setUserType] = useState('');
   const difficulties = ["easy", "medium", "hard"];
+  const language = useLanguage();
 
   useEffect(() => {
     fetchHistory();
   }, [userId]);
+
+  useEffect(() => {
+    const storedIdNumber = sessionStorage.getItem('idNumber');
+    const storedEmail = sessionStorage.getItem('email');
+    const storedUserType = sessionStorage.getItem('userType');
+
+    if (storedIdNumber) setUserId(storedIdNumber);
+    if (storedEmail) setEmail(storedEmail);
+    if (storedUserType) setUserType(storedUserType);
+  }, []);
 
   const fetchHistory = async () => {
     const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/interview/fetch-questions-history?userId=` + userId;

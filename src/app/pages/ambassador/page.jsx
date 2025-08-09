@@ -71,32 +71,27 @@ export default function AmbassadorHomePage() {
     if (!language) return [];
     return [
       {
-        labelHe: t('navPersonalDetails', language),
-        labelEn: t('navPersonalDetails', language),
+        label: t('navPersonalDetails', language),
         path: '#editForm',
         onClick: () => handleNavigation('editForm')
       },
       {
-        labelHe: t('jobs', language),
-        labelEn: t('jobs', language),
+        label: t('jobs', language),
         path: '#vallJobs',
         onClick: () => handleNavigation('allJobs')
       },
       {
-        labelHe: t('events', language),
-        labelEn: t('events', language),
+        label: t('events', language),
         path: '#all-events',
         onClick: () => handleNavigation('all-events')
       },
       {
-        labelHe: t('interviewQuesTitle', language),
-        labelEn: t('interviewQuesTitle', language),
+        label: t('interviewQuesTitle', language),
         path: '#interview-prep',
         onClick: () => handleNavigation('interview-ques')
       },
       {
-        labelHe: t('changePassword', 'he'),
-        labelEn: t('changePassword', 'en'),
+        label: t('changePassword', language),
         path: '#changePassword',
         onClick: () => handleNavigation('change-password')
       },
@@ -112,7 +107,6 @@ export default function AmbassadorHomePage() {
       <SideBar navItems={navItems} />
 
       <main className="ambassador-main">
-
         {view === 'allJobs' && (
           <div>
             <div className="ambassador-button-group">
@@ -136,8 +130,8 @@ export default function AmbassadorHomePage() {
         {view === 'myJobsList' && (
           <div className='ambassador-main-view'>
             <MyJobsList
-              publisherId={`${email}#${idNumber}`}
-              userType="ambassador"
+              publisherId={idNumber}
+              userType={userType}
               onEdit={(job) => {
                 setSelectedJobForEdit(job);
                 setView('edit-job');

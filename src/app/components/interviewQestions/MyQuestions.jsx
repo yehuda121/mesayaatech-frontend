@@ -6,12 +6,14 @@ import { Edit2, Trash2 } from 'lucide-react';
 import { useLanguage } from '@/app/utils/language/useLanguage';
 import EditQuestion from './EditQuestion';
 import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
+import AlertMessage from '@/app/components/Notifications/AlertMessage';
 
-export default function MyQuestions({ idNumber, fullName, onEdit  }) {
+export default function MyQuestions({ idNumber, fullName }) {
   const [myQuestions, setMyQuestions] = useState([]);
   const [questionToEdit, setQuestionToEdit] = useState(null);
   const language = useLanguage();
   const [confirmData, setConfirmData] = useState(null);
+  const [alertMessage, setAlertMessage] = useState(null);
 
   useEffect(() => {
     const loadQuestions = async () => {
@@ -41,18 +43,19 @@ export default function MyQuestions({ idNumber, fullName, onEdit  }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-question`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
         body: JSON.stringify({ questionId, idNumber, fullName })
       });
 
       if (res.ok) {
         setMyQuestions(prev => prev.filter(q => q.questionId !== questionId));
+        setAlertMessage({ message: t('questionDeletedSuccessfuly', language), type: 'success' });
       } else {
-        alert(t('deleteFailed', language));
+        setAlertMessage({ message: t('deleteFailed', language), type: 'error' });
       }
     } catch (err) {
+      setAlertMessage({ message: t('serverError', language), type: 'error' });
       console.error('Error deleting question:', err);
-      alert(t('serverError', language));
     }
   };
 
@@ -110,6 +113,13 @@ export default function MyQuestions({ idNumber, fullName, onEdit  }) {
             setConfirmData(null);
           }}
           onCancel={() => setConfirmData(null)}
+        />
+      )}
+      {alertMessage && (
+        <AlertMessage
+          message={alertMessage.message}
+          type={alertMessage.type}
+          onClose={() => setAlertMessage(null)}
         />
       )}
 

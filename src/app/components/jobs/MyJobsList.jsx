@@ -9,122 +9,121 @@ import ConfirmDialog from '@/app/components/Notifications/ConfirmDialog';
 import AlertMessage from '@/app/components/Notifications/AlertMessage';
 import sanitizeText from '@/app/utils/sanitizeText';
 
-export default function MyJobsList({ publisherId, userType = "mentor", onEdit }) {
+export default function MyJobsList({publisherId, userType, onEdit }) {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [toast, setToast] = useState(null);
+  const [alertMessage, setAlertMessage] = useState(null);
   const [confirmData, setConfirmData] = useState(null);
   const language = useLanguage();
   const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     const fetchJobs = async () => {
+      setLoading(true);
       try {
-        const encodedPublisherId = encodeURIComponent(publisherId);
-        const url =
-          `${process.env.NEXT_PUBLIC_API_BASE}/api/jobs-by-publisherID/by-publisher?publisherId=${encodedPublisherId}&idType=${userType}`;
+        const url = `${process.env.NEXT_PUBLIC_API_BASE}/api/jobs-by-publisherID/by-publisher?publisherId=${publisherId}&idType=${userType}`;
         const res = await fetch(url, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
           }
         });
+
         const data = await res.json();
 
         if (Array.isArray(data)) {
           setJobs(data);
           setFilteredJobs(data);
         } else {
-          // console.error("Expected array but got:", data);
           setJobs([]);
           setFilteredJobs([]);
-          setToast({
-            message: t('jobsLoadError', language),
-            type: 'error'
-          });
+          setAlertMessage({ message: t('jobsLoadError', language), type: 'error' });
         }
-      } catch (err) {
-        // console.error('Failed to fetch jobs:', err);
-        setToast({
-          message: t('jobsServerError', language),
-          type: 'error'
-        });
+      } catch (_err) {
+        setAlertMessage({ message: t('jobsServerError', language), type: 'error' });
       } finally {
         setLoading(false);
       }
     };
 
-    if (publisherId) {
-      fetchJobs();
-    } else {
-      setToast({
-        message: t('publisherIdMissing', language),
-        type: 'warning'
-      });
+    // If identifiers are missing, show a warning and stop loading
+    if (!publisherId || !userType) {
+      // console.log("publisherId: ",publisherId);
+      // console.log("userType: ",userType);
+      setLoading(false);
+      setAlertMessage({ message: t('publisherIdMissing', language), type: 'warning' });
+      return;
     }
-  }, [publisherId, language]);
 
+    fetchJobs();
+  }, [publisherId, userType, language]);
 
+  // Delete a job with auth and consistent idNumber
   const handleDelete = async (jobId) => {
-    const userId = sessionStorage.getItem('userId');
-    const userType = sessionStorage.getItem('userType');
-
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-job`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
-        body: JSON.stringify({ jobId, userId, userType })
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
+        },
+        body: JSON.stringify({ jobId, userId: publisherId, userType })
       });
 
       if (res.ok) {
-        setToast({ message: t('jobDeleted', language), type: 'success' });
+        setAlertMessage({ message: t('jobDeleted', language), type: 'success' });
         setJobs((prev) => prev.filter((job) => job.jobId !== jobId));
         setFilteredJobs((prev) => prev.filter((job) => job.jobId !== jobId));
       } else {
-        setToast({message: t('deleteFailed', language), type: 'error'});
+        const errText = await res.text().catch(() => '');
+        console.error('Delete failed:', res.status, errText);
+        setAlertMessage({ message: t('deleteFailed', language), type: 'error' });
       }
     } catch (err) {
       console.error('Delete failed:', err);
-      setToast({message: t('serverError', language), type: 'error'});
+      setAlertMessage({ message: t('serverError', language), type: 'error' });
     }
   };
 
+  // Free-text filter with basic ranking; preserves original list when query is empty
   const handleFreeTextFilter = (e) => {
-    const rawText = e.target.value ?? '';  
+    const rawText = e.target.value ?? '';
     const { text, wasModified } = sanitizeText(rawText, 500);
 
-    // Update display value (sanitized)
     setSearchText(text);
 
     if (wasModified) {
-      setToast({
+      setAlertMessage({
         message: t('textSanitizedWarning', language),
         type: 'warning'
       });
     }
 
-    const lowerText = String(text || '').toLowerCase();
+    const lowerText = (text || '').toLowerCase().trim();
+
+    if (!lowerText) {
+      // Empty query -> restore original list
+      setFilteredJobs(jobs);
+      return;
+    }
 
     const sortedFiltered = (Array.isArray(jobs) ? jobs : [])
       .map((job) => {
-        let company = '';
-        let role = '';
-        let location = '';
-
-        company = String(job.company || '').toLowerCase();
-        role = String(job.role || '').toLowerCase();
-        location = String(job.location || '').toLowerCase();
+        const company  = String(job.company  || '').toLowerCase();
+        const role     = String(job.role     || '').toLowerCase();
+        const location = String(job.location || '').toLowerCase();
 
         let score = 0;
-        if (company.includes(lowerText)) score += 3;
-        if (role.includes(lowerText)) score += 2;
+        if (company.includes(lowerText))  score += 3;
+        if (role.includes(lowerText))     score += 2;
         if (location.includes(lowerText)) score += 1;
 
         return { ...job, _matchScore: score };
       })
+      .filter(j => j._matchScore > 0)
       .sort((a, b) => b._matchScore - a._matchScore)
-      .map(({ _matchScore, ...job }) => job); // Remove match score from result
+      .map(({ _matchScore, ...job }) => job); // strip internal score
 
     setFilteredJobs(sortedFiltered);
   };
@@ -151,38 +150,54 @@ export default function MyJobsList({ publisherId, userType = "mentor", onEdit })
         renderCard={(job) => (
           <div className='text-start'>
             <h3 className="font-bold text-lg">{job.company || t('noCompany', language)}</h3>
-            {job.role && <p><strong>{t('role', language)}:</strong> {job.role}</p>}
-            {job.location && <p><strong>{t('location', language)}:</strong> {job.location}</p>}
+            {job.role && (
+              <p><strong>{t('role', language)}:</strong> {job.role}</p>
+            )}
+            {job.location && (
+              <p><strong>{t('location', language)}:</strong> {job.location}</p>
+            )}
             {job.minExperience !== undefined && job.minExperience !== null && (
               <p><strong>{t('minExperience', language)}:</strong> {job.minExperience}</p>
             )}
-            {job.requirements && <p><strong>{t('requirements', language)}:</strong> {job.requirements}</p>}
-            {job.advantages && <p><strong>{t('advantages', language)}:</strong> {job.advantages}</p>}
-            {job.description && <p className="job-description">{job.description}</p>}
+            {job.requirements && (
+              <p><strong>{t('requirements', language)}:</strong> {job.requirements}</p>
+            )}
+            {job.advantages && (
+              <p><strong>{t('advantages', language)}:</strong> {job.advantages}</p>
+            )}
+            {job.description && (
+              <p className="job-description">{job.description}</p>
+            )}
+
             <div className="job-actions flex gap-4 mt-3">
-              <button title={t('edit', language)} onClick={() => onEdit(job)}>
+              <button
+                title={t('edit', language)}
+                onClick={() => onEdit(job)}
+              >
                 <Edit2 size={20}/>
               </button>
-              <button title={t('delete', language)} 
-                // onClick={() => handleDelete(job.jobId)}>
+
+              <button
+                title={t('delete', language)}
                 onClick={(e) => {
                   e.stopPropagation();
                   setConfirmData(job.jobId);
-                }}>
+                }}
+              >
                 <Trash2 size={20}/>
               </button>
-
             </div>
           </div>
         )}
         onCardClick={() => {}}
         emptyTextKey="noJobsPosted"
       />
-      {toast && (
+
+      {alertMessage && (
         <AlertMessage
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
+          message={alertMessage.message}
+          type={alertMessage.type}
+          onClose={() => setAlertMessage(null)}
         />
       )}
 

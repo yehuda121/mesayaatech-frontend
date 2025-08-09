@@ -13,7 +13,7 @@
     "editevent": "עריכת האירוע",
     "deleteEvent": "מחיקת האירוע",
     "confirmDeleteQuestion": "האם אתה בטוח שברצונך למחוק את השאלה?",
-    "deleteFailed": "מחיקת המשרה נכשלה",
+    "deleteFailed": "המחיקה נכשלה",
     "serverError": "שגיאה בשרת",
     "question": "שאלה",
     "category": "קטגוריה",
@@ -170,7 +170,7 @@
     "confirmAssignText": "האם לשייך את",
     "jobsLoadError": "שגיאה בטעינת המשרות",
     "jobsServerError": "אירעה שגיאה בעת שליפת המשרות מהשרת",
-    "publisherIdMissing": "לא ניתן לטעון משרות – חסר מזהה מפרסם",
+    "publisherIdMissing": "לא ניתן לטעון משרות, חסר מזהה מפרסם",
     "confirmDelete": "אישור מחיקה",
     "jobDeleted": "המשרה נמחקה בהצלחה",
     "filterByDate": "סינון לפי תאריך",
@@ -547,7 +547,8 @@
     "passwordMissingUppercase": "הסיסמה חייבת לכלול אות גדולה",
     "passwordMissingLowercase": "הסיסמה חייבת לכלול אות קטנה",
     "passwordMissingNumber": "הסיסמה חייבת לכלול מספר",
-    "InvalidPassword": "הסיסמה לא תקינה"
+    "InvalidPassword": "הסיסמה לא תקינה",
+    "questionDeletedSuccessfuly": "השאלה נמחקה בהצלחה"
 
 
 

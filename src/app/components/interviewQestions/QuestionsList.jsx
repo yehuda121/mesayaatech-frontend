@@ -4,10 +4,10 @@ import GenericCardSection from '@/app/components/GenericCardSection/GenericCardS
 import { t } from '@/app/utils/loadTranslations';
 import ViewQuestion from './ViewQuestion'; 
 import Button from '@/app/components/Button/Button';
-import { ThumbsUp, FileSearch, MessageCircleMore,  Book, BookOpen , Edit2,Trash2 } from 'lucide-react';
+import { ThumbsUp, FileSearch, MessageCircleMore, Book, BookOpen, Edit2, Trash2 } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 import { useLanguage } from "@/app/utils/language/useLanguage";
-import { JobFields  } from "@/app/components/jobs/jobFields";
+import { JobFields } from "@/app/components/jobs/jobFields";
 import PostAnswer from './PostAnswer';
 import ConfirmDialog from '../Notifications/ConfirmDialog';
 import EditQuestion from './EditQuestion';
@@ -15,65 +15,58 @@ import DraggableButton from '@/app/components/DraggableButton/DraggableButton';
 import AddQuestion from './AddNewQuestion';
 import sanitizeText from '@/app/utils/sanitizeText';
 import AlertMessage from '../Notifications/AlertMessage';
+import './style/QuestionsPage.css'; 
 
-export default function QuestionsPage({ onAnswer }) {
+export default function QuestionsPage() {
   const [questions, setQuestions] = useState([]);
-  const [filteredCategory, setFilteredCategory] = useState('');
-  const [sortMode, setSortMode] = useState('newest');
   const [selectedQuestionId, setSelectedQuestionId] = useState(null);
   const selectedQuestion = questions.find(q => q.questionId === selectedQuestionId);
-  const [userType, setUserType] = useState(null);
-  const [idNumber, setIdNumber] = useState(null);
+  const [questionToEdit, setQuestionToEdit] = useState(null); 
+  const [questionToAnswer, setQuestionToAnswer] = useState(null);
+  const [showAddQuestion, setShowAddQuestion] = useState(false);
+  const [sortMode, setSortMode] = useState('newest');
+  const [filteredCategory, setFilteredCategory] = useState('');
   const [filterLikedOnly, setFilterLikedOnly] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [filterReadOnly, setFilterReadOnly] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [questionToAnswer, setQuestionToAnswer] = useState(null);
-  const language = useLanguage();
   const [confirmDialog, setConfirmDialog] = useState(null);
   const [alert, setAlert] = useState(null);
-  const [sanitizedAlert, setSanitizedAlert] = useState(null);
-  const [questionToEdit, setQuestionToEdit] = useState(null); 
-  const [showAddQuestion, setShowAddQuestion] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [userType, setUserType] = useState(null);
+  const [fullName, setFullName] = useState('');
+  const language = useLanguage();
 
   const fieldOptions = [
     { value: '', label: t('all', language) },
-    ...Object.keys(JobFields).map(value => ({
-      value,
-      label: t(`${value}`, language)
-    }))
+    ...Object.keys(JobFields).map(value => ({ value, label: t(`${value}`, language) }))
   ];
 
   useEffect(() => {
-    const idToken = sessionStorage.getItem('idToken');
-    const fullName = sessionStorage.getItem('fullName');
-
-    if (idToken) {
-      try {
-        const decoded = jwtDecode(idToken);
-        setUserType(decoded['custom:role']);
-        setIdNumber(decoded['custom:idNumber'] || decoded['sub']);
-        setFullName(fullName);
-      } catch (err) {
-        console.error('Failed to decode idToken:', err);
-      }
-    }
-
     fetchQuestions();
   }, []);
 
-  const hasRead = (readBy = []) => {
-    return readBy.some(read => read.idNumber === idNumber);
-  };
+  useEffect(() => {
+    const storedIdNumber = sessionStorage.getItem('idNumber');
+    const storedFullName = sessionStorage.getItem('fullName');
+    const storedUserType = sessionStorage.getItem('userType');
+
+    if (storedIdNumber) setUserId(storedIdNumber);
+    if (storedFullName) setFullName(storedFullName);
+    if (storedUserType) setUserType(storedUserType);
+  }, []);
+
+  const hasRead = (readBy = []) => readBy.some(read => read.idNumber === userId);
 
   const handleReadToggle = async (questionId, alreadyRead) => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/toggle-question-read`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
-        body: JSON.stringify({ questionId, idNumber, fullName })
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` 
+        },
+        body: JSON.stringify({ questionId, idNumber: userId, fullName })
       });
-
       if (!res.ok) return;
 
       setQuestions(prev =>
@@ -81,9 +74,8 @@ export default function QuestionsPage({ onAnswer }) {
           if (q.questionId !== questionId) return q;
           const prevRead = q.readBy || [];
           const updatedRead = alreadyRead
-            ? prevRead.filter(read => read.idNumber !== idNumber)
-            : [...prevRead, { idNumber, fullName, readAt: new Date().toISOString() }];
-
+            ? prevRead.filter(read => read.idNumber !== userId)
+            : [...prevRead, { idNumber: userId, fullName, readAt: new Date().toISOString() }];
           return { ...q, readBy: updatedRead };
         })
       );
@@ -96,51 +88,41 @@ export default function QuestionsPage({ onAnswer }) {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/get-questions`, {
         method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}`
-        }
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
       });
-
       const data = await res.json();
-  
       const formatted = data.map(q => ({
         ...q,
         questionId: q.questionId || q.PK?.replace('question#', ''),
         PK: q.PK,
       }));
-  
       setQuestions(formatted);
     } catch (err) {
       console.error('Error loading questions:', err);
     }
   };
-  
-  const hasLiked = (likes = []) => {
-    return likes.some(like => like.idNumber === idNumber);
-  };
+
+  const hasLiked = (likes = []) => likes.some(like => like.idNumber === userId);
 
   const handleLike = async (questionId, alreadyLiked) => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/toggle-question-like`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
-        body: JSON.stringify({ questionId, idNumber, fullName })
+        body: JSON.stringify({ questionId, idNumber: userId, fullName })
       });
-
       if (!res.ok) {
         console.error('Like toggle failed');
         return;
       }
 
-      setQuestions((prev) =>
-        prev.map((q) => {
+      setQuestions(prev =>
+        prev.map(q => {
           if (q.questionId !== questionId) return q;
-
           const prevLikes = q.likes || [];
           const updatedLikes = alreadyLiked
-            ? prevLikes.filter((like) => like.idNumber !== idNumber)
-            : [...prevLikes, { idNumber, fullName, likedAt: new Date().toISOString() }];
-
+            ? prevLikes.filter(like => like.idNumber !== userId)
+            : [...prevLikes, { idNumber: userId, fullName, likedAt: new Date().toISOString() }];
           return { ...q, likes: updatedLikes };
         })
       );
@@ -151,17 +133,15 @@ export default function QuestionsPage({ onAnswer }) {
 
   const filteredAndSorted = questions
     .filter(q =>
-      q.text.toLowerCase().includes(searchText.toLowerCase()) &&
+      (q.text || '').toLowerCase().includes((searchText || '').toLowerCase()) &&
       (!filteredCategory || q.category === filteredCategory) &&
       (!filterLikedOnly || hasLiked(q.likes)) &&
       (!filterReadOnly || !hasRead(q.readBy))
     )
-    .sort((a, b) => {
-      if (sortMode === 'popular') {
-        return (b.likes?.length || 0) - (a.likes?.length || 0);
-      }
-      return new Date(b.createdAt) - new Date(a.createdAt);
-    });
+    .sort((a, b) => (sortMode === 'popular'
+      ? (b.likes?.length || 0) - (a.likes?.length || 0)
+      : new Date(b.createdAt) - new Date(a.createdAt)
+    ));
 
   const handleDelete = (questionId) => {
     setConfirmDialog({
@@ -177,7 +157,7 @@ export default function QuestionsPage({ onAnswer }) {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-question`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
-        body: JSON.stringify({ questionId, idNumber, fullName })
+        body: JSON.stringify({ questionId, idNumber: userId, fullName })
       });
       if (res.ok) {
         setQuestions(prev => prev.filter(q => q.questionId !== questionId));
@@ -194,18 +174,7 @@ export default function QuestionsPage({ onAnswer }) {
   };
 
   const filters = [
-    <div
-      key="filter-wrap"
-      className="questions-filters"
-      style={{
-        display: 'flex',
-        width: '100%',
-        gap: '1rem',
-        marginBottom: '1.5rem',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}
-    >
+    <div key="filter-wrap" className="questions-filters">
       <input
         key="search"
         type="text"
@@ -213,10 +182,7 @@ export default function QuestionsPage({ onAnswer }) {
         onChange={(e) => {
           const result = sanitizeText(e.target.value, 100);
           if (result.wasModified) {
-            setSanitizedAlert({
-              message: t('unsafeInputSanitized', language),
-              type: 'warning'
-            });
+            setAlert({ message: t('unsafeInputSanitized', language), type: 'warning' });
           }
           setSearchText(result.text);
         }}
@@ -244,14 +210,10 @@ export default function QuestionsPage({ onAnswer }) {
         <option value="newest">{t('sortByNewest', language)}</option>
         <option value="popular">{t('sortByPopularity', language)}</option>
       </select>
-      <Button
-        onClick={() => setFilterLikedOnly(!filterLikedOnly)}
-      >
+      <Button onClick={() => setFilterLikedOnly(!filterLikedOnly)}>
         {filterLikedOnly ? t('cancel', language) : t('likedQuestions', language)}
       </Button>
-      <Button
-        onClick={() => setFilterReadOnly(!filterReadOnly)}
-      >
+      <Button onClick={() => setFilterReadOnly(!filterReadOnly)}>
         {filterReadOnly ? t('cancel', language) : t('readQuestions', language)}
       </Button>
     </div>
@@ -267,16 +229,12 @@ export default function QuestionsPage({ onAnswer }) {
           <div className="question-card">
             <p><strong>{t('question', language)}:</strong> {q.text}</p>
             <p><strong>{t('createdAt', language)}:</strong> {new Date(q.createdAt).toLocaleDateString(language === 'he' ? 'he-IL' : 'en-US')}</p>
-            <p>
-              <strong>{t('createdBy', language)}:</strong> {q.createdBy?.split('#')[0] || t('unknownUser', language)}
-            </p>
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <p><strong>{t('createdBy', language)}:</strong> {q.createdBy?.split('#')[0] || t('unknownUser', language)}</p>
+
+            <div className="question-actions">
               <button
-                className='text-green-600'
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedQuestionId(q.questionId);
-                }}
+                className='view-btn'
+                onClick={(e) => { e.stopPropagation(); setSelectedQuestionId(q.questionId); }}
                 title={t('viewQestion', language)}
               >
                 <FileSearch size={18} />
@@ -284,10 +242,8 @@ export default function QuestionsPage({ onAnswer }) {
 
               {userType !== 'reservist' && (
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setQuestionToAnswer(q);
-                  }}
+                  className='answer-btn'
+                  onClick={(e) => { e.stopPropagation(); setQuestionToAnswer(q); }}
                   title={t('postAnswer', language)}
                 >
                   <MessageCircleMore size={18} />
@@ -295,79 +251,53 @@ export default function QuestionsPage({ onAnswer }) {
               )}
 
               <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleLike(q.questionId, hasLiked(q.likes));
-                }}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer' }}
+                className={`like-toggle ${hasLiked(q.likes) ? 'liked' : ''}`}
+                onClick={(e) => { e.stopPropagation(); handleLike(q.questionId, hasLiked(q.likes)); }}
                 title={t('like', language)}
               >
-                <ThumbsUp
-                  size={22}
-                  color={hasLiked(q.likes) ? '#007bff' : '#ccc'}
-                />
-                <span>{q.likes?.length || 0}</span>
+                <ThumbsUp size={22} className="icon" />
+                <span className="like-count">{q.likes?.length || 0}</span>
               </div>
+
               <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleReadToggle(q.questionId, hasRead(q.readBy));
-                }}
+                className={`read-toggle ${hasRead(q.readBy) ? 'read' : ''}`}
+                onClick={(e) => { e.stopPropagation(); handleReadToggle(q.questionId, hasRead(q.readBy)); }}
                 title={hasRead(q.readBy) ? t('markAsUnread', language) : t('markAsRead', language)}
-                style={{ cursor: 'pointer', fontSize: '20px' }}
               >
-                {hasRead(q.readBy) ? (
-                  <BookOpen size={22} color="#4CAF50" />
-                ) : (
-                  <Book size={22} color="#bbb" />
-                )}
+                {hasRead(q.readBy) ? <BookOpen size={22} className="icon" /> : <Book size={22} className="icon" />}
               </div>
-                            
+
               {userType === 'admin' && (
-                <div className="mt-3 flex gap-4">
+                <div className="admin-actions">
                   <button
                     title={t('edit', language)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setQuestionToEdit(q); 
-                    }}
+                    onClick={(e) => { e.stopPropagation(); setQuestionToEdit(q); }}
                   >
                     <Edit2 size={20} />
                   </button>
-
                   <button
                     title={t('delete', language)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(q.questionId);
-                    }}
+                    onClick={(e) => { e.stopPropagation(); handleDelete(q.questionId); }}
                   >
                     <Trash2 size={20} />
                   </button>
                 </div>
               )}
-
             </div>
           </div>
         )}
       />
 
       {userType !== 'reservist' && (
-        <DraggableButton
-          title={t('addNewQuestion', language)}
-          onClick={() => setShowAddQuestion(true)}
-        />
+        <DraggableButton title={t('addNewQuestion', language)} onClick={() => setShowAddQuestion(true)} />
       )}
 
       {showAddQuestion && (
         <AddQuestion
           onClose={() => setShowAddQuestion(false)}
-          onSuccess={() => {
-            setShowAddQuestion(false);
-            fetchQuestions();
-          }}
+          onSuccess={() => { setShowAddQuestion(false); fetchQuestions(); }}
           fullName={fullName}
-          idNumber={idNumber}
+          idNumber={userId}
         />
       )}
 
@@ -384,42 +314,35 @@ export default function QuestionsPage({ onAnswer }) {
         <EditQuestion
           question={questionToEdit}
           onClose={() => setQuestionToEdit(null)}
-          onSave={() => {
-            setQuestionToEdit(null);
-            fetchQuestions();
-          }}
+          onSave={() => { setQuestionToEdit(null); fetchQuestions(); }}
         />
       )}
 
       {selectedQuestion && (
         <ViewQuestion
-        question={selectedQuestion}
-        onClose={() => setSelectedQuestionId(null)}
-        onUpdate={fetchQuestions}
-      />
-      
+          question={selectedQuestion}
+          onClose={() => setSelectedQuestionId(null)}
+          onUpdate={fetchQuestions}
+        />
       )}
 
       {questionToAnswer && (
         <PostAnswer
           questionId={questionToAnswer.questionId}
           fullName={fullName}
-          idNumber={idNumber}
-          onSuccess={() => {
-            fetchQuestions();
-          }}
+          idNumber={userId}
+          onSuccess={() => { fetchQuestions(); }}
           onClose={() => setQuestionToAnswer(null)}
         />
       )}
 
-      {sanitizedAlert && (
+      {alert && (
         <AlertMessage
-          message={sanitizedAlert.message}
-          type={sanitizedAlert.type}
-          onClose={() => setSanitizedAlert(null)}
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
         />
       )}
-
     </div>
   );
 }

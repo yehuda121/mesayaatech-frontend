@@ -12,7 +12,7 @@
     "location": "Location",
     "editevent": "Edit event",
     "deleteEvent": "Delete event",
-    "deleteFailed": "Failed to delete job",
+    "deleteFailed": "Failed to delete",
     "serverError": "Server error",
     "question": "Question",
     "category": "Category",
@@ -169,7 +169,7 @@
     "confirmAssignText": "Do you want to assign",
     "jobsLoadError": "Error loading job list",
     "jobsServerError": "Server error while fetching jobs",
-    "publisherIdMissing": "Cannot load jobs – missing publisher ID",
+    "publisherIdMissing": "Cannot load jobs, missing publisher ID",
     "confirmDelete": "Confirm Delete",
     "jobDeleted": "Job deleted successfully",
     "filterByDate": "Filter by date",
@@ -544,7 +544,8 @@
     "passwordMissingUppercase": "Password must include an uppercase letter",
     "passwordMissingLowercase": "Password must include a lowercase letter",
     "passwordMissingNumber": "Password must include a number",
-    "InvalidPassword": "Invalid Password"
+    "InvalidPassword": "Invalid Password",
+    "questionDeletedSuccessfuly": "The Question Has been Deleted"
 
 
 

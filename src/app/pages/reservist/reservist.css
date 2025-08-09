@@ -1,6 +1,5 @@
-/* === Main layout area next to sidebar === */
 .reservist-main {
-  margin-right: 250px; /* leave space for sidebar */
+  margin-right: 250px; 
   flex-grow: 1;
   padding: 2rem;
   background-color: #fff;
@@ -14,7 +13,6 @@
   }
 }
 
-/* === Welcome headline === */
 .reservist-welcome {
   font-size: 1.75rem;
   font-weight: bold;
@@ -23,31 +21,14 @@
   margin-top: 65px;
 }
 
-/* === Grid layout for job and event columns === */
-/* .reservist-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-
-}
-
-@media (max-width: 768px) {
-  .reservist-columns {
-    grid-template-columns: 1fr;
-  }
-}
-
-.EditreservistForm{
-  margin-top: -70;
-} */
- .reservist-dashboard-wrapper {
-  margin-inline-end: 270px; /* תומך גם ב־rtl/ltr */
+.reservist-dashboard-wrapper {
+  margin-inline-end: 270px; 
   transition: margin 0.3s ease;
 }
 
 @media (max-width: 1024px) {
   .reservist-dashboard-wrapper {
-    margin-inline-end: 0; /* כשאין בר צד */
+    margin-inline-end: 0; 
   }
 }
 

@@ -17,7 +17,7 @@ import CreateEvent from './CreateEvent';
 export default function ViewEvents() {
   const [filter, setFilter] = useState({ title: '', date: '' });
   const [showPast, setShowPast] = useState(false);
-  const [editingEvent, setEditingEvent] = useState(null);
+  const [eventToEdit, setEventToEdit] = useState(null);
   const [eventToDelete, setEventToDelete] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
   const [showCreateEventModal, setShowCreateEventModal] = useState(false);
@@ -49,7 +49,10 @@ export default function ViewEvents() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/delete-event`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` 
+        },
         body: JSON.stringify({ eventId: event.eventId })
       });
       if (res.ok) {
@@ -63,50 +66,51 @@ export default function ViewEvents() {
 
   const filteredEvents = events.filter((e) => {
     const isPast = new Date(e.date) < new Date(); 
-    const titleMatch = e.title.includes(filter.title);
+    const titleMatch = (e.title || '').toLowerCase().includes((filter.title || '').toLowerCase());
     const dateMatch = !filter.date || e.date === filter.date;
 
     return (showPast ? isPast : !isPast) && titleMatch && dateMatch;
   });
 
+  const filters = [
+    <input
+      key="title"
+      type="text"
+      placeholder={t('filterTitle', language)}
+      value={filter.title}
+      onChange={(e) => {
+        const result = sanitizeText(e.target.value, 100);
+        if (result.wasModified) {
+          setToastMessage({
+            message: t('unsafeInputSanitized', language),
+            type: 'warning'
+          });
+        }
+        setFilter({ ...filter, title: result.text });
+      }}
+      className="card-filter flexible"
+    />,
+    <input
+      key="date"
+      type="date"
+      value={filter.date}
+      onChange={(e) => setFilter({ ...filter, date: e.target.value })}
+      className="card-filter date-filter"
+    />,
+    <Button
+      key="toggle"
+      size="sm"
+      onClick={() => setShowPast(!showPast)}
+    >
+      {showPast ? t('hidePast', language) : t('showPast', language)}
+    </Button>
+  ];
 
   return (
     <>
       <GenericCardSection
         titleKey="viewEvents"
-        filters={[
-          <input
-            key="title"
-            type="text"
-            placeholder={t('filterTitle', language)}
-            value={filter.title}
-            onChange={(e) => {
-              const result = sanitizeText(e.target.value, 100);
-              if (result.wasModified) {
-                setToastMessage({
-                  message: t('unsafeInputSanitized', language),
-                  type: 'warning'
-                });
-              }
-              setFilter({ ...filter, title: result.text });
-            }}
-            className="card-filter flexible"
-          />,
-          <input
-            key="date"
-            type="date"
-            value={filter.date}
-            onChange={(e) => setFilter({ ...filter, date: e.target.value })}
-            className="card-filter date-filter"
-          />,
-          <Button
-            key="toggle"
-            size="sm"
-            onClick={() => setShowPast(!showPast)}
-          >
-            {showPast ? t('hidePast', language) : t('showPast', language)}
-          </Button>
-        ]}
+        filters={filters}
         data={filteredEvents}
         renderCard={(event) => (
           <>
@@ -125,7 +129,7 @@ export default function ViewEvents() {
             </div>
 
             <div className="mt-2 flex gap-4">
-              <button title={t('editevent', language)} onClick={(e) => { e.stopPropagation(); setEditingEvent(event); }}>
+              <button title={t('editevent', language)} onClick={(e) => { e.stopPropagation(); setEventToEdit(event); }}>
                 <Edit2 size={18}/>
               </button>
               <button title={t('deleteEvent', language)} onClick={(e) => { e.stopPropagation(); setEventToDelete(event); }}>
@@ -157,15 +161,15 @@ export default function ViewEvents() {
         />
       )}
 
-      {editingEvent && (
+      {eventToEdit && (
         <EditEvents
-          event={editingEvent}
-          onClose={() => setEditingEvent(null)}
+          event={eventToEdit}
+          onClose={() => setEventToEdit(null)}
           onSave={(updated) => {
             setEvents(prev =>
               prev.map(ev => ev.eventId === updated.eventId ? updated : ev)
             );
-            setEditingEvent(null);
+            setEventToEdit(null);
           }}
         />
       )}

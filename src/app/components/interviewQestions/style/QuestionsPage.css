@@ -1,0 +1,46 @@
+.question-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.like-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  color: #ccc;            
+}
+
+.like-toggle.liked {
+  color: #007bff;        
+}
+
+.like-toggle .icon {
+  display: inline-block;
+}
+
+.like-toggle .like-count {
+  font-size: 0.95rem;
+}
+
+.read-toggle {
+  cursor: pointer;
+  font-size: 20px;     
+  color: #bbb;            
+}
+
+.read-toggle.read {
+  color: #4CAF50;       
+}
+
+.read-toggle .icon {
+  display: inline-block;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem; 
+}

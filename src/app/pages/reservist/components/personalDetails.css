@@ -84,3 +84,8 @@
   font-size: 1.2em;
   margin-inline: 4px;
 }
+
+.readonly-red {
+  color: red;
+  background-color: #fff0f0;
+}

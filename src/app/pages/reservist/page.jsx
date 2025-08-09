@@ -5,7 +5,6 @@ import SideBar from '@/app/components/SideBar/SideBar';
 import Events from '@/app/components/events/ViewAllEvents';
 import EditReservistForm from './components/EditReservistForm';
 import ViewJobs from '@/app/components/jobs/ViewAllJobs';
-import JobDetailsModal from '@/app/components/jobs/viewJob';
 import { useRouter } from 'next/navigation';
 import { t } from '@/app/utils/loadTranslations';
 import InterviewQues  from '@/app/components/interviewQestions/QuestionsList';
@@ -24,7 +23,6 @@ export default function ReservistHomePage() {
   const [userType, setUserType] = useState('');
   const [userData, setUserData] = useState(null);
   const [view, setView] = useState('dashboard');
-  const [selectedJob, setSelectedJob] = useState(null);
   const [mentorId, setMentorID] = useState(null);
   const [mentorName, setMentorName] = useState('');
   const language = useLanguage();
@@ -85,44 +83,38 @@ export default function ReservistHomePage() {
 
   const navItems = [
     { 
-      labelHe: t('navDashboard', 'he'), 
-      labelEn: t('navDashboard', 'en'), 
+      label: t('navDashboard', language), 
       path: '#dashboard', 
       onClick: () => setView('dashboard') 
     },
     {
-      labelHe: t('userSettings', 'he'),
-      labelEn: t('userSettings', 'en'),
+      label: t('userSettings', language),
       path: '#userSettings',
       onClick: () => setView('userSettings')
     },
-    { labelHe: t('events', 'he'), 
-      labelEn: t('events', 'en'), 
+    { 
+      label: t('events', language), 
       path: '#events-section', 
       onClick: () => setView('events') 
     },
     { 
-      labelHe: t('jobs', 'he'), 
-      labelEn: t('jobs', 'en'), 
+      label: t('jobs', language), 
       path: '#jobs-section', 
       onClick: () => setView('jobs') 
     },
     { 
-      labelHe: t('interviewQues', 'he'), 
-      labelEn: t('interviewQues', 'en'), 
+      label: t('interviewQues', language), 
       path: '#interviewQues',
       onClick: () => setView('interviewQues') 
     },
     { 
-      labelHe: t('interviewWithAi', 'he'), 
-      labelEn: t('interviewWithAi', 'en'), 
+      label: t('interviewWithAi', language), 
       path: '#InterviewPracticePanel',
       icon: <Brain size={18} className="inline mr-2" />,
       onClick: () => setView('InterviewPracticePanel') 
     },
     { 
-      labelHe: t('mentorringProscess', 'he'), 
-      labelEn: t('mentorringProscess', 'en'), 
+      label: t('mentorringProscess', language), 
       path: '#mentorringProscess',
       onClick: () => setView('mentorringProscess') 
     },
@@ -186,33 +178,15 @@ export default function ReservistHomePage() {
         )}
 
         {view === 'InterviewPracticePanel' && idNumber && fullName && email && (
-          <InterviewPracticePanel userId={idNumber} email={email} language={language} role='reservist' />
+          <InterviewPracticePanel userId={idNumber} email={email} language={language} role={userType} />
         )}
 
         {view === 'jobs' && (
           <div className="reservist-jobs-section">
-            <ViewJobs
-              onCardClick={(job) => {
-                setSelectedJob(job);
-                setView('view-job');
-              }}
-            />
+            <ViewJobs />
           </div>
         )}
 
-        {view === 'view-job' && selectedJob && (
-          <div className="modal-overlay">
-            <div className="modal-box">
-            <JobDetailsModal
-              job={selectedJob}
-              onClose={() => {
-                setSelectedJob(null);
-                setView('jobs');
-              }}
-            />
-            </div>
-          </div>
-        )}
         {view === 'interviewQues' && <InterviewQues />}
         
         {view === 'mentorringProscess' &&

@@ -49,7 +49,7 @@ export default function ViewAllJobs() {
   useEffect(() => {
     const rawUserType = sessionStorage.getItem('userType');
     setUserType(rawUserType);
-    const id = sessionStorage.getItem('userId');
+    const id = sessionStorage.getItem('idNumber');
     setUserId(id);
     fetchJobs();
   }, []);

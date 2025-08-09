@@ -77,51 +77,43 @@ export default function MentorHomePage() {
   const navItems = useMemo(() => {
     return [
       {
-        labelHe: t('navDashboard', language),
-        labelEn: t('navDashboard', language),
+        label: t('navDashboard', language),
         path: '#dashboard',
         onClick: () => handleNavigation('dashboard')
       },
       {
-        labelHe: t('navPersonalDetails', language),
-        labelEn: t('navPersonalDetails', language),
+        label: t('navPersonalDetails', language),
         path: '#form',
         onClick: () => handleNavigation('form')
       },
       {
-        labelHe: t('jobs', language),
-        labelEn: t('jobs', language),
+        label: t('jobs', language),
         path: '#vallJobs',
         onClick: () => handleNavigation('allJobs')
       },
       {
-        labelHe: t('events', language),
-        labelEn: t('events', language),
+        label: t('events', language),
         path: '#all-events',
         onClick: () => handleNavigation('all-events')
       },
       {
-        labelHe: t('interviewQuesTitle', language),
-        labelEn: t('interviewQuesTitle', language),
+        label: t('interviewQuesTitle', language),
         path: '#interview-prep',
         onClick: () => handleNavigation('interview-ques')
       },
       {
-        labelHe: t('findReservist', language),
-        labelEn: t('findReservist', language),
+        label: t('findReservist', language),
         icon: <Brain size={18} className="inline mr-2" />,
         path: '#find-reservist',
         onClick: () => handleNavigation('find-reservist')
       },
       {
-        labelHe: t('myReservists', language),
-        labelEn: t('myReservists', language),
+        label: t('myReservists', language),
         path: '#myReservists',
         onClick: () => handleNavigation('myReservists')
       },
       {
-        labelHe: t('changePassword', 'he'),
-        labelEn: t('changePassword', 'en'),
+        label: t('changePassword', 'en'),
         path: '#changePassword',
         onClick: () => handleNavigation('change-password')
       },
@@ -176,7 +168,8 @@ export default function MentorHomePage() {
         {view === 'myJobsList' && (
           <div className="mentor-main-view">
             <MyJobsList
-              publisherId={`${email}#${idNumber}`}
+              publisherId={idNumber}
+              userType={userType}
               onEdit={(job) => {
                 setSelectedJobForEdit(job);
                 setView('edit-job');

@@ -110,7 +110,7 @@ export default function EditMentorForm({ userData, onSave, onClose, onDelete, ro
           <label>{t('phone', language)}:
             <input name="phone" value={formData.phone || ''} onChange={handleChange} />
           </label>
-        </AccordionSection>
+        </AccordionSection> 
 
         <AccordionSection titleKey={t('professionalDetails', language)}>
           <label>{t('armyRole', language)}:

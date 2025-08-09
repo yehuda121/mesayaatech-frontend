@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import SideBar from '@/app/components/SideBar/SideBar';
 import UsersTable from './components/users/usersTable';
 import ViewEvents from './components/events/ViewEvents';
-import EditEvents from './components/events/EditEvents';
 import ViewJobs from '../components/jobs/ViewAllJobs';
 import EditJob from '@/app/components/jobs/EditJob';
 import { useRouter } from 'next/navigation';
@@ -24,7 +23,6 @@ export default function AdminPage() {
   const [email, setEmail] = useState('');
   const [userType, setUserType] = useState('');
   const [view, setView] = useState('');
-  const [eventToEdit, setEventToEdit] = useState(null);
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [pendingUsers, setPendingUsers] = useState([]);
@@ -74,7 +72,6 @@ export default function AdminPage() {
   }, []);
 
   const handleNavigation = (newView) => {
-    setEventToEdit(null);
     setView(newView);
   };
 
@@ -141,71 +138,22 @@ export default function AdminPage() {
             </>
           )}
 
-          {view === 'view-events' && (
-            <ViewEvents
-              onEdit={(ev) => setEventToEdit(ev)}
-            />
-          )}
+          {view === 'view-events' && ( <ViewEvents /> )}
 
-          {view === 'view-jobs' && (
-            <>
-              <ViewJobs
-                jobs={jobs}
-                setJobs={setJobs}
-                onEdit={(job) => setSelectedJob(job)}
-                handleNavigation={handleNavigation}
-              />
-            </>
-          )}
+          {view === 'view-jobs' && ( <ViewJobs /> )}
 
           {view === 'view-users' && <UsersTable />}
 
           {view === 'view-mentorships' && <ViewMentorships />}
 
-          {view === 'InterviewPracticePanel' && idNumber && fullName && email && (
-            <InterviewPracticePanel userId={idNumber} email={email} language={language} role='reservist' />
-          )}
+          {view === 'InterviewPracticePanel' && ( <InterviewPracticePanel /> )}
           
-          {view === 'interview-ques' && (
-            <>
-              <InterviewQestions
-                onEdit={(q) => setSelectedQuestion(q)}
-                onAnswer={(qid) => setAnswerQuestionId(qid)}
-                onView={(q) => setQuestionToView(q)}
-              />
-            </>
-          )}
+          {view === 'interview-ques' && ( <InterviewQestions /> )}
           
           {view === 'change-password' && (<ChangePassword/>)}
      
         </main>
       </div>
-
-      {eventToEdit && (
-        <EditEvents
-          event={eventToEdit}
-          onClose={() => setEventToEdit(null)}
-          onSave={(updatedEvent) => {
-            setEventToEdit(null);
-            setEvents(prev =>
-              prev.map(ev => ev.eventId === updatedEvent.eventId ? updatedEvent : ev)
-            );
-          }}
-        />
-      )}
-
-      {selectedJob && (
-        <EditJob
-          job={selectedJob}
-          onClose={() => setSelectedJob(null)}
-          onSave={(updatedJob) => {
-            setJobs(prev =>
-              prev.map(j => j.jobId === updatedJob.jobId ? updatedJob : j)
-            );
-            setSelectedJob(null);
-          }}
-        />
-      )}
     </div>
   );
 }
