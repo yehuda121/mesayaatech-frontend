@@ -545,7 +545,44 @@
     "passwordMissingLowercase": "Password must include a lowercase letter",
     "passwordMissingNumber": "Password must include a number",
     "InvalidPassword": "Invalid Password",
-    "questionDeletedSuccessfuly": "The Question Has been Deleted"
+    "questionDeletedSuccessfuly": "The Question Has been Deleted",
+    "Admin": "Admin",
+
+    "jerusalemArea": "Jerusalem Area",
+    "jerusalem": "Jerusalem",
+    "maaleAdumim": "Ma'ale Adumim",
+    "beitShemesh": "Beit Shemesh",
+
+    "centralArea": "Central Area",
+    "telAviv": "Tel Aviv",
+    "ramatGan": "Ramat Gan",
+    "givataiyim": "Giv'atayim",
+    "herzliya": "Herzliya",
+    "petahTikva": "Petah Tikva",
+    "rishonLezion": "Rishon LeZion",
+
+    "northernArea": "Northern Area",
+    "haifa": "Haifa",
+    "karmiel": "Karmiel",
+    "kiryatShmona": "Kiryat Shmona",
+    "safed": "Safed",
+    "tiberias": "Tiberias",
+    "hermon": "Hermon",
+    "mountMeron": "Mount Meron",
+    "mountTabor": "Mount Tabor",
+    "mountArbel": "Mount Arbel",
+
+    "southernArea": "Southern Area",
+    "beerSheva": "Be'er Sheva",
+    "eilat": "Eilat",
+    "dimona": "Dimona",
+    "mitzpeRamon": "Mitzpe Ramon",
+    "mountRamon": "Mount Ramon",
+    "mountAtzmon": "Mount Atzmon",
+
+    "otherArea": "Other"
+
+
 
 
 

@@ -130,9 +130,7 @@ export default function EditMeeting({ meeting, index, mentorId, reservistId, onS
             {t('meetingMode', language)} <span style={{ color: 'red' }}>*</span>
             <input type="text" name="mode" value={formData.mode} onChange={handleChange} className="ANM-input" />
           </label>
-        </div>
 
-        <div className="ANM-grid">
           <label className="ANM-label">
             {t('meetingTopics', language)}
             <textarea name="topics" value={formData.topics} onChange={handleChange} className="ANM-textarea" />
@@ -142,9 +140,7 @@ export default function EditMeeting({ meeting, index, mentorId, reservistId, onS
             {t('meetingTasks', language)}
             <textarea name="tasks" value={formData.tasks} onChange={handleChange} className="ANM-textarea" />
           </label>
-        </div>
 
-        <div className="ANM-grid">
           <label className="ANM-label">
             {t('futurTasks', language)}
             <textarea name="futurTasks" value={formData.futurTasks} onChange={handleChange} className="ANM-textarea" />

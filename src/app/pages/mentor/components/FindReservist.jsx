@@ -62,6 +62,11 @@ export default function FindReservist({ mentorId, onBack }) {
       setToast({ message: t('assignedFail', language), type: 'error' });
     }
   };
+  
+  function truncateText(text, maxLength = 30) {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '…' : text;
+  }
 
   const renderCard = (r) => (
     <div key={r.idNumber} className="reservist-card">
@@ -69,7 +74,7 @@ export default function FindReservist({ mentorId, onBack }) {
       <p><strong>{t('fields', language)}:</strong>{' '}{r.fields?.map(f => t(f, language)).join(', ')}</p>
       <p><strong>{t('location', language)}:</strong> {r.location}</p>
       {r.aboutMe && (
-        <p><strong>{t('aboutMe', language)}:</strong> {r.aboutMe}</p>
+        <p><strong>{t('aboutMe', language)}:</strong> {truncateText(r.aboutMe, 50)}</p>
       )}
 
       <p className="flex items-center gap-2">
@@ -87,9 +92,9 @@ export default function FindReservist({ mentorId, onBack }) {
 
       {expandedScore === r.idNumber && r.scoreBreakdown && (
         <div className="text-sm ml-4 mt-1 space-y-1">
-          <p>{t('breakdownProfession', language)}: {r.scoreBreakdown.professionMatch}</p>
-          <p>{t('breakdownLocation', language)}: {r.scoreBreakdown.locationMatch}</p>
-          <p>{t('breakdownKeywords', language)}: {r.scoreBreakdown.keywordMatch}</p>
+          <p>{t('breakdownProfession', language)}: {r.scoreBreakdown.professionMatch}/50</p>
+          <p>{t('breakdownLocation', language)}: {r.scoreBreakdown.locationMatch}/30</p>
+          <p>{t('breakdownKeywords', language)}: {r.scoreBreakdown.keywordMatch}/20</p>
         </div>
       )}
 

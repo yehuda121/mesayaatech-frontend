@@ -49,7 +49,7 @@ export default function ReserveRegisterForm() {
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload-registration-form`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, userType: 'reservist', status: 'pending' }),
       });
 

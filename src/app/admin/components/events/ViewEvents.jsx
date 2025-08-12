@@ -72,6 +72,11 @@ export default function ViewEvents() {
     return (showPast ? isPast : !isPast) && titleMatch && dateMatch;
   });
 
+  function truncateText(text, maxLength = 30) {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '…' : text;
+  }
+
   const filters = [
     <input
       key="title"
@@ -114,7 +119,7 @@ export default function ViewEvents() {
         data={filteredEvents}
         renderCard={(event) => (
           <>
-            <div className="event-title text-center font-bold text-lg mb-2">{event.title}</div>
+            <div className="event-title text-center font-bold text-lg mb-2">{truncateText(event.title)}</div>
 
             <div className='text-start' dir={language === 'he' ? 'rtl' : 'ltr'}>
               <span className="font-bold">{t('date', language)}:</span> {event.date}
@@ -125,7 +130,7 @@ export default function ViewEvents() {
             </div>
 
             <div className='text-start' dir={language === 'he' ? 'rtl' : 'ltr'}>
-              <span className="font-bold">{t('location', language)}:</span> {event.location}
+              <span className="font-bold">{t('location', language)}:</span> {truncateText(event.location, 40)}
             </div>
 
             <div className="mt-2 flex gap-4">

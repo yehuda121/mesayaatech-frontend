@@ -173,6 +173,11 @@ export default function QuestionsPage() {
     }
   };
 
+  function truncateText(text, maxLength = 30) {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '…' : text;
+  }
+
   const filters = [
     <div key="filter-wrap" className="questions-filters">
       <input
@@ -227,9 +232,13 @@ export default function QuestionsPage() {
         data={filteredAndSorted}
         renderCard={(q) => (
           <div className="question-card">
-            <p><strong>{t('question', language)}:</strong> {q.text}</p>
+            <p><strong>{t('question', language)}:</strong> {truncateText(q.text, 100)}</p>
             <p><strong>{t('createdAt', language)}:</strong> {new Date(q.createdAt).toLocaleDateString(language === 'he' ? 'he-IL' : 'en-US')}</p>
-            <p><strong>{t('createdBy', language)}:</strong> {q.createdBy?.split('#')[0] || t('unknownUser', language)}</p>
+            <p><strong>{t('createdBy', language)}:</strong>{' '}
+              {q.createdBy?.split('#')[0] === 'Admin'
+                ? t('Admin', language)
+                : (q.createdBy?.split('#')[0] || t('unknownUser', language))}
+            </p>
 
             <div className="question-actions">
               <button

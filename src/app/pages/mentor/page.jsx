@@ -113,7 +113,7 @@ export default function MentorHomePage() {
         onClick: () => handleNavigation('myReservists')
       },
       {
-        label: t('changePassword', 'en'),
+        label: t('changePassword', language),
         path: '#changePassword',
         onClick: () => handleNavigation('change-password')
       },

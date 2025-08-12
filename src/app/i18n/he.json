@@ -548,7 +548,42 @@
     "passwordMissingLowercase": "הסיסמה חייבת לכלול אות קטנה",
     "passwordMissingNumber": "הסיסמה חייבת לכלול מספר",
     "InvalidPassword": "הסיסמה לא תקינה",
-    "questionDeletedSuccessfuly": "השאלה נמחקה בהצלחה"
+    "questionDeletedSuccessfuly": "השאלה נמחקה בהצלחה",
+    "Admin": "מנהל",
+
+    "jerusalemArea": "אזור ירושלים",
+    "jerusalem": "ירושלים",
+    "maaleAdumim": "מעלה אדומים",
+    "beitShemesh": "בית שמש",
+
+    "centralArea": "אזור מרכז",
+    "telAviv": "תל אביב",
+    "ramatGan": "רמת גן",
+    "givataiyim": "גבעתיים",
+    "herzliya": "הרצליה",
+    "petahTikva": "פתח תקווה",
+    "rishonLezion": "ראשון לציון",
+
+    "northernArea": "אזור צפון",
+    "haifa": "חיפה",
+    "karmiel": "כרמיאל",
+    "kiryatShmona": "קריית שמונה",
+    "safed": "צפת",
+    "tiberias": "טבריה",
+    "hermon": "החרמון",
+    "mountMeron": "הר מירון",
+    "mountTabor": "הר תבור",
+    "mountArbel": "הר ארבל",
+
+    "southernArea": "אזור דרום",
+    "beerSheva": "באר שבע",
+    "eilat": "אילת",
+    "dimona": "דימונה",
+    "mitzpeRamon": "מצפה רמון",
+    "mountRamon": "הר רמון",
+    "mountAtzmon": "הר עצמון",
+
+    "otherArea": "אחר"
 
 
 

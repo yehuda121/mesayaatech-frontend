@@ -39,6 +39,7 @@ export default function ViewProgress({ progressData, onClose }) {
               progressData.meetings.map((meeting, idx) => (
                 <div key={idx} className="VP-meeting-item">
                   <p><strong>{t('meetingDate', language)}:</strong> {meeting.date}</p>
+                  <p><strong>{t('progressStage', language)}:</strong> {meeting.stage ? progressStages[meeting.stage - 1] : t('unknownStage', language)}</p>
                   <p><strong>{t('meetingMode', language)}:</strong> {meeting.mode}</p>
                   <p><strong>{t('meetingTopics', language)}:</strong> {meeting.topics}</p>
                   <p><strong>{t('meetingTasks', language)}:</strong> {meeting.tasks}</p>

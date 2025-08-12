@@ -104,6 +104,11 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
     });
   };
 
+  function truncateText(text, maxLength = 30) {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '…' : text;
+  }
+
   const progressStages = [
     t('stage1', language),
     t('stage2', language),
@@ -169,11 +174,11 @@ export default function MentorshipProgress({ reservistId, mentorId }) {
               </p>
 
               <p><strong>{t('meetingDate', language)}:</strong> {m.date}</p>
-              <p><strong>{t('meetingMode', language)}:</strong> {m.mode}</p>
-              <p><strong>{t('meetingTopics', language)}:</strong> {m.topics}</p>
-              <p><strong>{t('meetingTasks', language)}:</strong> {m.tasks}</p>
-              <p><strong>{t('futurTasks', language)}:</strong> {m.futurTasks}</p>
-              <p><strong>{t('note', language)}:</strong> {m.note}</p>                    
+              <p><strong>{t('meetingMode', language)}:</strong> {truncateText(m.mode)}</p>
+              <p><strong>{t('meetingTopics', language)}:</strong> {truncateText(m.topics)}</p>
+              <p><strong>{t('meetingTasks', language)}:</strong> {truncateText(m.tasks)}</p>
+              <p><strong>{t('futurTasks', language)}:</strong> {truncateText(m.futurTasks)}</p>
+              <p><strong>{t('note', language)}:</strong> {truncateText(m.note)}</p>                    
               <div className='flex mt-4 gap-5'>
                 <button title={t('delete', language)} onClick={() => handleDeleteMeeting(m.__index)}>
                   <Trash2 size={18} />
