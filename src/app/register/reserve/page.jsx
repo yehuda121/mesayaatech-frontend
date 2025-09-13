@@ -26,27 +26,46 @@ export default function ReserveRegisterForm() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // const handleSubmit = async (formData) => {
+  //   try {
+  //     const existingRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`, {
+  //       method: 'GET',
+  //       headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
+  //     });
+
+  //     const existingUsers = await existingRes.json();
+
+  //     const emailExists = existingUsers.some(user => user.email === formData.email);
+  //     const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
+
+  //     if (emailExists) {
+  //       showAlert(t('emailAlreadyExists', language), 'error');
+  //       return;
+  //     }
+  //     if (idExists) {
+  //       showAlert(t('idNumberAlreadyExists', language), 'error');
+  //       return;
+  //     }
+
+  //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload-registration-form`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ ...formData, userType: 'reservist', status: 'pending' }),
+  //     });
+
+  //     if (res.ok) {
+  //       router.push("/pages/waitingApproval");
+  //     } else {
+  //       const errorText = await res.text();
+  //       showAlert(`${t('reservistError', language)}: ${errorText}`, 'error');
+  //     }
+  //   } catch (err) {
+  //     showAlert(t('reservistError', language), 'error');
+  //   }
+  // };
+
   const handleSubmit = async (formData) => {
     try {
-      const existingRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/imports-user-registration-form/all`, {
-        method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('idToken')}` }
-      });
-
-      const existingUsers = await existingRes.json();
-
-      const emailExists = existingUsers.some(user => user.email === formData.email);
-      const idExists = existingUsers.some(user => user.idNumber === formData.idNumber);
-
-      if (emailExists) {
-        showAlert(t('emailAlreadyExists', language), 'error');
-        return;
-      }
-      if (idExists) {
-        showAlert(t('idNumberAlreadyExists', language), 'error');
-        return;
-      }
-
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload-registration-form`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -54,12 +73,27 @@ export default function ReserveRegisterForm() {
       });
 
       if (res.ok) {
-        router.push("/pages/waitingApproval");
-      } else {
-        const errorText = await res.text();
-        showAlert(`${t('reservistError', language)}: ${errorText}`, 'error');
+        router.push('/pages/waitingApproval');
+        return;
       }
-    } catch (err) {
+
+      // Conflict (duplicate)
+      if (res.status === 409) {
+        const { code } = await res.json().catch(() => ({}));
+        if (code === 'emailExists') {
+          showAlert(t('emailAlreadyExists', language), 'error');
+        } else if (code === 'idExists') {
+          showAlert(t('idNumberAlreadyExists', language), 'error');
+        } else {
+          showAlert(t('reservistError', language), 'error');
+        }
+        return;
+      }
+
+      // Other errors
+      const text = await res.text();
+      showAlert(`${t('reservistError', language)}: ${text}`, 'error');
+    } catch {
       showAlert(t('reservistError', language), 'error');
     }
   };

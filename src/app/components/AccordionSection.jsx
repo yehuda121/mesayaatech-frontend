@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { useLanguage } from "@/app/utils/language/useLanguage";
+// import { useLanguage } from "@/app/utils/language/useLanguage";
 
 export default function AccordionSection({ titleKey, children, initiallyOpen = false }) {
   const [open, setOpen] = useState(initiallyOpen);
-  const language = useLanguage();
+  // const language = useLanguage();
 
   const toggleOpen = () => setOpen(!open);
 

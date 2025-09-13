@@ -59,6 +59,11 @@ export default function MyJobsList({publisherId, userType, onEdit }) {
     fetchJobs();
   }, [publisherId, userType, language]);
 
+  function truncateText(text, maxLength = 30) {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '…' : text;
+  }
+
   // Delete a job with auth and consistent idNumber
   const handleDelete = async (jobId) => {
     try {
@@ -151,7 +156,7 @@ export default function MyJobsList({publisherId, userType, onEdit }) {
           <div className='text-start'>
             <h3 className="font-bold text-lg">{job.company || t('noCompany', language)}</h3>
             {job.role && (
-              <p><strong>{t('role', language)}:</strong> {job.role}</p>
+              <p><strong>{t('role', language)}:</strong> {truncateText(job.role, 40)}</p>
             )}
             {job.location && (
               <p><strong>{t('location', language)}:</strong> {job.location}</p>
@@ -160,13 +165,13 @@ export default function MyJobsList({publisherId, userType, onEdit }) {
               <p><strong>{t('minExperience', language)}:</strong> {job.minExperience}</p>
             )}
             {job.requirements && (
-              <p><strong>{t('requirements', language)}:</strong> {job.requirements}</p>
+              <p><strong>{t('requirements', language)}:</strong> {truncateText(job.requirements, 100)}</p>
             )}
             {job.advantages && (
-              <p><strong>{t('advantages', language)}:</strong> {job.advantages}</p>
+              <p><strong>{t('advantages', language)}:</strong> {truncateText(job.advantages, 50)}</p>
             )}
             {job.description && (
-              <p className="job-description">{job.description}</p>
+              <p className="job-description">{truncateText(job.description, 50)}</p>
             )}
 
             <div className="job-actions flex gap-4 mt-3">
