@@ -22,10 +22,12 @@ import LocationsSummaryChart from '@/app/components/reports/charts/LocationsSumm
 import useEventsParticipantsCount from '@/app/components/reports/api/useEventsParticipantsCount';
 import EventsParticipantsCountChart from '@/app/components/reports/charts/EventsParticipantsCountChart';
 import { useLanguage } from "@/app/utils/language/useLanguage";
+import { useRoleGuard } from "@/app/utils/isExpectedRoll/useRoleGuard";
 
 export default function ReportsDashboard() {
     const [view, setView] = useState('userSummary');
     const router = useRouter();
+    useRoleGuard("admin");
     const { usersData, usersError, usersLoading } = useUsersSummary();
     const { jobsData, jobsError, jobsLoading } = useJobsPerMonth();
     const { eventsData, eventsError, eventsLoading } = useEventsPerMonth();    
